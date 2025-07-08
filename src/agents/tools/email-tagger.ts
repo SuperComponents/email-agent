@@ -1,6 +1,7 @@
 import { tool } from '@openai/agents';
 import { db } from '../../db';
 import { emailTags } from '../../db/schema/emails';
+import { wrapToolWithLogging } from './logging-wrapper';
 
 interface EmailTaggerParams {
   emailId: string;
@@ -34,30 +35,34 @@ export const emailTaggerTool = tool({
     required: ['emailId', 'tags', 'confidence'],
     additionalProperties: false
   },
-  execute: async (input: unknown) => {
-    const { emailId, tags, confidence = 80 } = input as EmailTaggerParams;
-    try {
-      const insertedTags = await db.insert(emailTags).values(
-        tags.map((tag: string) => ({
-          emailId,
-          tag,
-          confidence,
-        }))
-      ).returning();
+  execute: wrapToolWithLogging(
+    'tag_email',
+    async (input: unknown) => {
+      const { emailId, tags, confidence = 80 } = input as EmailTaggerParams;
+      try {
+        const insertedTags = await db.insert(emailTags).values(
+          tags.map((tag: string) => ({
+            emailId,
+            tag,
+            confidence,
+          }))
+        ).returning();
 
-      return {
-        success: true,
-        emailId,
-        tags: insertedTags.map(t => ({
-          tag: t.tag,
-          confidence: t.confidence,
-        })),
-      };
-    } catch (error) {
-      return {
-        success: false,
-        error: `Failed to tag email: ${error instanceof Error ? error.message : 'Unknown error'}`,
-      };
-    }
-  },
+        return {
+          success: true,
+          emailId,
+          tags: insertedTags.map(t => ({
+            tag: t.tag,
+            confidence: t.confidence,
+          })),
+        };
+      } catch (error) {
+        return {
+          success: false,
+          error: `Failed to tag email: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        };
+      }
+    },
+    (params: EmailTaggerParams) => `Tagged email ${params.emailId} as ${params.tags.join(', ')}`
+  ),
 });

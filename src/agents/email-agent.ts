@@ -6,6 +6,8 @@ import { ragSearchTool } from './tools/rag-search';
 import { db } from '../db';
 import { emails, emailThreads } from '../db/schema/emails';
 import { eq } from 'drizzle-orm';
+import { AgentActionLogger } from '../services/agent-action-logger';
+import { setCurrentThreadId } from './tools/logging-wrapper';
 
 const SYSTEM_PROMPT = `You are an intelligent customer support email assistant. You help process and respond to customer emails.
 
@@ -50,6 +52,7 @@ export interface ProcessEmailResult {
 
 export class EmailAgent {
   private agent: Agent;
+  private actionLogger: AgentActionLogger;
 
   constructor() {
     this.agent = new Agent({
@@ -58,6 +61,8 @@ export class EmailAgent {
       tools: [emailSearchTool, emailTaggerTool, ragSearchTool],
       model: env.OPENAI_MODEL,
     });
+    
+    this.actionLogger = new AgentActionLogger(this.agent);
   }
 
   private async loadEmailThread(threadId: string): Promise<EmailMessage[]> {
@@ -87,27 +92,31 @@ ${email.body}`;
   }
 
   async processEmail(email: EmailMessage, threadId?: string): Promise<ProcessEmailResult> {
-    // Load thread history if available
-    const threadHistory = threadId ? await this.loadEmailThread(threadId) : [];
+    // Set thread context for tool logging
+    setCurrentThreadId(threadId);
     
-    // Build context from thread history
-    let context = '';
-    if (threadHistory.length > 0) {
-      context = 'Previous emails in this thread:\n\n';
-      for (const msg of threadHistory) {
-        if (msg.id !== email.id) {
-          context += `---\n${this.formatEmailForContext(msg)}\n\n`;
+    try {
+      // Load thread history if available
+      const threadHistory = threadId ? await this.loadEmailThread(threadId) : [];
+      
+      // Build context from thread history
+      let context = '';
+      if (threadHistory.length > 0) {
+        context = 'Previous emails in this thread:\n\n';
+        for (const msg of threadHistory) {
+          if (msg.id !== email.id) {
+            context += `---\n${this.formatEmailForContext(msg)}\n\n`;
+          }
         }
+        context += '---\nNew email to process:\n';
       }
-      context += '---\nNew email to process:\n';
-    }
 
-    // Format the current email
-    const currentEmailText = this.formatEmailForContext(email);
-    const fullMessage = context + currentEmailText;
+      // Format the current email
+      const currentEmailText = this.formatEmailForContext(email);
+      const fullMessage = context + currentEmailText;
 
-    // Run the agent
-    const result = await run(this.agent, fullMessage);
+      // Run the agent
+      const result = await run(this.agent, fullMessage);
 
     // Parse the result
     const processResult: ProcessEmailResult = {
@@ -162,7 +171,21 @@ ${email.body}`;
       }
     }
 
-    return processResult;
+      return processResult;
+    } finally {
+      // Clear thread context after processing
+      setCurrentThreadId(undefined);
+    }
+  }
+
+  // Get all actions performed by the agent for a thread
+  async getThreadActions(threadId: string) {
+    return await this.actionLogger.getThreadActions(threadId);
+  }
+
+  // Get analytics about agent actions
+  async getActionsSummary() {
+    return await this.actionLogger.getActionsSummary();
   }
 }
 
