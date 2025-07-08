@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { AuthLayout } from '../../components/templates/AuthLayout';
 import { Button } from '../../components/atoms/Button';
 import { Input } from '../../components/atoms/Input';

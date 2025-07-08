@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { FilterPills } from '../../components/molecules/FilterPills';
 
 const meta: Meta<typeof FilterPills> = {
