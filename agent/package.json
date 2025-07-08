@@ -1,0 +1,35 @@
+{
+  "name": "proresponse-agent",
+  "version": "1.0.0",
+  "description": "A focused TypeScript library providing an AI support agent assistant that helps support teams draft customer responses",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "clean": "rm -rf dist",
+    "prebuild": "npm run clean",
+    "test": "node dist/index.js"
+  },
+  "keywords": [
+    "ai",
+    "support",
+    "agent",
+    "openai",
+    "typescript",
+    "customer-service"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "openai": "^4.67.3",
+    "dotenv": "^16.4.5"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.3",
+    "@types/node": "^22.9.1"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+} 
