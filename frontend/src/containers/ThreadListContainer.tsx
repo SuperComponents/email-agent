@@ -1,10 +1,8 @@
-import React from 'react';
 import { useThreads, useThreadCounts } from '../repo/hooks';
 import { useUIStore } from '../stores/ui-store';
 import { ThreadList } from '../components/organisms';
-import { FilterPills } from '../components/molecules';
-import { SearchInput } from '../components/molecules';
 import type { ThreadFilter } from '../types/api';
+import type { ThreadPreviewProps } from '../components/molecules/ThreadPreview';
 
 export function ThreadListContainer() {
   const threadFilter = useUIStore((state) => state.threadFilter);
@@ -14,61 +12,63 @@ export function ThreadListContainer() {
   const setSearchQuery = useUIStore((state) => state.setSearchQuery);
   const setSelectedThread = useUIStore((state) => state.setSelectedThread);
   
-  const { data: threadsData, isLoading, error } = useThreads(threadFilter, searchQuery);
+  const { data: threadsData, isLoading } = useThreads(threadFilter, searchQuery);
   const { data: counts } = useThreadCounts();
   
-  const handleFilterChange = (filter: ThreadFilter) => {
-    setThreadFilter(filter);
-  };
+  // Transform API threads to ThreadPreviewProps
+  const threadPreviews: ThreadPreviewProps[] = threadsData?.threads.map(thread => ({
+    id: thread.id,
+    title: thread.subject,
+    snippet: thread.snippet,
+    author: {
+      name: thread.customer_name,
+      initials: thread.customer_name.split(' ').map(n => n[0]).join('').toUpperCase()
+    },
+    timestamp: new Date(thread.timestamp).toLocaleTimeString([], { 
+      hour: '2-digit', 
+      minute: '2-digit' 
+    }),
+    isActive: thread.id === selectedThreadId,
+    isUnread: thread.is_unread,
+    badges: [
+      ...(thread.status !== 'open' ? [{ 
+        label: thread.status, 
+        variant: thread.status === 'closed' ? 'secondary' : 'default' as const 
+      }] : []),
+      ...thread.tags.map(tag => ({ 
+        label: tag, 
+        variant: tag === 'urgent' ? 'destructive' : 'outline' as const 
+      }))
+    ]
+  })) || [];
   
-  const handleSearchChange = (query: string) => {
-    setSearchQuery(query);
-  };
+  const filterOptions = [
+    { id: 'all', label: 'All', count: counts?.all },
+    { id: 'unread', label: 'Unread', count: counts?.unread },
+    { id: 'flagged', label: 'Flagged', count: counts?.flagged },
+    { id: 'urgent', label: 'Urgent', count: counts?.urgent },
+    { id: 'awaiting_customer', label: 'Awaiting Customer', count: counts?.awaiting_customer },
+    { id: 'closed', label: 'Closed', count: counts?.closed },
+  ];
   
-  const handleThreadSelect = (threadId: string) => {
-    setSelectedThread(threadId);
-  };
-  
-  if (error) {
+  if (isLoading && threadPreviews.length === 0) {
     return (
-      <div className="p-4 text-red-600">
-        Error loading threads: {(error as Error).message}
+      <div className="flex items-center justify-center h-full">
+        <div className="animate-pulse text-gray-500">Loading threads...</div>
       </div>
     );
   }
   
-  const filters = [
-    { value: 'all' as const, label: 'All', count: counts?.all },
-    { value: 'unread' as const, label: 'Unread', count: counts?.unread },
-    { value: 'flagged' as const, label: 'Flagged', count: counts?.flagged },
-    { value: 'urgent' as const, label: 'Urgent', count: counts?.urgent },
-    { value: 'awaiting_customer' as const, label: 'Awaiting Customer', count: counts?.awaiting_customer },
-    { value: 'closed' as const, label: 'Closed', count: counts?.closed },
-  ];
-  
   return (
-    <div className="flex flex-col h-full">
-      <div className="p-4 border-b border-gray-200 space-y-3">
-        <SearchInput
-          value={searchQuery}
-          onChange={handleSearchChange}
-          placeholder="Search threads..."
-        />
-        <FilterPills
-          filters={filters}
-          activeFilter={threadFilter}
-          onFilterChange={handleFilterChange}
-        />
-      </div>
-      
-      <div className="flex-1 overflow-hidden">
-        <ThreadList
-          threads={threadsData?.threads || []}
-          selectedThreadId={selectedThreadId}
-          onThreadSelect={handleThreadSelect}
-          isLoading={isLoading}
-        />
-      </div>
-    </div>
+    <ThreadList
+      threads={threadPreviews}
+      filters={filterOptions}
+      activeFilter={threadFilter}
+      activeThreadId={selectedThreadId}
+      searchValue={searchQuery}
+      onSearchChange={setSearchQuery}
+      onFilterChange={(filterId) => setThreadFilter(filterId as ThreadFilter)}
+      onThreadClick={setSelectedThread}
+    />
   );
 }
