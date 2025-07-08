@@ -11,7 +11,7 @@ This service provides a web-based email client where LLM agents analyze incoming
 - **Thread-based email organization** - View and manage email conversations as organized threads
 - **AI-powered draft generation** - LLM agents automatically create response drafts using company knowledge
 - **Intelligent review system** - Agents evaluate draft quality and confidence scores
-- **Automated approval workflow** - High-confidence drafts can be auto-approved, others escalate to humans
+- **Automated approval workflow** - High confidence drafts can be auto-approved, others escalate to humans
 - **Real-time processing** - Immediate draft generation as emails arrive
 
 ## Tech Stack
@@ -19,7 +19,7 @@ This service provides a web-based email client where LLM agents analyze incoming
 - **Backend**: Hono API server
 - **Frontend**: React + Vite
 - **Database**: PostgreSQL 
-- **ORM**: Drizzle ORMgit
+- **ORM**: Drizzle ORM
 - **LLM Provider**: OpenAI GPT models
 - **Authentication**: JWT-based auth
 
@@ -94,10 +94,26 @@ erDiagram
         DECIMAL confidence_score
     }
 
+    AGENT_ACTION {
+        INT id PK
+        INT thread_id FK
+        INT email_id FK NULLABLE
+        INT draft_response_id FK NULLABLE
+        INT actor_user_id FK NULLABLE
+        ENUM action
+        JSON metadata
+        VARCHAR ip_address
+        TIMESTAMP created_at
+    }
+
     USER ||--o{ DRAFT_RESPONSE : "creates"
+    USER ||--o{ AGENT_ACTION  : "acts"
     THREAD ||--|{ EMAIL : "contains"
     THREAD ||--|{ DRAFT_RESPONSE : "has"
+    THREAD ||--|{ AGENT_ACTION  : "logs"
     EMAIL ||--|{ DRAFT_RESPONSE : "reply"
+    EMAIL ||--|{ AGENT_ACTION  : "action"
+    DRAFT_RESPONSE ||--o{ AGENT_ACTION : "action"
 ```
 
 ### Table Definitions
@@ -106,7 +122,7 @@ erDiagram
 - `id` (primary key)
 - `email` (unique)
 - `name`
-- `role` ("agent", "manager", etc.)
+- `role` ("agent", "manager", "admin")
 - `created_at`, `updated_at`
 
 **Thread**
@@ -138,8 +154,19 @@ erDiagram
 - `created_by_user_id` (foreign key → User.id, nullable for AI system)
 - `version` (integer, default 1)
 - `parent_draft_id` (self-referencing FK, nullable)
-- `confidence_score` (decimal, nullable)
+- `confidence_score` (numeric, nullable)
 - `created_at`, `updated_at`
+
+**Agent_Action**
+- `id` (primary key)
+- `thread_id` (foreign key → Thread.id, restrict on delete)
+- `email_id` (foreign key → Email.id, nullable, set-null on delete)
+- `draft_response_id` (foreign key → Draft_Response.id, nullable, set-null on delete)
+- `actor_user_id` (foreign key → User.id, nullable, set-null on delete)
+- `action` (enum: see `agent_action` values)
+- `metadata` (JSON for extra audit details)
+- `ip_address` (varchar(45), optional)
+- `created_at` (timestamp, not null)
 
 ## Agentic Workflow (MVP)
 
@@ -211,13 +238,16 @@ JWT_SECRET=your-secret-key
 **Drizzle Configuration (drizzle.config.ts)**
 ```typescript
 import type { Config } from 'drizzle-kit';
+import { config } from 'dotenv';
+
+config({ path: '.env' });
 
 export default {
-  schema: './src/db/schema.ts',
+  schema: './src/database/schema.ts',
   out: './drizzle',
-  driver: 'pg',
+  dialect: 'postgresql',
   dbCredentials: {
-    connectionString: process.env.DATABASE_URL!,
+    url: process.env.DATABASE_URL!,
   },
 } satisfies Config;
 ```
