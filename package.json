@@ -1,0 +1,39 @@
+{
+  "name": "emailsmart",
+  "version": "1.0.0",
+  "description": "TypeScript project with Bun server and Drizzle ORM",
+  "type": "module",
+  "scripts": {
+    "dev": "bun run --watch src/server.ts",
+    "start": "bun run src/server.ts",
+    "db:generate": "drizzle-kit generate:sqlite",
+    "db:push": "drizzle-kit push:sqlite",
+    "db:studio": "drizzle-kit studio",
+    "test": "vitest",
+    "test:spam": "vitest src/tests/integration/agent-spam-detection.test.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@faker-js/faker": "^9.9.0",
+    "@hono/node-server": "^1.11.1",
+    "@openai/agents": "^0.0.10",
+    "@types/better-sqlite3": "^7.6.13",
+    "better-sqlite3": "^12.2.0",
+    "bun": "^1.2.18",
+    "dotenv": "^17.1.0",
+    "drizzle-orm": "^0.29.3",
+    "hono": "^4.0.0",
+    "openai": "^5.8.3",
+    "vitest": "^3.2.4",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.0.0",
+    "@types/node": "^20.19.5",
+    "drizzle-kit": "^0.20.14",
+    "typescript": "^5.3.3"
+  },
+  "trustedDependencies": [
+    "es5-ext"
+  ]
+}

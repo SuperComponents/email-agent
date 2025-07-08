@@ -1,0 +1,10 @@
+node_modules/
+dist/
+.env
+.env.local
+.env.*
+sqlite.db
+test.db
+drizzle/
+.DS_Store
+*.log

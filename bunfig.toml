@@ -1,0 +1,3 @@
+[install.trustedDependencies]
+# Add packages with native dependencies here
+better-sqlite3 = true
