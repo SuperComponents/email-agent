@@ -2,11 +2,22 @@ import { serve } from '@hono/node-server'
 import { Hono } from 'hono'
 import { db } from './database/db.js'
 import { users, threads, emails, draft_responses, agent_actions } from './database/schema.js'
+import { corsMiddleware } from './middleware/cors.js'
+import { errorHandler } from './middleware/error-handler.js'
+import threadRoutes from './routes/threads.js'
+import messageRoutes from './routes/messages.js'
+import draftRoutes from './routes/drafts.js'
+import agentRoutes from './routes/agent.js'
+import countRoutes from './routes/counts.js'
 
 const app = new Hono()
 
+// Apply middleware
+app.use('*', corsMiddleware)
+app.use('*', errorHandler)
+
 app.get('/', (c) => {
-  return c.text('Hello Hono!')
+  return c.text('ProResponse AI Backend API')
 })
 
 // Test endpoint to fetch all data from database
@@ -61,6 +72,13 @@ app.get('/db-test', async (c) => {
     }, 500)
   }
 })
+
+// Mount API routes
+app.route('/api/threads', threadRoutes)
+app.route('/api/threads', messageRoutes)
+app.route('/api/threads', draftRoutes)
+app.route('/api/threads', agentRoutes)
+app.route('/api/threads', countRoutes)
 
 serve({
   fetch: app.fetch,
