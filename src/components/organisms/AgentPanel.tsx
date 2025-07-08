@@ -1,5 +1,5 @@
 import React from 'react';
-import { AgentAction, AgentActionProps } from '../molecules/AgentAction';
+import { AgentAction, type AgentActionProps } from '../molecules/AgentAction';
 import { Separator } from '../atoms/Separator';
 import { cn } from '../../lib/utils';
 

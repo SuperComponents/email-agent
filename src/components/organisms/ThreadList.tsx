@@ -1,7 +1,7 @@
 import React from 'react';
 import { SearchInput } from '../molecules/SearchInput';
-import { FilterPills, FilterOption } from '../molecules/FilterPills';
-import { ThreadPreview, ThreadPreviewProps } from '../molecules/ThreadPreview';
+import { FilterPills, type FilterOption } from '../molecules/FilterPills';
+import { ThreadPreview, type ThreadPreviewProps } from '../molecules/ThreadPreview';
 import { cn } from '../../lib/utils';
 
 export interface ThreadListProps extends React.HTMLAttributes<HTMLDivElement> {
