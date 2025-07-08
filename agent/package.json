@@ -1,7 +1,7 @@
 {
   "name": "proresponse-agent",
-  "version": "1.0.0",
-  "description": "A focused TypeScript library providing an AI support agent assistant that helps support teams draft customer responses",
+  "version": "2.0.0",
+  "description": "Enhanced TypeScript library providing an AI support agent assistant with email thread support, RAG integration, and automatic thread naming for support teams",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
@@ -9,7 +9,10 @@
     "dev": "tsc --watch",
     "clean": "rm -rf dist",
     "prebuild": "npm run clean",
-    "test": "node dist/index.js"
+    "test": "node dist/index.js",
+    "example": "node example.js",
+    "example:enhanced": "node enhancedExample.js",
+    "example:basic": "node example.js"
   },
   "keywords": [
     "ai",
@@ -17,7 +20,15 @@
     "agent",
     "openai",
     "typescript",
-    "customer-service"
+    "customer-service",
+    "email-threads",
+    "rag",
+    "retrieval-augmented-generation",
+    "thread-naming",
+    "sentiment-analysis",
+    "escalation-detection",
+    "chatgpt-style",
+    "enhanced-agent"
   ],
   "author": "",
   "license": "MIT",
@@ -31,5 +42,30 @@
   },
   "engines": {
     "node": ">=18.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/your-repo/proresponse-agent.git"
+  },
+  "bugs": {
+    "url": "https://github.com/your-repo/proresponse-agent/issues"
+  },
+  "homepage": "https://github.com/your-repo/proresponse-agent#readme",
+  "files": [
+    "dist/",
+    "README.md",
+    "LICENSE",
+    "example.js",
+    "enhancedExample.js"
+  ],
+  "features": {
+    "emailThreadSupport": true,
+    "ragIntegration": true,
+    "threadNaming": true,
+    "sentimentAnalysis": true,
+    "escalationDetection": true,
+    "multipleTools": true,
+    "skeletonImplementation": true,
+    "backwardCompatibility": true
   }
 } 
