@@ -18,13 +18,13 @@ const draftStore = new Map<string, Draft>();
 mockThreads.forEach(thread => {
   const detail = generateMockThreadDetail(thread);
   threadStore.set(thread.id, detail);
-  draftStore.set(thread.id, generateMockDraft());
+  draftStore.set(thread.id, generateMockDraft(thread.id));
 });
 
 export class MockAPI {
   // Thread endpoints
   static async getThreads(filter?: ThreadFilter, search?: string): Promise<{ threads: Thread[] }> {
-    await delay(300);
+    await delay(100);
     
     let threads = [...mockThreads];
     
@@ -205,6 +205,6 @@ export class MockAPI {
   // Filter counts
   static async getThreadCounts(): Promise<ThreadCounts> {
     await delay(100);
-    return generateMockThreadCounts();
+    return generateMockThreadCounts(mockThreads);
   }
 }

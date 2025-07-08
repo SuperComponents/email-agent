@@ -1,3 +1,4 @@
+import { useState, useEffect, useCallback } from 'react';
 import { useThreads, useThreadCounts } from '../repo/hooks';
 import { useUIStore } from '../stores/ui-store';
 import { ThreadList } from '../components/organisms';
@@ -12,8 +13,24 @@ export function ThreadListContainer() {
   const setSearchQuery = useUIStore((state) => state.setSearchQuery);
   const setSelectedThread = useUIStore((state) => state.setSelectedThread);
   
+  // Local search state for immediate UI updates
+  const [localSearchValue, setLocalSearchValue] = useState(searchQuery);
+  
+  // Debounce search query updates
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      setSearchQuery(localSearchValue);
+    }, 300); // 300ms debounce
+    
+    return () => clearTimeout(timeoutId);
+  }, [localSearchValue, setSearchQuery]);
+  
   const { data: threadsData, isLoading } = useThreads(threadFilter, searchQuery);
   const { data: counts } = useThreadCounts();
+  
+  const handleSearchChange = useCallback((value: string) => {
+    setLocalSearchValue(value);
+  }, []);
   
   // Transform API threads to ThreadPreviewProps
   const threadPreviews: ThreadPreviewProps[] = threadsData?.threads.map(thread => ({
@@ -51,22 +68,14 @@ export function ThreadListContainer() {
     { id: 'closed', label: 'Closed', count: counts?.closed },
   ];
   
-  if (isLoading && threadPreviews.length === 0) {
-    return (
-      <div className="flex items-center justify-center h-full">
-        <div className="animate-pulse text-gray-500">Loading threads...</div>
-      </div>
-    );
-  }
-  
   return (
     <ThreadList
       threads={threadPreviews}
       filters={filterOptions}
       activeFilter={threadFilter}
       activeThreadId={selectedThreadId}
-      searchValue={searchQuery}
-      onSearchChange={setSearchQuery}
+      searchValue={localSearchValue}
+      onSearchChange={handleSearchChange}
       onFilterChange={(filterId) => setThreadFilter(filterId as ThreadFilter)}
       onThreadClick={setSelectedThread}
     />

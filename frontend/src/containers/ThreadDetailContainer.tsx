@@ -1,41 +1,12 @@
-import React from 'react';
-import { useThread, useUpdateThread } from '../repo/hooks';
+import { useThread } from '../repo/hooks';
 import { useUIStore } from '../stores/ui-store';
-import { ThreadDetail } from '../components/organisms';
-import { Badge } from '../components/atoms';
+import { ThreadDetail, type EmailMessage } from '../components/organisms';
 
 export function ThreadDetailContainer() {
   const selectedThreadId = useUIStore((state) => state.selectedThreadId);
   const setComposerOpen = useUIStore((state) => state.setComposerOpen);
   
   const { data: thread, isLoading, error } = useThread(selectedThreadId || '');
-  const updateThread = useUpdateThread();
-  
-  const handleReply = () => {
-    setComposerOpen(true, 'reply');
-  };
-  
-  const handleStatusChange = (status: string) => {
-    if (!selectedThreadId) return;
-    
-    updateThread.mutate({
-      id: selectedThreadId,
-      updates: { status },
-    });
-  };
-  
-  const handleTagToggle = (tag: string) => {
-    if (!selectedThreadId || !thread) return;
-    
-    const newTags = thread.tags.includes(tag)
-      ? thread.tags.filter(t => t !== tag)
-      : [...thread.tags, tag];
-    
-    updateThread.mutate({
-      id: selectedThreadId,
-      updates: { tags: newTags },
-    });
-  };
   
   if (!selectedThreadId) {
     return (
@@ -61,37 +32,30 @@ export function ThreadDetailContainer() {
     );
   }
   
+  // Transform emails to EmailMessage format
+  const messages: EmailMessage[] = thread.emails.map(email => ({
+    id: email.id,
+    author: {
+      name: email.from_name,
+      email: email.from_email,
+      initials: email.from_name.split(' ').map(n => n[0]).join('').toUpperCase()
+    },
+    content: email.content,
+    timestamp: new Date(email.timestamp).toLocaleString([], {
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    }),
+    isSupport: email.is_support_reply
+  }));
+  
   return (
-    <div className="h-full flex flex-col">
-      <div className="p-4 border-b border-gray-200">
-        <div className="flex items-start justify-between">
-          <div>
-            <h2 className="text-lg font-semibold text-gray-900">{thread.subject}</h2>
-            <p className="text-sm text-gray-600 mt-1">
-              {thread.customer.name} • {thread.customer.email}
-            </p>
-          </div>
-          <div className="flex items-center gap-2">
-            <Badge variant={thread.status === 'closed' ? 'secondary' : 'default'}>
-              {thread.status}
-            </Badge>
-            {thread.tags.map(tag => (
-              <Badge key={tag} variant="outline">
-                {tag}
-              </Badge>
-            ))}
-          </div>
-        </div>
-      </div>
-      
-      <div className="flex-1 overflow-hidden">
-        <ThreadDetail
-          thread={thread}
-          onReply={handleReply}
-          onStatusChange={handleStatusChange}
-          onTagToggle={handleTagToggle}
-        />
-      </div>
-    </div>
+    <ThreadDetail
+      subject={thread.subject}
+      messages={messages}
+      status={thread.status as 'open' | 'closed' | 'pending'}
+      tags={thread.tags}
+    />
   );
 }
