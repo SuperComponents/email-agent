@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { AppLayout } from '../../components/templates/AppLayout';
 import { Header } from '../../components/organisms/Header';
 import { ThreadList } from '../../components/organisms/ThreadList';

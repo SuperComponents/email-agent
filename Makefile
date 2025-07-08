@@ -11,6 +11,7 @@ help:
 	@echo "  make install-agent - Install agent dependencies only"
 	@echo "  make f             - Start the frontend development server"
 	@echo "  make sb            - Start Storybook"
+	@echo "  make lf            - Run frontend linters (ESLint and TypeScript)"
 	@echo "  make build-agent   - Build the agent TypeScript project"
 	@echo "  make agent-example - Run the agent example (requires .env with OPENAI_API_KEY)"
 	@echo "  make clean         - Clean all build artifacts"
@@ -38,6 +39,11 @@ f:
 .PHONY: sb
 sb:
 	cd $(FRONTEND_DIR) && npm run storybook
+
+# Run frontend linters
+.PHONY: lf
+lf:
+	cd $(FRONTEND_DIR) && npm run lint:all
 
 # Build agent TypeScript project
 .PHONY: build-agent
