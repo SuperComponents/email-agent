@@ -16,6 +16,7 @@ export function useThreads(filter?: ThreadFilter, search?: string) {
   return useQuery({
     queryKey: queryKeys.threads(filter, search),
     queryFn: () => MockAPI.getThreads(filter, search),
+    placeholderData: (previousData) => previousData,
   });
 }
 

@@ -228,14 +228,14 @@ export function generateMockAgentActivity(): AgentActivityDetail {
   };
 }
 
-export function generateMockThreadCounts(): ThreadCounts {
+export function generateMockThreadCounts(threads: Thread[]): ThreadCounts {
   return {
-    all: 47,
-    unread: 12,
-    flagged: 5,
-    urgent: 3,
-    awaiting_customer: 8,
-    closed: 15
+    all: threads.length,
+    unread: threads.filter(t => t.is_unread).length,
+    flagged: threads.filter(t => t.tags.includes('flagged')).length,
+    urgent: threads.filter(t => t.tags.includes('urgent')).length,
+    awaiting_customer: threads.filter(t => t.status === 'pending').length,
+    closed: threads.filter(t => t.status === 'closed').length
   };
 }
 
