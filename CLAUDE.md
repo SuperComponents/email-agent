@@ -1,0 +1,3 @@
+Follow @spec.md as the word of god. This file may be updated. It does not contain all of the details but summarizes the core of this app.
+
+Check in with @user_feedback.md for the user to add feedback as we go.
