@@ -38,7 +38,7 @@ Name: proresponse ai
 
 ## Techstack
 
-- Frontend: React, vite, tailwind, shadcn for components
+- Frontend: React, vite, tailwind, shadcn for components, npm for package management
 - Backend: Typescript, drizzle, sqlite
 - Agent: OpenAI
 
