@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ProResponse AI – Thread View (Enterprise SaaS)</title>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    @media (prefers-color-scheme:dark){body{background:#0f172a;color:#e2e8f0}}
+    body{font-family:'Inter',sans-serif;background:#f8fafc;color:#0f172a;height:100vh;display:flex}
+
+    :root{--primary:#6366f1;--bg-side:#fff;--bg-main:#f8fafc;--bg-history:#f1f5f9;--border:#e2e8f0}
+
+    /* Layout */
+    .sidebar{width:270px;background:var(--bg-side);border-right:1px solid var(--border);overflow-y:auto}
+    .main{flex:1;display:flex;flex-direction:column;overflow:hidden;background:var(--bg-main)}
+    .tool-history{width:320px;background:var(--bg-history);border-left:1px solid var(--border);overflow-y:auto}
+
+    /* Sidebar */
+    .thread-item{padding:1.2rem 1.4rem;border-bottom:1px solid var(--border);cursor:pointer;transition:background .15s}
+    .thread-item:hover{background:#eef2ff}
+    .thread-item.active{background:#e0e7ff;border-left:4px solid var(--primary)}
+    .thread-title{font-weight:600;margin-bottom:.25rem;color:#0f172a}
+    .thread-snippet{font-size:.85rem;color:#64748b}
+
+    /* Messages */
+    .messages{flex:1;padding:2.5rem;overflow-y:auto}
+    .bubble{max-width:700px;background:#ffffff;border:1px solid var(--border);border-radius:12px;padding:1.25rem 1.5rem;box-shadow:0 2px 4px rgba(15,23,42,.06);margin-bottom:1.8rem}
+    .meta{font-size:.75rem;color:#64748b;margin-bottom:.6rem;font-weight:500}
+
+    /* Tool history */
+    .history-section{padding:1.5rem;border-bottom:1px solid var(--border)}
+    .history-title{font-weight:600;color:var(--primary);margin-bottom:.7rem}
+    .tool-call{font-family:monospace;background:#fff;border:1px solid var(--border);border-radius:8px;padding:.7rem 1rem;font-size:.8rem;margin-bottom:.8rem;display:block;box-shadow:0 1px 2px rgba(15,23,42,.04)}
+
+    /* Scrollbar */
+    ::-webkit-scrollbar{width:10px}
+    ::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:10px}
+  </style>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="thread-item active"><div class="thread-title">Bug in Checkout Flow</div><div class="thread-snippet">Customer experiencing error on step 3...</div></div>
+    <div class="thread-item"><div class="thread-title">Feature Request: Dark Mode</div><div class="thread-snippet">Is there a way to enable dark mode on...</div></div>
+    <div class="thread-item"><div class="thread-title">Thank you for the quick response!</div><div class="thread-snippet">Just wanted to say your support has...</div></div>
+  </aside>
+
+  <main class="main">
+    <section class="messages">
+      <div class="bubble"><div class="meta">Jane Doe • Oct 2, 11:14 AM</div>Hi team, I'm encountering an issue during the checkout flow where the page freezes on step 3. Could you please look into this?</div>
+      <div class="bubble" style="border-left:4px solid var(--primary)"><div class="meta">Agent James • Oct 2, 11:20 AM</div>Thanks for reaching out, Jane! We're sorry about the trouble. Let me gather some information and I'll get back to you shortly.</div>
+      <div class="bubble"><div class="meta">Jane Doe • Oct 2, 11:45 AM</div>Any updates on this? I'm on a tight deadline.</div>
+    </section>
+  </main>
+
+  <aside class="tool-history">
+    <div class="history-section"><div class="history-title">Tool Calls</div><span class="tool-call">searchKnowledgeBase("checkout step 3 freeze")</span><span class="tool-call">fetchBugReport(#1248)</span><span class="tool-call">draftReply("Apology + workaround")</span></div>
+    <div class="history-section"><div class="history-title">Analysis</div><p style="font-size:.85rem;line-height:1.5;color:#334155">Root cause confirmed. Patch scheduled for release 2.4.1. Temporary solution shared with customer.</p></div>
+  </aside>
+</body>
+</html> 

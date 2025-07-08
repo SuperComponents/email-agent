@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ProResponse AI – Thread View (Happy Fun)</title>
+  <style>
+    /* Reset */
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Comic Sans MS', 'Comic Neue', cursive;background:#fff9ed;color:#333;height:100vh;display:flex;overflow:hidden}
+
+    /* Fun color palette */
+    :root{
+      --c1:#ff6b6b;
+      --c2:#ffd93d;
+      --c3:#6bcB77;
+      --c4:#4d96ff;
+    }
+
+    /* Confetti background */
+    body::before{content:"";position:fixed;inset:0;pointer-events:none;background-image:radial-gradient(circle at 10% 20%,var(--c1) 2%,transparent 2%),radial-gradient(circle at 80% 10%,var(--c2) 1.5%,transparent 2%),radial-gradient(circle at 50% 80%,var(--c3) 1.5%,transparent 2%),radial-gradient(circle at 20% 70%,var(--c4) 1.5%,transparent 2%);background-size:120px 120px;opacity:0.15}
+
+    /* Layout */
+    .sidebar{width:240px;background:var(--c1);color:#fff;overflow-y:auto}
+    .main{flex:1;display:flex;flex-direction:column;overflow:hidden;background:#fff9ed}
+    .tool-history{width:300px;background:var(--c4);color:#fff;overflow-y:auto}
+
+    /* Threads */
+    .thread-item{padding:1rem 1.25rem;border-bottom:3px dashed rgba(255,255,255,.4);cursor:pointer;transition:background .2s}
+    .thread-item:hover{background:rgba(255,255,255,.1)}
+    .thread-item.active{background:rgba(255,255,255,.25)}
+    .thread-title{font-weight:bold;margin-bottom:.3rem}
+    .thread-snippet{font-size:.8rem;opacity:.9}
+
+    /* Messages */
+    .messages{flex:1;padding:2rem;overflow-y:auto;display:flex;flex-direction:column;gap:1.2rem}
+    .bubble{padding:1rem 1.25rem;border-radius:1.2rem;color:#fff;line-height:1.5;max-width:65%;box-shadow:0 4px 6px rgba(0,0,0,.05)}
+    .left{align-self:flex-start;background:var(--c2);color:#222}
+    .right{align-self:flex-end;background:var(--c3)}
+    .meta{font-size:.7rem;margin-bottom:.4rem;font-weight:bold}
+
+    /* Tool history */
+    .history-section{padding:1rem;border-bottom:2px dashed rgba(255,255,255,.4)}
+    .history-title{font-weight:bold;margin-bottom:.5rem;font-size:1.1rem}
+    .tool-call{background:rgba(255,255,255,.15);padding:.6rem .9rem;border-radius:10px;font-size:.8rem;margin-bottom:.6rem;display:block}
+
+    /* Scrollbar */
+    ::-webkit-scrollbar{width:10px}
+    ::-webkit-scrollbar-thumb{background:rgba(0,0,0,.2);border-radius:10px}
+  </style>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="thread-item active"><div class="thread-title">Bug in Checkout Flow</div><div class="thread-snippet">Customer experiencing error on step 3...</div></div>
+    <div class="thread-item"><div class="thread-title">Feature Request: Dark Mode</div><div class="thread-snippet">Is there a way to enable dark mode on...</div></div>
+    <div class="thread-item"><div class="thread-title">Thank you for the quick response!</div><div class="thread-snippet">Just wanted to say your support has...</div></div>
+  </aside>
+
+  <main class="main">
+    <section class="messages">
+      <div class="bubble left"><div class="meta">Jane • 11:14 AM</div>Hi team, I'm encountering an issue during the checkout flow where the page freezes on step 3. Could you please look into this?</div>
+      <div class="bubble right"><div class="meta">Agent • 11:20 AM</div>Thanks for reaching out, Jane! We're sorry about the trouble. Let me gather some information and I'll get back to you shortly.</div>
+      <div class="bubble left"><div class="meta">Jane • 11:45 AM</div>Any updates on this? I'm on a tight deadline.</div>
+    </section>
+  </main>
+
+  <aside class="tool-history">
+    <div class="history-section"><div class="history-title">Tool Calls</div><span class="tool-call">searchKnowledgeBase("checkout step 3 freeze")</span><span class="tool-call">fetchBugReport(#1248)</span><span class="tool-call">draftReply("Apology + workaround")</span></div>
+    <div class="history-section"><div class="history-title">Analysis</div><p style="font-size:.9rem;line-height:1.4">Suggested cache clear steps and alternate browser advice.</p></div>
+  </aside>
+</body>
+</html> 

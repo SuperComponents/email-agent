@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ProResponse AI – Thread View (Minimal Cards)</title>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:Georgia,serif;background:#ffffff;color:#333;height:100vh;display:flex}
+
+    /* Layout */
+    .sidebar{width:220px;background:#f8f8f8;border-right:1px solid #eee;overflow-y:auto}
+    .main{flex:1;display:flex;flex-direction:column;overflow:hidden;padding:2rem 2.5rem;background:#fafafa}
+    .tool-history{width:280px;background:#fafafa;border-left:1px solid #eee;overflow-y:auto}
+
+    /* Sidebar items as plain list */
+    .thread-item{padding:.9rem 1rem;border-bottom:1px dashed #ddd;cursor:pointer}
+    .thread-item:hover{background:#f0f0f0}
+    .thread-item.active{background:#eaeaea;font-weight:bold}
+    .thread-title{font-size:.95rem;margin-bottom:.15rem}
+    .thread-snippet{font-size:.75rem;color:#666}
+
+    /* Messages styled as cards */
+    .messages{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:1.5rem}
+    .card{background:#fff;border:1px solid #e5e5e5;border-radius:12px;padding:1.5rem;box-shadow:0 3px 6px rgba(0,0,0,.04)}
+    .card-header{display:flex;align-items:center;margin-bottom:.8rem}
+    .avatar{width:34px;height:34px;border-radius:34px;background:#999;color:#fff;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:bold;margin-right:.8rem}
+    .meta{font-size:.8rem;color:#999}
+
+    /* Tool history as stack */
+    .history-section{padding:1.5rem;border-bottom:1px solid #eee}
+    .history-title{font-weight:bold;margin-bottom:.6rem}
+    .tool-call{font-family:monospace;background:#fff;border:1px solid #e5e5e5;border-radius:6px;padding:.6rem .8rem;font-size:.8rem;margin-bottom:.6rem;display:block;box-shadow:0 1px 2px rgba(0,0,0,.03)}
+
+    /* Scrollbar */
+    ::-webkit-scrollbar{width:8px}
+    ::-webkit-scrollbar-thumb{background:#ccc;border-radius:8px}
+  </style>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="thread-item active"><div class="thread-title">Bug in Checkout Flow</div><div class="thread-snippet">Customer experiencing error on step 3...</div></div>
+    <div class="thread-item"><div class="thread-title">Feature Request: Dark Mode</div><div class="thread-snippet">Is there a way to enable dark mode on...</div></div>
+    <div class="thread-item"><div class="thread-title">Thank you for the quick response!</div><div class="thread-snippet">Just wanted to say your support has...</div></div>
+  </aside>
+
+  <main class="main">
+    <section class="messages">
+      <div class="card"><div class="card-header"><div class="avatar">JD</div><div><strong>Jane Doe</strong><div class="meta">Oct 2, 2025 • 11:14 AM</div></div></div><p>Hi team, I'm encountering an issue during the checkout flow where the page freezes on step 3. Could you please look into this?</p></div>
+      <div class="card"><div class="card-header"><div class="avatar">AJ</div><div><strong>Agent James</strong><div class="meta">Oct 2, 2025 • 11:20 AM</div></div></div><p>Thanks for reaching out, Jane! We're sorry about the trouble. Let me gather some information and I'll get back to you shortly.</p></div>
+      <div class="card"><div class="card-header"><div class="avatar">JD</div><div><strong>Jane Doe</strong><div class="meta">Oct 2, 2025 • 11:45 AM</div></div></div><p>Any updates on this? I'm on a tight deadline.</p></div>
+    </section>
+  </main>
+
+  <aside class="tool-history">
+    <div class="history-section"><div class="history-title">Tool Calls</div><span class="tool-call">searchKnowledgeBase("checkout step 3 freeze")</span><span class="tool-call">fetchBugReport(#1248)</span><span class="tool-call">draftReply("Apology + workaround")</span></div>
+    <div class="history-section"><div class="history-title">Analysis</div><p style="font-size:.85rem;color:#555;line-height:1.4">The customer cannot proceed past the payment step. Similar bug fixed in v2.4. Suggest clearing cache or switching browsers as temporary workaround while engineering investigates.</p></div>
+  </aside>
+</body>
+</html> 

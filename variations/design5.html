@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ProResponse AI – Thread View (Corporate)</title>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Times New Roman',serif;background:#f5f7fa;color:#1b1f23;height:100vh;display:flex}
+
+    /* Corporate palette */
+    :root{--navy:#0a2d53;--sky:#e6eef5;--accent:#0050b3}
+
+    /* Layout */
+    .sidebar{width:260px;background:var(--navy);color:#fff;overflow-y:auto}
+    .main{flex:1;display:flex;flex-direction:column;overflow:hidden;padding:2rem;background:#ffffff}
+    .tool-history{width:320px;background:var(--sky);overflow-y:auto;border-left:4px solid var(--accent)}
+
+    /* Threads */
+    .thread-item{padding:1rem 1.25rem;border-bottom:1px solid rgba(255,255,255,.15);cursor:pointer}
+    .thread-item:hover{background:rgba(255,255,255,.1)}
+    .thread-item.active{background:rgba(255,255,255,.2)}
+    .thread-title{font-weight:bold;margin-bottom:.2rem}
+    .thread-snippet{font-size:.8rem;opacity:.85}
+
+    /* Messages */
+    .messages{flex:1;overflow-y:auto}
+    .message{max-width:700px;margin-bottom:1.8rem}
+    .msg-header{margin-bottom:.4rem;font-size:.85rem;color:#555}
+    .bubble{border-left:6px solid var(--accent);background:#f9fbfe;padding:1rem 1.2rem;border-radius:4px;line-height:1.6;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+
+    /* Tool history */
+    .history-section{padding:1.2rem 1.4rem;border-bottom:1px solid #d0dce9}
+    .history-title{font-weight:bold;color:var(--accent);margin-bottom:.4rem}
+    .tool-call{font-family:monospace;background:#fff;border:1px solid #c3cfe4;border-left:4px solid var(--accent);padding:.6rem .8rem;font-size:.8rem;margin-bottom:.6rem;display:block}
+
+    /* Scrollbar */
+    ::-webkit-scrollbar{width:8px}
+    ::-webkit-scrollbar-thumb{background:#bcd; border-radius:8px}
+  </style>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="thread-item active"><div class="thread-title">Bug in Checkout Flow</div><div class="thread-snippet">Customer experiencing error on step 3...</div></div>
+    <div class="thread-item"><div class="thread-title">Feature Request: Dark Mode</div><div class="thread-snippet">Is there a way to enable dark mode on...</div></div>
+    <div class="thread-item"><div class="thread-title">Thank you for the quick response!</div><div class="thread-snippet">Just wanted to say your support has...</div></div>
+  </aside>
+
+  <main class="main">
+    <section class="messages">
+      <article class="message"><div class="msg-header">Jane Doe • Oct 2, 11:14 AM</div><div class="bubble">Hi team, I'm encountering an issue during the checkout flow where the page freezes on step 3. Could you please look into this?</div></article>
+      <article class="message"><div class="msg-header">Agent James • Oct 2, 11:20 AM</div><div class="bubble">Thanks for reaching out, Jane. Our team is investigating the incident and will provide an update shortly.</div></article>
+      <article class="message"><div class="msg-header">Jane Doe • Oct 2, 11:45 AM</div><div class="bubble">Any updates on this? I'm on a tight deadline.</div></article>
+    </section>
+  </main>
+
+  <aside class="tool-history">
+    <div class="history-section"><div class="history-title">Tool Calls</div><span class="tool-call">searchKnowledgeBase("checkout step 3 freeze")</span><span class="tool-call">fetchBugReport(#1248)</span><span class="tool-call">draftReply("Apology + workaround")</span></div>
+    <div class="history-section"><div class="history-title">Analysis</div><p style="font-size:.85rem;line-height:1.5;color:#333">Incident replicated in staging. Engineering bug ticket escalated. Customer advised on workaround.</p></div>
+  </aside>
+</body>
+</html> 

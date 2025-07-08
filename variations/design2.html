@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ProResponse AI – Thread View (Gradient)</title>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:"Helvetica Neue",Arial,sans-serif;background:#f0f4ff;color:#222;height:100vh;display:flex}
+
+    /* Gradient bar */
+    .grad-bar{position:fixed;top:0;left:0;width:100%;height:6px;background:linear-gradient(90deg,#4f46e5 0%,#6366f1 50%,#818cf8 100%)}
+
+    /* Layout */
+    .sidebar{width:260px;background:#ffffff;border-right:2px solid #e0e7ff;overflow-y:auto;box-shadow:2px 0 4px rgba(0,0,0,.05)}
+    .main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+    .tool-history{width:310px;background:#fdfdff;border-left:2px solid #e0e7ff;overflow-y:auto}
+
+    /* Sidebar items */
+    .thread-item{padding:1.25rem;border-bottom:1px solid #eef2ff;cursor:pointer;transition:background .15s}
+    .thread-item:hover{background:#f8faff}
+    .thread-item.active{background:#e0e7ff}
+    .thread-title{font-weight:700;margin-bottom:.3rem;color:#4f46e5}
+    .thread-snippet{font-size:.85rem;color:#6b7280}
+
+    /* Messages */
+    .messages{flex:1;padding:2rem 4rem;overflow-y:auto}
+    .message{max-width:640px;margin-bottom:2rem}
+    .msg-header{display:flex;align-items:center;margin-bottom:.6rem}
+    .avatar{width:36px;height:36px;border-radius:50%;background:#4f46e5;color:#fff;display:flex;align-items:center;justify-content:center;font-size:.9rem;font-weight:700;margin-right:.9rem}
+    .author{font-weight:700;color:#3730a3}
+    .timestamp{font-size:.75rem;color:#6b7280;margin-left:.6rem}
+    .bubble{background:#ffffff;border:1px solid #e0e7ff;border-radius:.9rem;padding:1.2rem 1.4rem;line-height:1.6;box-shadow:0 2px 4px rgba(0,0,0,.04)}
+
+    /* Tool history */
+    .history-section{padding:1.25rem;border-bottom:1px solid #eef2ff}
+    .history-title{font-weight:700;margin-bottom:.6rem;color:#4f46e5}
+    .tool-call{background:#f8faff;border:1px solid #e0e7ff;border-radius:.6rem;padding:.8rem 1.1rem;font-size:.85rem;margin-bottom:.8rem;word-break:break-all}
+
+    /* Scrollbar */
+    ::-webkit-scrollbar{width:10px}
+    ::-webkit-scrollbar-track{background:#f0f4ff}
+    ::-webkit-scrollbar-thumb{background:#c7d2fe;border-radius:10px}
+    ::-webkit-scrollbar-thumb:hover{background:#a5b4fc}
+  </style>
+</head>
+<body>
+  <div class="grad-bar"></div>
+  <aside class="sidebar">
+    <div class="thread-item active"><div class="thread-title">Bug in Checkout Flow</div><div class="thread-snippet">Customer experiencing error on step 3...</div></div>
+    <div class="thread-item"><div class="thread-title">Feature Request: Dark Mode</div><div class="thread-snippet">Is there a way to enable dark mode on...</div></div>
+    <div class="thread-item"><div class="thread-title">Thank you for the quick response!</div><div class="thread-snippet">Just wanted to say your support has...</div></div>
+  </aside>
+
+  <main class="main">
+    <section class="messages">
+      <article class="message"><div class="msg-header"><div class="avatar">JD</div><span class="author">Jane Doe</span><time class="timestamp">Oct 2, 2025 • 11:14 AM</time></div><div class="bubble">Hi team, I'm encountering an issue during the checkout flow where the page freezes on step 3. Could you please look into this?</div></article>
+      <article class="message"><div class="msg-header"><div class="avatar">AJ</div><span class="author">Agent James</span><time class="timestamp">Oct 2, 2025 • 11:20 AM</time></div><div class="bubble">Thanks for reaching out, Jane! We're sorry about the trouble. Let me gather some information and I'll get back to you shortly.</div></article>
+      <article class="message"><div class="msg-header"><div class="avatar">JD</div><span class="author">Jane Doe</span><time class="timestamp">Oct 2, 2025 • 11:45 AM</time></div><div class="bubble">Any updates on this? I'm on a tight deadline.</div></article>
+    </section>
+  </main>
+
+  <aside class="tool-history">
+    <div class="history-section"><div class="history-title">Tool Calls</div><div class="tool-call">searchKnowledgeBase("checkout step 3 freeze")</div><div class="tool-call">fetchBugReport(#1248)</div><div class="tool-call">draftReply("Apology + workaround")</div></div>
+    <div class="history-section"><div class="history-title">Analysis</div><p style="font-size:.9rem;line-height:1.5;color:#374151">The customer cannot proceed past the payment step. Similar bug fixed in v2.4. Suggest clearing cache or switching browsers as temporary workaround while engineering investigates.</p></div>
+  </aside>
+</body>
+</html> 
