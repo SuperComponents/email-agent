@@ -25,7 +25,7 @@ export function ThreadListContainer() {
     return () => clearTimeout(timeoutId);
   }, [localSearchValue, setSearchQuery]);
   
-  const { data: threadsData, isLoading } = useThreads(threadFilter, searchQuery);
+  const { data: threadsData } = useThreads(threadFilter, searchQuery);
   const { data: counts } = useThreadCounts();
   
   const handleSearchChange = useCallback((value: string) => {

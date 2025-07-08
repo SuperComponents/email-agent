@@ -1,6 +1,7 @@
 import { useThread } from '../repo/hooks';
 import { useUIStore } from '../stores/ui-store';
 import { ThreadDetail, type EmailMessage } from '../components/organisms';
+import { ComposerContainer } from './ComposerContainer';
 
 export function ThreadDetailContainer() {
   const selectedThreadId = useUIStore((state) => state.selectedThreadId);
@@ -50,12 +51,20 @@ export function ThreadDetailContainer() {
     isSupport: email.is_support_reply
   }));
   
+  const handleReply = () => {
+    setComposerOpen(true, 'reply');
+  };
+  
   return (
-    <ThreadDetail
-      subject={thread.subject}
-      messages={messages}
-      status={thread.status as 'open' | 'closed' | 'pending'}
-      tags={thread.tags}
-    />
+    <div className="flex flex-col h-full">
+      <ThreadDetail
+        subject={thread.subject}
+        messages={messages}
+        status={thread.status as 'open' | 'closed' | 'pending'}
+        tags={thread.tags}
+        onReply={handleReply}
+      />
+      <ComposerContainer />
+    </div>
   );
 }

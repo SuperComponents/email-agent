@@ -3,7 +3,6 @@ import { Header } from '../components/organisms';
 import { ThreadListContainer } from '../containers/ThreadListContainer';
 import { ThreadDetailContainer } from '../containers/ThreadDetailContainer';
 import { AgentPanelContainer } from '../containers/AgentPanelContainer';
-import { ComposerContainer } from '../containers/ComposerContainer';
 import { useAuthStore } from '../stores/auth-store';
 import { useUIStore } from '../stores/ui-store';
 
@@ -24,8 +23,6 @@ export function InboxPage() {
       sidebar={<ThreadListContainer />}
       main={<ThreadDetailContainer />}
       panel={isAgentPanelOpen ? <AgentPanelContainer /> : null}
-    >
-      <ComposerContainer />
-    </AppLayout>
+    />
   );
 }
