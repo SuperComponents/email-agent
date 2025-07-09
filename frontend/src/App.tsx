@@ -14,31 +14,31 @@ import { StackHandler, StackProvider, StackTheme } from '@stackframe/react';
 
 
 function HandlerRoutes() {
-const location = useLocation();
-return (
-<StackHandler app={stackClientApp} location={location.pathname} fullPage />
-);
+  const location = useLocation();
+  return (
+    <StackHandler app={stackClientApp} location={location.pathname} fullPage />
+  );
 }
 
 
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <StackProvider app={stackClientApp}>
-      <StackTheme>
 
       <Router>
-        <Routes>
-        <Route path="/handler/*" element={<HandlerRoutes />} />
-          {/* <Route path="/login" element={<LoginPage />} /> */}
-          <Route element={<ProtectedRoute />}>
-            <Route path="/" element={<InboxPage />} />
-            <Route path="/thread/:threadId" element={<InboxPage />} />
-          </Route>
-        </Routes>
+        <StackProvider app={stackClientApp}>
+          <StackTheme>
+            <Routes>
+              <Route path="/handler/*" element={<HandlerRoutes />} />
+              {/* <Route path="/login" element={<LoginPage />} /> */}
+              <Route element={<ProtectedRoute />}>
+                <Route path="/" element={<InboxPage />} />
+                <Route path="/thread/:threadId" element={<InboxPage />} />
+              </Route>
+            </Routes>
+          </StackTheme>
+        </StackProvider>
       </Router>
-      </StackTheme>
-      </StackProvider>
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   );

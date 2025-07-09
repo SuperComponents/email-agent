@@ -10,7 +10,8 @@ import { useStackApp } from '@stackframe/react';
 export function ProtectedRoute() {
   // const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const app = useStackApp();
-  const user = app.useUser(); 
+  const user = app.useUser();
+
   if (!user) {
     return <Navigate to="/handler/sign-in" replace />;
   }
@@ -18,6 +19,6 @@ export function ProtectedRoute() {
   // if (!isAuthenticated) {
   //   return <Navigate to="/login" replace />;
   // }
-  
+
   return <Outlet />;
 }
