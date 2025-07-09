@@ -14,6 +14,7 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route element={<ProtectedRoute />}>
             <Route path="/" element={<InboxPage />} />
+            <Route path="/thread/:threadId" element={<InboxPage />} />
           </Route>
         </Routes>
       </Router>
