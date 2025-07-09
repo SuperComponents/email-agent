@@ -1,12 +1,16 @@
+
+
 import { Navigate, Outlet } from 'react-router-dom';
-import { useAuthStore } from '../stores/auth-store';
+import { useStackApp } from '@stackframe/react';
 
 export function ProtectedRoute() {
-  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
-  
-  if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
+
+  const app = useStackApp();
+  const user = app.useUser();
+
+  if (!user) {
+    return <Navigate to="/handler/sign-in" replace />;
   }
-  
+
   return <Outlet />;
 }

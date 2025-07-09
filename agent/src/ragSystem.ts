@@ -1,69 +1,119 @@
 // RAG (Retrieval-Augmented Generation) System Integration
-// SKELETON IMPLEMENTATION - To be implemented by backend team
+// Now integrated with actual OpenAI vector store via fileSearchTool
 
 import { RAGQuery, RAGResult } from './types';
+import { knowledgeBaseSearchTool } from './openaiClient';
+import { run, Agent } from '@openai/agents';
 
 /**
- * SKELETON: Query the company knowledge base for relevant information
- * This function will be implemented by the backend team to integrate with the actual RAG system
+ * Query the company knowledge base for relevant information
+ * Now uses actual OpenAI vector store via fileSearchTool
  * 
  * @param query - The search query to find relevant company information
  * @returns Promise<RAGResult[]> - Array of relevant knowledge base results
  */
 export async function queryCompanyKnowledge(query: RAGQuery): Promise<RAGResult[]> {
-  console.log(`[RAG-Skeleton] Querying knowledge base with query: "${query.query}"`);
-  console.log(`[RAG-Skeleton] Category filter: ${query.category || 'all'}`);
-  console.log(`[RAG-Skeleton] Max results: ${query.maxResults || 5}`);
+  console.log(`[RAG-System] Querying knowledge base with query: "${query.query}"`);
+  console.log(`[RAG-System] Category filter: ${query.category || 'all'}`);
+  console.log(`[RAG-System] Max results: ${query.maxResults || 5}`);
   
-  // SKELETON: This will be replaced with actual RAG system integration
-  // For now, return mock structure to enable development and testing
-  const mockResults: RAGResult[] = [
-    {
-      id: 'rag-policy-001',
-      title: 'Customer Refund Policy',
-      content: 'SKELETON: Our refund policy allows customers to request refunds within 30 days of purchase for digital products and 60 days for physical products. Refunds are processed within 5-7 business days.',
-      category: 'policy',
-      relevanceScore: 0.95,
-      lastUpdated: new Date('2024-01-15'),
-      source: 'company-policies.pdf',
-      tags: ['refund', 'policy', 'customer-service'],
-      metadata: { 
-        section: 'Customer Service Policies',
-        version: '2.1',
-        approvedBy: 'Legal Team'
-      }
-    },
-    {
-      id: 'rag-knowledge-002',
-      title: 'Premium Account Features Troubleshooting',
-      content: 'SKELETON: If premium features are not accessible after subscription activation, check: 1) Account billing status, 2) Feature cache refresh (log out/in), 3) Subscription service status. Contact technical support if issues persist.',
-      category: 'knowledge',
-      relevanceScore: 0.87,
-      lastUpdated: new Date('2024-01-10'),
-      source: 'technical-kb.md',
-      tags: ['premium', 'troubleshooting', 'subscription'],
-      metadata: {
-        difficulty: 'basic',
-        successRate: 0.92
-      }
-    }
-  ];
+  try {
+    // Create a temporary agent with the knowledge base search tool to perform the query
+    const searchAgent = new Agent({
+      name: 'knowledge-search-agent',
+      instructions: `You are a knowledge search agent. Search for relevant information about: "${query.query}"
+      
+      Focus on finding information related to: ${query.category || 'all categories'}
+      
+      Return the most relevant information found in the knowledge base. Be specific and detailed.`,
+      model: 'gpt-4o-mini',
+      tools: [knowledgeBaseSearchTool]
+    });
 
-  console.log(`[RAG-Skeleton] Mock results generated: ${mockResults.length} items`);
-  console.log(`[RAG-Skeleton] Results preview:`, mockResults.map(r => r.title));
-  
-  // TODO: Replace with actual RAG system implementation:
-  // 1. Connect to vector database
-  // 2. Perform semantic search based on query
-  // 3. Apply category filters and relevance thresholds
-  // 4. Return formatted results with metadata
-  
-  return mockResults;
+    console.log(`[RAG-System] Executing search with vector store...`);
+    
+    const searchResult = await run(searchAgent, `Search for information about: ${query.query}`);
+    const searchResponse = Array.isArray(searchResult?.output) 
+      ? searchResult.output.map((item: any) => {
+          // Look for assistant message with output_text content
+          if (item.type === 'message' && item.role === 'assistant' && item.content) {
+            if (Array.isArray(item.content)) {
+              return item.content
+                .filter((contentItem: any) => contentItem.type === 'output_text' && contentItem.text)
+                .map((contentItem: any) => contentItem.text)
+                .join('\n');
+            }
+          }
+          return '';
+        }).filter(text => text.length > 0).join('\n')
+      : '';
+    
+    console.log(`[RAG-System] Vector store search completed`);
+    console.log(`[RAG-System] Search response length: ${searchResponse.length} characters`);
+    
+    if (searchResponse.length > 10) {
+      console.log(`[RAG-System] ✅ SUCCESS! Found content: "${searchResponse.substring(0, 200)}..."`);
+    }
+    
+    // Parse the search response into RAGResult format
+    const ragResults: RAGResult[] = parseSearchResponseToRAGResults(searchResponse, query);
+    
+    console.log(`[RAG-System] Parsed ${ragResults.length} results from search response`);
+    
+    return ragResults;
+    
+  } catch (error) {
+    console.error(`[RAG-System] Error querying vector store:`, error);
+    
+    // Fallback to indicate search failed
+    return [{
+      id: 'search-error',
+      title: 'Knowledge Base Search Error',
+      content: `Unable to search knowledge base: ${error instanceof Error ? error.message : 'Unknown error'}`,
+      category: 'other',
+      relevanceScore: 0.1,
+      lastUpdated: new Date(),
+      source: 'error',
+      metadata: { error: true }
+    }];
+  }
 }
 
 /**
- * SKELETON: Query company policies specifically
- * Focused search for policy-related information
+ * Parse search response from vector store into RAGResult format
+ * 
+ * @param searchResponse - Response from the vector store search
+ * @param query - Original query for context
+ * @returns RAGResult[] - Parsed results
+ */
+function parseSearchResponseToRAGResults(searchResponse: string, query: RAGQuery): RAGResult[] {
+  console.log(`[RAG-System] Parsing search response into RAGResult format`);
+  
+  // For now, create a single result with the search response
+  // This could be enhanced to parse multiple results if the response contains structured data
+  const result: RAGResult = {
+    id: `search-${Date.now()}`,
+    title: `Knowledge Base Search Results for "${query.query}"`,
+    content: searchResponse,
+    category: (query.category === 'all' ? 'other' : query.category) || 'knowledge',
+    relevanceScore: 0.8, // Default relevance score
+    lastUpdated: new Date(),
+    source: 'vector-store',
+    metadata: {
+      originalQuery: query.query,
+      searchCategory: query.category,
+      searchTimestamp: new Date().toISOString()
+    }
+  };
+  
+  console.log(`[RAG-System] Created RAGResult with ID: ${result.id}`);
+  
+  return [result];
+}
+
+/**
+ * Query company policies specifically
+ * Enhanced to use actual vector store with policy-focused queries
  * 
  * @param policyQuery - Search query for policy information
  * @param policyType - Specific type of policy (optional)
@@ -73,30 +123,32 @@ export async function queryCompanyPolicies(
   policyQuery: string, 
   policyType?: 'refund' | 'privacy' | 'terms' | 'shipping' | 'support'
 ): Promise<RAGResult[]> {
-  console.log(`[RAG-Skeleton] Querying company policies for: "${policyQuery}"`);
-  console.log(`[RAG-Skeleton] Policy type filter: ${policyType || 'all'}`);
+  console.log(`[RAG-System] Querying company policies for: "${policyQuery}"`);
+  console.log(`[RAG-System] Policy type filter: ${policyType || 'all'}`);
+  
+  // Enhance query with policy-specific context
+  const enhancedQuery = `${policyQuery} ${policyType ? `${policyType} policy` : 'policy'}`;
   
   const ragQuery: RAGQuery = {
-    query: policyQuery,
+    query: enhancedQuery,
     category: 'policy',
     maxResults: 3,
     relevanceThreshold: 0.7,
     includeMetadata: true
   };
   
-  // SKELETON: Filter by policy type when implemented
-  console.log(`[RAG-Skeleton] Converting to RAG query and delegating to knowledge system`);
+  console.log(`[RAG-System] Enhanced policy query: "${enhancedQuery}"`);
   
   const results = await queryCompanyKnowledge(ragQuery);
   
-  // SKELETON: Apply additional policy-specific filtering when backend is ready
-  console.log(`[RAG-Skeleton] Policy query completed: ${results.length} policy documents found`);
+  console.log(`[RAG-System] Policy query completed: ${results.length} policy documents found`);
   
   return results;
 }
 
 /**
- * SKELETON: Query procedural knowledge (how-to guides, troubleshooting steps)
+ * Query procedural knowledge (how-to guides, troubleshooting steps)
+ * Enhanced to use actual vector store with procedure-focused queries
  * 
  * @param procedureQuery - Search query for procedural information  
  * @param issueType - Type of issue/procedure (optional)
@@ -106,56 +158,62 @@ export async function queryProcedures(
   procedureQuery: string,
   issueType?: 'technical' | 'billing' | 'shipping' | 'account' | 'general'
 ): Promise<RAGResult[]> {
-  console.log(`[RAG-Skeleton] Querying procedures for: "${procedureQuery}"`);
-  console.log(`[RAG-Skeleton] Issue type: ${issueType || 'general'}`);
+  console.log(`[RAG-System] Querying procedures for: "${procedureQuery}"`);
+  console.log(`[RAG-System] Issue type: ${issueType || 'general'}`);
+  
+  // Enhance query with procedure-specific context
+  const enhancedQuery = `${procedureQuery} ${issueType ? `${issueType} issue` : ''} procedure how-to steps`;
   
   const ragQuery: RAGQuery = {
-    query: procedureQuery,
+    query: enhancedQuery,
     category: 'procedure',
     maxResults: 5,
     relevanceThreshold: 0.6,
     includeMetadata: true
   };
   
-  console.log(`[RAG-Skeleton] Converting to RAG query for procedure lookup`);
+  console.log(`[RAG-System] Enhanced procedure query: "${enhancedQuery}"`);
   
   const results = await queryCompanyKnowledge(ragQuery);
   
-  // SKELETON: Apply procedure-specific filtering and ranking when implemented
-  console.log(`[RAG-Skeleton] Procedure query completed: ${results.length} procedural guides found`);
+  console.log(`[RAG-System] Procedure query completed: ${results.length} procedural guides found`);
   
   return results;
 }
 
 /**
- * SKELETON: Query frequently asked questions
+ * Query frequently asked questions
+ * Enhanced to use actual vector store with FAQ-focused queries
  * 
  * @param faqQuery - Search query for FAQ information
  * @returns Promise<RAGResult[]> - FAQ-related results
  */
 export async function queryFAQ(faqQuery: string): Promise<RAGResult[]> {
-  console.log(`[RAG-Skeleton] Querying FAQ for: "${faqQuery}"`);
+  console.log(`[RAG-System] Querying FAQ for: "${faqQuery}"`);
+  
+  // Enhance query with FAQ-specific context
+  const enhancedQuery = `${faqQuery} FAQ frequently asked questions`;
   
   const ragQuery: RAGQuery = {
-    query: faqQuery,
+    query: enhancedQuery,
     category: 'faq',
     maxResults: 3,
     relevanceThreshold: 0.8,
     includeMetadata: false
   };
   
-  console.log(`[RAG-Skeleton] Converting to RAG query for FAQ lookup`);
+  console.log(`[RAG-System] Enhanced FAQ query: "${enhancedQuery}"`);
   
   const results = await queryCompanyKnowledge(ragQuery);
   
-  console.log(`[RAG-Skeleton] FAQ query completed: ${results.length} FAQ entries found`);
+  console.log(`[RAG-System] FAQ query completed: ${results.length} FAQ entries found`);
   
   return results;
 }
 
 /**
- * SKELETON: Generate contextual search queries based on email content
- * Automatically generates relevant search queries from email thread content
+ * Generate contextual search queries based on email content
+ * Enhanced to use actual vector store with intelligent query generation
  * 
  * @param emailContent - Raw email content to analyze
  * @param includeCategories - Categories to include in search
@@ -165,60 +223,176 @@ export async function generateContextualQueries(
   emailContent: string,
   includeCategories: ('policy' | 'knowledge' | 'procedure' | 'faq')[] = ['policy', 'knowledge', 'procedure']
 ): Promise<RAGResult[]> {
-  console.log(`[RAG-Skeleton] Generating contextual queries from email content`);
-  console.log(`[RAG-Skeleton] Content length: ${emailContent.length} characters`);
-  console.log(`[RAG-Skeleton] Categories to search: ${includeCategories.join(', ')}`);
+  console.log(`[RAG-System] Generating contextual queries from email content`);
+  console.log(`[RAG-System] Content length: ${emailContent.length} characters`);
+  console.log(`[RAG-System] Categories to search: ${includeCategories.join(', ')}`);
   
-  // SKELETON: This will be enhanced with NLP/LLM analysis when implemented
-  // For now, use simple keyword extraction as placeholder
-  
-  const contextualQueries: string[] = [];
-  
-  // SKELETON: Extract key terms and issues (to be replaced with NLP)
-  const keywords = extractKeywordsFromEmail(emailContent);
-  console.log(`[RAG-Skeleton] Extracted keywords: ${keywords.join(', ')}`);
-  
-  // Generate queries based on keywords
-  for (const keyword of keywords.slice(0, 3)) { // Limit to top 3 for efficiency
-    contextualQueries.push(`${keyword} support help assistance`);
-  }
-  
-  console.log(`[RAG-Skeleton] Generated ${contextualQueries.length} contextual queries`);
-  
-  // Execute all queries in parallel
-  const allResults: RAGResult[] = [];
-  
-  for (const query of contextualQueries) {
-    console.log(`[RAG-Skeleton] Executing contextual query: "${query}"`);
+  try {
+    // Create a query analysis agent to generate relevant search queries
+    const queryAgent = new Agent({
+      name: 'query-analysis-agent',
+      instructions: `You are a knowledge base query generator. Your job is to analyze email content and generate 2-3 specific search queries for finding relevant company information.
+
+IMPORTANT: Format your response as a simple numbered list like this:
+1. [first search query]
+2. [second search query]  
+3. [third search query]
+
+Generate queries that would help find:
+- Company policies (refund, billing, account, subscription policies)
+- Troubleshooting procedures (technical issues, account problems)
+- FAQ information (common questions and answers)
+- General company knowledge
+
+Categories to focus on: ${includeCategories.join(', ')}
+
+Make each query specific and actionable - like you're searching a help center or knowledge base.`,
+      model: 'gpt-4o-mini',
+      tools: []
+    });
+
+    console.log(`[RAG-System] Analyzing email content to generate contextual queries...`);
     
-    const ragQuery: RAGQuery = {
-      query,
-      category: 'all',
-      maxResults: 2,
-      relevanceThreshold: 0.7
-    };
+    const analysisResult = await run(queryAgent, `Analyze this email content and generate relevant search queries:\n\n${emailContent}`);
+    const analysisResponse = Array.isArray(analysisResult?.output) 
+      ? analysisResult.output.map((item: any) => {
+          // Look for assistant message with output_text content
+          if (item.type === 'message' && item.role === 'assistant' && item.content) {
+            if (Array.isArray(item.content)) {
+              return item.content
+                .filter((contentItem: any) => contentItem.type === 'output_text' && contentItem.text)
+                .map((contentItem: any) => contentItem.text)
+                .join('\n');
+            }
+          }
+          return '';
+        }).filter(text => text.length > 0).join('\n')
+      : '';
     
-    const results = await queryCompanyKnowledge(ragQuery);
-    allResults.push(...results);
+    console.log(`[RAG-System] Query analysis completed`);
+    console.log(`[RAG-System] Analysis response length: ${analysisResponse.length} characters`);
+    
+    // Extract queries from the analysis response
+    let queries = extractQueriesFromAnalysis(analysisResponse);
+    
+    // If still no queries, create fallback queries from email keywords
+    if (queries.length === 0) {
+      console.log(`[RAG-System] Creating fallback queries from email keywords`);
+      const keywords = extractKeywordsFromEmail(emailContent);
+      if (keywords.length > 0) {
+        queries = [
+          `${keywords.slice(0, 2).join(' ')} policy`,
+          `${keywords.slice(0, 2).join(' ')} troubleshooting`,
+          `${keywords.slice(0, 2).join(' ')} help`
+        ];
+        console.log(`[RAG-System] Generated fallback queries:`, queries);
+      }
+    }
+    
+    console.log(`[RAG-System] Generated ${queries.length} contextual queries:`, queries);
+    
+    // Execute all queries in parallel
+    const allResults: RAGResult[] = [];
+    
+    for (const query of queries.slice(0, 3)) { // Limit to top 3 for efficiency
+      console.log(`[RAG-System] Executing contextual query: "${query}"`);
+      
+      const ragQuery: RAGQuery = {
+        query,
+        category: 'all',
+        maxResults: 2,
+        relevanceThreshold: 0.7
+      };
+      
+      const results = await queryCompanyKnowledge(ragQuery);
+      allResults.push(...results);
+    }
+    
+    console.log(`[RAG-System] Contextual search completed: ${allResults.length} total results found`);
+    
+    return allResults;
+    
+  } catch (error) {
+    console.error(`[RAG-System] Error in contextual query generation:`, error);
+    
+    // Fallback to simple keyword extraction
+    console.log(`[RAG-System] Falling back to simple keyword extraction`);
+    const keywords = extractKeywordsFromEmail(emailContent);
+    
+    if (keywords.length > 0) {
+      const ragQuery: RAGQuery = {
+        query: keywords.slice(0, 3).join(' '),
+        category: 'all',
+        maxResults: 3,
+        relevanceThreshold: 0.6
+      };
+      
+      return await queryCompanyKnowledge(ragQuery);
+    }
+    
+    return [];
   }
-  
-  // SKELETON: Deduplicate and rank results when backend is implemented
-  console.log(`[RAG-Skeleton] Contextual search completed: ${allResults.length} total results found`);
-  
-  return allResults;
 }
 
 /**
- * SKELETON: Simple keyword extraction (to be replaced with NLP)
- * This is a placeholder for more sophisticated content analysis
+ * Extract search queries from analysis response
+ * 
+ * @param analysisResponse - Response from query analysis agent
+ * @returns string[] - Extracted queries
+ */
+function extractQueriesFromAnalysis(analysisResponse: string): string[] {
+  console.log(`[RAG-System] Extracting queries from analysis response`);
+  console.log(`[RAG-System] Analysis response: "${analysisResponse}"`);
+  
+  const queries: string[] = [];
+  const lines = analysisResponse.split('\n');
+  
+  for (const line of lines) {
+    const trimmed = line.trim();
+    // Look for various query formats
+    if (trimmed.toLowerCase().startsWith('query:') || 
+        trimmed.toLowerCase().startsWith('search:') ||
+        trimmed.match(/^\d+\.\s+/) || // Numbered lists
+        trimmed.startsWith('- ')) { // Bullet points
+      
+      let query = trimmed;
+      // Clean up the query
+      query = query.replace(/^(query:|search:|\d+\.\s*|-\s*)/i, '').trim();
+      
+      if (query.length > 5) { // Only add substantial queries
+        queries.push(query);
+      }
+    }
+  }
+  
+  // If no structured queries found, try to extract from the raw response
+  if (queries.length === 0) {
+    console.log(`[RAG-System] No structured queries found, extracting from raw response`);
+    
+    // Split by common delimiters and extract meaningful phrases
+    const phrases = analysisResponse
+      .split(/[.!?;\n]/)
+      .map(phrase => phrase.trim())
+      .filter(phrase => phrase.length > 10 && phrase.length < 100)
+      .slice(0, 3); // Take first 3 meaningful phrases
+    
+    queries.push(...phrases);
+  }
+  
+  console.log(`[RAG-System] Extracted ${queries.length} queries from analysis:`, queries);
+  
+  return queries;
+}
+
+/**
+ * Simple keyword extraction (fallback method)
  * 
  * @param emailContent - Email content to analyze
  * @returns string[] - Extracted keywords
  */
 function extractKeywordsFromEmail(emailContent: string): string[] {
-  console.log(`[RAG-Skeleton] Extracting keywords using simple pattern matching`);
+  console.log(`[RAG-System] Extracting keywords using simple pattern matching`);
   
-  // SKELETON: Basic keyword extraction - to be replaced with NLP/LLM analysis
   const commonSupportTerms = [
     'refund', 'billing', 'payment', 'subscription', 'premium', 'account',
     'login', 'password', 'access', 'features', 'bug', 'error', 'issue',
@@ -229,14 +403,13 @@ function extractKeywordsFromEmail(emailContent: string): string[] {
   const content = emailContent.toLowerCase();
   const foundKeywords = commonSupportTerms.filter(term => content.includes(term));
   
-  console.log(`[RAG-Skeleton] Found ${foundKeywords.length} relevant keywords in content`);
+  console.log(`[RAG-System] Found ${foundKeywords.length} relevant keywords in content`);
   
   return foundKeywords;
 }
 
 /**
- * SKELETON: Format RAG results for agent consumption
- * Prepares RAG results for integration into agent prompts
+ * Format RAG results for agent consumption
  * 
  * @param ragResults - Raw RAG results
  * @param maxContentLength - Maximum content length per result
@@ -246,18 +419,18 @@ export function formatRAGResultsForAgent(
   ragResults: RAGResult[],
   maxContentLength: number = 500
 ): string {
-  console.log(`[RAG-Skeleton] Formatting ${ragResults.length} RAG results for agent consumption`);
-  console.log(`[RAG-Skeleton] Max content length per result: ${maxContentLength} characters`);
+  console.log(`[RAG-System] Formatting ${ragResults.length} RAG results for agent consumption`);
+  console.log(`[RAG-System] Max content length per result: ${maxContentLength} characters`);
   
   if (ragResults.length === 0) {
-    console.log(`[RAG-Skeleton] No RAG results to format`);
+    console.log(`[RAG-System] No RAG results to format`);
     return 'No relevant company knowledge found for this query.';
   }
   
   const formattedSections: string[] = [];
   
   ragResults.forEach((result, index) => {
-    console.log(`[RAG-Skeleton] Formatting result ${index + 1}: "${result.title}"`);
+    console.log(`[RAG-System] Formatting result ${index + 1}: "${result.title}"`);
     
     // Truncate content if too long
     const content = result.content.length > maxContentLength 
@@ -277,15 +450,15 @@ ${result.tags ? `Tags: ${result.tags.join(', ')}` : ''}
   });
   
   const formatted = `
-## Relevant Company Knowledge
+## Relevant Company Knowledge (from Vector Store)
 
 ${formattedSections.join('\n\n---\n\n')}
 
-**Note**: This information has been retrieved from our company knowledge base. Please ensure the response aligns with these policies and procedures.
+**Note**: This information has been retrieved from our company knowledge base via vector store search. Please ensure the response aligns with these policies and procedures.
 `.trim();
   
-  console.log(`[RAG-Skeleton] Formatted content length: ${formatted.length} characters`);
-  console.log(`[RAG-Skeleton] Number of sections: ${formattedSections.length}`);
+  console.log(`[RAG-System] Formatted content length: ${formatted.length} characters`);
+  console.log(`[RAG-System] Number of sections: ${formattedSections.length}`);
   
   return formatted;
 } 

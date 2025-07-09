@@ -3,8 +3,11 @@ import type { Thread, ThreadDetail, Draft, AgentActivityDetail, ThreadCounts, Th
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 class APIError extends Error {
-  constructor(public status: number, message: string) {
+  status: number;
+  
+  constructor(status: number, message: string) {
     super(message);
+    this.status = status;
     this.name = 'APIError';
   }
 }
@@ -36,61 +39,71 @@ async function fetchAPI<T>(endpoint: string, options?: RequestInit): Promise<T> 
   }
 }
 
-export class APIClient {
-  // Thread endpoints
-  static async getThreads(filter?: ThreadFilter, search?: string): Promise<{ threads: Thread[] }> {
-    const params = new URLSearchParams();
-    if (filter) params.append('filter', filter);
-    if (search) params.append('search', search);
-    
-    const query = params.toString() ? `?${params.toString()}` : '';
-    return fetchAPI<{ threads: Thread[] }>(`/api/threads${query}`);
-  }
-
-  static async getThread(id: string): Promise<ThreadDetail> {
-    return fetchAPI<ThreadDetail>(`/api/threads/${id}`);
-  }
-
-  static async updateThread(id: string, updates: { status?: string; tags?: string[] }): Promise<{ id: string; status: string; tags: string[] }> {
-    return fetchAPI<{ id: string; status: string; tags: string[] }>(`/api/threads/${id}`, {
-      method: 'PATCH',
-      body: JSON.stringify(updates),
-    });
-  }
-
-  // Message endpoints
-  static async sendMessage(threadId: string, content: string) {
-    return fetchAPI(`/api/threads/${threadId}/messages`, {
-      method: 'POST',
-      body: JSON.stringify({ content }),
-    });
-  }
-
-  static async getDraft(threadId: string): Promise<Draft> {
-    return fetchAPI<Draft>(`/api/threads/${threadId}/draft`);
-  }
-
-  static async updateDraft(threadId: string, content: string): Promise<Draft> {
-    return fetchAPI<Draft>(`/api/threads/${threadId}/draft`, {
-      method: 'PUT',
-      body: JSON.stringify({ content }),
-    });
-  }
-
-  // Agent endpoints
-  static async getAgentActivity(threadId: string): Promise<AgentActivityDetail> {
-    return fetchAPI<AgentActivityDetail>(`/api/threads/${threadId}/agent-activity`);
-  }
-
-  static async regenerateDraft(threadId: string, instructions?: string): Promise<{ status: string; message: string }> {
-    return fetchAPI<{ status: string; message: string }>(`/api/threads/${threadId}/regenerate`, {
-      method: 'POST',
-      body: JSON.stringify({ instructions }),
-    });
-  }
-
-  // Filter counts
-  static async getThreadCounts(): Promise<ThreadCounts> {
-    return fetchAPI<ThreadCounts>('/api/threads/counts');
-  }
+// Thread endpoints
+export async function getThreads(filter?: ThreadFilter, search?: string): Promise<{ threads: Thread[] }> {
+  const params = new URLSearchParams();
+  if (filter) params.append('filter', filter);
+  if (search) params.append('search', search);
+  
+  const query = params.toString() ? `?${params.toString()}` : '';
+  return fetchAPI<{ threads: Thread[] }>(`/api/threads${query}`);
 }
+
+export async function getThread(id: string): Promise<ThreadDetail> {
+  return fetchAPI<ThreadDetail>(`/api/threads/${id}`);
+}
+
+export async function updateThread(id: string, updates: { status?: string; tags?: string[] }): Promise<{ id: string; status: string; tags: string[] }> {
+  return fetchAPI<{ id: string; status: string; tags: string[] }>(`/api/threads/${id}`, {
+    method: 'PATCH',
+    body: JSON.stringify(updates),
+  });
+}
+
+// Message endpoints
+export async function sendMessage(threadId: string, content: string) {
+  return fetchAPI(`/api/threads/${threadId}/messages`, {
+    method: 'POST',
+    body: JSON.stringify({ content }),
+  });
+}
+
+export async function getDraft(threadId: string): Promise<Draft> {
+  return fetchAPI<Draft>(`/api/threads/${threadId}/draft`);
+}
+
+export async function updateDraft(threadId: string, content: string): Promise<Draft> {
+  return fetchAPI<Draft>(`/api/threads/${threadId}/draft`, {
+    method: 'PUT',
+    body: JSON.stringify({ content }),
+  });
+}
+
+// Agent endpoints
+export async function getAgentActivity(threadId: string): Promise<AgentActivityDetail> {
+  return fetchAPI<AgentActivityDetail>(`/api/threads/${threadId}/agent-activity`);
+}
+
+export async function regenerateDraft(threadId: string, instructions?: string): Promise<{ status: string; message: string }> {
+  return fetchAPI<{ status: string; message: string }>(`/api/threads/${threadId}/regenerate`, {
+    method: 'POST',
+    body: JSON.stringify({ instructions }),
+  });
+}
+
+// Filter counts
+export async function getThreadCounts(): Promise<ThreadCounts> {
+  return fetchAPI<ThreadCounts>('/api/threads/counts');
+}
+
+export const APIClient = {
+  getThreads,
+  getThread,
+  updateThread,
+  sendMessage,
+  getDraft,
+  updateDraft,
+  getAgentActivity,
+  regenerateDraft,
+  getThreadCounts,
+};

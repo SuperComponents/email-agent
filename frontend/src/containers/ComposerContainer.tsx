@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useUIStore } from '../stores/ui-store';
 import { useComposerStore } from '../stores/composer-store';
 import { useDraft, useUpdateDraft, useSendMessage, useRegenerateDraft } from '../repo/hooks';
