@@ -74,11 +74,12 @@ app.get('/db-test', async (c) => {
 })
 
 // Mount API routes
+// Mount routes with specific paths first to avoid conflicts
+app.route('/api/threads', countRoutes)
 app.route('/api/threads', threadRoutes)
 app.route('/api/threads', messageRoutes)
 app.route('/api/threads', draftRoutes)
 app.route('/api/threads', agentRoutes)
-app.route('/api/threads', countRoutes)
 
 serve({
   fetch: app.fetch,
