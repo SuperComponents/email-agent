@@ -4,7 +4,9 @@ Utilities for accessing OpenAI vector stores that are automatically synced from 
 
 ## Auto-Sync
 
-The GitHub workflow at `.github/workflows/sync-vector-store.yml` automatically syncs markdown files in `rag/knowledge_base/` to an OpenAI vector store. This sync only runs on the `master` and `rag` branches.
+The GitHub workflow at `.github/workflows/sync-vector-store.yml` automatically syncs markdown files in `rag/knowledge_base/` to an OpenAI vector store. This sync only runs:
+- On the `master` and `rag` branches
+- When `.md` files in `rag/knowledge_base/` are changed
 
 ## Functions
 
