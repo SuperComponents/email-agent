@@ -33,7 +33,7 @@ export function ThreadListContainer() {
   }, []);
   
   // Transform API threads to ThreadPreviewProps
-  const threadPreviews: ThreadPreviewProps[] = threadsData?.threads.map(thread => ({
+  const threadPreviews: ThreadPreviewProps[] = threadsData?.map(thread => ({
     id: thread.id,
     title: thread.subject,
     snippet: thread.snippet,
