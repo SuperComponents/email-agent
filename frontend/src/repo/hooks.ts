@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { MockAPI } from './mock-api';
+import { APIClient } from './api-client';
 import type { ThreadFilter } from '../types/api';
 
 // Query keys
@@ -15,7 +15,7 @@ export const queryKeys = {
 export function useThreads(filter?: ThreadFilter, search?: string) {
   return useQuery({
     queryKey: queryKeys.threads(filter, search),
-    queryFn: () => MockAPI.getThreads(filter, search),
+    queryFn: () => APIClient.getThreads(filter, search),
     placeholderData: (previousData) => previousData,
   });
 }
@@ -23,7 +23,7 @@ export function useThreads(filter?: ThreadFilter, search?: string) {
 export function useThread(id: string) {
   return useQuery({
     queryKey: queryKeys.thread(id),
-    queryFn: () => MockAPI.getThread(id),
+    queryFn: () => APIClient.getThread(id),
     enabled: !!id,
   });
 }
@@ -31,7 +31,7 @@ export function useThread(id: string) {
 export function useThreadCounts() {
   return useQuery({
     queryKey: queryKeys.threadCounts,
-    queryFn: () => MockAPI.getThreadCounts(),
+    queryFn: () => APIClient.getThreadCounts(),
     refetchInterval: 30000, // Refetch every 30 seconds
   });
 }
@@ -40,7 +40,7 @@ export function useThreadCounts() {
 export function useDraft(threadId: string) {
   return useQuery({
     queryKey: queryKeys.draft(threadId),
-    queryFn: () => MockAPI.getDraft(threadId),
+    queryFn: () => APIClient.getDraft(threadId),
     enabled: !!threadId,
   });
 }
@@ -49,7 +49,7 @@ export function useDraft(threadId: string) {
 export function useAgentActivity(threadId: string) {
   return useQuery({
     queryKey: queryKeys.agentActivity(threadId),
-    queryFn: () => MockAPI.getAgentActivity(threadId),
+    queryFn: () => APIClient.getAgentActivity(threadId),
     enabled: !!threadId,
   });
 }
@@ -60,7 +60,7 @@ export function useUpdateThread() {
   
   return useMutation({
     mutationFn: ({ id, updates }: { id: string; updates: { status?: string; tags?: string[] } }) =>
-      MockAPI.updateThread(id, updates),
+      APIClient.updateThread(id, updates),
     onSuccess: (data, variables) => {
       // Invalidate and refetch thread data
       queryClient.invalidateQueries({ queryKey: queryKeys.thread(variables.id) });
@@ -75,7 +75,7 @@ export function useSendMessage() {
   
   return useMutation({
     mutationFn: ({ threadId, content }: { threadId: string; content: string }) =>
-      MockAPI.sendMessage(threadId, content),
+      APIClient.sendMessage(threadId, content),
     onSuccess: (data, variables) => {
       // Invalidate thread to refetch with new message
       queryClient.invalidateQueries({ queryKey: queryKeys.thread(variables.threadId) });
@@ -89,7 +89,7 @@ export function useUpdateDraft() {
   
   return useMutation({
     mutationFn: ({ threadId, content }: { threadId: string; content: string }) =>
-      MockAPI.updateDraft(threadId, content),
+      APIClient.updateDraft(threadId, content),
     onSuccess: (data, variables) => {
       // Update the draft in cache
       queryClient.setQueryData(queryKeys.draft(variables.threadId), data);
@@ -102,7 +102,7 @@ export function useRegenerateDraft() {
   
   return useMutation({
     mutationFn: ({ threadId, instructions }: { threadId: string; instructions?: string }) =>
-      MockAPI.regenerateDraft(threadId, instructions),
+      APIClient.regenerateDraft(threadId, instructions),
     onSuccess: (data, variables) => {
       // Invalidate draft and agent activity
       queryClient.invalidateQueries({ queryKey: queryKeys.draft(variables.threadId) });
