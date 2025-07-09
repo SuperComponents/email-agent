@@ -10,9 +10,9 @@
     "clean": "rm -rf dist",
     "prebuild": "npm run clean",
     "test": "node dist/index.js",
-    "example": "node example.js",
-    "example:enhanced": "node enhancedExample.js",
-    "example:basic": "node example.js"
+    "test:rag": "npm run build && node dist/test-rag-integration.js",
+    "example": "node enhancedExample.js",
+    "example:enhanced": "node enhancedExample.js"
   },
   "keywords": [
     "ai",
@@ -33,12 +33,13 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "openai": "^4.67.3",
-    "dotenv": "^16.4.5"
+    "openai": "5.0.0-beta.0",
+    "dotenv": "^16.4.5",
+    "@openai/agents": "^0.0.10"
   },
   "devDependencies": {
-    "typescript": "^5.6.3",
-    "@types/node": "^22.9.1"
+    "@types/node": "^22.9.1",
+    "typescript": "^5.6.3"
   },
   "engines": {
     "node": ">=18.0.0"
@@ -55,7 +56,6 @@
     "dist/",
     "README.md",
     "LICENSE",
-    "example.js",
     "enhancedExample.js"
   ],
   "features": {
@@ -68,4 +68,4 @@
     "skeletonImplementation": true,
     "backwardCompatibility": true
   }
-} 
+}

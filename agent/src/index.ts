@@ -2,8 +2,7 @@
 // Now supports email threads, RAG integration, and automatic thread naming
 
 // Core agent functions
-export { assistSupportPerson, AgentResponse } from './agent';
-export { assistSupportPersonEnhanced } from './enhancedAgent';
+export { assistSupportPersonEnhanced, assistSupportPersonEnhanced as default } from './enhancedAgent';
 
 // Type definitions for enhanced functionality
 export {
@@ -50,10 +49,6 @@ export {
 // Enhanced tools and utilities
 export { tools, handleToolCall } from './tools';
 export { openai } from './openaiClient';
-
-// Backward compatibility aliases
-export { assistSupportPerson as assistSupportPersonBasic } from './agent';
-export { assistSupportPersonEnhanced as default } from './enhancedAgent';
 
 /**
  * Version information and capabilities

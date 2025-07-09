@@ -27,6 +27,7 @@ app.get('/', (c) => {
 // Test endpoint to fetch all data from database
 app.get('/db-test', async (c) => {
   try {
+    console.log(`[DB-Test] Starting database connection test`)
     // Fetch all data from each table
     const [
       allUsers,
@@ -41,6 +42,8 @@ app.get('/db-test', async (c) => {
       db.select().from(draft_responses),
       db.select().from(agent_actions)
     ])
+
+    console.log(`[DB-Test] Database query successful - Users: ${allUsers.length}, Threads: ${allThreads.length}, Emails: ${allEmails.length}, Drafts: ${allDraftResponses.length}, Actions: ${allAgentActions.length}`)
 
     // Return all data as JSON
     return c.json({
@@ -69,7 +72,7 @@ app.get('/db-test', async (c) => {
       }
     })
   } catch (error) {
-    console.error('Database test error:', error)
+    console.error('[DB-Test] Database test error:', error)
     return c.json({
       success: false,
       error: error instanceof Error ? error.message : 'Unknown error occurred'
@@ -89,5 +92,10 @@ serve({
   fetch: app.fetch,
   port: 3000
 }, (info) => {
-  console.log(`Server is running on http://localhost:${info.port}`)
+  console.log(`[Server] Hono API server running on http://localhost:${info.port}`)
+  console.log(`[Server] Available endpoints:`)
+  console.log(`[Server] - GET / (Hello World)`)
+  console.log(`[Server] - GET /db-test (Database test)`)
+  console.log(`[Server] - API routes mounted from modules`)
+  console.log(`[Server] Database connected and ready`)
 })

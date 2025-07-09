@@ -895,14 +895,13 @@ npm run dev             # Watch mode compilation
 npm run clean           # Clean dist directory
 npm run example         # Run basic example
 npm run example:enhanced # Run enhanced example
-npm run example:basic   # Run v1.x compatible example
 ```
 
 ### **🧪 Testing Examples**
 
 ```bash
 # Test basic functionality
-npm run example:basic
+npm run example:enhanced
 
 # Test enhanced functionality
 npm run example:enhanced

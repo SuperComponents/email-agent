@@ -74,7 +74,7 @@ build-agent:
 # Run agent example
 .PHONY: agent-example
 agent-example: build-agent
-	cd $(AGENT_DIR) && node example.js
+	cd $(AGENT_DIR) && node enhancedExample.js
 
 # Seed database with test data
 .PHONY: db-seed

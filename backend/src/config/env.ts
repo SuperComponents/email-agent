@@ -24,4 +24,5 @@ export const DATABASE_URL = databaseUrl;
 export const OPENAI_API_KEY = openaiApiKey;
 export const STACK_PROJECT_ID = stackProjectId;
 
+
 export const NODE_ENV = process.env.NODE_ENV || 'development';
