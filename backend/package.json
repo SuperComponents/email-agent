@@ -13,7 +13,8 @@
     "@hono/node-server": "^1.15.0",
     "@neondatabase/serverless": "^1.0.1",
     "drizzle-orm": "^0.44.2",
-    "hono": "^4.8.4"
+    "hono": "^4.8.4",
+    "proresponse-agent": "file:../agent"
   },
   "devDependencies": {
     "@types/node": "^20.11.17",

@@ -4,6 +4,15 @@ import { db } from './database/db.js'
 import { users, threads, emails, draft_responses, agent_actions } from './database/schema.js'
 import { eq, desc, and, sql, like, or } from 'drizzle-orm'
 import { logAgentAction } from './database/logAgentAction.js'
+import { OPENAI_API_KEY } from './config/env.js'
+import { assistSupportPersonEnhanced } from 'proresponse-agent'
+import type { 
+  EmailThread, 
+  EmailMessage, 
+  SupportContext, 
+  AgentConfig,
+  EnhancedAgentResponse 
+} from 'proresponse-agent'
 
 // Database types for helper functions
 interface DatabaseThread {
@@ -55,6 +64,18 @@ app.use('*', async (c, next) => {
   await next()
   const ms = Date.now() - start
   console.log(`[${new Date().toISOString()}] ${c.req.method} ${c.req.url} - ${c.res.status} (${ms}ms)`)
+})
+
+// Middleware to check OpenAI API key for agent endpoints
+app.use('/api/drafts/generate', async (c, next) => {
+  if (!OPENAI_API_KEY) {
+    console.error('[Agent-Integration] OPENAI_API_KEY not configured')
+    return c.json({
+      success: false,
+      error: 'OpenAI API key not configured. Please set OPENAI_API_KEY environment variable.'
+    }, 500)
+  }
+  await next()
 })
 
 app.get('/', (c) => {
@@ -490,51 +511,39 @@ app.post('/api/drafts/generate', async (c) => {
       }
     })
 
-    // TODO: Replace with real agent integration
-    // For now, return mock response similar to agent format
-    console.log(`[API-Draft-Generate] [MOCK] Simulating agent processing for thread ${threadIdNum}`)
+    // Real agent integration - calling the enhanced agent
+    console.log(`[API-Draft-Generate] Calling enhanced agent for thread ${threadIdNum}`)
     
-    const mockResponse = {
-      draft: `Dear ${agentThread.customerEmail.split('@')[0]},
-
-Thank you for contacting us regarding "${thread.subject}".
-
-I've reviewed your message and I'm here to help you resolve this issue. Based on your inquiry, I understand you're experiencing difficulties with our service.
-
-Let me assist you with this matter. I'll need to gather some additional information to provide you with the most accurate solution.
-
-Could you please provide me with:
-- Your account details
-- Any error messages you're encountering
-- The steps you've already tried
-
-I'll be happy to work with you to resolve this as quickly as possible.
-
-Best regards,
-Support Team`,
-      
-      reasoning: `Analysis of thread ${threadIdNum}:
-- Customer email: ${agentThread.customerEmail}
-- Subject: ${thread.subject}
-- Email count: ${threadEmails.length}
-- Status: ${thread.status}
-- Last activity: ${thread.last_activity_at}
-
-Generated professional response requesting additional information to provide targeted assistance.`,
-      
-      threadName: thread.subject.length > 50 ? 
-        thread.subject.substring(0, 50) + '...' : 
-        thread.subject,
-      
-      confidence: 0.85,
-      suggestedPriority: thread.status === 'needs_attention' ? 'high' : 'normal',
-      escalationRecommended: false,
-      followUpRequired: true,
-      estimatedResolutionTime: 24,
-      customerSentiment: 'neutral',
-      tags: ['support', 'inquiry'],
-      ragSources: [], // Empty since RAG is not implemented yet
-      additionalActions: ['Request additional information', 'Monitor for customer response']
+    // Prepare optional support context (if provided in request)
+    const supportContext: SupportContext = context || {}
+    
+    // Agent configuration
+    const agentConfig: AgentConfig = {
+      model: 'gpt-4o',
+      includeRAG: true,
+      generateThreadName: true,
+      maxRAGResults: 5,
+      enableSentimentAnalysis: true,
+      confidenceThreshold: 0.7,
+      escalationKeywords: ['legal', 'lawyer', 'manager', 'complaint', 'unacceptable', 'sue', 'cancel', 'refund immediately']
+    }
+    
+    console.log(`[API-Draft-Generate] Agent configuration:`, agentConfig)
+    
+    // Call the enhanced agent
+    let agentResponse: EnhancedAgentResponse
+    try {
+      console.log(`[API-Draft-Generate] Calling assistSupportPersonEnhanced with ${agentThread.messages.length} messages`)
+      agentResponse = await assistSupportPersonEnhanced(agentThread, supportContext, agentConfig)
+      console.log(`[API-Draft-Generate] Agent response received successfully`)
+      console.log(`[API-Draft-Generate] Agent confidence: ${(agentResponse.confidence * 100).toFixed(1)}%`)
+      console.log(`[API-Draft-Generate] Agent suggested priority: ${agentResponse.suggestedPriority}`)
+      console.log(`[API-Draft-Generate] Agent escalation recommended: ${agentResponse.escalationRecommended}`)
+      console.log(`[API-Draft-Generate] Agent thread name: "${agentResponse.threadName}"`)
+      console.log(`[API-Draft-Generate] Agent RAG sources: ${agentResponse.ragSources?.length || 0}`)
+    } catch (error) {
+      console.error(`[API-Draft-Generate] Agent call failed:`, error)
+      throw new Error(`Agent processing failed: ${error instanceof Error ? error.message : 'Unknown error'}`)
     }
 
     // Save draft response to database
@@ -543,11 +552,11 @@ Generated professional response requesting additional information to provide tar
       .values({
         email_id: threadEmails[threadEmails.length - 1].id, // Link to latest email
         thread_id: threadIdNum,
-        generated_content: mockResponse.draft,
+        generated_content: agentResponse.draft,
         status: 'pending',
         created_by_user_id: null, // NULL indicates AI-generated
         version: 1,
-        confidence_score: mockResponse.confidence.toString()
+        confidence_score: agentResponse.confidence.toString()
       })
       .returning()
 
@@ -561,9 +570,13 @@ Generated professional response requesting additional information to provide tar
       draftResponseId: insertedDraft.id,
       metadata: {
         draft_id: insertedDraft.id,
-        confidence_score: mockResponse.confidence,
-        estimated_resolution_time: mockResponse.estimatedResolutionTime,
+        confidence_score: agentResponse.confidence,
+        estimated_resolution_time: agentResponse.estimatedResolutionTime,
         agent_version: '2.0.0',
+        suggested_priority: agentResponse.suggestedPriority,
+        escalation_recommended: agentResponse.escalationRecommended,
+        customer_sentiment: agentResponse.customerSentiment,
+        rag_sources_count: agentResponse.ragSources?.length || 0,
         timestamp: new Date().toISOString()
       }
     })
@@ -573,20 +586,21 @@ Generated professional response requesting additional information to provide tar
       success: true,
       draft: {
         id: insertedDraft.id.toString(),
-        content: mockResponse.draft,
-        confidence: mockResponse.confidence,
+        content: agentResponse.draft,
+        confidence: agentResponse.confidence,
         status: 'pending',
         created_at: insertedDraft.created_at?.toISOString(),
         metadata: {
-          thread_name: mockResponse.threadName,
-          reasoning: mockResponse.reasoning,
-          suggested_priority: mockResponse.suggestedPriority,
-          escalation_recommended: mockResponse.escalationRecommended,
-          follow_up_required: mockResponse.followUpRequired,
-          estimated_resolution_time: mockResponse.estimatedResolutionTime,
-          customer_sentiment: mockResponse.customerSentiment,
-          tags: mockResponse.tags,
-          additional_actions: mockResponse.additionalActions
+          thread_name: agentResponse.threadName,
+          reasoning: agentResponse.reasoning,
+          suggested_priority: agentResponse.suggestedPriority,
+          escalation_recommended: agentResponse.escalationRecommended,
+          follow_up_required: agentResponse.followUpRequired,
+          estimated_resolution_time: agentResponse.estimatedResolutionTime,
+          customer_sentiment: agentResponse.customerSentiment,
+          tags: agentResponse.tags || [],
+          additional_actions: agentResponse.additionalActions || [],
+          rag_sources: agentResponse.ragSources || []
         }
       }
     })
