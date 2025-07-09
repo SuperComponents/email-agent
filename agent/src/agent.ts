@@ -1,5 +1,6 @@
 import { openai } from './openaiClient';
 import { tools, handleToolCall } from './tools';
+import { log } from './logger';
 
 // Simple result interface for the support agent assistant
 export interface AgentResponse {
@@ -21,7 +22,7 @@ export async function assistSupportPerson(
   preferredModel: string = 'gpt-4o'
 ): Promise<AgentResponse> {
   
-  console.log(`[Agent] Analyzing customer email and drafting response...`);
+  log.info(`[Agent] Analyzing customer email and drafting response...`);
   
   // Create a focused prompt for the support agent assistant
   const systemPrompt = `You are a support agent assistant helping a human support person.
@@ -60,11 +61,11 @@ Please analyze this email and draft a response.`;
     model: preferredModel
   });
 
-  console.log(`[Agent] Assistant created with id: ${assistant.id}`);
+  log.info(`[Agent] Assistant created with id: ${assistant.id}`);
 
   // Create thread and run
   const thread = await openai.beta.threads.create();
-  console.log(`[Agent] Thread created with id: ${thread.id}`);
+  log.info(`[Agent] Thread created with id: ${thread.id}`);
   
   await openai.beta.threads.messages.create(thread.id, { 
     role: 'user', 
@@ -75,12 +76,12 @@ Please analyze this email and draft a response.`;
     assistant_id: assistant.id 
   });
 
-  console.log(`[Agent] Run started with id: ${run.id}`);
+  log.info(`[Agent] Run started with id: ${run.id}`);
 
   try {
     // Handle run lifecycle
     while (true) {
-      console.log(`[Agent] Run status: ${run.status}`);
+      log.debug(`[Agent] Run status: ${run.status}`);
 
       if (['failed', 'expired', 'cancelled'].includes(run.status)) {
         throw new Error(`Run failed with status: ${run.status}`);
@@ -88,7 +89,7 @@ Please analyze this email and draft a response.`;
 
       if (run.status === 'requires_action') {
         const toolCalls = run.required_action?.submit_tool_outputs?.tool_calls || [];
-        console.log(`[Agent] Processing ${toolCalls.length} tool call(s)`);
+        log.info(`[Agent] Processing ${toolCalls.length} tool call(s)`);
         
         const toolOutputs = await Promise.all(
           toolCalls.map(async (toolCall) => ({
@@ -112,7 +113,7 @@ Please analyze this email and draft a response.`;
         const assistantMessage = messages.data.find((m) => m.role === 'assistant');
         const responseText = (assistantMessage?.content[0] as any)?.text?.value || '';
         
-        console.log(`[Agent] Response received, processing...`);
+        log.info(`[Agent] Response received, processing...`);
         
         // Parse the response to extract reasoning and draft
         const reasoningMatch = responseText.match(/REASONING:\s*(.*?)(?=DRAFT:|$)/s);
@@ -121,7 +122,7 @@ Please analyze this email and draft a response.`;
         const reasoning = reasoningMatch ? reasoningMatch[1].trim() : 'No reasoning provided';
         const draft = draftMatch ? draftMatch[1].trim() : responseText;
         
-        console.log(`[Agent] Draft completed successfully`);
+        log.info(`[Agent] Draft completed successfully`);
         
         return {
           draft,
@@ -135,7 +136,7 @@ Please analyze this email and draft a response.`;
     }
 
   } catch (error) {
-    console.error(`[Agent] Error in assistSupportPerson:`, error);
+    log.error(`[Agent] Error in assistSupportPerson:`, error);
     throw error;
   }
 } 

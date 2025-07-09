@@ -3,6 +3,7 @@ import { Hono } from 'hono'
 import { db } from './database/db.js'
 import { users, threads, emails, draft_responses, agent_actions } from './database/schema.js'
 import { corsMiddleware } from './middleware/cors.js'
+import { log } from './utils/logger.js';
 import { errorHandler } from './middleware/error-handler.js'
 import threadRoutes from './routes/threads.js'
 import messageRoutes from './routes/messages.js'
@@ -65,7 +66,7 @@ app.get('/db-test', async (c) => {
       }
     })
   } catch (error) {
-    console.error('Database test error:', error)
+    log.error('Database test error:', error)
     return c.json({
       success: false,
       error: error instanceof Error ? error.message : 'Unknown error occurred'
@@ -85,5 +86,5 @@ serve({
   fetch: app.fetch,
   port: 3000
 }, (info) => {
-  console.log(`Server is running on http://localhost:${info.port}`)
+  log.info(`Server is running on http://localhost:${info.port}`)
 })

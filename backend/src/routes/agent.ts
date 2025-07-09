@@ -7,6 +7,7 @@ import { regenerateDraftSchema, validateRequest } from '../utils/validation.js'
 import { logAgentAction } from '../database/logAgentAction.js'
 import OpenAI from 'openai'
 import { OPENAI_API_KEY } from '../config/env.js'
+import { log } from '../utils/logger.js';
 
 const app = new Hono()
 
@@ -108,7 +109,7 @@ Return ONLY the message content that should be sent to the customer - no headers
 
     return cleanedContent
   } catch (error) {
-    console.error('Error generating draft response:', error)
+    log.error('Error generating draft response:', error)
     throw error
   }
 }
@@ -175,7 +176,7 @@ app.get('/:id/agent-activity', async (c) => {
       knowledge_used: [] // TODO: Implement knowledge base tracking
     })
   } catch (error) {
-    console.error('Error fetching agent activity:', error)
+    log.error('Error fetching agent activity:', error)
     return errorResponse(c, error instanceof Error ? error.message : 'Failed to fetch agent activity', 500)
   }
 })
@@ -249,7 +250,7 @@ app.post('/:id/regenerate', async (c) => {
       message: 'Draft regenerated successfully'
     })
   } catch (error) {
-    console.error('Error regenerating draft:', error)
+    log.error('Error regenerating draft:', error)
     return errorResponse(c, error instanceof Error ? error.message : 'Failed to regenerate draft', 500)
   }
 })

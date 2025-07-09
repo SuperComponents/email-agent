@@ -12,6 +12,7 @@ import {
   AgentConfig,
   ThreadNamingRequest 
 } from './types';
+import { log } from './logger';
 
 /**
  * Enhanced support agent assistant function
@@ -28,12 +29,12 @@ export async function assistSupportPersonEnhanced(
   config: AgentConfig = {}
 ): Promise<EnhancedAgentResponse> {
   
-  console.log(`[EnhancedAgent] Starting enhanced support agent analysis`);
-  console.log(`[EnhancedAgent] Thread ID: ${thread.id}`);
-  console.log(`[EnhancedAgent] Thread has ${thread.messages.length} messages`);
-  console.log(`[EnhancedAgent] Customer: ${thread.customerEmail}`);
-  console.log(`[EnhancedAgent] Thread priority: ${thread.priority}`);
-  console.log(`[EnhancedAgent] Thread status: ${thread.status}`);
+  log.info(`[EnhancedAgent] Starting enhanced support agent analysis`);
+  log.info(`[EnhancedAgent] Thread ID: ${thread.id}`);
+  log.debug(`[EnhancedAgent] Thread has ${thread.messages.length} messages`);
+  log.debug(`[EnhancedAgent] Customer: ${thread.customerEmail}`);
+  log.debug(`[EnhancedAgent] Thread priority: ${thread.priority}`);
+  log.debug(`[EnhancedAgent] Thread status: ${thread.status}`);
   
   // Set default configuration
   const {
@@ -46,7 +47,7 @@ export async function assistSupportPersonEnhanced(
     escalationKeywords = ['legal', 'lawyer', 'manager', 'complaint', 'unacceptable']
   } = config;
   
-  console.log(`[EnhancedAgent] Configuration:`, {
+  log.info(`[EnhancedAgent] Configuration:`, {
     model,
     includeRAG,
     shouldGenerateThreadName,
@@ -58,7 +59,7 @@ export async function assistSupportPersonEnhanced(
     // Step 1: Generate thread name if requested
     let threadName = '';
     if (shouldGenerateThreadName) {
-      console.log(`[EnhancedAgent] Generating thread name`);
+      log.info(`[EnhancedAgent] Generating thread name`);
       const namingRequest: ThreadNamingRequest = {
         thread,
         maxLength: 60,
@@ -68,8 +69,8 @@ export async function assistSupportPersonEnhanced(
       
       const namingResponse = await generateThreadName(namingRequest);
       threadName = namingResponse.name;
-      console.log(`[EnhancedAgent] Thread name generated: "${threadName}"`);
-      console.log(`[EnhancedAgent] Naming confidence: ${(namingResponse.confidence * 100).toFixed(1)}%`);
+      log.info(`[EnhancedAgent] Thread name generated: "${threadName}"`);
+      log.info(`[EnhancedAgent] Naming confidence: ${(namingResponse.confidence * 100).toFixed(1)}%`);
     }
     
     // Step 2: Prepare email content for analysis
@@ -84,14 +85,14 @@ ${msg.body}
 ${msg.attachments?.length ? `**Attachments:** ${msg.attachments.map(a => a.filename).join(', ')}` : ''}
 ---`).join('\n\n');
     
-    console.log(`[EnhancedAgent] Combined email content prepared: ${combinedEmailContent.length} characters`);
+    log.debug(`[EnhancedAgent] Combined email content prepared: ${combinedEmailContent.length} characters`);
     
     // Step 3: Gather RAG information if enabled
     let ragResults: any[] = [];
     let formattedRAGContent = '';
     
     if (includeRAG) {
-      console.log(`[EnhancedAgent] Gathering relevant company knowledge via RAG`);
+      log.info(`[EnhancedAgent] Gathering relevant company knowledge via RAG`);
       
       try {
         ragResults = await generateContextualQueries(
@@ -99,27 +100,27 @@ ${msg.attachments?.length ? `**Attachments:** ${msg.attachments.map(a => a.filen
           ['policy', 'knowledge', 'procedure', 'faq']
         );
         
-        console.log(`[EnhancedAgent] RAG analysis returned ${ragResults.length} relevant knowledge items`);
+        log.info(`[EnhancedAgent] RAG analysis returned ${ragResults.length} relevant knowledge items`);
         
         // Limit results based on configuration
         const limitedRAGResults = ragResults.slice(0, maxRAGResults);
         formattedRAGContent = formatRAGResultsForAgent(limitedRAGResults);
         
-        console.log(`[EnhancedAgent] Using ${limitedRAGResults.length} RAG results for agent prompt`);
+        log.info(`[EnhancedAgent] Using ${limitedRAGResults.length} RAG results for agent prompt`);
         
       } catch (error) {
-        console.warn(`[EnhancedAgent] RAG query failed, proceeding without RAG:`, error);
+        log.warn(`[EnhancedAgent] RAG query failed, proceeding without RAG:`, error);
         formattedRAGContent = 'RAG system temporarily unavailable - using agent knowledge only.';
       }
     }
     
     // Step 4: Prepare support context information
     const contextString = formatSupportContext(context);
-    console.log(`[EnhancedAgent] Support context prepared: ${contextString.length} characters`);
+    log.debug(`[EnhancedAgent] Support context prepared: ${contextString.length} characters`);
     
     // Step 5: Create enhanced system prompt
     const systemPrompt = createEnhancedSystemPrompt(formattedRAGContent, escalationKeywords);
-    console.log(`[EnhancedAgent] Enhanced system prompt created: ${systemPrompt.length} characters`);
+    log.debug(`[EnhancedAgent] Enhanced system prompt created: ${systemPrompt.length} characters`);
     
     // Step 6: Create user prompt with thread and context
     const userPrompt = `
@@ -163,7 +164,7 @@ ACTIONS: [Comma-separated list of additional actions for support person]
 TAGS: [Comma-separated list of suggested tags for the thread]
     `.trim();
     
-    console.log(`[EnhancedAgent] User prompt prepared: ${userPrompt.length} characters`);
+    log.debug(`[EnhancedAgent] User prompt prepared: ${userPrompt.length} characters`);
     
     // Step 7: Create and run OpenAI assistant
     const assistant = await openai.beta.assistants.create({
@@ -173,10 +174,10 @@ TAGS: [Comma-separated list of suggested tags for the thread]
       model
     });
     
-    console.log(`[EnhancedAgent] Enhanced assistant created with id: ${assistant.id}`);
+    log.info(`[EnhancedAgent] Enhanced assistant created with id: ${assistant.id}`);
     
     const thread_openai = await openai.beta.threads.create();
-    console.log(`[EnhancedAgent] OpenAI thread created with id: ${thread_openai.id}`);
+    log.info(`[EnhancedAgent] OpenAI thread created with id: ${thread_openai.id}`);
     
     await openai.beta.threads.messages.create(thread_openai.id, { 
       role: 'user', 
@@ -187,11 +188,11 @@ TAGS: [Comma-separated list of suggested tags for the thread]
       assistant_id: assistant.id 
     });
     
-    console.log(`[EnhancedAgent] Run started with id: ${run.id}`);
+    log.info(`[EnhancedAgent] Run started with id: ${run.id}`);
     
     // Step 8: Handle run lifecycle with tool support
     while (true) {
-      console.log(`[EnhancedAgent] Run status: ${run.status}`);
+      log.debug(`[EnhancedAgent] Run status: ${run.status}`);
       
       if (['failed', 'expired', 'cancelled'].includes(run.status)) {
         throw new Error(`Enhanced agent run failed with status: ${run.status}`);
@@ -199,11 +200,11 @@ TAGS: [Comma-separated list of suggested tags for the thread]
       
       if (run.status === 'requires_action') {
         const toolCalls = run.required_action?.submit_tool_outputs?.tool_calls || [];
-        console.log(`[EnhancedAgent] Processing ${toolCalls.length} tool call(s)`);
+        log.info(`[EnhancedAgent] Processing ${toolCalls.length} tool call(s)`);
         
         const toolOutputs = await Promise.all(
           toolCalls.map(async (toolCall) => {
-            console.log(`[EnhancedAgent] Executing tool: ${toolCall.function.name}`);
+            log.debug(`[EnhancedAgent] Executing tool: ${toolCall.function.name}`);
             return {
               tool_call_id: toolCall.id,
               output: await handleToolCall(toolCall.function.name, JSON.parse(toolCall.function.arguments))
@@ -226,15 +227,15 @@ TAGS: [Comma-separated list of suggested tags for the thread]
         const assistantMessage = messages.data.find((m) => m.role === 'assistant');
         const responseText = (assistantMessage?.content[0] as any)?.text?.value || '';
         
-        console.log(`[EnhancedAgent] Response received, parsing enhanced response...`);
+        log.info(`[EnhancedAgent] Response received, parsing enhanced response...`);
         
         // Step 9: Parse enhanced response
         const parsedResponse = parseEnhancedResponse(responseText);
-        console.log(`[EnhancedAgent] Response parsing completed`);
-        console.log(`[EnhancedAgent] Confidence: ${(parsedResponse.confidence * 100).toFixed(1)}%`);
-        console.log(`[EnhancedAgent] Suggested priority: ${parsedResponse.suggestedPriority}`);
-        console.log(`[EnhancedAgent] Escalation recommended: ${parsedResponse.escalationRecommended}`);
-        console.log(`[EnhancedAgent] Customer sentiment: ${parsedResponse.customerSentiment}`);
+        log.info(`[EnhancedAgent] Response parsing completed`);
+        log.info(`[EnhancedAgent] Confidence: ${(parsedResponse.confidence * 100).toFixed(1)}%`);
+        log.info(`[EnhancedAgent] Suggested priority: ${parsedResponse.suggestedPriority}`);
+        log.info(`[EnhancedAgent] Escalation recommended: ${parsedResponse.escalationRecommended}`);
+        log.info(`[EnhancedAgent] Customer sentiment: ${parsedResponse.customerSentiment}`);
         
         // Step 10: Build final enhanced response
         const enhancedResponse: EnhancedAgentResponse = {
@@ -243,9 +244,9 @@ TAGS: [Comma-separated list of suggested tags for the thread]
           ragSources: ragResults.slice(0, maxRAGResults),
         };
         
-        console.log(`[EnhancedAgent] Enhanced support agent analysis completed successfully`);
-        console.log(`[EnhancedAgent] Thread name: "${enhancedResponse.threadName}"`);
-        console.log(`[EnhancedAgent] RAG sources included: ${enhancedResponse.ragSources?.length || 0}`);
+        log.info(`[EnhancedAgent] Enhanced support agent analysis completed successfully`);
+        log.info(`[EnhancedAgent] Thread name: "${enhancedResponse.threadName}"`);
+        log.info(`[EnhancedAgent] RAG sources included: ${enhancedResponse.ragSources?.length || 0}`);
         
         return enhancedResponse;
       }
@@ -256,7 +257,7 @@ TAGS: [Comma-separated list of suggested tags for the thread]
     }
     
   } catch (error) {
-    console.error(`[EnhancedAgent] Error in enhanced support agent:`, error);
+    log.error(`[EnhancedAgent] Error in enhanced support agent:`, error);
     throw error;
   }
 }
@@ -265,7 +266,7 @@ TAGS: [Comma-separated list of suggested tags for the thread]
  * Create enhanced system prompt with RAG integration
  */
 function createEnhancedSystemPrompt(ragContent: string, escalationKeywords: string[]): string {
-  console.log(`[EnhancedAgent] Creating enhanced system prompt`);
+  log.info(`[EnhancedAgent] Creating enhanced system prompt`);
   
   return `You are an enhanced support agent assistant helping a human support person analyze email threads and draft responses.
 
@@ -333,7 +334,7 @@ Never make promises the company cannot keep. Always use the company knowledge ba
  * Format support context for inclusion in prompt
  */
 function formatSupportContext(context: SupportContext): string {
-  console.log(`[EnhancedAgent] Formatting support context`);
+  log.info(`[EnhancedAgent] Formatting support context`);
   
   const sections: string[] = [];
   
@@ -386,7 +387,7 @@ ${context.internalNotes.map(note => `- ${note}`).join('\n')}`);
     ? sections.join('\n\n')
     : 'No additional support context provided.';
   
-  console.log(`[EnhancedAgent] Support context formatted: ${formatted.length} characters`);
+  log.debug(`[EnhancedAgent] Support context formatted: ${formatted.length} characters`);
   
   return formatted;
 }
@@ -395,7 +396,7 @@ ${context.internalNotes.map(note => `- ${note}`).join('\n')}`);
  * Parse the enhanced response from the assistant
  */
 function parseEnhancedResponse(responseText: string): Omit<EnhancedAgentResponse, 'threadName' | 'ragSources'> {
-  console.log(`[EnhancedAgent] Parsing enhanced response from assistant`);
+  log.info(`[EnhancedAgent] Parsing enhanced response from assistant`);
   
   // Extract sections using regex patterns
   const reasoningMatch = responseText.match(/REASONING:\s*(.*?)(?=DRAFT:|$)/s);
@@ -427,7 +428,7 @@ function parseEnhancedResponse(responseText: string): Omit<EnhancedAgentResponse
     ? tagsMatch[1].trim().split(',').map(tag => tag.trim()).filter(tag => tag.length > 0)
     : [];
   
-  console.log(`[EnhancedAgent] Parsed response values:`, {
+  log.info(`[EnhancedAgent] Parsed response values:`, {
     confidence,
     suggestedPriority,
     escalationRecommended,
