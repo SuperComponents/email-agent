@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Composer } from '../../components/organisms/Composer';
 
 const meta: Meta<typeof Composer> = {

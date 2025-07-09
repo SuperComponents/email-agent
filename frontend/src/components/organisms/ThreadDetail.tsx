@@ -1,6 +1,9 @@
 import React from 'react';
+import { Reply } from 'lucide-react';
 import { Avatar } from '../atoms/Avatar';
 import { Badge } from '../atoms/Badge';
+import { Button } from '../atoms/Button';
+import { Icon } from '../atoms/Icon';
 import { cn } from '../../lib/utils';
 
 export interface EmailMessage {
@@ -21,10 +24,11 @@ export interface ThreadDetailProps extends React.HTMLAttributes<HTMLDivElement> 
   messages: EmailMessage[];
   status?: 'open' | 'closed' | 'pending';
   tags?: string[];
+  onReply?: () => void;
 }
 
 export const ThreadDetail = React.forwardRef<HTMLDivElement, ThreadDetailProps>(
-  ({ className, subject, messages, status = 'open', tags = [], ...props }, ref) => {
+  ({ className, subject, messages, status = 'open', tags = [], onReply, ...props }, ref) => {
     return (
       <div
         ref={ref}
@@ -50,6 +54,14 @@ export const ThreadDetail = React.forwardRef<HTMLDivElement, ThreadDetailProps>(
                 ))}
               </div>
             </div>
+            <Button
+              onClick={onReply}
+              size="sm"
+              className="gap-2"
+            >
+              <Icon icon={Reply} size="sm" />
+              <span>Reply</span>
+            </Button>
           </div>
         </div>
 

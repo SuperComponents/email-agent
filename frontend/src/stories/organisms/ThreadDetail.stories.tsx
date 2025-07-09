@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { ThreadDetail } from '../../components/organisms/ThreadDetail';
 
 const meta: Meta<typeof ThreadDetail> = {

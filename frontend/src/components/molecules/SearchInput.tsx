@@ -4,9 +4,7 @@ import { Input } from '../atoms/Input';
 import { Icon } from '../atoms/Icon';
 import { cn } from '../../lib/utils';
 
-export interface SearchInputProps extends React.InputHTMLAttributes<HTMLInputElement> {}
-
-export const SearchInput = React.forwardRef<HTMLInputElement, SearchInputProps>(
+export const SearchInput = React.forwardRef<HTMLInputElement, React.InputHTMLAttributes<HTMLInputElement>>(
   ({ className, ...props }, ref) => {
     return (
       <div className="relative">

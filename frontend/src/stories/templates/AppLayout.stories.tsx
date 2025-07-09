@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { AppLayout } from '../../components/templates/AppLayout';
 import { Header } from '../../components/organisms/Header';
 import { ThreadList } from '../../components/organisms/ThreadList';
@@ -91,10 +91,7 @@ export const Default: Story = {
   render: () => (
     <AppLayout
       header={
-        <Header
-          user={{ name: 'John Doe', initials: 'JD' }}
-          notificationCount={3}
-        />
+        <Header />
       }
       sidebar={
         <ThreadList
@@ -134,9 +131,7 @@ export const WithoutAgentPanel: Story = {
   render: () => (
     <AppLayout
       header={
-        <Header
-          user={{ name: 'John Doe', initials: 'JD' }}
-        />
+        <Header />
       }
       sidebar={
         <ThreadList
