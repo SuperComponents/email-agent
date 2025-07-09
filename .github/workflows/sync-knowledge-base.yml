@@ -3,7 +3,7 @@ name: Sync knowledge-base docs to OpenAI vector-store
 on:
   push:
     branches: [master, rag]
-    paths: ['**/**']     # run only when docs change
+    paths: ['rag/knowledge_base/**/*.md']     # run only when docs change
   workflow_dispatch:            # allow manual “Run workflow” in UI
 
 jobs:
