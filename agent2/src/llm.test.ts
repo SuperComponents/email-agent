@@ -7,7 +7,7 @@ import { LLMClient } from './llm';
 import { ALL_MOCK_TOOLS } from './mocktools';
 
 
-test('First updates the urgency of the thread', async () => {
+test('First updates the urgency of the thread, has only 1 tool', async () => {
     // arrange
     const toolManager = new ToolManager();
     const tool = new ALL_MOCK_TOOLS.UpdateThreadUrgencyTool();
@@ -41,3 +41,4 @@ test('First updates the urgency of the thread', async () => {
     expect(response.tool_call.args).toBeDefined();
     expect(response.tool_call.args.urgency).toBe('high');
 })
+

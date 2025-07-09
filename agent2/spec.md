@@ -47,3 +47,17 @@ User actions may include:
 We convert the events to LLM context according to a variety of factors. This can be thought of as a reducer that turns the events into agent context for determining the next tool call.
 
 
+## Eval framework
+
+The eval framework should run the entire set of LLM "Context to tool call" tests. 
+
+Each eval test defines: events, tools, and expected tool_call response
+
+
+The framework iterates over permutations of:
+- LLMClient's (to inject different models)
+- ContextGenerator's (to test different system prompts and event reducers)
+
+Let's not do n x m permutations, let's run 1 sweep across each set of variables.
+
+Output a nice grid of the results including which tests failed for which hyperparameters.
