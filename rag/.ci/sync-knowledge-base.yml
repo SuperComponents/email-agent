@@ -1,0 +1,26 @@
+# Reusable workflow: syncs every Markdown file under services/docs/
+# to an OpenAI Assistants-v2 vector store, using the “Assistants
+# Vector-Store Sync” action by @shmatt.
+
+name: Docs ➜ OpenAI vector-store sync
+
+on:
+  # Only called by the wrapper workflow
+  workflow_call:
+    secrets:
+      OPENAI_API_KEY:
+        required: true
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Sync markdown files to OpenAI
+        uses: shmatt/assistants-vector-store-sync@v1   # correct slug
+        with:
+          # ↳ glob is **relative to the repo root**
+          pattern: 'rag/knowledge_base/**/*.md'
+          token:   ${{ secrets.OPENAI_API_KEY }}
+          key:     emailsmart-knowledge-base        # becomes the vector-store name/metadata
