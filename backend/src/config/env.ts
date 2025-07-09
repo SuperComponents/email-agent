@@ -11,7 +11,7 @@ if (!databaseUrl) {
 }
 
 if (!openaiApiKey) {
-  console.warn('WARNING: OPENAI_API_KEY environment variable is not set. Agent functionality will be limited.');
+  throw new Error('OPENAI_API_KEY environment variable is required');
 }
 
 export const DATABASE_URL = databaseUrl;

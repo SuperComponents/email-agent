@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useThreads, useThreadCounts } from '../repo/hooks';
 import { useUIStore } from '../stores/ui-store';
 import { ThreadList } from '../components/organisms';
@@ -6,12 +7,12 @@ import type { ThreadFilter } from '../types/api';
 import type { ThreadPreviewProps } from '../components/molecules/ThreadPreview';
 
 export function ThreadListContainer() {
+  const navigate = useNavigate();
   const threadFilter = useUIStore((state) => state.threadFilter);
   const searchQuery = useUIStore((state) => state.searchQuery);
   const selectedThreadId = useUIStore((state) => state.selectedThreadId);
   const setThreadFilter = useUIStore((state) => state.setThreadFilter);
   const setSearchQuery = useUIStore((state) => state.setSearchQuery);
-  const setSelectedThread = useUIStore((state) => state.setSelectedThread);
   
   // Local search state for immediate UI updates
   const [localSearchValue, setLocalSearchValue] = useState(searchQuery);
@@ -31,6 +32,10 @@ export function ThreadListContainer() {
   const handleSearchChange = useCallback((value: string) => {
     setLocalSearchValue(value);
   }, []);
+  
+  const handleThreadClick = useCallback((threadId: string) => {
+    navigate(`/thread/${threadId}`);
+  }, [navigate]);
   
   // Transform API threads to ThreadPreviewProps
   const threadPreviews: ThreadPreviewProps[] = threadsData?.threads.map(thread => ({
@@ -77,7 +82,7 @@ export function ThreadListContainer() {
       searchValue={localSearchValue}
       onSearchChange={handleSearchChange}
       onFilterChange={(filterId) => setThreadFilter(filterId as ThreadFilter)}
-      onThreadClick={setSelectedThread}
+      onThreadClick={handleThreadClick}
     />
   );
 }
