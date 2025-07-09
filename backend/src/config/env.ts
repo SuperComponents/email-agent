@@ -10,6 +10,10 @@ if (!databaseUrl) {
   throw new Error('DATABASE_URL environment variable is required');
 }
 
+if (!openaiApiKey) {
+  throw new Error('OPENAI_API_KEY environment variable is required');
+}
+
 export const DATABASE_URL = databaseUrl;
 export const OPENAI_API_KEY = openaiApiKey;
 

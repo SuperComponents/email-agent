@@ -5,8 +5,113 @@ import { threads, agent_actions, draft_responses, emails } from '../database/sch
 import { successResponse, notFoundResponse, errorResponse } from '../utils/response.js'
 import { regenerateDraftSchema, validateRequest } from '../utils/validation.js'
 import { logAgentAction } from '../database/logAgentAction.js'
+import OpenAI from 'openai'
+import { OPENAI_API_KEY } from '../config/env.js'
 
 const app = new Hono()
+
+// Initialize OpenAI client
+const openai = new OpenAI({
+  apiKey: OPENAI_API_KEY,
+})
+
+// Helper function to generate draft response using OpenAI
+async function generateDraftResponse(threadId: number, customInstructions?: string): Promise<string> {
+  try {
+    // Get all emails in the thread
+    const threadEmails = await db
+      .select({
+        from_email: emails.from_email,
+        to_emails: emails.to_emails,
+        subject: emails.subject,
+        body_text: emails.body_text,
+        direction: emails.direction,
+        sent_at: emails.sent_at
+      })
+      .from(emails)
+      .where(eq(emails.thread_id, threadId))
+      .orderBy(emails.sent_at)
+
+    if (threadEmails.length === 0) {
+      throw new Error('No emails found in thread')
+    }
+
+    // Get thread subject
+    const [thread] = await db
+      .select({ subject: threads.subject })
+      .from(threads)
+      .where(eq(threads.id, threadId))
+      .limit(1)
+
+    // Format thread context for OpenAI
+    const threadContext = threadEmails.map(email => {
+      const timestamp = email.sent_at?.toISOString() || new Date().toISOString()
+      const direction = email.direction === 'inbound' ? 'Customer' : 'Support Agent'
+      return `[${timestamp}] ${direction} (${email.from_email}):\n${email.body_text}\n`
+    }).join('\n')
+
+    // Create system prompt
+    const systemPrompt = `You are a professional customer support agent. You will be provided with an email thread and need to draft a helpful, professional response to the customer's latest message.
+
+Guidelines:
+- Be polite, professional, and helpful
+- Address the customer's concerns directly
+- Provide clear and actionable solutions when possible
+- Keep the tone friendly but professional
+- If you need more information, ask specific questions
+- Don't make promises about things you can't deliver
+
+IMPORTANT: Only return the email message content. Do not include any email headers, signatures, greetings like "Subject:" or "From:" or "To:", or any other metadata. Just provide the clean message body that would be sent to the customer.`
+
+    // Create user prompt with thread context
+    const userPrompt = `Please draft a professional response to this customer support email thread:
+
+Thread Subject: ${thread?.subject || 'No Subject'}
+
+Email Thread:
+${threadContext}
+
+${customInstructions ? `\nAdditional Instructions: ${customInstructions}` : ''}
+
+Return ONLY the message content that should be sent to the customer - no headers, no metadata, just the clean email body.`
+
+    // Call OpenAI API
+    const completion = await openai.chat.completions.create({
+      model: 'gpt-4o',
+      messages: [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: userPrompt }
+      ],
+      temperature: 0.7,
+      max_tokens: 500
+    })
+
+    const draftContent = completion.choices[0]?.message?.content
+    if (!draftContent) {
+      throw new Error('No response generated from OpenAI')
+    }
+
+    // Clean up the response to remove any potential metadata or formatting
+    const cleanedContent = draftContent
+      .replace(/^Subject:.*$/gm, '') // Remove subject lines
+      .replace(/^From:.*$/gm, '') // Remove from lines
+      .replace(/^To:.*$/gm, '') // Remove to lines
+      .replace(/^Date:.*$/gm, '') // Remove date lines
+      .replace(/^Dear.*?,?\s*/gm, '') // Remove formal greetings
+      .replace(/^\s*Hi.*?,?\s*/gm, '') // Remove informal greetings  
+      .replace(/^\s*Hello.*?,?\s*/gm, '') // Remove hello greetings
+      .replace(/Best regards,?\s*$/gm, '') // Remove common sign-offs
+      .replace(/Sincerely,?\s*$/gm, '') // Remove formal sign-offs
+      .replace(/Thanks,?\s*$/gm, '') // Remove thanks sign-offs
+      .replace(/\n\s*\n/g, '\n\n') // Normalize line breaks
+      .trim()
+
+    return cleanedContent
+  } catch (error) {
+    console.error('Error generating draft response:', error)
+    throw error
+  }
+}
 
 // GET /api/threads/:id/agent-activity - Get agent activity
 app.get('/:id/agent-activity', async (c) => {
@@ -109,10 +214,8 @@ app.post('/:id/regenerate', async (c) => {
       return errorResponse(c, 'No emails found in thread', 400)
     }
     
-    // Generate new draft content (mock for now)
-    const newContent = body?.instructions 
-      ? `Based on your instructions: "${body.instructions}"\n\nThank you for reaching out. We appreciate your feedback and will address your concerns promptly.`
-      : 'Thank you for contacting us. We have received your message and will respond as soon as possible.'
+    // Generate new draft content using OpenAI
+    const newContent = await generateDraftResponse(threadId, body?.instructions)
     
     // Create new draft
     const [newDraft] = await db
@@ -135,7 +238,9 @@ app.post('/:id/regenerate', async (c) => {
       action: 'draft_created',
       metadata: { 
         regenerated: true,
-        instructions: body?.instructions || null 
+        instructions: body?.instructions || null,
+        model: 'gpt-4o',
+        ai_generated: true
       }
     })
     
