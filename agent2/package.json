@@ -18,7 +18,8 @@
     "test": "vitest",
     "test:watch": "vitest --watch",
     "test:coverage": "vitest --coverage",
-    "prepublishOnly": "npm run clean && npm run build"
+    "prepublishOnly": "npm run clean && npm run build",
+    "evals": "tsx src/run_evals.ts"
   },
   "keywords": [
     "support",
@@ -39,7 +40,8 @@
     "@types/dotenv": "^8.0.0",
     "@types/node": "^20.0.0",
     "typescript": "^5.0.0",
-    "vitest": "^1.6.1"
+    "vitest": "^1.6.1",
+    "tsx": "^4.0.0"
   },
   "files": [
     "dist"

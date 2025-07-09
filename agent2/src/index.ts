@@ -4,3 +4,6 @@ export * from './context/context';
 export * from './context/tools';
 export * from './llm';
 export * from './mocktools';
+export * from './tools';
+export * from './eval-framework';
+export * from './eval-tests';

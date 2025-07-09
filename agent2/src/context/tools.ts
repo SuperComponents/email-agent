@@ -10,23 +10,7 @@ export abstract class ToolDefinition {
     abstract execute(args: any): Promise<any>;
 
 
-    serialize(): string {
-        // Convert zod schemas to standard JSON-Schema so the LLM receives a fully
-        // machine-readable contract instead of the opaque `.toString()` output.
-        const argsSchema = zodToJsonSchema(this.args, "args");
-        const resultSchema = zodToJsonSchema(this.result, "result");
-
-        return JSON.stringify(
-            {
-                name: this.name,
-                description: this.description,
-                args: argsSchema,
-                result: resultSchema,
-            },
-            null,
-            undefined,
-        );
-    }
+    
 }
 
 /**
@@ -42,13 +26,15 @@ export default class ToolManager {
         return this.toolList.map(tool => tool.name);
     }
 
+    listTools(): ToolDefinition[] {
+        return [...this.toolList];
+    }
+
     getTool(name: string): ToolDefinition | undefined {
         return this.toolList.find(tool => tool.name === name);
     }
 
-    serialize(): string {
-        return this.toolList.map(tool => tool.serialize()).join('\n');
-    }
+    
 }
 
 

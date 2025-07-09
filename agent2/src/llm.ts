@@ -4,11 +4,17 @@ import { z } from 'zod';
 
 dotenv.config();
 
+
+
+// Define zod schema for LLMResponse
+export const ToolCallSchema = z.object({
+        
+  name: z.string(),
+  args: z.record(z.any())
+
+});
 export interface LLMResponse {
-  tool_call: {
-    name: string;
-    args: Record<string, any>;
-  };
+  tool_call: z.infer<typeof ToolCallSchema>;
   usage?: {
     prompt_tokens: number;
     completion_tokens: number;
@@ -16,12 +22,13 @@ export interface LLMResponse {
   };
 }
 
+
 export class LLMClient {
   private client: OpenAI;
-  private model: string;
+  
 
-  constructor(model: string = 'gpt-4o', apiKey?: string) {
-    this.model = model;
+  constructor(readonly model: string = 'gpt-4o', apiKey?: string) {
+  
     this.client = new OpenAI({
       apiKey: apiKey || process.env.OPENAI_API_KEY
     });
@@ -29,7 +36,6 @@ export class LLMClient {
 
   async getNextToolCall(systemPrompt: string, message: string): Promise<LLMResponse> {
     try {
-      console.log({systemPrompt, message})
       const response = await this.client.chat.completions.create({
         model: this.model,
         messages: [
@@ -37,13 +43,12 @@ export class LLMClient {
           { role: 'user', content: message }
         ],
         response_format: { type: "json_object" },
-        temperature: 0.7,
+        temperature: .3,
       });
 
       
 
       const choice = response.choices[0];
-      console.log(choice.message?.content);
       if (!choice.message?.content) {
         throw new Error('No content in LLM response');
       }
@@ -55,16 +60,10 @@ export class LLMClient {
         throw new Error('LLM response is not valid JSON');
       }
 
-      // Define zod schema for LLMResponse
-      const LLMResponseSchema = z.object({
-        
-          name: z.string(),
-          args: z.record(z.any())
-        
-      });
+      
 
       // Validate the response structure
-      const validationResult = LLMResponseSchema.safeParse(parsedResponse);
+      const validationResult = ToolCallSchema.safeParse(parsedResponse);
       if (!validationResult.success) {
         throw new Error(`LLM response validation failed: ${validationResult.error.message}`);
       }
