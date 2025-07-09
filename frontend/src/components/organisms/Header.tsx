@@ -6,6 +6,7 @@ import { Avatar } from '../atoms/Avatar';
 import { cn } from '../../lib/utils';
 import { useAuthStore } from '../../stores/auth-store';
 import { useNavigate } from 'react-router-dom';
+import { UserButton } from '@stackframe/react';
 
 export interface HeaderProps extends React.HTMLAttributes<HTMLElement> {
   user?: {
@@ -51,63 +52,12 @@ export const Header = React.forwardRef<HTMLElement, HeaderProps>(
         )}
         {...props}
       >
-        <div className="flex items-center gap-4">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={onMenuClick}
-            className="md:hidden"
-          >
-            <Icon icon={Menu} size="sm" />
-          </Button>
-          <h1 className="text-xl font-semibold">ProResponse AI</h1>
-        </div>
+<UserButton />
 
-        <div className="flex items-center gap-2">
-          <Button variant="ghost" size="sm" className="relative">
-            <Icon icon={Bell} size="sm" />
-            {notificationCount > 0 && (
-              <span className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-destructive text-destructive-foreground text-xs flex items-center justify-center">
-                {notificationCount}
-              </span>
-            )}
-          </Button>
-          
-          {user ? (
-            <div className="relative" ref={dropdownRef}>
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                className="gap-2"
-                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-              >
-                <Avatar
-                  src={user.avatar}
-                  alt={user.name}
-                  fallback={user.initials}
-                  size="sm"
-                />
-                <span className="hidden sm:inline">{user.name}</span>
-              </Button>
-              
-              {isDropdownOpen && (
-                <div className="absolute right-0 mt-2 w-48 bg-card border border-border rounded-md shadow-lg py-1 z-50">
-                  <button
-                    onClick={handleLogout}
-                    className="w-full px-4 py-2 text-sm text-left hover:bg-accent hover:text-accent-foreground flex items-center gap-2 transition-colors"
-                  >
-                    <Icon icon={LogOut} size="sm" />
-                    Log out
-                  </button>
-                </div>
-              )}
-            </div>
-          ) : (
-            <Button variant="ghost" size="sm">
-              <Icon icon={User} size="sm" />
-            </Button>
-          )}
-        </div>
+
+
+
+  
       </header>
     );
   }
