@@ -15,10 +15,10 @@ export const errorHandler = async (c: Context, next: Next) => {
     }
     
     if (err instanceof Error) {
-      const status = (err as any).status || 500
+      const status = (err as Error & { status?: number }).status || 500
       return c.json(
         { error: { message: err.message } },
-        status
+        status as 200 | 400 | 401 | 403 | 404 | 500
       )
     }
     

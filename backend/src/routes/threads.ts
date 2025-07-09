@@ -168,7 +168,7 @@ app.get('/:id', async (c) => {
       id: action.id.toString(),
       type: action.action,
       title: action.action.replace(/_/g, ' '),
-      description: (action.metadata as any)?.description || '',
+      description: (action.metadata as Record<string, unknown>)?.description as string || '',
       timestamp: action.created_at.toISOString(),
       status: 'completed'
     }))

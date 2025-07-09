@@ -7,7 +7,7 @@ export interface LogAgentActionParams {
   emailId?: number;
   draftResponseId?: number;
   actorUserId?: number;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   ipAddress?: string;
 }
 

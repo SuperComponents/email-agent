@@ -56,7 +56,7 @@ app.get('/:id/agent-activity', async (c) => {
       id: action.id.toString(),
       type: action.action,
       title: action.action.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
-      description: (action.metadata as any)?.description || '',
+      description: (action.metadata as Record<string, unknown>)?.description as string || '',
       status: 'completed',
       timestamp: action.created_at.toISOString(),
       result: action.metadata
