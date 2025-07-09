@@ -20,4 +20,4 @@ services:
 
 networks:
   email-agent-network:
-    driver: bridge
+    driver: bridge 
