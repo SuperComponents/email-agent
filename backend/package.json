@@ -19,8 +19,8 @@
     "hono": "^4.8.4",
     "jose": "^6.0.11",
     "openai": "^5.8.3",
-    "proresponse-agent": "file:../agent",
-    "zod": "^3.25.76"
+    "zod": "^3.25.76",
+    "proresponse-agent": "file:../agent"
   },
   "devDependencies": {
     "@eslint/js": "^9.30.1",

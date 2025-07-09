@@ -152,9 +152,9 @@ Return a JSON object with an "emails" array containing ${count} email objects. E
 
 
 export async function generateEmail(
-  category?: string,
-  isReply: boolean = false,
-  previousContext?: string
+  _category?: string,
+  _isReply: boolean = false,
+  _previousContext?: string
 ): Promise<GeneratedEmail> {
   // For single email generation, use the batch function and return first email
   const emails = await generateEmailBatch(1);
