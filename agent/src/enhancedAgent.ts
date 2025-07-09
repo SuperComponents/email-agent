@@ -3,6 +3,7 @@
 
 import { openai } from './openaiClient';
 import { tools, handleToolCall } from './tools';
+import { createAgentRunner } from '@openai/agents';
 import { generateContextualQueries, formatRAGResultsForAgent } from './ragSystem';
 import { generateThreadName } from './threadNaming';
 import { 
@@ -164,96 +165,48 @@ TAGS: [Comma-separated list of suggested tags for the thread]
     `.trim();
     
     console.log(`[EnhancedAgent] User prompt prepared: ${userPrompt.length} characters`);
-    
-    // Step 7: Create and run OpenAI assistant
-    const assistant = await openai.beta.assistants.create({
-      name: 'Enhanced Support Agent Assistant',
+
+    // Step 7: Build Agent Runner tools (attach execute handlers)
+    const runnerTools = tools.filter(t => t.type === 'function').map(t => {
+      return {
+        name: (t as any).function.name,
+        description: (t as any).function.description,
+        parameters: (t as any).function.parameters,
+        // Attach our existing handler
+        execute: async (args: any) => {
+          return await handleToolCall((t as any).function.name, args);
+        }
+      };
+    });
+
+    // Step 8: Create Agent Runner and execute
+    console.log(`[EnhancedAgent] Initializing Agent Runner with ${runnerTools.length} tools`);
+
+    const runner = createAgentRunner({
+      openai,
       instructions: systemPrompt,
-      tools,
-      model
+      model,
+      tools: runnerTools
     });
+
+    const runResult: any = await runner.run(userPrompt);
+    const responseText: string = runResult?.text || runResult?.finalOutput || runResult?.output || '';
+
+    console.log(`[EnhancedAgent] Runner completed, parsing enhanced response...`);
+
+    const parsedResponse = parseEnhancedResponse(responseText);
+
+    const enhancedResponse: EnhancedAgentResponse = {
+      ...parsedResponse,
+      threadName: threadName || `Thread ${thread.id}`,
+      ragSources: ragResults.slice(0, maxRAGResults)
+    };
+
+    console.log(`[EnhancedAgent] Enhanced support agent analysis completed successfully`);
+    console.log(`[EnhancedAgent] Thread name: "${enhancedResponse.threadName}"`);
+    console.log(`[EnhancedAgent] RAG sources included: ${enhancedResponse.ragSources?.length || 0}`);
     
-    console.log(`[EnhancedAgent] Enhanced assistant created with id: ${assistant.id}`);
-    
-    const thread_openai = await openai.beta.threads.create();
-    console.log(`[EnhancedAgent] OpenAI thread created with id: ${thread_openai.id}`);
-    
-    await openai.beta.threads.messages.create(thread_openai.id, { 
-      role: 'user', 
-      content: userPrompt 
-    });
-    
-    let run = await openai.beta.threads.runs.create(thread_openai.id, { 
-      assistant_id: assistant.id 
-    });
-    
-    console.log(`[EnhancedAgent] Run started with id: ${run.id}`);
-    
-    // Step 8: Handle run lifecycle with tool support
-    while (true) {
-      console.log(`[EnhancedAgent] Run status: ${run.status}`);
-      
-      if (['failed', 'expired', 'cancelled'].includes(run.status)) {
-        throw new Error(`Enhanced agent run failed with status: ${run.status}`);
-      }
-      
-      if (run.status === 'requires_action') {
-        const toolCalls = run.required_action?.submit_tool_outputs?.tool_calls || [];
-        console.log(`[EnhancedAgent] Processing ${toolCalls.length} tool call(s)`);
-        
-        const toolOutputs = await Promise.all(
-          toolCalls.map(async (toolCall) => {
-            console.log(`[EnhancedAgent] Executing tool: ${toolCall.function.name}`);
-            return {
-              tool_call_id: toolCall.id,
-              output: await handleToolCall(toolCall.function.name, JSON.parse(toolCall.function.arguments))
-            };
-          })
-        );
-        
-        run = await openai.beta.threads.runs.submitToolOutputs(
-          thread_openai.id,
-          run.id, 
-          { 
-            tool_outputs: toolOutputs 
-          }
-        );
-        continue;
-      }
-      
-      if (run.status === 'completed') {
-        const messages = await openai.beta.threads.messages.list(thread_openai.id);
-        const assistantMessage = messages.data.find((m) => m.role === 'assistant');
-        const responseText = (assistantMessage?.content[0] as any)?.text?.value || '';
-        
-        console.log(`[EnhancedAgent] Response received, parsing enhanced response...`);
-        
-        // Step 9: Parse enhanced response
-        const parsedResponse = parseEnhancedResponse(responseText);
-        console.log(`[EnhancedAgent] Response parsing completed`);
-        console.log(`[EnhancedAgent] Confidence: ${(parsedResponse.confidence * 100).toFixed(1)}%`);
-        console.log(`[EnhancedAgent] Suggested priority: ${parsedResponse.suggestedPriority}`);
-        console.log(`[EnhancedAgent] Escalation recommended: ${parsedResponse.escalationRecommended}`);
-        console.log(`[EnhancedAgent] Customer sentiment: ${parsedResponse.customerSentiment}`);
-        
-        // Step 10: Build final enhanced response
-        const enhancedResponse: EnhancedAgentResponse = {
-          ...parsedResponse,
-          threadName: threadName || `Thread ${thread.id}`,
-          ragSources: ragResults.slice(0, maxRAGResults),
-        };
-        
-        console.log(`[EnhancedAgent] Enhanced support agent analysis completed successfully`);
-        console.log(`[EnhancedAgent] Thread name: "${enhancedResponse.threadName}"`);
-        console.log(`[EnhancedAgent] RAG sources included: ${enhancedResponse.ragSources?.length || 0}`);
-        
-        return enhancedResponse;
-      }
-      
-      // Continue polling
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      run = await openai.beta.threads.runs.retrieve(thread_openai.id, run.id);
-    }
+    return enhancedResponse;
     
   } catch (error) {
     console.error(`[EnhancedAgent] Error in enhanced support agent:`, error);
