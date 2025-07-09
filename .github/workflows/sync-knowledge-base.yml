@@ -1,0 +1,21 @@
+name: Sync knowledge-base docs to OpenAI vector-store
+
+on:
+  push:
+    branches: [master, rag]
+    paths: ['rag/knowledge_base/**/*.md']     # run only when docs change
+  workflow_dispatch:            # allow manual “Run workflow” in UI
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Upload / prune Markdown files
+        uses: shmatt/assistants-vector-store-sync@v1
+        with:
+          pattern: 'rag/knowledge_base/**/*.md'              # glob relative to repo root
+          token:   ${{ secrets.OPENAI_API_KEY }}
+          key:     emailsmart-knowledge-base             # becomes the vector-store name
