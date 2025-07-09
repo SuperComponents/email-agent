@@ -3,11 +3,22 @@ import type { Context, Next } from 'hono'
 import { HTTPException } from 'hono/http-exception'
 import { getCookie } from 'hono/cookie'
 import { STACK_PROJECT_ID } from '../config/env.js'
+import { db } from '../database/db.js'
+import { users } from '../database/schema.js'
+import { eq } from 'drizzle-orm'
 
 // Type definition for authenticated user
 export interface AuthenticatedUser {
   id: string
   payload: jose.JWTPayload
+  dbUser?: {
+    id: number
+    email: string
+    name: string
+    role: 'agent' | 'manager' | 'admin'
+    created_at: Date | null
+    updated_at: Date | null
+  }
 }
 
 // Cache the JWKS to avoid repeated network calls
@@ -63,12 +74,22 @@ export const authMiddleware = async (c: Context, next: Next) => {
     // Verify the JWT
     const { payload } = await jose.jwtVerify(accessToken, jwks)
     
+    // Fetch user from database using Stack Auth ID
+    const stackAuthId = payload.sub
+    const [dbUser] = stackAuthId
+      ? await db
+          .select()
+          .from(users)
+          .where(eq(users.stack_auth_id, stackAuthId))
+          .limit(1)
+      : []
+    
     // Add the authenticated user info to the context
     c.set('user', {
       id: payload.sub,
-      payload: payload
+      payload: payload,
+      dbUser: dbUser || undefined
     })
-
     
     await next()
   } catch (error) {
@@ -114,11 +135,22 @@ export const optionalAuthMiddleware = async (c: Context, next: Next) => {
 
     if (accessToken) {
       const { payload } = await jose.jwtVerify(accessToken, jwks)
+      
+      // Fetch user from database using Stack Auth ID
+      const stackAuthId = payload.sub
+      const [dbUser] = stackAuthId
+        ? await db
+            .select()
+            .from(users)
+            .where(eq(users.stack_auth_id, stackAuthId))
+            .limit(1)
+        : []
+      
       c.set('user', {
         id: payload.sub,
-        payload: payload
+        payload: payload,
+        dbUser: dbUser || undefined
       })
-
     }
     
     await next()
