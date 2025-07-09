@@ -6,7 +6,7 @@ import { OpenAIEmbeddings } from '@langchain/openai';
 import { Agent, run, tool } from '@openai/agents'; // tool/Agent API :contentReference[oaicite:1]{index=1}
 
 import db from './db.js';
-import { SUPPORT_DOCS_TABLE } from './env.js';
+import { SUPPORT_DOCS_TABLE } from '../src/env.js';
 
 /* ── db + vector store ───────────────────────────────────── */
 

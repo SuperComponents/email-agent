@@ -1,8 +1,11 @@
 import { Agent, run, fileSearchTool, setDefaultOpenAIKey } from '@openai/agents';
-import { OPENAI_API_KEY } from './env.js';
+import { getVectorStoreId } from '../src/openai.js';
+import { OPENAI_API_KEY } from '../src/env.js';
 
-setDefaultOpenAIKey(OPENAI_API_KEY)
-const VECTOR_STORE_ID = 'vs_686ea940fba481918bab43cb64dd54f1';
+setDefaultOpenAIKey(OPENAI_API_KEY);
+// const VECTOR_STORE_ID = 'vs_686ea940fba481918bab43cb64dd54f1';
+const VECTOR_STORE_ID = await getVectorStoreId();
+
 const knowledgeBaseSearchTool = fileSearchTool(VECTOR_STORE_ID)
 
 const supportBot = new Agent({

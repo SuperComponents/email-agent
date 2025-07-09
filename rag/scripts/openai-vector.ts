@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
-import openai from './openai.js';
-import { DOCS_PATH } from './env.js';
+import openai from '../src/openai.js';
+import { DOCS_PATH } from '../src/env.js';
 
 async function uploadDocsToOpenAI() {
   console.log('📁 Reading docs directory...');

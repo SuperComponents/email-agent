@@ -9,12 +9,8 @@
     "typecheck": "tsc --noEmit",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "demo": "tsx scripts/dem.ts",
-    "seed": "tsx src/seed.ts",
     "agent": "tsx src/agent.ts",
-    "openai-vector": "tsx src/openai-vector.ts",
     "openai-agent": "tsx src/openai-vector-agent.ts",
-    "drop-table": "tsx scripts/drop-table.ts",
     "psql": "psql emailsmart_rag"
   },
   "dependencies": {

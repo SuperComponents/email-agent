@@ -1,4 +1,4 @@
-import db from '../src/db.js';
+import db from './db.js';
 import { SUPPORT_DOCS_TABLE } from '../src/env.js';
 
 console.log(`🗑️  Dropping table: ${SUPPORT_DOCS_TABLE}`);

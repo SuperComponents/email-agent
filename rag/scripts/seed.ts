@@ -6,7 +6,7 @@ import { PGVectorStore } from '@langchain/community/vectorstores/pgvector';
 import { OpenAIEmbeddings } from '@langchain/openai';
 
 import db from './db.js';
-import { SUPPORT_DOCS_TABLE, DOCS_PATH } from './env.js';
+import { SUPPORT_DOCS_TABLE, DOCS_PATH } from '../src/env.js';
 
 /* ── 1. Load all .md files via LangChain loaders ──────────────── */
 const mdLoader = new DirectoryLoader(DOCS_PATH, {
