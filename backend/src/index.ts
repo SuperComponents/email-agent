@@ -9,12 +9,16 @@ import messageRoutes from './routes/messages.js'
 import draftRoutes from './routes/drafts.js'
 import agentRoutes from './routes/agent.js'
 import countRoutes from './routes/counts.js'
+import { authMiddleware } from './middleware/auth.js'
 
 const app = new Hono()
 
 // Apply middleware
 app.use('*', corsMiddleware)
 app.use('*', errorHandler)
+
+// 🔐 Protect all API routes
+app.use('/api/*', authMiddleware)
 
 app.get('/', (c) => {
   return c.text('ProResponse AI Backend API')

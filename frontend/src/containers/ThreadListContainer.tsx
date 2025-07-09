@@ -55,11 +55,11 @@ export function ThreadListContainer() {
     badges: [
       ...(thread.status !== 'open' ? [{ 
         label: thread.status, 
-        variant: thread.status === 'closed' ? 'secondary' : 'default' as const 
+        variant: (thread.status === 'closed' ? 'secondary' : 'default') as 'secondary' | 'default'
       }] : []),
       ...thread.tags.map(tag => ({ 
         label: tag, 
-        variant: tag === 'urgent' ? 'destructive' : 'outline' as const 
+        variant: (tag === 'urgent' ? 'destructive' : 'outline') as 'destructive' | 'outline'
       }))
     ]
   })) || [];
@@ -78,7 +78,7 @@ export function ThreadListContainer() {
       threads={threadPreviews}
       filters={filterOptions}
       activeFilter={threadFilter}
-      activeThreadId={selectedThreadId}
+      activeThreadId={selectedThreadId || undefined}
       searchValue={localSearchValue}
       onSearchChange={handleSearchChange}
       onFilterChange={(filterId) => setThreadFilter(filterId as ThreadFilter)}

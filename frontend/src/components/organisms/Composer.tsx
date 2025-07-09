@@ -4,7 +4,8 @@ import { Button } from '../atoms/Button';
 import { Icon } from '../atoms/Icon';
 import { cn } from '../../lib/utils';
 
-export interface ComposerProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface ComposerProps {
+  className?: string;
   value?: string;
   onChange?: (value: string) => void;
   onSend?: () => void;
