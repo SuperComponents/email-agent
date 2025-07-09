@@ -18,7 +18,7 @@ const draftStore = new Map<string, Draft>();
 mockThreads.forEach(thread => {
   const detail = generateMockThreadDetail(thread);
   threadStore.set(thread.id, detail);
-  draftStore.set(thread.id, generateMockDraft(thread.id));
+  draftStore.set(thread.id, generateMockDraft());
 });
 
 export class MockAPI {

@@ -61,7 +61,7 @@ export function useUpdateThread() {
   return useMutation({
     mutationFn: ({ id, updates }: { id: string; updates: { status?: string; tags?: string[] } }) =>
       APIClient.updateThread(id, updates),
-    onSuccess: (data, variables) => {
+    onSuccess: (_, variables) => {
       // Invalidate and refetch thread data
       queryClient.invalidateQueries({ queryKey: queryKeys.thread(variables.id) });
       queryClient.invalidateQueries({ queryKey: queryKeys.threads() });
@@ -76,7 +76,7 @@ export function useSendMessage() {
   return useMutation({
     mutationFn: ({ threadId, content }: { threadId: string; content: string }) =>
       APIClient.sendMessage(threadId, content),
-    onSuccess: (data, variables) => {
+    onSuccess: (_, variables) => {
       // Invalidate thread to refetch with new message
       queryClient.invalidateQueries({ queryKey: queryKeys.thread(variables.threadId) });
       queryClient.invalidateQueries({ queryKey: queryKeys.threads() });
@@ -103,7 +103,7 @@ export function useRegenerateDraft() {
   return useMutation({
     mutationFn: ({ threadId, instructions }: { threadId: string; instructions?: string }) =>
       APIClient.regenerateDraft(threadId, instructions),
-    onSuccess: (data, variables) => {
+    onSuccess: (_, variables) => {
       // Invalidate draft and agent activity
       queryClient.invalidateQueries({ queryKey: queryKeys.draft(variables.threadId) });
       queryClient.invalidateQueries({ queryKey: queryKeys.agentActivity(variables.threadId) });

@@ -1,3 +1,5 @@
+import React from 'react';
+
 export { Button } from './Button';
 export { Input } from './Input';
 export { Label } from './Label';
@@ -7,8 +9,8 @@ export { Separator } from './Separator';
 export { Icon } from './Icon';
 
 export type { ButtonProps } from './Button';
-export type { InputProps } from './Input';
-export type { LabelProps } from './Label';
+export type InputProps = React.InputHTMLAttributes<HTMLInputElement>;
+export type LabelProps = React.LabelHTMLAttributes<HTMLLabelElement>;
 export type { AvatarProps } from './Avatar';
 export type { BadgeProps } from './Badge';
 export type { SeparatorProps } from './Separator';

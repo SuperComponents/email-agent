@@ -1,7 +1,4 @@
-/*
-// TODO: 
-// Remove auth store; using stack handler instead
-*/
+
 
 import { Navigate, Outlet } from 'react-router-dom';
 import { useStackApp } from '@stackframe/react';

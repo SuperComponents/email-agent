@@ -91,10 +91,7 @@ export const Default: Story = {
   render: () => (
     <AppLayout
       header={
-        <Header
-          user={{ name: 'John Doe', initials: 'JD' }}
-          notificationCount={3}
-        />
+        <Header />
       }
       sidebar={
         <ThreadList
@@ -134,9 +131,7 @@ export const WithoutAgentPanel: Story = {
   render: () => (
     <AppLayout
       header={
-        <Header
-          user={{ name: 'John Doe', initials: 'JD' }}
-        />
+        <Header />
       }
       sidebar={
         <ThreadList
