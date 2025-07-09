@@ -44,6 +44,10 @@ RUN npm run build
 # Create production dependencies
 RUN npm prune --production
 
+# Replace the symlink with actual files for proresponse-agent
+RUN rm -rf node_modules/proresponse-agent && \
+    cp -r ../agent node_modules/proresponse-agent
+
 # Runtime stage
 FROM node:22-slim
 
