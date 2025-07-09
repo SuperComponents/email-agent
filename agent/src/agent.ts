@@ -110,7 +110,12 @@ Please analyze this email and draft a response.`;
       if (run.status === 'completed') {
         const messages = await openai.beta.threads.messages.list(thread.id);
         const assistantMessage = messages.data.find((m) => m.role === 'assistant');
-        const responseText = (assistantMessage?.content[0] as any)?.text?.value || '';
+        let responseText = '';
+        if (typeof assistantMessage?.content === 'string') {
+          responseText = assistantMessage.content;
+        } else if (Array.isArray(assistantMessage?.content)) {
+          responseText = (assistantMessage?.content[0] as any)?.text?.value || '';
+        }
         
         console.log(`[Agent] Response received, processing...`);
         
