@@ -1,9 +1,82 @@
 import { z } from "zod";
 import { ToolDefinition } from "./context/tools";
 
+import { OpenAI } from 'openai';
+import { OPENAI_API_KEY, OPENAI_VECTOR_STORE_KEY } from './env';
+
+const openai = new OpenAI({ 
+  apiKey: OPENAI_API_KEY,
+});
+
+async function getVectorStore(): Promise<OpenAI.VectorStores.VectorStore> {
+  const vectorStores = await openai.vectorStores.list();
+  
+  const matchingStores = vectorStores.data.filter(
+    (store: any) => store.metadata?.key === OPENAI_VECTOR_STORE_KEY
+  );
+  
+  if (matchingStores.length === 0) {
+    throw new Error(`No vector store found with metadata key: ${OPENAI_VECTOR_STORE_KEY}`);
+  }
+  
+  if (matchingStores.length > 1) {
+    console.warn(`Warning: Found ${matchingStores.length} vector stores with metadata key: ${OPENAI_VECTOR_STORE_KEY}. Using the first one.`);
+  }
+
+  return matchingStores[0];
+}
+
+export async function getVectorStoreId(): Promise<string> {
+  const vectorStore = await getVectorStore();
+  return vectorStore.id;
+}
+
+
+
+// Helper function to extract title from file content
+function extractTitleFromContent(content: string): string {
+  const lines = content.split('\n').filter(line => line.trim());
+  
+  // Look for markdown headers
+  for (const line of lines) {
+    if (line.match(/^#+\s+/)) {
+      return line.replace(/^#+\s+/, '').trim();
+    }
+  }
+  
+  // Look for first non-empty line
+  if (lines.length > 0) {
+    return lines[0].trim().substring(0, 100);
+  }
+  
+  return 'Untitled Document';
+}
+
+// Helper function to extract snippet from content
+function extractSnippet(content: string, maxLength: number = 200): string {
+  const cleanContent = content.replace(/\n+/g, ' ').trim();
+  if (cleanContent.length <= maxLength) {
+    return cleanContent;
+  }
+  return cleanContent.substring(0, maxLength - 3) + '...';
+}
+
+// Helper function to extract tags from metadata
+function extractTags(metadata: any): string[] {
+  if (metadata?.tags) {
+    if (Array.isArray(metadata.tags)) {
+      return metadata.tags;
+    }
+    if (typeof metadata.tags === 'string') {
+      return metadata.tags.split(',').map((tag: string) => tag.trim());
+    }
+  }
+  return ['general', 'knowledge-base'];
+}
+
 export class SearchKnowledgeBaseTool extends ToolDefinition {
     name = "search_knowledge_base";
-    description = "Search the knowledge base for relevant articles and solutions";
+    description = "Search the knowledge base for relevant articles and solutions using AI-enhanced queries";
     args = z.object({
         query: z.string().describe("The search query to find relevant knowledge base articles"),
         limit: z.number().optional().default(5).describe("Maximum number of results to return")
@@ -19,32 +92,146 @@ export class SearchKnowledgeBaseTool extends ToolDefinition {
     });
 
     async execute(args: z.infer<typeof this.args>) {
-        // Mock implementation
-        return {
-            articles: [
-                {
-                    id: "kb-001",
-                    title: "How to reset your password",
-                    snippet: "Follow these steps to reset your password: 1. Click 'Forgot Password'...",
-                    relevance_score: 0.95
-                },
-                {
-                    id: "kb-002", 
-                    title: "Troubleshooting login issues",
-                    snippet: "Common login problems and solutions...",
-                    relevance_score: 0.87
+        console.log(`[SearchKnowledgeBase] Starting Assistant API search for: "${args.query}"`);
+        
+        try {
+            // Step 1: Get vector store ID
+            const vectorStoreId = await getVectorStoreId();
+            console.log(`[SearchKnowledgeBase] Using vector store: ${vectorStoreId}`);
+            
+            // Step 2: Create an assistant with file_search capability
+            console.log(`[SearchKnowledgeBase] Creating assistant with file search capability...`);
+            const assistant = await openai.beta.assistants.create({
+                name: 'Knowledge Base Search Assistant',
+                instructions: `You are a knowledge base search assistant. Search through the provided documents and return relevant information for the user's query. Focus on finding the most relevant content and provide clear, helpful summaries.`,
+                model: 'gpt-4o',
+                tools: [{ type: 'file_search' }],
+                tool_resources: {
+                    file_search: {
+                        vector_store_ids: [vectorStoreId]
+                    }
                 }
-            ],
-            total_found: 2
-        };
+            });
+            
+            console.log(`[SearchKnowledgeBase] Created assistant: ${assistant.id}`);
+            
+            // Step 3: Create a thread for the search
+            const thread = await openai.beta.threads.create();
+            console.log(`[SearchKnowledgeBase] Created thread: ${thread.id}`);
+            
+            // Step 4: Add the search query as a message
+            await openai.beta.threads.messages.create(thread.id, {
+                role: 'user',
+                content: `Search the knowledge base for: "${args.query}". Please provide relevant information and cite your sources.`
+            });
+            
+            // Step 5: Run the assistant
+            console.log(`[SearchKnowledgeBase] Running assistant search...`);
+            const run = await openai.beta.threads.runs.create(thread.id, {
+                assistant_id: assistant.id
+            });
+            
+            // Step 6: Wait for completion
+            let runStatus = await openai.beta.threads.runs.retrieve(thread.id, run.id);
+            let attempts = 0;
+            const maxAttempts = 30; // 30 seconds timeout
+            
+            while (runStatus.status === 'in_progress' || runStatus.status === 'queued') {
+                if (attempts >= maxAttempts) {
+                    throw new Error('Assistant search timed out');
+                }
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                runStatus = await openai.beta.threads.runs.retrieve(thread.id, run.id);
+                attempts++;
+            }
+            
+            console.log(`[SearchKnowledgeBase] Assistant run completed with status: ${runStatus.status}`);
+            
+            if (runStatus.status === 'failed') {
+                throw new Error(`Assistant run failed: ${runStatus.last_error?.message || 'Unknown error'}`);
+            }
+            
+            // Step 7: Get the assistant's response
+            const messages = await openai.beta.threads.messages.list(thread.id);
+            const assistantMessages = messages.data.filter(msg => msg.role === 'assistant');
+            
+            if (assistantMessages.length === 0) {
+                throw new Error('No response from assistant');
+            }
+            
+            // Step 8: Parse the response and extract search results
+            const response = assistantMessages[0];
+            const textContent = response.content.find(content => content.type === 'text');
+            
+            if (!textContent || textContent.type !== 'text') {
+                throw new Error('No text content in assistant response');
+            }
+            
+            const responseText = textContent.text.value;
+            const citations = textContent.text.annotations || [];
+            
+            console.log(`[SearchKnowledgeBase] Retrieved response with ${citations.length} citations`);
+            
+            // Step 9: Format results
+            const articles = citations.slice(0, args.limit).map((citation, index) => {
+                // Extract file information from citation
+                const fileId = citation.type === 'file_citation' ? citation.file_citation?.file_id : 'unknown';
+                
+                // Extract snippet from citation text (the text that was replaced by the citation)
+                const startIndex = citation.start_index || 0;
+                const endIndex = citation.end_index || startIndex + 100;
+                const snippet = responseText.substring(startIndex, endIndex) || responseText.substring(0, 200);
+                
+                return {
+                    id: fileId || `result_${index}`,
+                    title: `Knowledge Article ${index + 1}`,
+                    snippet: snippet,
+                    relevance_score: Math.max(0.9 - (index * 0.1), 0.1) // Decreasing relevance
+                };
+            });
+            
+            // If no citations, create a single result from the response
+            if (articles.length === 0 && responseText.trim()) {
+                articles.push({
+                    id: 'assistant_response',
+                    title: 'Assistant Search Result',
+                    snippet: responseText.substring(0, 200),
+                    relevance_score: 0.8
+                });
+            }
+            
+            // Step 10: Cleanup
+            await openai.beta.assistants.del(assistant.id);
+            
+            console.log(`[SearchKnowledgeBase] Found ${articles.length} relevant results`);
+            
+            return {
+                articles: articles,
+                total_found: articles.length
+            };
+            
+        } catch (error) {
+            console.error(`[SearchKnowledgeBase] Assistant search failed:`, error);
+            
+            // Return error in expected format
+            return {
+                articles: [{
+                    id: 'error',
+                    title: 'Search Error',
+                    snippet: `Failed to search knowledge base: ${error instanceof Error ? error.message : 'Unknown error'}`,
+                    relevance_score: 0.0
+                }],
+                total_found: 0
+            };
+        }
     }
 }
 
 export class ReadKnowledgeBaseTool extends ToolDefinition {
     name = "read_knowledge_base";
-    description = "Read a specific knowledge base article by ID";
+    description = "Read the complete content of a specific knowledge base article by ID";
     args = z.object({
-        id: z.string().describe("The knowledge base article ID to read")
+        id: z.string().describe("The knowledge base article ID to read (from search results)")
     });
     result = z.object({
         id: z.string(),
@@ -55,14 +242,123 @@ export class ReadKnowledgeBaseTool extends ToolDefinition {
     });
 
     async execute(args: z.infer<typeof this.args>) {
-        // Mock implementation
-        return {
-            id: args.id,
-            title: "Knowledge Base Article",
-            content: "This is the full content of the knowledge base article with detailed instructions and solutions.",
-            tags: ["support", "troubleshooting", "common-issues"],
-            last_updated: "2024-01-15T10:30:00Z"
-        };
+        console.log(`[ReadKnowledgeBase] Reading file with Assistant API: ${args.id}`);
+        
+        try {
+            // Step 1: Get vector store ID and verify file exists
+            const vectorStoreId = await getVectorStoreId();
+            
+            // Step 2: Get file metadata from vector store
+            let fileMetadata;
+            try {
+                fileMetadata = await openai.vectorStores.files.retrieve(vectorStoreId, args.id);
+                console.log(`[ReadKnowledgeBase] Found file in vector store: ${fileMetadata.id}`);
+            } catch (error) {
+                console.error(`[ReadKnowledgeBase] File not found in vector store:`, error);
+                throw new Error(`File not found in knowledge base: ${args.id}`);
+            }
+            
+            // Step 3: Create an assistant with file_search capability
+            console.log(`[ReadKnowledgeBase] Creating assistant to read file content...`);
+            const assistant = await openai.beta.assistants.create({
+                name: 'Knowledge Base Reader Assistant',
+                instructions: `You are a knowledge base reader assistant. When given a specific file ID, provide the complete content of that document in a clear, well-structured format. Include all important information from the document.`,
+                model: 'gpt-4o',
+                tools: [{ type: 'file_search' }],
+                tool_resources: {
+                    file_search: {
+                        vector_store_ids: [vectorStoreId]
+                    }
+                }
+            });
+            
+            console.log(`[ReadKnowledgeBase] Created assistant: ${assistant.id}`);
+            
+            // Step 4: Create a thread for the read request
+            const thread = await openai.beta.threads.create();
+            console.log(`[ReadKnowledgeBase] Created thread: ${thread.id}`);
+            
+            // Step 5: Request the specific file content
+            await openai.beta.threads.messages.create(thread.id, {
+                role: 'user',
+                content: `Please provide the complete content of the document with file ID: ${args.id}. Include all text, structure, and important information from this specific document.`
+            });
+            
+            // Step 6: Run the assistant
+            console.log(`[ReadKnowledgeBase] Running assistant to read file...`);
+            const run = await openai.beta.threads.runs.create(thread.id, {
+                assistant_id: assistant.id
+            });
+            
+            // Step 7: Wait for completion
+            let runStatus = await openai.beta.threads.runs.retrieve(thread.id, run.id);
+            let attempts = 0;
+            const maxAttempts = 30; // 30 seconds timeout
+            
+            while (runStatus.status === 'in_progress' || runStatus.status === 'queued') {
+                if (attempts >= maxAttempts) {
+                    throw new Error('Assistant read operation timed out');
+                }
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                runStatus = await openai.beta.threads.runs.retrieve(thread.id, run.id);
+                attempts++;
+            }
+            
+            console.log(`[ReadKnowledgeBase] Assistant run completed with status: ${runStatus.status}`);
+            
+            if (runStatus.status === 'failed') {
+                throw new Error(`Assistant run failed: ${runStatus.last_error?.message || 'Unknown error'}`);
+            }
+            
+            // Step 8: Get the assistant's response
+            const messages = await openai.beta.threads.messages.list(thread.id);
+            const assistantMessages = messages.data.filter(msg => msg.role === 'assistant');
+            
+            if (assistantMessages.length === 0) {
+                throw new Error('No response from assistant');
+            }
+            
+            // Step 9: Extract content from response
+            const response = assistantMessages[0];
+            const textContent = response.content.find(content => content.type === 'text');
+            
+            if (!textContent || textContent.type !== 'text') {
+                throw new Error('No text content in assistant response');
+            }
+            
+            const fullContent = textContent.text.value;
+            const citations = textContent.text.annotations || [];
+            
+            console.log(`[ReadKnowledgeBase] Retrieved content with ${citations.length} citations`);
+            
+            // Step 10: Extract metadata and format response
+            const title = extractTitleFromContent(fullContent) || `Knowledge Article ${args.id.substring(5, 13)}`;
+            const tags = extractTags(fileMetadata);
+            const lastUpdated = new Date(fileMetadata.created_at * 1000).toISOString();
+            
+            // Step 11: Cleanup
+            await openai.beta.assistants.del(assistant.id);
+            
+            return {
+                id: args.id,
+                title: title,
+                content: fullContent,
+                tags: tags,
+                last_updated: lastUpdated
+            };
+            
+        } catch (error) {
+            console.error(`[ReadKnowledgeBase] Failed to read file:`, error);
+            
+            // Return error in expected format
+            return {
+                id: args.id,
+                title: 'Error Reading File',
+                content: `Failed to read knowledge base article: ${error instanceof Error ? error.message : 'Unknown error'}`,
+                tags: ['error'],
+                last_updated: new Date().toISOString()
+            };
+        }
     }
 }
 
