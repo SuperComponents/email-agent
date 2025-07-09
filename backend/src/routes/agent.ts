@@ -235,7 +235,7 @@ app.post('/:id/regenerate', async (c) => {
     await logAgentAction({
       threadId: threadId,
       draftResponseId: newDraft.id,
-      action: 'draft_created',
+      action: 'draft_regenerated',
       metadata: { 
         regenerated: true,
         instructions: body?.instructions || null,
