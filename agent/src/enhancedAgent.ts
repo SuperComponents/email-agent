@@ -1,9 +1,9 @@
 // Enhanced Support Agent - Handles email threads with RAG integration and thread naming
 // Builds upon the original agent with expanded capabilities
 
-import { openai } from './openaiClient';
+import { openai, knowledgeBaseSearchTool } from './openaiClient';
 import { tools, handleToolCall } from './tools';
-import { createAgentRunner } from '@openai/agents';
+import { Agent, run } from '@openai/agents';
 import { generateContextualQueries, formatRAGResultsForAgent } from './ragSystem';
 import { generateThreadName } from './threadNaming';
 import { 
@@ -95,12 +95,72 @@ ${msg.attachments?.length ? `**Attachments:** ${msg.attachments.map(a => a.filen
       console.log(`[EnhancedAgent] Gathering relevant company knowledge via RAG`);
       
       try {
+        // First try contextual query generation
         ragResults = await generateContextualQueries(
           combinedEmailContent,
           ['policy', 'knowledge', 'procedure', 'faq']
         );
         
         console.log(`[EnhancedAgent] RAG analysis returned ${ragResults.length} relevant knowledge items`);
+        
+        // If no results from contextual queries, try direct search with email content
+        if (ragResults.length === 0) {
+          console.log(`[EnhancedAgent] No contextual results, trying direct vector store search`);
+          
+          // Extract key terms for direct search
+          const emailText = thread.messages
+            .filter(msg => msg.isFromCustomer)
+            .map(msg => msg.body)
+            .join(' ');
+          
+          console.log(`[EnhancedAgent] Customer email text: "${emailText.substring(0, 100)}..."`);
+          
+          // Create a direct search agent
+          const searchAgent = new Agent({
+            name: 'direct-search-agent',
+            instructions: `Search the knowledge base for information that would help respond to this customer inquiry. Look for relevant policies, procedures, troubleshooting steps, or FAQ entries. Provide detailed information from the documents.`,
+            model: 'gpt-4o-mini',
+            tools: [knowledgeBaseSearchTool]
+          });
+
+          console.log(`[EnhancedAgent] Executing direct vector store search with file search tool...`);
+          
+          try {
+            const directSearchResult = await run(searchAgent, `Search the knowledge base for information to help with this customer inquiry: "${emailText}"`);
+            const directSearchResponse = Array.isArray(directSearchResult?.output) 
+              ? directSearchResult.output.map((item: any) => item.output || item.text || '').join('\n') 
+              : '';
+            
+            console.log(`[EnhancedAgent] Direct search response length: ${directSearchResponse.length} characters`);
+            
+            if (directSearchResponse.trim().length > 10) {
+              console.log(`[EnhancedAgent] Direct search found information!`);
+              console.log(`[EnhancedAgent] Response preview: "${directSearchResponse.substring(0, 200)}..."`);
+              
+              // Create a RAG result from the direct search
+              ragResults = [{
+                id: `direct-search-${Date.now()}`,
+                title: 'Knowledge Base Search Results',
+                content: directSearchResponse,
+                category: 'knowledge',
+                relevanceScore: 0.9,
+                lastUpdated: new Date(),
+                source: 'vector-store-direct',
+                metadata: {
+                  searchType: 'direct-file-search',
+                  originalQuery: emailText.substring(0, 100),
+                  timestamp: new Date().toISOString()
+                }
+              }];
+              
+              console.log(`[EnhancedAgent] Created RAG result from direct search`);
+            } else {
+              console.log(`[EnhancedAgent] Direct search returned minimal content`);
+            }
+          } catch (error) {
+            console.log(`[EnhancedAgent] Direct search failed: ${error}`);
+          }
+        }
         
         // Limit results based on configuration
         const limitedRAGResults = ragResults.slice(0, maxRAGResults);
@@ -166,7 +226,7 @@ TAGS: [Comma-separated list of suggested tags for the thread]
     
     console.log(`[EnhancedAgent] User prompt prepared: ${userPrompt.length} characters`);
 
-    // Step 7: Build Agent Runner tools (attach execute handlers)
+    // Step 8: Build Agent Runner tools (attach execute handlers)
     const runnerTools = tools.filter(t => t.type === 'function').map(t => {
       return {
         name: (t as any).function.name,
@@ -179,20 +239,42 @@ TAGS: [Comma-separated list of suggested tags for the thread]
       };
     });
 
-    // Step 8: Create Agent Runner and execute
-    console.log(`[EnhancedAgent] Initializing Agent Runner with ${runnerTools.length} tools`);
+    // Step 8: Create Agent with knowledgeBaseSearchTool for direct vector store access
+    console.log(`[EnhancedAgent] Initializing Agent with knowledge base search tool for direct vector store access`);
+    console.log(`[EnhancedAgent] Vector store provides comprehensive access to company policies, procedures, FAQ, and knowledge base`);
 
-    const runner = createAgentRunner({
-      openai,
+    const agent = new Agent({
+      name: 'enhanced-support-agent',
       instructions: systemPrompt,
       model,
-      tools: runnerTools
+      tools: [knowledgeBaseSearchTool] // Direct vector store access provides comprehensive knowledge base search
     });
 
-    const runResult: any = await runner.run(userPrompt);
-    const responseText: string = runResult?.text || runResult?.finalOutput || runResult?.output || '';
+    const runResult: any = await run(agent, userPrompt);
+    const responseText = Array.isArray(runResult?.output) 
+      ? runResult.output.map((item: any) => {
+          // Look for assistant message with output_text content (same method as RAG)
+          if (item.type === 'message' && item.role === 'assistant' && item.content) {
+            if (Array.isArray(item.content)) {
+              return item.content
+                .filter((contentItem: any) => contentItem.type === 'output_text' && contentItem.text)
+                .map((contentItem: any) => contentItem.text)
+                .join('\n');
+            }
+          }
+          return '';
+        }).filter((text: string) => text.length > 0).join('\n')
+      : '';
 
-    console.log(`[EnhancedAgent] Runner completed, parsing enhanced response...`);
+    console.log(`[EnhancedAgent] Agent run completed, parsing enhanced response...`);
+    console.log(`[EnhancedAgent] Response length: ${responseText.length} characters`);
+    
+    if (responseText.length > 50) {
+      console.log(`[EnhancedAgent] ✅ Successfully extracted response content`);
+      console.log(`[EnhancedAgent] Response preview: "${responseText.substring(0, 200)}..."`);
+    } else {
+      console.log(`[EnhancedAgent] ⚠️ Warning: Response text is very short: "${responseText}"`);
+    }
 
     const parsedResponse = parseEnhancedResponse(responseText);
 
@@ -223,11 +305,20 @@ function createEnhancedSystemPrompt(ragContent: string, escalationKeywords: stri
   return `You are an enhanced support agent assistant helping a human support person analyze email threads and draft responses.
 
 ## Your Enhanced Capabilities:
-- Access to company knowledge base through RAG system
+- Access to company knowledge base through file search tool (vector store)
 - Email thread analysis and sentiment detection
 - Escalation detection and priority assessment
 - Thread naming and categorization
 - Customer history integration
+
+## Knowledge Base Access:
+You have access to a comprehensive company knowledge base through the file search tool. This includes:
+- Company policies (refund, privacy, terms, shipping, support)
+- Procedural knowledge (troubleshooting steps, how-to guides)
+- Frequently asked questions (FAQ)
+- General company knowledge and documentation
+
+Use the file search tool to find relevant information for customer inquiries.
 
 ## Available Company Knowledge:
 ${ragContent}
@@ -237,7 +328,7 @@ ${ragContent}
 - Draft professional, empathetic responses based on company policies
 - Assess customer sentiment and escalation needs
 - Provide priority recommendations and estimated resolution times
-- Always reference relevant company policies from the knowledge base
+- Always search the knowledge base for relevant company policies and procedures
 - Be solution-focused with clear next steps
 - Sign off with "Best regards,\\nCustomer Support Team"
 
@@ -251,15 +342,17 @@ Keywords that may indicate escalation needs: ${escalationKeywords.join(', ')}
 
 ## Analysis Framework:
 1. **Thread Analysis**: Review all messages in chronological order
-2. **Sentiment Assessment**: Determine customer emotional state
-3. **Issue Classification**: Identify the core problem/request
-4. **Policy Application**: Apply relevant company policies from knowledge base
-5. **Priority Assessment**: Evaluate urgency and impact
-6. **Response Crafting**: Draft appropriate response with clear next steps
-7. **Escalation Review**: Determine if escalation is needed
+2. **Knowledge Base Search**: Search for relevant company information using the file search tool
+3. **Sentiment Assessment**: Determine customer emotional state
+4. **Issue Classification**: Identify the core problem/request
+5. **Policy Application**: Apply relevant company policies from knowledge base
+6. **Priority Assessment**: Evaluate urgency and impact
+7. **Response Crafting**: Draft appropriate response with clear next steps
+8. **Escalation Review**: Determine if escalation is needed
 
 ## Quality Standards:
-- Always reference specific company policies when applicable
+- Always search the knowledge base for relevant information
+- Reference specific company policies when applicable
 - Provide exact procedural steps from the knowledge base
 - Acknowledge the full context of the thread conversation
 - Balance empathy with policy compliance
@@ -279,7 +372,7 @@ ESTIMATED_TIME: [hours for resolution]
 ACTIONS: [additional actions for support person]
 TAGS: [suggested thread tags]
 
-Never make promises the company cannot keep. Always use the company knowledge base to inform your responses.`;
+Always use the file search tool to find relevant company information before responding.`;
 }
 
 /**
