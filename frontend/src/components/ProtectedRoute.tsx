@@ -11,7 +11,6 @@ export function ProtectedRoute() {
   // const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const app = useStackApp();
   const user = app.useUser(); 
-  console.log("USER",user);
   if (!user) {
     return <Navigate to="/handler/sign-in" replace />;
   }
