@@ -1,10 +1,10 @@
 import { Agent, run, fileSearchTool, setDefaultOpenAIKey } from '@openai/agents';
-import { getVectorStoreId } from '../src/openai.js';
+import { getVectorStoreId } from '../src/vector-store.js';
+import openai from '../src/openai.js';
 import { OPENAI_API_KEY } from '../src/env.js';
 
 setDefaultOpenAIKey(OPENAI_API_KEY);
-// const VECTOR_STORE_ID = 'vs_686ea940fba481918bab43cb64dd54f1';
-const VECTOR_STORE_ID = await getVectorStoreId();
+const VECTOR_STORE_ID = await getVectorStoreId(openai);
 
 const knowledgeBaseSearchTool = fileSearchTool(VECTOR_STORE_ID)
 
@@ -29,9 +29,7 @@ console.log(`\n❓ Question: ${question}`);
 const result = await run(supportBot, question);
 
 console.log('\n─── Answer ───\n');
-// console.log(JSON.stringify(result.output, null, 2));
 
 result.output.forEach((item) => {
-  // console.log(item);
   console.log(JSON.stringify(item, null, 2));
 });
