@@ -4,9 +4,9 @@ import { db } from '../database/db.js'
 import { threads, emails, draft_responses, agent_actions } from '../database/schema.js'
 import { successResponse, notFoundResponse, errorResponse } from '../utils/response.js'
 import { threadFilterSchema, updateThreadSchema, validateRequest } from '../utils/validation.js'
-
+import { authMiddleware } from '../middleware/auth.js'
 const app = new Hono()
-
+app.use(authMiddleware)
 // GET /api/threads - List all threads with filtering
 app.get('/', async (c) => {
   try {
