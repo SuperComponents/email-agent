@@ -15,13 +15,17 @@ export function AgentPanelContainer() {
   }
   
   // Transform agent activity data to match component props
-  const actions: AgentActionProps[] = agentActivity?.actions.map(action => ({
-    icon: action.type === 'analyze' ? Brain : action.type === 'search' ? FileSearch : MessageSquare,
-    title: action.title,
-    description: action.description,
-    timestamp: new Date(action.timestamp).toLocaleTimeString(),
-    status: action.status === 'completed' ? 'completed' : action.status === 'failed' ? 'failed' : 'pending'
-  })) || [];
+  // Reverse the array to show most recent at bottom
+  const actions: AgentActionProps[] = agentActivity?.actions
+    .slice() // Create a copy to avoid mutating the original
+    .reverse() // Reverse to show most recent at bottom
+    .map(action => ({
+      icon: action.type === 'analyze' ? Brain : action.type === 'search' ? FileSearch : MessageSquare,
+      title: action.title,
+      description: action.description,
+      timestamp: new Date(action.timestamp).toLocaleTimeString(),
+      status: action.status === 'completed' ? 'completed' : action.status === 'failed' ? 'failed' : 'pending'
+    })) || [];
   
   return (
     <AgentPanel

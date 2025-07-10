@@ -1,6 +1,5 @@
 import React from 'react';
 import { cn } from '../../lib/utils';
-import { UserButton } from '@stackframe/react';
 
 export interface HeaderProps extends React.HTMLAttributes<HTMLElement> { }
 
@@ -15,7 +14,7 @@ export const Header = React.forwardRef<HTMLElement, HeaderProps>(
                 )}
                 {...props}
             >
-                <UserButton />
+                {/* UserButton disabled for testing */}
             </header>
         );
     }
