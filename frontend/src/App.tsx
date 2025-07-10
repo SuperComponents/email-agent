@@ -32,6 +32,7 @@ function App() {
                   <Route path="/" element={<InboxPage />} />
                   <Route path="/thread/:threadId" element={<InboxPage />} />
                   <Route path="/knowledge-base" element={<KnowledgeBasePage />} />
+                  <Route path="/knowledge-base/:documentName" element={<KnowledgeBasePage />} />
                 </Route>
                 <Route path="*" element={<NotFoundPage />} />
               </Routes>

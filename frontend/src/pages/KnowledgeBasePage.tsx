@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import { GitHubService } from '../services/github';
 import { Button } from '../components/atoms/Button';
 import { Input } from '../components/atoms/Input';
 import { AppLayout } from '../components/templates';
 import { Header } from '../components/organisms';
-import { FileText, Plus, Edit, Trash2, Save, X } from 'lucide-react';
+import { FileText, Plus, Edit, Trash2, Save, X, Link } from 'lucide-react';
 
 interface KnowledgeDocument {
   name: string;
@@ -13,6 +14,9 @@ interface KnowledgeDocument {
 }
 
 export function KnowledgeBasePage() {
+  const { documentName } = useParams<{ documentName?: string }>();
+  const navigate = useNavigate();
+  
   const [documents, setDocuments] = useState<KnowledgeDocument[]>([]);
   const [selectedDocument, setSelectedDocument] = useState<KnowledgeDocument | null>(null);
   const [isEditing, setIsEditing] = useState(false);
@@ -27,11 +31,32 @@ export function KnowledgeBasePage() {
     loadDocuments();
   }, []);
 
+  // Sync URL to document selection - URL is the single source of truth
+  useEffect(() => {
+    if (documentName && documents.length > 0) {
+      console.log('Looking for document from URL:', documentName);
+      const document = documents.find(doc => doc.name === documentName);
+      if (document) {
+        console.log('Found document from URL:', document.name);
+        setSelectedDocument(document);
+      } else {
+        console.log('Document not found from URL, redirecting to knowledge base');
+        // Document not found, redirect to knowledge base without document
+        navigate('/knowledge-base', { replace: true });
+      }
+    } else if (!documentName) {
+      console.log('No document in URL, clearing selection');
+      setSelectedDocument(null);
+    }
+  }, [documentName, documents, navigate]);
+
   const loadDocuments = async () => {
     try {
       setLoading(true);
       setError(null);
+      console.log('Loading documents from GitHub...');
       const fileNames = await GitHubService.listFiles('rag/knowledge_base');
+      console.log('Found files:', fileNames);
       
       const docs: KnowledgeDocument[] = [];
       for (const fileName of fileNames) {
@@ -43,6 +68,7 @@ export function KnowledgeBasePage() {
         });
       }
       
+      console.log('Loaded documents:', docs.map(d => d.name));
       setDocuments(docs);
     } catch (err) {
       setError('Failed to load documents from GitHub');
@@ -53,21 +79,25 @@ export function KnowledgeBasePage() {
   };
 
   const handleSelectDocument = (doc: KnowledgeDocument) => {
+    console.log('Selecting document:', doc.name);
     if (isEditing || isCreating) {
       // Ask for confirmation if there are unsaved changes
       if (window.confirm('You have unsaved changes. Are you sure you want to switch documents?')) {
-        setSelectedDocument(doc);
+        // Navigate to the document URL
+        navigate(`/knowledge-base/${encodeURIComponent(doc.name)}`);
         setIsEditing(false);
         setIsCreating(false);
         setEditContent('');
       }
     } else {
-      setSelectedDocument(doc);
+      // Navigate to the document URL
+      navigate(`/knowledge-base/${encodeURIComponent(doc.name)}`);
     }
   };
 
   const handleEdit = () => {
     if (selectedDocument) {
+      console.log('Editing document:', selectedDocument.name);
       setEditContent(selectedDocument.content);
       setIsEditing(true);
     }
@@ -78,6 +108,7 @@ export function KnowledgeBasePage() {
 
     try {
       setLoading(true);
+      console.log('Saving document:', selectedDocument.name);
       await GitHubService.commitFile({
         path: selectedDocument.path,
         content: editContent,
@@ -92,6 +123,7 @@ export function KnowledgeBasePage() {
       setSelectedDocument(updatedDoc);
       setIsEditing(false);
       setEditContent('');
+      console.log('Document saved successfully');
     } catch (err) {
       setError('Failed to save document');
       console.error('Error saving document:', err);
@@ -106,6 +138,7 @@ export function KnowledgeBasePage() {
     if (window.confirm(`Are you sure you want to delete ${selectedDocument.name}?`)) {
       try {
         setLoading(true);
+        console.log('Deleting document:', selectedDocument.name);
         await GitHubService.deleteFile(
           selectedDocument.path,
           `Delete ${selectedDocument.name}`
@@ -113,7 +146,9 @@ export function KnowledgeBasePage() {
 
         // Update local state
         setDocuments(docs => docs.filter(doc => doc.path !== selectedDocument.path));
-        setSelectedDocument(null);
+        // Navigate back to knowledge base without document
+        navigate('/knowledge-base');
+        console.log('Document deleted successfully');
       } catch (err) {
         setError('Failed to delete document');
         console.error('Error deleting document:', err);
@@ -124,10 +159,12 @@ export function KnowledgeBasePage() {
   };
 
   const handleCreateNew = () => {
+    console.log('Creating new document');
     setIsCreating(true);
     setNewDocName('');
     setEditContent('# New Document\n\nEnter your content here...');
-    setSelectedDocument(null);
+    // Navigate to knowledge base without document
+    navigate('/knowledge-base');
     setIsEditing(false);
   };
 
@@ -142,6 +179,7 @@ export function KnowledgeBasePage() {
 
     try {
       setLoading(true);
+      console.log('Creating new document:', fileName);
       await GitHubService.commitFile({
         path,
         content: editContent,
@@ -155,10 +193,12 @@ export function KnowledgeBasePage() {
         path,
       };
       setDocuments(docs => [...docs, newDoc]);
-      setSelectedDocument(newDoc);
       setIsCreating(false);
       setNewDocName('');
       setEditContent('');
+      // Navigate to the new document
+      navigate(`/knowledge-base/${encodeURIComponent(fileName)}`);
+      console.log('New document created successfully');
     } catch (err) {
       setError('Failed to create document');
       console.error('Error creating document:', err);
@@ -168,10 +208,31 @@ export function KnowledgeBasePage() {
   };
 
   const handleCancel = () => {
+    console.log('Canceling operation');
     setIsEditing(false);
     setIsCreating(false);
     setEditContent('');
     setNewDocName('');
+  };
+
+  const handleCopyLink = async () => {
+    if (!selectedDocument) return;
+    
+    const url = `${window.location.origin}/knowledge-base/${encodeURIComponent(selectedDocument.name)}`;
+    try {
+      await navigator.clipboard.writeText(url);
+      console.log('Link copied to clipboard:', url);
+      // Could add a toast notification here
+    } catch (err) {
+      console.error('Failed to copy link:', err);
+      // Fallback: select the URL in a temporary input
+      const input = document.createElement('input');
+      input.value = url;
+      document.body.appendChild(input);
+      input.select();
+      document.execCommand('copy');
+      document.body.removeChild(input);
+    }
   };
 
   return (
@@ -272,6 +333,17 @@ export function KnowledgeBasePage() {
               <div className="flex items-center justify-between">
                 <h3 className="text-lg font-semibold">{selectedDocument.name}</h3>
                 <div className="flex gap-2">
+                  <Button
+                    size="sm"
+                    variant="secondary"
+                    onClick={handleCopyLink}
+                    disabled={loading}
+                    className="flex items-center gap-2"
+                    title="Copy link to this document"
+                  >
+                    <Link size={16} />
+                    Copy Link
+                  </Button>
                   {isEditing ? (
                     <>
                       <Button
@@ -346,4 +418,4 @@ export function KnowledgeBasePage() {
       }
     />
   );
-} 
+}; 
