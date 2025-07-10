@@ -22,7 +22,7 @@ import {
 import { useDarkMode } from "./hooks/useDarkMode";
 import "./index.css";
 
-const APP_URL = import.meta.env.BUN_PUBLIC_APP_URL ?? "http://localhost:5173";
+const APP_URL = process.env.BUN_PUBLIC_APP_URL ?? "http://localhost:5173";
 
 export function App() {
   const { isDarkMode, toggleDarkMode } = useDarkMode();
