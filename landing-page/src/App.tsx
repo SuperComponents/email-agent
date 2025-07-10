@@ -15,18 +15,23 @@ import {
   Sparkles,
   Shield,
   Clock,
-  TrendingUp
+  TrendingUp,
+  Moon,
+  Sun
 } from "lucide-react";
+import { useDarkMode } from "./hooks/useDarkMode";
 import "./index.css";
 
 export function App() {
+  const { isDarkMode, toggleDarkMode } = useDarkMode();
+
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background via-cream to-background overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-b from-background via-cream to-background dark:from-background dark:via-background dark:to-background overflow-hidden transition-all duration-500">
       {/* Animated background elements */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-96 h-96 bg-ai-blue/10 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-ai-purple/10 rounded-full blur-3xl animate-pulse delay-300" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-mocha-light/5 rounded-full blur-3xl animate-pulse delay-700" />
+        <div className="absolute -top-40 -right-40 w-96 h-96 bg-ai-blue/10 dark:bg-ai-blue/5 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-ai-purple/10 dark:bg-ai-purple/5 rounded-full blur-3xl animate-pulse delay-300" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-mocha-light/5 dark:bg-mocha/5 rounded-full blur-3xl animate-pulse delay-700" />
       </div>
 
       {/* Navigation */}
@@ -55,6 +60,18 @@ export function App() {
           </div>
 
           <div className="flex items-center gap-4">
+            {/* Dark Mode Toggle */}
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={toggleDarkMode}
+              className="relative w-10 h-10 rounded-full hover:bg-mocha/10 dark:hover:bg-mocha/20 transition-all duration-300"
+              aria-label={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
+            >
+              <Sun className="h-5 w-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+              <Moon className="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+            </Button>
+            
             <Button variant="ghost" size="sm">Sign In</Button>
             <Button 
               size="sm"
@@ -71,14 +88,14 @@ export function App() {
         <div className="max-w-7xl mx-auto">
           <div className="text-center space-y-8">
             {/* Viral-worthy badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-ai-blue/10 rounded-full border border-ai-blue/20">
-              <Sparkles className="w-4 h-4 text-ai-blue animate-pulse" />
-              <span className="text-sm font-medium text-ai-blue">Open-source AI-powered support</span>
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-ai-blue/10 dark:bg-ai-blue/20 rounded-full border border-ai-blue/20 dark:border-ai-blue/30">
+              <Sparkles className="w-4 h-4 text-ai-blue dark:text-ai-blue animate-pulse" />
+              <span className="text-sm font-medium text-ai-blue dark:text-ai-blue">Open-source AI-powered support</span>
             </div>
 
             {/* Bold Typography - Main Headline */}
             <h1 className="text-6xl md:text-8xl lg:text-9xl font-black leading-none tracking-tighter">
-              <span className="block bg-gradient-to-r from-mocha-dark via-mocha to-mocha-light bg-clip-text text-transparent">
+              <span className="block bg-gradient-to-r from-mocha-dark via-mocha to-mocha-light dark:from-mocha-light dark:via-mocha dark:to-mocha-dark bg-clip-text text-transparent">
                 Customer Support
               </span>
               <span className="block mt-2 text-4xl md:text-6xl lg:text-7xl text-muted-foreground font-light">
@@ -113,19 +130,19 @@ export function App() {
             {/* Social Proof Stats */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 pt-16 max-w-4xl mx-auto">
               <div className="text-center">
-                <div className="text-4xl font-bold text-mocha">92%</div>
+                <div className="text-4xl font-bold text-mocha dark:text-mocha-light">92%</div>
                 <div className="text-sm text-muted-foreground mt-1">Query Resolution</div>
               </div>
               <div className="text-center">
-                <div className="text-4xl font-bold text-ai-blue">3.2s</div>
+                <div className="text-4xl font-bold text-ai-blue dark:text-ai-blue">3.2s</div>
                 <div className="text-sm text-muted-foreground mt-1">Avg Response Time</div>
               </div>
               <div className="text-center">
-                <div className="text-4xl font-bold text-ai-purple">500+</div>
+                <div className="text-4xl font-bold text-ai-purple dark:text-ai-purple">500+</div>
                 <div className="text-sm text-muted-foreground mt-1">Active Teams</div>
               </div>
               <div className="text-center">
-                <div className="text-4xl font-bold text-success-green">$0</div>
+                <div className="text-4xl font-bold text-success-green dark:text-success-green">$0</div>
                 <div className="text-sm text-muted-foreground mt-1">To Get Started</div>
               </div>
             </div>
@@ -138,9 +155,9 @@ export function App() {
         <div className="max-w-7xl mx-auto">
           <div className="relative">
             {/* Decorative elements */}
-            <div className="absolute inset-0 bg-gradient-to-r from-ai-blue/20 via-ai-purple/20 to-mocha/20 blur-3xl" />
+            <div className="absolute inset-0 bg-gradient-to-r from-ai-blue/20 via-ai-purple/20 to-mocha/20 dark:from-ai-blue/10 dark:via-ai-purple/10 dark:to-mocha/10 blur-3xl" />
             
-            <Card className="relative overflow-hidden border-2 border-mocha/20 bg-card/80 backdrop-blur-sm">
+            <Card className="relative overflow-hidden border-2 border-mocha/20 dark:border-mocha/30 bg-card/80 backdrop-blur-sm">
               <CardContent className="p-0">
                 {/* Fake browser window */}
                 <div className="bg-muted/50 px-4 py-3 border-b flex items-center gap-2">
@@ -150,8 +167,8 @@ export function App() {
                     <div className="w-3 h-3 rounded-full bg-green-500" />
                   </div>
                   <div className="flex-1 text-center">
-                    <div className="inline-flex items-center gap-2 px-3 py-1 bg-background rounded-md text-sm">
-                      <Shield className="w-3 h-3 text-success-green" />
+                    <div className="inline-flex items-center gap-2 px-3 py-1 bg-background dark:bg-card rounded-md text-sm">
+                      <Shield className="w-3 h-3 text-success-green dark:text-success-green" />
                       app.opensupport.ai
                     </div>
                   </div>
@@ -164,7 +181,7 @@ export function App() {
                       <Bot className="w-6 h-6 text-white" />
                     </div>
                     <div className="flex-1 space-y-2">
-                      <div className="bg-muted rounded-2xl rounded-tl-none p-4 max-w-md">
+                      <div className="bg-muted dark:bg-muted/80 rounded-2xl rounded-tl-none p-4 max-w-md">
                         <p className="text-sm">Hi! I'm your AI support assistant. I've already analyzed your account and I see you're asking about billing. I can help you with that right away!</p>
                       </div>
                       <div className="flex items-center gap-2 text-xs text-muted-foreground">
@@ -181,9 +198,9 @@ export function App() {
                   </div>
                   
                   <div className="flex items-center justify-center py-4">
-                    <div className="flex items-center gap-2 px-4 py-2 bg-success-green/10 rounded-full">
-                      <CheckCircle className="w-4 h-4 text-success-green" />
-                      <span className="text-sm font-medium text-success-green">AI Agent is typing...</span>
+                    <div className="flex items-center gap-2 px-4 py-2 bg-success-green/10 dark:bg-success-green/20 rounded-full">
+                      <CheckCircle className="w-4 h-4 text-success-green dark:text-success-green" />
+                      <span className="text-sm font-medium text-success-green dark:text-success-green">AI Agent is typing...</span>
                     </div>
                   </div>
                 </div>
@@ -208,7 +225,7 @@ export function App() {
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <Card className="group hover:shadow-2xl transition-all duration-300 border-2 hover:border-mocha/20">
+            <Card className="group hover:shadow-2xl transition-all duration-300 border-2 hover:border-mocha/20 dark:hover:border-mocha/40">
               <CardContent className="p-8">
                 <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-ai-blue to-ai-purple flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                   <Bot className="w-7 h-7 text-white" />
@@ -223,7 +240,7 @@ export function App() {
               </CardContent>
             </Card>
 
-            <Card className="group hover:shadow-2xl transition-all duration-300 border-2 hover:border-mocha/20">
+            <Card className="group hover:shadow-2xl transition-all duration-300 border-2 hover:border-mocha/20 dark:hover:border-mocha/40">
               <CardContent className="p-8">
                 <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-mocha to-mocha-light flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                   <Globe className="w-7 h-7 text-white" />
@@ -238,7 +255,7 @@ export function App() {
               </CardContent>
             </Card>
 
-            <Card className="group hover:shadow-2xl transition-all duration-300 border-2 hover:border-mocha/20">
+            <Card className="group hover:shadow-2xl transition-all duration-300 border-2 hover:border-mocha/20 dark:hover:border-mocha/40">
               <CardContent className="p-8">
                 <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-ai-purple to-mocha flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                   <Zap className="w-7 h-7 text-white" />
@@ -253,7 +270,7 @@ export function App() {
               </CardContent>
             </Card>
 
-            <Card className="group hover:shadow-2xl transition-all duration-300 border-2 hover:border-mocha/20">
+            <Card className="group hover:shadow-2xl transition-all duration-300 border-2 hover:border-mocha/20 dark:hover:border-mocha/40">
               <CardContent className="p-8">
                 <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-success-green to-ai-blue flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                   <BarChart3 className="w-7 h-7 text-white" />
@@ -268,7 +285,7 @@ export function App() {
               </CardContent>
             </Card>
 
-            <Card className="group hover:shadow-2xl transition-all duration-300 border-2 hover:border-mocha/20">
+            <Card className="group hover:shadow-2xl transition-all duration-300 border-2 hover:border-mocha/20 dark:hover:border-mocha/40">
               <CardContent className="p-8">
                 <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-mocha-dark to-ai-purple flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                   <Users className="w-7 h-7 text-white" />
@@ -283,7 +300,7 @@ export function App() {
               </CardContent>
             </Card>
 
-            <Card className="group hover:shadow-2xl transition-all duration-300 border-2 hover:border-mocha/20">
+            <Card className="group hover:shadow-2xl transition-all duration-300 border-2 hover:border-mocha/20 dark:hover:border-mocha/40">
               <CardContent className="p-8">
                 <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-ai-blue to-success-green flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                   <Shield className="w-7 h-7 text-white" />
@@ -348,7 +365,7 @@ export function App() {
               </CardContent>
             </Card>
 
-            <Card className="relative overflow-hidden border-2 border-mocha/20 shadow-xl scale-105">
+            <Card className="relative overflow-hidden border-2 border-mocha/20 dark:border-mocha/40 shadow-xl scale-105">
               <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-mocha to-mocha-light" />
               <div className="absolute -top-4 -right-4 px-4 py-1 bg-gradient-to-r from-mocha to-mocha-light text-white text-sm font-medium rounded-full">
                 Popular
@@ -440,7 +457,7 @@ export function App() {
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <Card className="border-2 hover:border-mocha/20 transition-colors">
+            <Card className="border-2 hover:border-mocha/20 dark:hover:border-mocha/40 transition-colors">
               <CardContent className="p-8">
                 <div className="flex items-center gap-1 mb-4">
                   {[...Array(5)].map((_, i) => (
@@ -460,7 +477,7 @@ export function App() {
               </CardContent>
             </Card>
 
-            <Card className="border-2 hover:border-mocha/20 transition-colors">
+            <Card className="border-2 hover:border-mocha/20 dark:hover:border-mocha/40 transition-colors">
               <CardContent className="p-8">
                 <div className="flex items-center gap-1 mb-4">
                   {[...Array(5)].map((_, i) => (
@@ -480,7 +497,7 @@ export function App() {
               </CardContent>
             </Card>
 
-            <Card className="border-2 hover:border-mocha/20 transition-colors">
+            <Card className="border-2 hover:border-mocha/20 dark:hover:border-mocha/40 transition-colors">
               <CardContent className="p-8">
                 <div className="flex items-center gap-1 mb-4">
                   {[...Array(5)].map((_, i) => (
@@ -506,8 +523,8 @@ export function App() {
       {/* Final CTA */}
       <section className="relative z-10 px-6 pb-32 lg:px-12">
         <div className="max-w-4xl mx-auto">
-          <Card className="overflow-hidden border-0 bg-gradient-to-br from-mocha via-mocha-light to-ai-purple p-1">
-            <div className="bg-background rounded-[calc(var(--radius)-1px)]">
+          <Card className="overflow-hidden border-0 bg-gradient-to-br from-mocha via-mocha-light to-ai-purple dark:from-mocha-dark dark:via-mocha dark:to-ai-purple p-1">
+            <div className="bg-background dark:bg-card rounded-[calc(var(--radius)-1px)]">
               <CardContent className="p-12 text-center">
                 <h2 className="text-4xl md:text-5xl font-bold mb-4">
                   Ready to Transform Your Support?
@@ -540,7 +557,7 @@ export function App() {
       </section>
 
       {/* Footer */}
-      <footer className="relative z-10 border-t bg-card/50 backdrop-blur-sm">
+      <footer className="relative z-10 border-t bg-card/50 dark:bg-card/30 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-6 py-12 lg:px-12">
           <div className="grid md:grid-cols-4 gap-8 mb-8">
             <div>

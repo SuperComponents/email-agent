@@ -13,6 +13,11 @@
   html {
     scroll-behavior: smooth;
   }
+
+  /* Smooth transitions for dark mode */
+  * {
+    @apply transition-colors duration-300;
+  }
 }
 
 /* Custom animations */
@@ -59,15 +64,20 @@
 }
 
 ::-webkit-scrollbar-track {
-  @apply bg-muted;
+  @apply bg-muted dark:bg-muted/50;
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-mocha/20 rounded-full;
+  @apply bg-mocha/20 dark:bg-mocha/40 rounded-full;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  @apply bg-mocha/40;
+  @apply bg-mocha/40 dark:bg-mocha/60;
+}
+
+/* Dark mode specific transitions */
+.dark {
+  color-scheme: dark;
 }
 
 @media (prefers-reduced-motion) {
