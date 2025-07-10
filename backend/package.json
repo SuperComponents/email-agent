@@ -24,8 +24,8 @@
     "openai": "^5.8.3",
     "pg": "^8.16.3",
     "proresponse-agent": "file:../agent",
-    "zod": "^3.25.76"
-    "postgres": "^3.4.0",
+    "zod": "^3.25.76",
+    "postgres": "^3.4.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.30.1",
