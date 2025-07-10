@@ -12,6 +12,7 @@ if (!OPENAI_API_KEY) {
     console.warn('[ENV] OPENAI_API_KEY not found in environment variables');
 }
 
+
 if (!OPENAI_VECTOR_STORE_KEY) {
     console.warn('[ENV] OPENAI_VECTOR_STORE_KEY not found in environment variables');
 }

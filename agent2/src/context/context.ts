@@ -2,53 +2,49 @@ import zodToJsonSchema from "zod-to-json-schema";
 import { Event } from "../types";
 import ToolManager, { ToolDefinition } from "./tools";
 
-
-
 export abstract class ContextGenerator {
   // This is an abstract class that will be implemented by the various context generators.
   // The different context generators will allow for testing of different system prompts and context strategies.
 
-  constructor(protected eventLog: Event[], protected toolManager: ToolManager) {
-    
-  }
+  constructor(protected toolManager: ToolManager) {}
 
   abstract getSystemPrompt(): string;
 
-
-  abstract getMessage(): string;
+  abstract getMessage(eventLog: Event[]): string;
 }
 
 export class DefaultContextGenerator extends ContextGenerator {
-  constructor(eventLog: Event[], toolManager: ToolManager) {
-    super(eventLog, toolManager);
+  constructor(toolManager: ToolManager) {
+    super(toolManager);
   }
 
   static serializeTool(tool: ToolDefinition): string {
-    
-      // Convert zod schemas to standard JSON-Schema so the LLM receives a fully
-      // machine-readable contract instead of the opaque `.toString()` output.
-      const argsSchema = zodToJsonSchema(tool.args, "args");
-      const resultSchema = zodToJsonSchema(tool.result, "result");
+    // Convert zod schemas to standard JSON-Schema so the LLM receives a fully
+    // machine-readable contract instead of the opaque `.toString()` output.
+    const argsSchema = zodToJsonSchema(tool.args, "args");
+    const resultSchema = zodToJsonSchema(tool.result, "result");
 
-      return JSON.stringify(
-          {
-              name: tool.name,
-              description: tool.description,
-              args: argsSchema,
-              result: resultSchema,
-          },
-          null,
-          undefined,
-      );
-  
+    return JSON.stringify(
+      {
+        name: tool.name,
+        description: tool.description,
+        args: argsSchema,
+        result: resultSchema,
+      },
+      null,
+      undefined
+    );
   }
   serializeTools(): string {
-    return this.toolManager.listTools().map(tool => DefaultContextGenerator.serializeTool(tool)).join('\n'); 
+    return this.toolManager
+      .listTools()
+      .map((tool) => DefaultContextGenerator.serializeTool(tool))
+      .join("\n");
   }
 
   systemPromptTemplate = `
   
-`
+`;
   getSystemPrompt(): string {
     return `
 You are a customer support agent. You are responsible for helping your supervisor gather context related to the support
@@ -68,49 +64,57 @@ Your response should be a JSON object with the following structure:
 }
 
 This represents a single tool call. This will be executed then the result of that will be given back to you to continue to the next step.
-`
+
+##Policies:
+Search the knowledge base, communicate with the user, manage the thread's category and urgency. If you can draft a response.
+`;
   }
 
-  getMessage(): string {
-    return this.eventLog.map(event => {
-      return `
-${event.timestamp} - ${event.type} - ${event.actor} - ${JSON.stringify(event.data)}
-`
-    }).join('\n');
+  getMessage(eventLog: Event[]): string {
+    return eventLog
+      .map((event) => {
+        return `
+${event.timestamp} - ${event.type} - ${event.actor} - ${JSON.stringify(
+          event.data
+        )}
+`;
+      })
+      .join("\n");
   }
 }
 
 export class DefaultContextGeneratorV2 extends ContextGenerator {
-  constructor(eventLog: Event[], toolManager: ToolManager) {
-    super(eventLog, toolManager);
+  constructor(toolManager: ToolManager) {
+    super(toolManager);
   }
 
   static serializeTool(tool: ToolDefinition): string {
-    
-      // Convert zod schemas to standard JSON-Schema so the LLM receives a fully
-      // machine-readable contract instead of the opaque `.toString()` output.
-      const argsSchema = zodToJsonSchema(tool.args, "args");
-      const resultSchema = zodToJsonSchema(tool.result, "result");
+    // Convert zod schemas to standard JSON-Schema so the LLM receives a fully
+    // machine-readable contract instead of the opaque `.toString()` output.
+    const argsSchema = zodToJsonSchema(tool.args, "args");
+    const resultSchema = zodToJsonSchema(tool.result, "result");
 
-      return JSON.stringify(
-          {
-              name: tool.name,
-              description: tool.description,
-              args: argsSchema,
-              result: resultSchema,
-          },
-          null,
-          undefined,
-      );
-  
+    return JSON.stringify(
+      {
+        name: tool.name,
+        description: tool.description,
+        args: argsSchema,
+        result: resultSchema,
+      },
+      null,
+      undefined
+    );
   }
   serializeTools(): string {
-    return this.toolManager.listTools().map(tool => DefaultContextGenerator.serializeTool(tool)).join('\n'); 
+    return this.toolManager
+      .listTools()
+      .map((tool) => DefaultContextGenerator.serializeTool(tool))
+      .join("\n");
   }
 
   systemPromptTemplate = `
   
-`
+`;
   getSystemPrompt(): string {
     return `
 You are a customer support agent. You are responsible for helping your supervisor gather context related to the support
@@ -137,14 +141,18 @@ Your response should be a JSON object with the following structure:
 }
 
 This represents a single tool call. This will be executed then the result of that will be given back to you to continue to the next step.
-`
+`;
   }
 
-  getMessage(): string {
-    return this.eventLog.map(event => {
-      return `
-${event.timestamp} - ${event.type} - ${event.actor} - ${JSON.stringify(event.data)}
-`
-    }).join('\n');
+  getMessage(eventLog: Event[]): string {
+    return eventLog
+      .map((event) => {
+        return `
+${event.timestamp} - ${event.type} - ${event.actor} - ${JSON.stringify(
+          event.data
+        )}
+`;
+      })
+      .join("\n");
   }
 }
