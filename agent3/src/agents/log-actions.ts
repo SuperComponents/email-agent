@@ -1,7 +1,7 @@
-import { AgentOutputItem, HostedToolCallItem, FunctionCallItem, FunctionCallResultItem } from '@openai/agents';
-import { db } from '../db/db';
-import { agentActions } from '../db/newschema';
-import type { AgentAction, ToolCallMetadata } from '../db/types';
+import type { AgentOutputItem, HostedToolCallItem, FunctionCallItem, FunctionCallResultItem, RunItemStreamEvent } from '@openai/agents';
+import { db } from '../db/db.js';
+import { agentActions } from '../db/newschema.js';
+import type { AgentAction, ToolCallMetadata } from '../db/types.js';
 
 type ToolResult = HostedToolCallItem | FunctionCallItem | FunctionCallResultItem
 
@@ -28,11 +28,23 @@ function getResultCallOrUndefined(call: AgentOutputItem, output: AgentOutputItem
   }
 }
 
+export async function logStreamingToolCalls(current: RunItemStreamEvent, thread_id: number, last?: RunItemStreamEvent) {
+  const currentRawItem = current.item.rawItem;
+  const lastRawItem = last?.item.rawItem;
+
+  if (isHostedToolCall(currentRawItem)) {
+    return await logCall(currentRawItem, thread_id);
+  } else if (isFunctionCallResult(currentRawItem) && lastRawItem && isFunctionCall(lastRawItem)) {
+    return await logCall(lastRawItem, thread_id, currentRawItem);
+  }
+  return [];
+}
+
 export async function logAndProcessToolCalls(
   output: AgentOutputItem[],
-  thread_id?: number
+  thread_id: number
 ): Promise<AgentAction[]> {
-  if (!output || !thread_id) return [];
+  if (!output) return [];
 
   const promises = output.filter(isHostedOrFunctionCall).map(call => 
     logCall(call, thread_id, getResultCallOrUndefined(call, output))

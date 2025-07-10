@@ -13,7 +13,7 @@ export function ComposerContainer() {
   const setDraft = useComposerStore((state) => state.setDraft);
   const clearDraft = useComposerStore((state) => state.clearDraft);
   
-  const { data: serverDraft } = useDraft(selectedThreadId || '');
+  const { data: serverDraft, error: draftError } = useDraft(selectedThreadId || '');
   const updateDraftMutation = useUpdateDraft();
   const sendMessageMutation = useSendMessage();
   const regenerateDraftMutation = useRegenerateDraft();
@@ -26,11 +26,20 @@ export function ComposerContainer() {
       const localDraft = getDraft(selectedThreadId);
       if (localDraft) {
         setLocalContent(localDraft);
+        // Auto-open composer if there's a local draft
+        setComposerOpen(true, 'reply');
       } else if (serverDraft) {
         setLocalContent(serverDraft.content);
+        // Auto-open composer if there's a server draft with content
+        if (serverDraft.content.trim()) {
+          setComposerOpen(true, 'reply');
+        }
+      } else if ((draftError as any)?.status === 404) {
+        // No draft exists yet, start with empty content
+        setLocalContent('');
       }
     }
-  }, [selectedThreadId, serverDraft, getDraft]);
+  }, [selectedThreadId, serverDraft, getDraft, draftError, setComposerOpen]);
   
   const handleContentChange = (content: string) => {
     setLocalContent(content);

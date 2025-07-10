@@ -3,6 +3,14 @@
   "version": "1.0.0",
   "description": "TypeScript project with Bun server and Drizzle ORM",
   "type": "module",
+  "main": "./dist/src/index.js",
+  "types": "./dist/src/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/src/index.d.ts",
+      "import": "./dist/src/index.js"
+    }
+  },
   "scripts": {
     "dev": "bun run --watch src/server.ts",
     "start": "bun run src/server.ts",
@@ -15,6 +23,9 @@
     "test:actions": "vitest run src/tests/integration/agent-action-logging.test.ts",
     "test:rag": "vitest run src/tests/integration/rag-search.test.ts",
     "typecheck": "tsc --noEmit",
+    "build": "tsc",
+    "clean": "rm -rf dist",
+    "build:clean": "npm run clean && npm run build",
     "generate:emails": "npx tsx src/scripts/generate-emails.ts",
     "generate:emails:test": "npx tsx src/scripts/generate-emails.ts --test",
     "generate:threads": "npx tsx src/scripts/generate-threads.ts",

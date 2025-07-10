@@ -19,18 +19,18 @@ app.get('/', async (c) => {
     // Build where conditions
     const conditions = []
     
-    if (filter && filter !== 'all') {
-      switch (filter) {
-        case 'closed':
-          conditions.push(eq(threads.status, 'closed'))
-          break
-        case 'awaiting_customer':
-          conditions.push(eq(threads.status, 'active'))
-          break
-        // Note: For MVP, we'll need to handle unread, flagged, urgent differently
-        // as they depend on additional fields or email states
-      }
-    }
+//     if (filter && filter !== 'all') {
+//       switch (filter) {
+//         case 'closed':
+//           conditions.push(eq(threads.status, 'closed'))
+//           break
+//         case 'awaiting_customer':
+//           conditions.push(eq(threads.status, 'active'))
+//           break
+//         // Note: For MVP, we'll need to handle unread, flagged, urgent differently
+//         // as they depend on additional fields or email states
+//       }
+//     }
     
     if (searchParam) {
       conditions.push(
@@ -57,7 +57,6 @@ app.get('/', async (c) => {
           SELECT body_text FROM ${emails} 
           WHERE ${emails.thread_id} = ${threads.id} 
           ORDER BY ${emails.created_at} DESC 
-          LIMIT 1
         )`
       })
       .from(threads)

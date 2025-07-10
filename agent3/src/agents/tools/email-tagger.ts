@@ -1,6 +1,6 @@
 import { tool } from '@openai/agents';
-import { db } from '../../db/db';
-import { emails, emailTags } from '../../db/newschema';
+import { db } from '../../db/db.js';
+import { emails, emailTags } from '../../db/newschema.js';
 import { eq } from 'drizzle-orm';
 
 interface EmailTaggerParams {
@@ -69,7 +69,7 @@ export const emailTaggerTool = tool({
       return {
         success: true,
         emailId,
-        tags: insertedTags.map(t => ({
+        tags: insertedTags.map((t: any) => ({
           tag: t.tag,
           confidence: parseFloat(t.confidence || '0') * 100, // Convert back to percentage
         })),

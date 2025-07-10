@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
-import { processEmail } from '../../agents/email-agent';
-import { db } from '../../db/db';
-import { emails, threads, emailTags, agentActions, draft_responses } from '../../db/newschema';
+import { processEmail } from '../../agents/email-agent.js';
+import { db } from '../../db/db.js';
+import { emails, threads, emailTags, agentActions, draft_responses } from '../../db/newschema.js';
 import { eq } from 'drizzle-orm';
 
 describe('RAG Search Integration', () => {
@@ -46,22 +46,13 @@ describe('RAG Search Integration', () => {
   });
 
   it('should search knowledge base for warranty information', async () => {
-    const email = {
-      id: emailId,
-      from_email: 'customer@example.com',
-      to_emails: ['support@company.com'],
-      subject: 'Warranty Question',
-      body_text: 'What warranty do we offer for the dragonscale gauntlets?',
-      created_at: new Date(),
-    };
-
     console.log('\n=== Testing RAG Search ===');
-    console.log('Query:', email.body_text);
+    console.log('Query: What warranty do we offer for the dragonscale gauntlets?');
     
     // Process the email - this should trigger the RAG search
     console.log('\nProcessing email...');
     const startTime = Date.now();
-    const result = await processEmail(email, threadId);
+    const result = await processEmail(threadId);
     const processingTime = Date.now() - startTime;
     console.log(`Processing completed in ${processingTime}ms`);
     
@@ -78,17 +69,16 @@ describe('RAG Search Integration', () => {
     console.log('Total actions performed:', actions.length);
     
     // Log each action with its metadata
-    actions.forEach((action, index) => {
+    actions.forEach((action: any, index: number) => {
       console.log(`\nAction ${index + 1}:`);
       console.log('Action type:', action.action);
       console.log('Metadata:', JSON.stringify(action.metadata, null, 2));
     });
 
     // Look specifically for knowledge base search actions
-    const kbSearchAction = actions.find(a => {
-      const metadata = a.metadata as any;
-      return metadata?.toolName === 'search_knowledge_base' || 
-             metadata?.toolName === 'file_search';
+    const kbSearchAction = actions.find((a: any) => {
+      return a.action === 'file_search_call' || 
+             a.action === 'search_knowledge_base';
     });
 
     if (kbSearchAction) {
@@ -100,30 +90,43 @@ describe('RAG Search Integration', () => {
       console.log('\n=== No Knowledge Base Search Action Found ===');
     }
 
-    // Basic assertion to ensure the test runs
+    // Check that we got back the expected result structure
     expect(result).toBeDefined();
     expect(result.draft).toBeDefined();
-    expect(result.draft.generated_content).toBeDefined();
+    expect(result.actions).toBeDefined();
+    expect(result.actions).toBeInstanceOf(Array);
     
-    // Log the raw response from the agent
-    console.log('\n=== Agent Response ===');
-    console.log(result.draft.generated_content);
+    // Check that draft was saved to database
+    expect(result.draft.id).toBeDefined();
+    expect(result.draft.email_id).toBe(emailId);
+    expect(result.draft.thread_id).toBe(threadId);
+    expect(result.draft.generated_content).toBeDefined();
+    expect(result.draft.status).toBe('pending');
+    
+    // Check that actions were logged to database
+    expect(result.actions.length).toBeGreaterThan(0);
+    
+    // Verify we have a RAG search action
+    expect(kbSearchAction).toBeDefined();
+    expect(kbSearchAction?.action).toBe('file_search_call');
+    expect(kbSearchAction?.thread_id).toBe(threadId);
+    expect(kbSearchAction?.metadata).toBeDefined();
+    
+    // Verify the search action has the expected metadata
+    const metadata = kbSearchAction?.metadata as any;
+    expect(metadata?.parameters?.queries).toBeDefined();
+    expect(metadata?.parameters?.queries).toBeInstanceOf(Array);
+    expect(metadata?.parameters?.queries.length).toBeGreaterThan(0);
     
     // Check if the response mentions warranty details
     const response = result.draft.generated_content || '';
     const responseContainsWarranty = response.toLowerCase().includes('warranty');
-    const responseContainsKnowledgeBase = response.toLowerCase().includes('knowledge base');
+    expect(responseContainsWarranty).toBe(true);
     
-    console.log('\n=== Response Analysis ===');
-    console.log('Contains warranty information:', responseContainsWarranty);
-    console.log('Mentions knowledge base:', responseContainsKnowledgeBase);
-    
-    // Check if specific warranty details are mentioned
-    const hasLifetimeWarranty = response.includes('Lifetime Warranty');
-    const has5YearWarranty = response.includes('5-Year Warranty');
-    
-    console.log('Has specific warranty details:');
-    console.log('- Lifetime warranty mentioned:', hasLifetimeWarranty);
-    console.log('- 5-year warranty mentioned:', has5YearWarranty);
+    console.log('\n=== Test Assertions Passed ===');
+    console.log('- Draft saved to database with ID:', result.draft.id);
+    console.log('- Actions logged to database:', result.actions.length);
+    console.log('- RAG search action found:', kbSearchAction?.action);
+    console.log('- Response contains warranty information:', responseContainsWarranty);
   });
 });

@@ -1,8 +1,7 @@
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
-import { processEmail } from '../../agents/email-agent';
-import { db } from '../../db/db';
-import { emails, threads, emailTags, agentActions, draft_responses } from '../../db/newschema';
-import { randomUUID } from 'crypto';
+import { processEmail } from '../../agents/email-agent.js';
+import { db } from '../../db/db.js';
+import { emails, threads, emailTags, agentActions, draft_responses } from '../../db/newschema.js';
 import { eq } from 'drizzle-orm';
 
 describe('Agent Action Logging', () => {
@@ -47,20 +46,14 @@ describe('Agent Action Logging', () => {
   });
 
   it('should log agent actions when processing an email', async () => {
-    const email = {
-      id: emailId,
-      from_email: 'action-test@example.com',
-      to_emails: ['support@gauntletairon.com'],
-      subject: 'Test Action Logging',
-      body_text: 'This is a test email to verify action logging. I need help with my DragonScale gauntlets.',
-      created_at: new Date(),
-    };
-
     // Process the email
-    const result = await processEmail(email, threadId);
+    const result = await processEmail(threadId);
     
-    // Give it a moment for async logging to complete
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    // Check that we got back the expected structure
+    expect(result).toBeDefined();
+    expect(result.draft).toBeDefined();
+    expect(result.actions).toBeDefined();
+    expect(result.actions).toBeInstanceOf(Array);
 
     // Check that actions were logged
     const actions = await db
@@ -74,8 +67,8 @@ describe('Agent Action Logging', () => {
     // Verify action details
     // Note: The new schema has a different structure for agent actions
     // The metadata field contains tool information
-    const searchAction = actions.find(a => (a.metadata as any)?.toolName === 'search_emails');
-    const tagAction = actions.find(a => (a.metadata as any)?.toolName === 'tag_email');
+    const searchAction = actions.find((a: any) => a.metadata?.toolName === 'search_emails');
+    const tagAction = actions.find((a: any) => a.metadata?.toolName === 'tag_email');
 
     if (searchAction) {
       expect(searchAction.thread_id).toBe(threadId);

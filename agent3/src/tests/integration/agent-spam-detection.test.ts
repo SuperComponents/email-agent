@@ -1,11 +1,8 @@
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
-import { processEmail } from '../../agents/email-agent';
-import { db } from '../../db/db';
-import { emails, threads, emailTags, agentActions, draft_responses } from '../../db/newschema';
-// Note: knowledgeBaseArticles table is not available in the new schema
-import { generateEmail, createEmailRecord } from '../../utils/email-generator';
-import { randomUUID } from 'crypto';
-import { sql, eq } from 'drizzle-orm';
+import { processEmail } from '../../agents/email-agent.js';
+import { db } from '../../db/db.js';
+import { emails, threads, emailTags, agentActions, draft_responses } from '../../db/newschema.js';
+import { eq } from 'drizzle-orm';
 
 describe('Email Agent - Spam Detection', () => {
   beforeAll(async () => {
@@ -48,12 +45,9 @@ describe('Email Agent - Spam Detection', () => {
   });
 
   it('should correctly tag spam email about lottery winnings', async () => {
-    // Generate a spam email
-    const spamTemplate = generateEmail('spam');
-    
     // Create thread
     const [thread] = await db.insert(threads).values({
-      subject: spamTemplate.subject,
+      subject: 'Congratulations! You\'ve won $1,000,000!!!',
       participant_emails: ['scammer@suspicious-domain.com', 'user@company.com'],
       status: 'active',
     }).returning();
@@ -64,21 +58,14 @@ describe('Email Agent - Spam Detection', () => {
       thread_id: threadId,
       from_email: 'scammer@suspicious-domain.com',
       to_emails: ['user@company.com'],
-      subject: spamTemplate.subject,
-      body_text: spamTemplate.body,
+      subject: 'Congratulations! You\'ve won $1,000,000!!!',
+      body_text: 'You have won our international lottery! Click here to claim your prize: http://totally-not-a-scam.com',
       direction: 'inbound',
       sent_at: new Date(),
     }).returning();
     
     // Process email with agent
-    const result = await processEmail({
-      id: emailRecord.id,
-      from_email: emailRecord.from_email,
-      to_emails: emailRecord.to_emails as string[],
-      subject: emailRecord.subject,
-      body_text: emailRecord.body_text,
-      created_at: emailRecord.sent_at,
-    }, threadId);
+    const result = await processEmail(threadId);
     
     // Assertions - result now contains draft and actions
     expect(result.draft).toBeTruthy();
@@ -87,21 +74,18 @@ describe('Email Agent - Spam Detection', () => {
     // Verify tags were saved to database
     const savedTags = await db.select().from(emailTags).where(eq(emailTags.email_id, emailRecord.id));
     expect(savedTags.length).toBeGreaterThan(0);
-    expect(savedTags.some(t => t.tag === 'spam')).toBe(true);
+    expect(savedTags.some((t: any) => t.tag === 'spam')).toBe(true);
     
     // Verify confidence in the saved tag
-    const spamTag = savedTags.find(t => t.tag === 'spam');
+    const spamTag = savedTags.find((t: any) => t.tag === 'spam');
     expect(spamTag).toBeDefined();
     expect(Number(spamTag?.confidence)).toBeGreaterThan(0.7);
   });
 
   it('should not tag legitimate support email as spam', async () => {
-    // Generate a support email
-    const supportTemplate = generateEmail('support');
-    
     // Create thread
     const [thread] = await db.insert(threads).values({
-      subject: supportTemplate.subject,
+      subject: 'Unable to log into my account',
       participant_emails: ['legitimate.customer@gmail.com', 'support@company.com'],
       status: 'active',
     }).returning();
@@ -112,8 +96,8 @@ describe('Email Agent - Spam Detection', () => {
       thread_id: threadId,
       from_email: 'legitimate.customer@gmail.com',
       to_emails: ['support@company.com'],
-      subject: supportTemplate.subject,
-      body_text: supportTemplate.body,
+      subject: 'Unable to log into my account',
+      body_text: 'I am having trouble logging into my account. Can you please help me regain access?',
       direction: 'inbound',
       sent_at: new Date(),
     }).returning();
@@ -123,14 +107,7 @@ describe('Email Agent - Spam Detection', () => {
     expect(insertedEmail.length).toBe(1);
     
     // Process email with agent
-    const result = await processEmail({
-      id: emailRecord.id,
-      from_email: emailRecord.from_email,
-      to_emails: emailRecord.to_emails as string[],
-      subject: emailRecord.subject,
-      body_text: emailRecord.body_text,
-      created_at: emailRecord.sent_at,
-    }, threadId);
+    const result = await processEmail(threadId);
     
     // Assertions - result now contains draft and actions
     expect(result.draft).toBeTruthy();
@@ -139,8 +116,8 @@ describe('Email Agent - Spam Detection', () => {
     // Verify tags were saved to database
     const savedTags = await db.select().from(emailTags).where(eq(emailTags.email_id, emailRecord.id));
     expect(savedTags.length).toBeGreaterThan(0);
-    expect(savedTags.some(t => t.tag === 'spam')).toBe(false);
-    expect(savedTags.some(t => t.tag === 'support')).toBe(true);
+    expect(savedTags.some((t: any) => t.tag === 'spam')).toBe(false);
+    expect(savedTags.some((t: any) => t.tag === 'support')).toBe(true);
   });
 
   it('should handle email thread context when detecting spam', async () => {
@@ -156,7 +133,7 @@ describe('Email Agent - Spam Detection', () => {
     const threadId = thread.id;
     
     // Create legitimate first email
-    const [firstEmail] = await db.insert(emails).values({
+    await db.insert(emails).values({
       thread_id: threadId,
       from_email: customerEmail,
       to_emails: [supportEmail],
@@ -178,14 +155,7 @@ describe('Email Agent - Spam Detection', () => {
     }).returning();
     
     // Process the spam follow-up with thread context
-    const result = await processEmail({
-      id: spamFollowUp.id,
-      from_email: spamFollowUp.from_email,
-      to_emails: spamFollowUp.to_emails as string[],
-      subject: spamFollowUp.subject,
-      body_text: spamFollowUp.body_text,
-      created_at: spamFollowUp.sent_at,
-    }, threadId);
+    const result = await processEmail(threadId);
     
     // Assertions - result now contains draft and actions
     expect(result.draft).toBeTruthy();
@@ -194,6 +164,6 @@ describe('Email Agent - Spam Detection', () => {
     // Should still detect spam despite thread context
     const savedTags = await db.select().from(emailTags).where(eq(emailTags.email_id, spamFollowUp.id));
     expect(savedTags.length).toBeGreaterThan(0);
-    expect(savedTags.some(t => t.tag === 'spam')).toBe(true);
+    expect(savedTags.some((t: any) => t.tag === 'spam')).toBe(true);
   });
 });

@@ -1,12 +1,5 @@
-import { Agent, run, fileSearchTool } from '@openai/agents';
-// import { getVectorStoreId } from '../../../rag/dist/index';
-import { tool } from '@openai/agents';
+import { fileSearchTool } from '@openai/agents';
 import { OpenAI } from 'openai';
-import { db } from '../../db/db';
-// Note: knowledgeBaseArticles table is not available in the new schema
-// This tool needs to be refactored or a new knowledge base table needs to be added
-import { sql } from 'drizzle-orm';
-import { env } from '../../config/environment';
 
 // const openai = new OpenAI({ apiKey: env.OPENAI_API_KEY });
 
@@ -40,31 +33,12 @@ async function getVectorStoreId(openai: OpenAI, vectorStoreKey: string = OPENAI_
   return vectorStore.id;
 }
 
-interface RAGSearchParams {
-  query: string;
-  category?: string;
-  limit?: number;
-}
-
-async function getEmbedding(text: string): Promise<number[]> {
-  const response = await openai.embeddings.create({
-    model: env.EMBEDDING_MODEL,
-    input: text,
-  });
-  return response.data[0].embedding;
-}
-
-function cosineSimilarity(a: number[], b: number[]): number {
-  const dotProduct = a.reduce((sum, val, i) => sum + val * b[i], 0);
-  const magnitudeA = Math.sqrt(a.reduce((sum, val) => sum + val * val, 0));
-  const magnitudeB = Math.sqrt(b.reduce((sum, val) => sum + val * val, 0));
-  return dotProduct / (magnitudeA * magnitudeB);
-}
 
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 const vectorStoreId = await getVectorStoreId(openai);
 
 const knowledgeBaseSearchTool = fileSearchTool(vectorStoreId, { name: 'search_knowledge_base', includeSearchResults: true });
+// const knowledgeBaseSearchTool = fileSearchTool(vectorStoreId, { name: 'search_knowledge_base' });
 
 export const ragSearchTool = knowledgeBaseSearchTool;

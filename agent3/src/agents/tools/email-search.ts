@@ -1,8 +1,8 @@
 import { tool } from '@openai/agents';
-import { db } from '../../db/db';
-import { emails, threads } from '../../db/newschema';
+import { db } from '../../db/db.js';
+import { emails } from '../../db/newschema.js';
 import { eq, and, like, desc } from 'drizzle-orm';
-import { EmailMessage } from '../email-agent';
+import type { EmailMessage } from '../email-agent.js';
 
 interface EmailSearchParams {
   senderEmail: string;
