@@ -1,0 +1,48 @@
+# Dependencies
+node_modules
+
+# Build output
+dist
+out
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+logs
+
+# IDE files
+.idea
+.vscode
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Git
+.git
+.gitignore
+
+# Documentation
+README.md
+CLAUDE.md
+
+# Test files
+*.test.ts
+*.test.tsx
+*.spec.ts
+*.spec.tsx
+
+# Cache
+.cache
+.eslintcache
+*.tsbuildinfo
+
+# Temporary files
+*.tmp
+*.temp 
