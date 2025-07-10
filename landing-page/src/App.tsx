@@ -22,6 +22,8 @@ import {
 import { useDarkMode } from "./hooks/useDarkMode";
 import "./index.css";
 
+const APP_URL = import.meta.env.BUN_PUBLIC_APP_URL ?? "http://localhost:5173";
+
 export function App() {
   const { isDarkMode, toggleDarkMode } = useDarkMode();
 
@@ -73,13 +75,13 @@ export function App() {
             </Button>
             
             <Button asChild variant="ghost" size="sm">
-              <a href="http://localhost:5173">Sign In</a>
+              <a href={APP_URL}>Sign In</a>
             </Button>
             <Button 
               size="sm"
               className="bg-gradient-to-r from-mocha to-mocha-light hover:from-mocha-dark hover:to-mocha text-white border-0"
             >
-              <a href="http://localhost:5173/handler/sign-up">Get Started Free</a>
+              <a href={`${APP_URL}/handler/sign-up`}>Get Started Free</a>
             </Button>
           </div>
         </div>
