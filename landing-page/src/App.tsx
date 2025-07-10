@@ -79,7 +79,7 @@ export function App() {
               size="sm"
               className="bg-gradient-to-r from-mocha to-mocha-light hover:from-mocha-dark hover:to-mocha text-white border-0"
             >
-              <a href="http://localhost:5173/signup">Get Started Free</a>
+              <a href="http://localhost:5173/handler/sign-up">Get Started Free</a>
             </Button>
           </div>
         </div>
