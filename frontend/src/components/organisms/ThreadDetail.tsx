@@ -1,5 +1,5 @@
 import React from 'react';
-import { Reply } from 'lucide-react';
+import { Reply, Sparkles, UserPlus } from 'lucide-react';
 import { Avatar } from '../atoms/Avatar';
 import { Badge } from '../atoms/Badge';
 import { Button } from '../atoms/Button';
@@ -25,10 +25,14 @@ export interface ThreadDetailProps extends React.HTMLAttributes<HTMLDivElement> 
   status?: 'open' | 'closed' | 'pending';
   tags?: string[];
   onReply?: () => void;
+  onUseAgent?: () => void;
+  onDemoCustomerResponse?: () => void;
+  isRegeneratingDraft?: boolean;
+  isGeneratingDemoResponse?: boolean;
 }
 
 export const ThreadDetail = React.forwardRef<HTMLDivElement, ThreadDetailProps>(
-  ({ className, subject, messages, status = 'open', tags = [], onReply, ...props }, ref) => {
+  ({ className, subject, messages, status = 'open', tags = [], onReply, onUseAgent, onDemoCustomerResponse, isRegeneratingDraft, isGeneratingDemoResponse, ...props }, ref) => {
     return (
       <div
         ref={ref}
@@ -54,14 +58,44 @@ export const ThreadDetail = React.forwardRef<HTMLDivElement, ThreadDetailProps>(
                 ))}
               </div>
             </div>
-            <Button
-              onClick={onReply}
-              size="sm"
-              className="gap-2"
-            >
-              <Icon icon={Reply} size="sm" />
-              <span>Reply</span>
-            </Button>
+            <div className="flex gap-2">
+              <Button
+                onClick={onDemoCustomerResponse}
+                size="sm"
+                variant="ghost"
+                className="gap-2"
+                disabled={isGeneratingDemoResponse}
+              >
+                <Icon 
+                  icon={UserPlus} 
+                  size="sm" 
+                  className={isGeneratingDemoResponse ? 'animate-pulse' : ''}
+                />
+                <span>{isGeneratingDemoResponse ? 'Generating...' : 'Demo Customer Response'}</span>
+              </Button>
+              <Button
+                onClick={onUseAgent}
+                size="sm"
+                variant="secondary"
+                className="gap-2"
+                disabled={isRegeneratingDraft}
+              >
+                <Icon 
+                  icon={Sparkles} 
+                  size="sm" 
+                  className={isRegeneratingDraft ? 'animate-pulse' : ''}
+                />
+                <span>{isRegeneratingDraft ? 'Generating...' : 'Use Agent'}</span>
+              </Button>
+              <Button
+                onClick={onReply}
+                size="sm"
+                className="gap-2"
+              >
+                <Icon icon={Reply} size="sm" />
+                <span>Reply</span>
+              </Button>
+            </div>
           </div>
         </div>
 

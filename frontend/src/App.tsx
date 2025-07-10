@@ -24,20 +24,16 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <ErrorBoundary>
         <Router>
-          <StackProvider app={stackClientApp}>
-            <StackTheme>
-              <Routes>
-                <Route path="/handler/*" element={<HandlerRoutes />} />
-                <Route element={<ProtectedRoute />}>
-                  <Route path="/" element={<InboxPage />} />
-                  <Route path="/thread/:threadId" element={<InboxPage />} />
-                  <Route path="/knowledge-base" element={<KnowledgeBasePage />} />
-                  <Route path="/knowledge-base/:documentName" element={<KnowledgeBasePage />} />
-                </Route>
-                <Route path="*" element={<NotFoundPage />} />
-              </Routes>
-            </StackTheme>
-          </StackProvider>
+          <Routes>
+            <Route path="/handler/*" element={<HandlerRoutes />} />
+            <Route element={<ProtectedRoute />}>
+              <Route path="/" element={<InboxPage />} />
+              <Route path="/thread/:threadId" element={<InboxPage />} />
+              <Route path="/knowledge-base" element={<KnowledgeBasePage />} />
+              <Route path="/knowledge-base/:documentName" element={<KnowledgeBasePage />} />
+            </Route>
+            <Route path="*" element={<NotFoundPage />} />
+          </Routes>
         </Router>
       </ErrorBoundary>
       <ReactQueryDevtools initialIsOpen={false} />

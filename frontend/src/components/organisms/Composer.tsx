@@ -1,8 +1,16 @@
 import React from 'react';
-import { Send, Paperclip, Smile, Save, Sparkles } from 'lucide-react';
+import { Send, Paperclip, Smile, Save, Sparkles, FileText, ExternalLink } from 'lucide-react';
 import { Button } from '../atoms/Button';
 import { Icon } from '../atoms/Icon';
 import { cn } from '../../lib/utils';
+
+export interface Citation {
+  file_id: string;
+  filename: string;
+  score: number;
+  text: string;
+  attributes?: any;
+}
 
 export interface ComposerProps {
   className?: string;
@@ -17,6 +25,7 @@ export interface ComposerProps {
   isGenerating?: boolean;
   isSending?: boolean;
   isSavingDraft?: boolean;
+  citations?: Citation[] | Citation;
 }
 
 export const Composer = React.forwardRef<HTMLDivElement, ComposerProps>(
@@ -33,6 +42,7 @@ export const Composer = React.forwardRef<HTMLDivElement, ComposerProps>(
     isGenerating = false,
     isSending = false,
     isSavingDraft = false,
+    citations = [],
     ...props 
   }, ref) => {
     const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -52,6 +62,36 @@ export const Composer = React.forwardRef<HTMLDivElement, ComposerProps>(
         {...props}
       >
         <div className="p-4">
+          {citations && (Array.isArray(citations) ? citations.length > 0 : citations.text) && (
+            <div className="mb-3 p-3 bg-accent/50 rounded-lg border border-accent-foreground/20">
+              <div className="flex items-center gap-2 mb-2">
+                <Icon icon={FileText} size="sm" className="text-accent-foreground" />
+                <span className="text-sm font-medium text-accent-foreground">Citations</span>
+              </div>
+              <div className="space-y-2">
+                {(Array.isArray(citations) ? citations : [citations]).map((citation, index) => (
+                  <div key={citation.file_id || index} className="flex items-start gap-2">
+                    <span className="text-xs text-secondary-foreground mt-0.5">{index + 1}.</span>
+                    <div className="flex-1">
+                      <a 
+                        href={`http://localhost:3005/#/${citation.filename.split('/').slice(1).join('/')}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-sm text-primary hover:underline inline-flex items-center gap-1"
+                        title={citation.text}
+                      >
+                        {citation.filename.split('/').pop()?.replace('.md', '') || citation.filename}
+                        <Icon icon={ExternalLink} size="sm" />
+                      </a>
+                      <span className="text-xs text-secondary-foreground ml-2">
+                        (relevance: {Math.round(citation.score * 100)}%)
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
           <div className="rounded-lg border border-border bg-input focus-within:ring-2 focus-within:ring-ring">
             <textarea
               value={value}
@@ -59,8 +99,8 @@ export const Composer = React.forwardRef<HTMLDivElement, ComposerProps>(
               onKeyDown={handleKeyDown}
               placeholder={placeholder}
               disabled={disabled}
-              className="w-full px-4 py-3 bg-transparent resize-none focus:outline-none min-h-[100px] max-h-[300px]"
-              rows={4}
+              className="w-full px-4 py-3 bg-transparent resize-none focus:outline-none min-h-[200px] max-h-[500px]"
+              rows={8}
             />
             <div className="flex items-center justify-between px-3 py-2 border-t border-border">
               <div className="flex gap-1">

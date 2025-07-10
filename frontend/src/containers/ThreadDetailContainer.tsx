@@ -1,11 +1,17 @@
-import { useThread } from '../repo/hooks';
+import { useThread, queryKeys } from '../repo/hooks';
 import { useUIStore } from '../stores/ui-store';
 import { ThreadDetail, type EmailMessage } from '../components/organisms';
 import { ComposerContainer } from './ComposerContainer';
+import { regenerateDraft, generateDemoCustomerResponse } from '../repo/api-client';
+import { useState } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 
 export function ThreadDetailContainer() {
   const selectedThreadId = useUIStore((state) => state.selectedThreadId);
   const setComposerOpen = useUIStore((state) => state.setComposerOpen);
+  const [isRegenerating, setIsRegenerating] = useState(false);
+  const [isGeneratingDemo, setIsGeneratingDemo] = useState(false);
+  const queryClient = useQueryClient();
   
   const { data: thread, isLoading, error } = useThread(selectedThreadId || '');
   
@@ -55,6 +61,48 @@ export function ThreadDetailContainer() {
     setComposerOpen(true, 'reply');
   };
   
+  const handleUseAgent = async () => {
+    if (!selectedThreadId) return;
+    
+    setIsRegenerating(true);
+    try {
+      const result = await regenerateDraft(selectedThreadId);
+      console.log('Agent regenerate result:', result);
+      
+      // Refetch the thread data, draft, and agent activity
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: queryKeys.thread(selectedThreadId) }),
+        queryClient.invalidateQueries({ queryKey: queryKeys.draft(selectedThreadId) }),
+        queryClient.invalidateQueries({ queryKey: queryKeys.agentActivity(selectedThreadId) })
+      ]);
+      
+      setComposerOpen(true, 'reply');
+    } catch (error) {
+      console.error('Failed to regenerate draft with agent:', error);
+      // You might want to show an error toast here
+    } finally {
+      setIsRegenerating(false);
+    }
+  };
+  
+  const handleDemoCustomerResponse = async () => {
+    if (!selectedThreadId) return;
+    
+    setIsGeneratingDemo(true);
+    try {
+      const result = await generateDemoCustomerResponse(selectedThreadId);
+      console.log('Demo customer response result:', result);
+      
+      // Refetch the thread data to show the new email
+      await queryClient.invalidateQueries({ queryKey: queryKeys.thread(selectedThreadId) });
+    } catch (error) {
+      console.error('Failed to generate demo customer response:', error);
+      // You might want to show an error toast here
+    } finally {
+      setIsGeneratingDemo(false);
+    }
+  };
+  
   return (
     <div className="flex flex-col h-full">
       <ThreadDetail
@@ -63,6 +111,10 @@ export function ThreadDetailContainer() {
         status={thread.status as 'open' | 'closed' | 'pending'}
         tags={thread.tags}
         onReply={handleReply}
+        onUseAgent={handleUseAgent}
+        onDemoCustomerResponse={handleDemoCustomerResponse}
+        isRegeneratingDraft={isRegenerating}
+        isGeneratingDemoResponse={isGeneratingDemo}
       />
       <ComposerContainer />
     </div>

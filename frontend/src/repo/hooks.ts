@@ -42,6 +42,14 @@ export function useDraft(threadId: string) {
     queryKey: queryKeys.draft(threadId),
     queryFn: () => APIClient.getDraft(threadId),
     enabled: !!threadId,
+    retry: (failureCount, error: any) => {
+      // Don't retry on 404 errors
+      if (error?.status === 404) {
+        return false;
+      }
+      return failureCount < 3;
+    },
+    throwOnError: false, // Don't throw errors to console for 404s
   });
 }
 
@@ -51,6 +59,7 @@ export function useAgentActivity(threadId: string) {
     queryKey: queryKeys.agentActivity(threadId),
     queryFn: () => APIClient.getAgentActivity(threadId),
     enabled: !!threadId,
+    refetchInterval: 200, // Poll 5 times per second
   });
 }
 

@@ -9,6 +9,7 @@ import messageRoutes from './routes/messages.js'
 import draftRoutes from './routes/drafts.js'
 import agentRoutes from './routes/agent.js'
 import countRoutes from './routes/counts.js'
+import demoRoutes from './routes/demo.js'
 import { authMiddleware } from './middleware/auth.js'
 
 const app = new Hono()
@@ -87,6 +88,7 @@ app.route('/api/threads', threadRoutes)
 app.route('/api/threads', messageRoutes)
 app.route('/api/threads', draftRoutes)
 app.route('/api/threads', agentRoutes)
+app.route('/api/threads', demoRoutes)
 
 serve({
   fetch: app.fetch,

@@ -4,15 +4,13 @@ import { db } from '../database/db.js'
 import { threads, agent_actions, draft_responses, emails } from '../database/schema.js'
 import { successResponse, notFoundResponse, errorResponse } from '../utils/response.js'
 import { regenerateDraftSchema, validateRequest } from '../utils/validation.js'
-import { logAgentAction } from '../database/logAgentAction.js'
-import { assistSupportPersonEnhanced } from 'proresponse-agent'
-import type { 
-  EmailThread, 
-  EmailMessage, 
-  SupportContext, 
-  AgentConfig,
-  EnhancedAgentResponse 
-} from 'proresponse-agent'
+// import type { 
+//   EmailThread, 
+//   EmailMessage, 
+//   SupportContext, 
+//   AgentConfig
+// } from 'proresponse-agent'
+import { processEmail } from 'agent3';
 
 const app = new Hono()
 
@@ -43,57 +41,57 @@ interface DatabaseEmail {
 }
 
 // Helper function to convert database thread to agent EmailThread format
-function convertToAgentEmailThread(thread: DatabaseThread, threadEmails: DatabaseEmail[]): EmailThread {
-  console.log(`[Agent-Convert] Converting thread ${thread.id} with ${threadEmails.length} emails to agent format`)
-  
-  // Convert database emails to agent EmailMessage format
-  const agentMessages: EmailMessage[] = threadEmails.map((email: DatabaseEmail) => ({
-    id: email.id.toString(),
-    threadId: thread.id.toString(),
-    from: email.from_email,
-    to: Array.isArray(email.to_emails) ? email.to_emails : [email.to_emails],
-    cc: Array.isArray(email.cc_emails) ? email.cc_emails : (email.cc_emails ? [email.cc_emails] : []),
-    bcc: Array.isArray(email.bcc_emails) ? email.bcc_emails : (email.bcc_emails ? [email.bcc_emails] : []),
-    subject: email.subject,
-    body: email.body_text || email.body_html || '',
-    timestamp: email.sent_at || email.created_at || new Date(),
-    isFromCustomer: email.direction === 'inbound',
-    attachments: [], // TODO: Implement attachment support
-    priority: 'normal' // TODO: Implement priority detection
-  }))
-
-  // Determine customer email
-  const participantEmails = Array.isArray(thread.participant_emails) ? thread.participant_emails : []
-  const customerEmail = participantEmails.find(email => !email.includes('@proresponse.ai') && !email.includes('@yourcompany.com')) || participantEmails[0] || 'unknown@example.com'
-
-  // Create agent EmailThread object
-  const agentThread: EmailThread = {
-    id: thread.id.toString(),
-    subject: thread.subject,
-    messages: agentMessages,
-    customerEmail: customerEmail,
-    status: thread.status === 'active' ? 'open' : 
-            thread.status === 'closed' ? 'resolved' : 
-            thread.status === 'needs_attention' ? 'pending' : 'open',
-    priority: 'normal', // TODO: Implement priority detection based on thread content
-    tags: [], // TODO: Implement tags system
-    assignedTo: undefined, // TODO: Implement assignment system
-    createdAt: thread.created_at || new Date(),
-    updatedAt: thread.updated_at || new Date(),
-    internalNotes: [], // TODO: Implement internal notes
-    customFields: {} // TODO: Implement custom fields
-  }
-
-  console.log(`[Agent-Convert] Converted thread with customer: ${customerEmail}, messages: ${agentMessages.length}`)
-  return agentThread
-}
+// function convertToAgentEmailThread(thread: DatabaseThread, threadEmails: DatabaseEmail[]): EmailThread {
+//   console.log(`[Agent-Convert] Converting thread ${thread.id} with ${threadEmails.length} emails to agent format`)
+//   
+//   // Convert database emails to agent EmailMessage format
+//   const agentMessages: EmailMessage[] = threadEmails.map((email: DatabaseEmail) => ({
+//     id: email.id.toString(),
+//     threadId: thread.id.toString(),
+//     from: email.from_email,
+//     to: Array.isArray(email.to_emails) ? email.to_emails : [email.to_emails],
+//     cc: Array.isArray(email.cc_emails) ? email.cc_emails : (email.cc_emails ? [email.cc_emails] : []),
+//     bcc: Array.isArray(email.bcc_emails) ? email.bcc_emails : (email.bcc_emails ? [email.bcc_emails] : []),
+//     subject: email.subject,
+//     body: email.body_text || email.body_html || '',
+//     timestamp: email.sent_at || email.created_at || new Date(),
+//     isFromCustomer: email.direction === 'inbound',
+//     attachments: [], // TODO: Implement attachment support
+//     priority: 'normal' // TODO: Implement priority detection
+//   }))
+// 
+//   // Determine customer email
+//   const participantEmails = Array.isArray(thread.participant_emails) ? thread.participant_emails : []
+//   const customerEmail = participantEmails.find(email => !email.includes('@proresponse.ai') && !email.includes('@yourcompany.com')) || participantEmails[0] || 'unknown@example.com'
+// 
+//   // Create agent EmailThread object
+//   const agentThread: EmailThread = {
+//     id: thread.id.toString(),
+//     subject: thread.subject,
+//     messages: agentMessages,
+//     customerEmail: customerEmail,
+//     status: thread.status === 'active' ? 'open' : 
+//             thread.status === 'closed' ? 'resolved' : 
+//             thread.status === 'needs_attention' ? 'pending' : 'open',
+//     priority: 'normal', // TODO: Implement priority detection based on thread content
+//     tags: [], // TODO: Implement tags system
+//     assignedTo: undefined, // TODO: Implement assignment system
+//     createdAt: thread.created_at || new Date(),
+//     updatedAt: thread.updated_at || new Date(),
+//     internalNotes: [], // TODO: Implement internal notes
+//     customFields: {} // TODO: Implement custom fields
+//   }
+// 
+//   console.log(`[Agent-Convert] Converted thread with customer: ${customerEmail}, messages: ${agentMessages.length}`)
+//   return agentThread
+// }
 
 // Enhanced helper function to generate draft response using proresponse-agent
 async function generateEnhancedDraftResponse(
-  threadId: number, 
-  customInstructions?: string, 
-  supportContext?: SupportContext
-): Promise<EnhancedAgentResponse> {
+  threadId: number
+  // customInstructions?: string, 
+  // supportContext?: SupportContext
+)  {
   try {
     console.log(`[Agent-Enhanced] Starting enhanced draft generation for thread ${threadId}`)
     
@@ -135,18 +133,18 @@ async function generateEnhancedDraftResponse(
     console.log(`[Agent-Enhanced] Found ${threadEmails.length} emails in thread ${threadId}`)
 
     // Convert to agent format
-    const agentThread = convertToAgentEmailThread(thread, threadEmails)
+    // const agentThread = convertToAgentEmailThread(thread, threadEmails)
 
     // Prepare enhanced support context
-    const enhancedContext: SupportContext = {
-      ...supportContext,
-      internalNotes: customInstructions ? [customInstructions] : undefined,
-      urgencyReason: thread.status === 'needs_attention' ? 'Thread marked as needs attention' : undefined,
-      escalationLevel: 'none' // TODO: Implement escalation tracking
-    }
+    // const enhancedContext: SupportContext = {
+    //   ...supportContext,
+    //   internalNotes: customInstructions ? [customInstructions] : undefined,
+    //   urgencyReason: thread.status === 'needs_attention' ? 'Thread marked as needs attention' : undefined,
+    //   escalationLevel: 'none' // TODO: Implement escalation tracking
+    // }
 
     // Agent configuration with enhanced features
-    const agentConfig: AgentConfig = {
+    const agentConfig = {
       model: 'gpt-4o',
       includeRAG: true,
       generateThreadName: true,
@@ -165,15 +163,24 @@ async function generateEnhancedDraftResponse(
     console.log(`[Agent-Enhanced] Calling enhanced agent with config:`, agentConfig)
 
     // Call the enhanced agent
-    const agentResponse = await assistSupportPersonEnhanced(agentThread, enhancedContext, agentConfig)
+    // const agentResponse = await assistSupportPersonEnhanced(agentThread, enhancedContext, agentConfig)
+    const logger = (message: any) => { console.log(message) }
+    const agentResponse = await processEmail(threadId, logger)
+
+    console.log('agentResponse');
+    console.log(agentResponse);
+    console.log('agentResponse.history');
+    console.log((agentResponse as any)?.history.forEach((x: any) => console.log(x)));
+//     console.log('summary');
+//     console.log(agentResponse.summary);
 
     console.log(`[Agent-Enhanced] Enhanced agent response received successfully`)
-    console.log(`[Agent-Enhanced] Agent confidence: ${(agentResponse.confidence * 100).toFixed(1)}%`)
-    console.log(`[Agent-Enhanced] Agent suggested priority: ${agentResponse.suggestedPriority}`)
-    console.log(`[Agent-Enhanced] Agent escalation recommended: ${agentResponse.escalationRecommended}`)
-    console.log(`[Agent-Enhanced] Agent thread name: "${agentResponse.threadName}"`)
-    console.log(`[Agent-Enhanced] Agent customer sentiment: ${agentResponse.customerSentiment}`)
-    console.log(`[Agent-Enhanced] Agent RAG sources: ${agentResponse.ragSources?.length || 0}`)
+//     console.log(`[Agent-Enhanced] Agent confidence: ${(agentResponse.confidence * 100).toFixed(1)}%`)
+//     console.log(`[Agent-Enhanced] Agent suggested priority: ${agentResponse.suggestedPriority}`)
+//     console.log(`[Agent-Enhanced] Agent escalation recommended: ${agentResponse.escalationRecommended}`)
+//     console.log(`[Agent-Enhanced] Agent thread name: "${agentResponse.threadName}"`)
+//     console.log(`[Agent-Enhanced] Agent customer sentiment: ${agentResponse.customerSentiment}`)
+//     console.log(`[Agent-Enhanced] Agent RAG sources: ${agentResponse.ragSources?.length || 0}`)
 
     return agentResponse
 
@@ -192,7 +199,7 @@ app.get('/:id/agent-activity', async (c) => {
       return errorResponse(c, 'Invalid thread ID', 400)
     }
     
-    console.log(`[Agent-Activity] Fetching agent activity for thread ${threadId}`)
+    // console.log(`[Agent-Activity] Fetching agent activity for thread ${threadId}`)
     
     // Check thread exists
     const [thread] = await db
@@ -210,6 +217,7 @@ app.get('/:id/agent-activity', async (c) => {
       .select({
         id: agent_actions.id,
         action: agent_actions.action,
+        description: agent_actions.description,
         metadata: agent_actions.metadata,
         created_at: agent_actions.created_at
       })
@@ -229,7 +237,7 @@ app.get('/:id/agent-activity', async (c) => {
       .orderBy(desc(draft_responses.created_at))
       .limit(1)
     
-    console.log(`[Agent-Activity] Found ${actions.length} actions and ${latestDraft ? 1 : 0} draft(s) for thread ${threadId}`)
+    // console.log(`[Agent-Activity] Found ${actions.length} actions and ${latestDraft ? 1 : 0} draft(s) for thread ${threadId}`)
     
     // Transform actions with enhanced metadata
     const formattedActions = actions.map(action => {
@@ -238,7 +246,7 @@ app.get('/:id/agent-activity', async (c) => {
         id: action.id.toString(),
         type: action.action,
         title: action.action.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
-        description: metadata.description || formatActionDescription(action.action, metadata),
+        description: action.description || formatActionDescription(action.action, metadata),
         status: 'completed',
         timestamp: action.created_at.toISOString(),
         result: {
@@ -323,86 +331,84 @@ app.post('/:id/regenerate', async (c) => {
     
     // Generate enhanced draft response
     const enhancedResponse = await generateEnhancedDraftResponse(
-      threadId, 
-      body?.instructions,
-      {} // TODO: Add support context from request
+      threadId
     )
     
     // Create new draft with enhanced metadata
-    const [newDraft] = await db
-      .insert(draft_responses)
-      .values({
-        email_id: latestEmail.id,
-        thread_id: threadId,
-        generated_content: enhancedResponse.draft,
-        status: 'pending',
-        created_by_user_id: null, // Agent generated
-        version: 1,
-        confidence_score: enhancedResponse.confidence.toString()
-      })
-      .returning()
-    
-    console.log(`[Agent-Regenerate] Draft ${newDraft.id} created with enhanced features`)
-    
-    // Log enhanced regeneration action with full metadata
-    await logAgentAction({
-      threadId: threadId,
-      draftResponseId: newDraft.id,
-      action: 'draft_created',
-      metadata: { 
-        regenerated: true,
-        instructions: body?.instructions || null,
-        model: 'gpt-4o',
-        ai_generated: true,
-        enhanced_agent: true,
-        thread_name: enhancedResponse.threadName,
-        confidence_score: enhancedResponse.confidence,
-        suggested_priority: enhancedResponse.suggestedPriority,
-        escalation_recommended: enhancedResponse.escalationRecommended,
-        customer_sentiment: enhancedResponse.customerSentiment,
-        follow_up_required: enhancedResponse.followUpRequired,
-        estimated_resolution_time: enhancedResponse.estimatedResolutionTime,
-        rag_sources_count: enhancedResponse.ragSources?.length || 0,
-        tags_suggested: enhancedResponse.tags || [],
-        additional_actions: enhancedResponse.additionalActions || [],
-        reasoning: enhancedResponse.reasoning,
-        timestamp: new Date().toISOString()
-      }
-    })
+//     const [newDraft] = await db
+//       .insert(draft_responses)
+//       .values({
+//         email_id: latestEmail.id,
+//         thread_id: threadId,
+//         generated_content: enhancedResponse.draft,
+//         status: 'pending',
+//         created_by_user_id: null, // Agent generated
+//         version: 1,
+//         confidence_score: enhancedResponse.confidence.toString()
+//       })
+//       .returning()
+//     
+//     console.log(`[Agent-Regenerate] Draft ${newDraft.id} created with enhanced features`)
+//     
+//     // Log enhanced regeneration action with full metadata
+//     await logAgentAction({
+//       threadId: threadId,
+//       draftResponseId: newDraft.id,
+//       action: 'draft_created',
+//       metadata: { 
+//         regenerated: true,
+//         instructions: body?.instructions || null,
+//         model: 'gpt-4o',
+//         ai_generated: true,
+//         enhanced_agent: true,
+//         thread_name: enhancedResponse.threadName,
+//         confidence_score: enhancedResponse.confidence,
+//         suggested_priority: enhancedResponse.suggestedPriority,
+//         escalation_recommended: enhancedResponse.escalationRecommended,
+//         customer_sentiment: enhancedResponse.customerSentiment,
+//         follow_up_required: enhancedResponse.followUpRequired,
+//         estimated_resolution_time: enhancedResponse.estimatedResolutionTime,
+//         rag_sources_count: enhancedResponse.ragSources?.length || 0,
+//         tags_suggested: enhancedResponse.tags || [],
+//         additional_actions: enhancedResponse.additionalActions || [],
+//         reasoning: enhancedResponse.reasoning,
+//         timestamp: new Date().toISOString()
+//       }
+//     })
     
     // Update thread with enhanced metadata if available
-    if (enhancedResponse.suggestedPriority || enhancedResponse.escalationRecommended) {
-      const updateData: any = {
-        updated_at: new Date()
-      }
-      
-      // Update status if escalation is recommended
-      if (enhancedResponse.escalationRecommended && thread.status !== 'needs_attention') {
-        updateData.status = 'needs_attention'
-      }
-      
-      await db
-        .update(threads)
-        .set(updateData)
-        .where(eq(threads.id, threadId))
-    }
+//    if (enhancedResponse.suggestedPriority || enhancedResponse.escalationRecommended) {
+//      const updateData: any = {
+//        updated_at: new Date()
+//      }
+//      
+//      // Update status if escalation is recommended
+//      if (enhancedResponse.escalationRecommended && thread.status !== 'needs_attention') {
+//        updateData.status = 'needs_attention'
+//      }
+//      
+//      await db
+//        .update(threads)
+//        .set(updateData)
+//        .where(eq(threads.id, threadId))
+//    }
     
     console.log(`[Agent-Regenerate] Enhanced draft regeneration completed successfully`)
     
     return successResponse(c, {
       status: 'success',
       message: 'Enhanced draft regenerated successfully',
-      draft_id: newDraft.id.toString(),
-      enhanced_features: {
-        thread_name: enhancedResponse.threadName,
-        confidence: enhancedResponse.confidence,
-        suggested_priority: enhancedResponse.suggestedPriority,
-        escalation_recommended: enhancedResponse.escalationRecommended,
-        customer_sentiment: enhancedResponse.customerSentiment,
-        rag_sources_used: enhancedResponse.ragSources?.length || 0,
-        tags_suggested: enhancedResponse.tags || [],
-        estimated_resolution_time: enhancedResponse.estimatedResolutionTime
-      }
+      draft_id: enhancedResponse.draft.id.toString(),
+//       enhanced_features: {
+//         thread_name: enhancedResponse.threadName,
+//         confidence: enhancedResponse.confidence,
+//         suggested_priority: enhancedResponse.suggestedPriority,
+//         escalation_recommended: enhancedResponse.escalationRecommended,
+//         customer_sentiment: enhancedResponse.customerSentiment,
+//         rag_sources_used: enhancedResponse.ragSources?.length || 0,
+//         tags_suggested: enhancedResponse.tags || [],
+//         estimated_resolution_time: enhancedResponse.estimatedResolutionTime
+//       }
     })
   } catch (error) {
     console.error(`[Agent-Regenerate] Error in enhanced draft regeneration:`, error)

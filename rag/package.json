@@ -23,7 +23,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "agent": "tsx scripts/openai-vector-agent.ts",
-    "psql": "psql emailsmart_rag"
+    "psql": "psql emailsmart_merge"
   },
   "dependencies": {
     "dotenv": "^17.1.0",
