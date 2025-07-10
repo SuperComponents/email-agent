@@ -54,6 +54,7 @@ FROM node:22-slim
 # Install runtime dependencies (tini is included in slim images)
 RUN apt-get update && apt-get install -y \
     tini \
+    netcat-openbsd \
     && rm -rf /var/lib/apt/lists/*
 
 # Create non-root user
@@ -67,6 +68,7 @@ WORKDIR /app
 COPY --from=builder --chown=nodejs:nodejs /build/backend/node_modules ./node_modules
 COPY --from=builder --chown=nodejs:nodejs /build/backend/dist ./dist
 COPY --from=builder --chown=nodejs:nodejs /build/backend/drizzle ./drizzle
+COPY --from=builder --chown=nodejs:nodejs /build/backend/drizzle.config.ts ./
 COPY --from=builder --chown=nodejs:nodejs /build/backend/package.json ./
 
 # Copy and setup entrypoint script

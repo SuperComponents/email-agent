@@ -1,10 +1,13 @@
 import React from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { cn } from '../../lib/utils';
 
-export interface HeaderProps extends React.HTMLAttributes<HTMLElement> { }
+export type HeaderProps = React.HTMLAttributes<HTMLElement>;
 
 export const Header = React.forwardRef<HTMLElement, HeaderProps>(
     ({ className, ...props }, ref) => {
+        const location = useLocation();
+        
         return (
             <header
                 ref={ref}
@@ -15,6 +18,7 @@ export const Header = React.forwardRef<HTMLElement, HeaderProps>(
                 {...props}
             >
                 {/* UserButton disabled for testing */}
+
             </header>
         );
     }

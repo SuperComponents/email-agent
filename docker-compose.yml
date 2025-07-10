@@ -6,8 +6,15 @@ services:
     container_name: email-agent-backend
     ports:
       - "3000:3000"
+    depends_on:
+      db:
+        condition: service_healthy
     env_file:
       - ./backend/.env
+    environment:
+      DATABASE_URL: postgres://email_agent:email_agent_pw@db:5432/email_agent
+      DB_HOST: db
+      DB_PORT: 5432
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "node", "-e", "require('http').get('http://localhost:3000/', (r) => process.exit(r.statusCode === 200 ? 0 : 1))"]
@@ -17,6 +24,27 @@ services:
       start_period: 40s
     networks:
       - email-agent-network
+
+  db:
+    image: postgres:16-alpine
+    container_name: email-agent-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: email_agent
+      POSTGRES_PASSWORD: email_agent_pw
+      POSTGRES_DB: email_agent
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U email_agent"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - email-agent-network
+
+volumes:
+  postgres_data:
 
 networks:
   email-agent-network:
