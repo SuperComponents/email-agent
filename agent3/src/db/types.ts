@@ -56,6 +56,7 @@ export interface DraftResponse {
   version: number;
   parent_draft_id: number | null;
   confidence_score: string | null; // decimal stored as string
+  citations: any | null; // jsonb field for knowledge base citations
   created_at: Date | null;
   updated_at: Date | null;
 }

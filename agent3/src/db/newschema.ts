@@ -83,6 +83,7 @@ export const draft_responses = pgTable('draft_responses', {
   version: integer('version').notNull().default(1),
   parent_draft_id: integer('parent_draft_id'),
   confidence_score: decimal('confidence_score', { precision: 4, scale: 3 }),
+  citations: jsonb('citations'),
   created_at: timestamp('created_at').defaultNow(),
   updated_at: timestamp('updated_at').defaultNow()
 });

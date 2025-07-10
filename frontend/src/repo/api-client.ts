@@ -72,7 +72,9 @@ export async function sendMessage(threadId: string, content: string) {
 }
 
 export async function getDraft(threadId: string): Promise<Draft> {
-  return fetchAPI<Draft>(`/api/threads/${threadId}/draft`);
+  const draft = await fetchAPI<Draft>(`/api/threads/${threadId}/draft`);
+  console.log('API getDraft response:', draft);
+  return draft;
 }
 
 export async function updateDraft(threadId: string, content: string): Promise<Draft> {

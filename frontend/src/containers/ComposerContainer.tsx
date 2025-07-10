@@ -29,6 +29,8 @@ export function ComposerContainer() {
         // Auto-open composer if there's a local draft
         setComposerOpen(true, 'reply');
       } else if (serverDraft) {
+        console.log('Draft response received:', serverDraft);
+        console.log('Draft citations:', serverDraft.citations);
         setLocalContent(serverDraft.content);
         // Auto-open composer if there's a server draft with content
         if (serverDraft.content.trim()) {
@@ -113,6 +115,7 @@ export function ComposerContainer() {
       isGenerating={regenerateDraftMutation.isPending}
       isSending={sendMessageMutation.isPending}
       isSavingDraft={updateDraftMutation.isPending}
+      citations={serverDraft?.citations}
     />
   );
 }

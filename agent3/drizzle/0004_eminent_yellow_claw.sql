@@ -1,0 +1,1 @@
+ALTER TABLE "draft_responses" ADD COLUMN "citations" jsonb;

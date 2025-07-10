@@ -12,6 +12,15 @@ import type { EmailMessage, DraftResponse, AgentAction } from '../db/types.js';
 
 export type { EmailMessage };
 
+// Type for knowledge base search result
+interface KnowledgeBaseResult {
+  attributes: Record<string, any>;
+  file_id: string;
+  filename: string;
+  score: number;
+  text: string;
+}
+
 // const EmailResponseSchema = z.object({
 //   draft: z.object({
 //     subject: z.string().describe('The subject line for the email response'),
@@ -30,7 +39,7 @@ Your capabilities:
 3. Search the company knowledge base for relevant information
 4. Generate helpful responses to customer inquiries
 
-important: tag emails before you search the knowledge base. your last message should include the annotations
+important: tag emails before you search the knowledge base.
 
 When processing emails:
 - You should ALWAYS use the email search tool to see if there is a history with the customer once before you do anything else
@@ -43,14 +52,13 @@ When processing emails:
 - Maintain a professional and helpful tone
 - Remember the entire email thread context when analyzing
 
-IMPORTANT: if you use the results of the knowledge base search tool you should include citations to the source files in your response
 
 Email metadata will be provided in the format:
 [EMAIL_ID: <id>]
 
 process the provided email thread
 
-your final response should be just the email body of your draft response, and annotations if you used the RAG tool
+your final response should be just the email body of your draft response and nothing else
 `;
 
 // when you are ready to output your final response, output your final response in the following JSON format:
@@ -121,7 +129,8 @@ async function saveDraftResponse(
   email_id: number,
   thread_id: number,
   generated_content: string,
-  confidence?: number
+  confidence?: number,
+  citations?: any
 ): Promise<DraftResponse> {
   const [draft] = await db
     .insert(draft_responses)
@@ -131,6 +140,7 @@ async function saveDraftResponse(
       generated_content,
       status: 'pending',
       confidence_score: confidence ? confidence.toFixed(3) : null,
+      citations: citations || null,
     })
     .returning();
   
@@ -204,12 +214,13 @@ export async function processEmail(
 
   await result.completed;
 
-  // Log all tool calls and actions
-  // const actions = await logAndProcessToolCalls(result.output, threadId);
+  // Tool calls and actions are already logged in the streaming loop above
 
   // Parse the structured output - finalOutput is already typed from the schema
   // const structuredOutput = result.finalOutput as EmailResponse;
   const structuredOutput = result.finalOutput
+  
+  let highestScoringResult: KnowledgeBaseResult | null = null;
   
   logger('START OUTPUT BLOCK');
   result.output.forEach((item) => {
@@ -219,27 +230,49 @@ export async function processEmail(
       logger(item?.providerData?.results);
       
       // Find the result with the highest score
-      const results = item?.providerData?.results;
+      const results = item?.providerData?.results as KnowledgeBaseResult[] | undefined;
       if (results && Array.isArray(results) && results.length > 0) {
-        const highestScoringResult = results.reduce((highest, current) => {
+        const currentHighest = results.reduce<KnowledgeBaseResult>((highest, current) => {
           return (current.score > highest.score) ? current : highest;
         }, results[0]);
         
-        logger('HIGHEST SCORING RESULT:');
-        logger({
-          filename: highestScoringResult.filename,
-          score: highestScoringResult.score,
-          text: highestScoringResult.text?.substring(0, 200) + '...' // First 200 chars
-        });
+        // Update the highest scoring result if this is better than what we've seen
+        if (!highestScoringResult || currentHighest.score > highestScoringResult.score) {
+          highestScoringResult = currentHighest;
+        }
       }
     }
   });
-  // Save the draft response
+
+  
+  // Log the overall highest scoring result
+  if (highestScoringResult !== null) {
+    const result = highestScoringResult as KnowledgeBaseResult;
+    logger('OVERALL HIGHEST SCORING RESULT:');
+    logger({
+      filename: result.filename,
+      score: result.score,
+      text: result.text?.substring(0, 200) + '...' // First 200 chars
+    });
+    
+    if (result.score > 0.6) {
+      logger('✓ Score above 0.6 - will attach as citation');
+    } else {
+      logger('✗ Score below 0.6 - will NOT attach as citation');
+    }
+  }
+
+  // Save the draft response with citations if available and score is high enough
+  const citationsToAttach = highestScoringResult !== null && (highestScoringResult as KnowledgeBaseResult).score > 0.6 
+    ? highestScoringResult 
+    : null;
+    
   const draft = await saveDraftResponse(
     email.id,
     threadId,
     structuredOutput!,
-    0.85 // Default confidence score, could be calculated based on tool results
+    0.85, // Default confidence score, could be calculated based on tool results
+    citationsToAttach
   );
 
   return {
