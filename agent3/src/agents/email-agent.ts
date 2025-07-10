@@ -263,7 +263,7 @@ export async function processEmail(
   }
 
   // Save the draft response with citations if available and score is high enough
-  const citationsToAttach = highestScoringResult !== null && (highestScoringResult as KnowledgeBaseResult).score > 0.6 
+  const citationsToAttach = highestScoringResult !== null && (highestScoringResult as KnowledgeBaseResult).score > 0.4 
     ? highestScoringResult 
     : null;
     

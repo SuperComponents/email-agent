@@ -74,7 +74,7 @@ export const Composer = React.forwardRef<HTMLDivElement, ComposerProps>(
                     <span className="text-xs text-secondary-foreground mt-0.5">{index + 1}.</span>
                     <div className="flex-1">
                       <a 
-                        href={`/docs/${citation.filename.split('/').slice(1).join('/')}`}
+                        href={`http://localhost:3005/#/${citation.filename.split('/').slice(1).join('/')}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-sm text-primary hover:underline inline-flex items-center gap-1"
@@ -99,8 +99,8 @@ export const Composer = React.forwardRef<HTMLDivElement, ComposerProps>(
               onKeyDown={handleKeyDown}
               placeholder={placeholder}
               disabled={disabled}
-              className="w-full px-4 py-3 bg-transparent resize-none focus:outline-none min-h-[100px] max-h-[300px]"
-              rows={4}
+              className="w-full px-4 py-3 bg-transparent resize-none focus:outline-none min-h-[200px] max-h-[500px]"
+              rows={8}
             />
             <div className="flex items-center justify-between px-3 py-2 border-t border-border">
               <div className="flex gap-1">
