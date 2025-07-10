@@ -101,6 +101,7 @@ export const agent_actions = pgTable('agent_actions', {
   actor_user_id: integer('actor_user_id')
     .references(() => users.id, { onDelete: 'set null' }),
   action: varchar('action', { length: 100 }).notNull(),
+  description: text('description'),
   metadata: jsonb('metadata'),
   ip_address: varchar('ip_address', { length: 45 }),
   created_at: timestamp('created_at').defaultNow().notNull()

@@ -1,7 +1,7 @@
 import { Hono } from 'hono';
 import { db } from '../database/db.js';
 import { emails, threads } from '../database/schema.js';
-import { eq, and, desc } from 'drizzle-orm';
+import { eq } from 'drizzle-orm';
 import { authMiddleware } from '../middleware/auth.js';
 import OpenAI from 'openai';
 import { OPENAI_API_KEY } from '../config/env.js';
