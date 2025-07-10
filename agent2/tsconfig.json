@@ -22,6 +22,9 @@
   ],
   "exclude": [
     "node_modules",
-    "dist"
+    "dist",
+    "src/evals/**/*",
+    "src/**/*.test.ts",
+    "examples/**/*"
   ]
 }
