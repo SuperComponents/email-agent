@@ -3,6 +3,7 @@ import { QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { queryClient } from './repo/query-client';
 import { InboxPage } from './pages/InboxPage';
+import { KnowledgeBasePage } from './pages/KnowledgeBasePage';
 import { NotFoundPage } from './pages/NotFoundPage';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { ErrorBoundary } from './components/ErrorBoundary';
@@ -30,6 +31,7 @@ function App() {
                 <Route element={<ProtectedRoute />}>
                   <Route path="/" element={<InboxPage />} />
                   <Route path="/thread/:threadId" element={<InboxPage />} />
+                  <Route path="/knowledge-base" element={<KnowledgeBasePage />} />
                 </Route>
                 <Route path="*" element={<NotFoundPage />} />
               </Routes>
