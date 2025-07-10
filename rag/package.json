@@ -1,0 +1,57 @@
+{
+  "name": "agent-rag",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf dist",
+    "build:clean": "npm run clean && npm run build",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "lint:all": "tsc --noEmit && eslint .",
+    "typecheck": "tsc --noEmit",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "agent": "tsx scripts/openai-vector-agent.ts",
+    "psql": "psql emailsmart_rag"
+  },
+  "dependencies": {
+    "dotenv": "^17.1.0",
+    "openai": "^5.8.3"
+  },
+  "devDependencies": {
+    "@openai/agents": "^0.0.10",
+    "@langchain/community": "^0.3.48",
+    "@langchain/core": "^0.3.62",
+    "@langchain/openai": "^0.5.18",
+    "@neondatabase/serverless": "^1.0.1",
+    "@eslint/js": "^9.30.1",
+    "@types/node": "^20.19.5",
+    "drizzle-kit": "^0.31.4",
+    "eslint": "^9.30.1",
+    "eslint-config-prettier": "^10.1.5",
+    "globals": "^16.3.0",
+    "prettier": "^3.6.2",
+    "tsx": "^4.7.1",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.36.0",
+    "pg": "^8.16.3",
+    "zod": "^3.25.76"
+  },
+  "overrides": {
+    "@browserbasehq/stagehand": {
+      "dotenv": "^17.1.0",
+      "openai": "^5.8.3"
+    }
+  }
+}
