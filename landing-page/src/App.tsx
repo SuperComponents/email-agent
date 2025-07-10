@@ -72,12 +72,14 @@ export function App() {
               <Moon className="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
             </Button>
             
-            <Button variant="ghost" size="sm">Sign In</Button>
+            <Button asChild variant="ghost" size="sm">
+              <a href="http://localhost:5173">Sign In</a>
+            </Button>
             <Button 
               size="sm"
               className="bg-gradient-to-r from-mocha to-mocha-light hover:from-mocha-dark hover:to-mocha text-white border-0"
             >
-              Get Started Free
+              <a href="http://localhost:5173/signup">Get Started Free</a>
             </Button>
           </div>
         </div>
