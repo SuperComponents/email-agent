@@ -67,10 +67,8 @@ export function ThreadListContainer() {
   const filterOptions = [
     { id: 'all', label: 'All', count: counts?.all },
     { id: 'unread', label: 'Unread', count: counts?.unread },
-    { id: 'flagged', label: 'Flagged', count: counts?.flagged },
     { id: 'urgent', label: 'Urgent', count: counts?.urgent },
-    { id: 'awaiting_customer', label: 'Awaiting Customer', count: counts?.awaiting_customer },
-    { id: 'closed', label: 'Closed', count: counts?.closed },
+    { id: 'awaiting_customer', label: 'Pending', count: counts?.awaiting_customer },
   ];
   
   return (

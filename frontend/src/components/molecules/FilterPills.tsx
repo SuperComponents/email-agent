@@ -25,14 +25,19 @@ export const FilterPills = React.forwardRef<HTMLDivElement, FilterPillsProps>(
         {options.map((option) => (
           <Button
             key={option.id}
-            variant={value === option.id ? 'primary' : 'ghost'}
+            variant={value === option.id ? 'secondary' : 'ghost'}
             size="sm"
             onClick={() => onValueChange?.(option.id)}
-            className="rounded-full"
+            className={cn(
+              'rounded-full h-7 px-3 text-xs',
+              value === option.id 
+                ? 'bg-primary/10 text-primary border-primary/20' 
+                : 'hover:bg-secondary/50'
+            )}
           >
             {option.label}
             {option.count !== undefined && (
-              <span className="ml-1.5 text-xs opacity-70">
+              <span className="ml-1 text-xs opacity-70">
                 {option.count}
               </span>
             )}
