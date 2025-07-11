@@ -1,6 +1,7 @@
 import { db } from './db.js';
 import { users, threads, emails, draft_responses, agent_actions } from './schema.js';
 import { eq } from 'drizzle-orm';
+import { hashPassword } from '../lib/auth.js';
 
 async function seed() {
   try {
@@ -13,12 +14,16 @@ async function seed() {
     await db.delete(threads);
     await db.delete(users);
 
+    // Hash password for demo user
+    const demoPasswordHash = await hashPassword('Password1!');
+    
     // Insert sample users
     const insertedUsers = await db.insert(users).values([
       {
         email: 'demo@user.com',
         name: 'Demo User',
-        role: 'agent'
+        role: 'agent',
+        password_hash: demoPasswordHash
       },
       {
         email: 'john.agent@company.com',

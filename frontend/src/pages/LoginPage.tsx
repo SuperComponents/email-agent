@@ -37,6 +37,20 @@ export function LoginPage() {
     }
   };
 
+  const handleDemoLogin = async () => {
+    setError('');
+    setIsLoading(true);
+
+    try {
+      await login({ email: 'demo@user.com', password: 'Password1!' });
+      navigate('/');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Demo login failed. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-background px-4 py-12 sm:px-6 lg:px-8">
       <div className="w-full max-w-md space-y-8">
@@ -133,6 +147,18 @@ export function LoginPage() {
               disabled={isLoading}
             >
               {isLoading ? 'Signing in...' : 'Sign in'}
+            </Button>
+
+            {/* Demo Login Button */}
+            <Button
+              type="button"
+              variant="secondary"
+              size="md"
+              className="w-full"
+              disabled={isLoading}
+              onClick={handleDemoLogin}
+            >
+              Demo Login
             </Button>
           </div>
 
