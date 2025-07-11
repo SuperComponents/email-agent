@@ -22,9 +22,6 @@ app.use('*', errorHandler)
 // 🔑 Auth routes (unprotected)
 app.route('/api/auth', authRoutes)
 
-// 🔐 Protect all other API routes
-app.use('/api/*', authMiddleware)
-
 app.get('/', (c) => {
   return c.text('ProResponse AI Backend API')
 })
@@ -85,7 +82,10 @@ app.get('/db-test', async (c) => {
   }
 })
 
-// Mount API routes
+// Mount API routes with auth protection
+// 🔐 Apply auth middleware to protected routes
+app.use('/api/threads/*', authMiddleware)
+
 // Mount routes with specific paths first to avoid conflicts
 app.route('/api/threads', countRoutes)
 app.route('/api/threads', threadRoutes)

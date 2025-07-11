@@ -42,21 +42,17 @@ import { SignupPage } from './pages';
 <Route path="/signup" element={<SignupPage />} />
 ```
 
-### 2. Implement Authentication Logic
-The signup page currently has a TODO comment where you need to implement the actual signup logic:
+### 2. Authentication Logic
+The signup page uses the `useAuth` hook to handle user registration:
 
 ```tsx
-// TODO: Implement actual signup logic here
-// For now, we'll simulate an API call
-```
+const { signup } = useAuth();
 
-Replace this with your Stack authentication implementation:
-
-```tsx
 try {
-  await stackClientApp.signUpWithPassword({
+  await signup({
+    name: formData.name,
     email: formData.email,
-    password: formData.password,
+    password: formData.password
     // Add any additional user metadata
   });
   navigate('/');

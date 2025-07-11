@@ -40,17 +40,19 @@ const [error, setError] = useState('');
 #### Authentication Flow
 1. Form submission triggers `handleSubmit`
 2. Loading state activated, errors cleared
-3. Currently simulates login with 1-second delay
+3. Calls the `login` function from `useAuth` hook with email and password
 4. On success: navigates to home page (`/`)
 5. On error: displays error message
 
-#### Stack Integration
-The component is prepared for Stack authentication:
+#### Authentication Implementation
+The component uses the custom JWT-based authentication system via the `useAuth` hook:
 ```typescript
-// When Stack is re-enabled:
-// await stackClientApp.signIn({ email, password });
-// stackClientApp.signInWithOAuth('google')
-// stackClientApp.signInWithOAuth('github')
+const { login } = useAuth();
+
+await login({
+  email: formData.email,
+  password: formData.password
+});
 ```
 
 ## Design Consistency

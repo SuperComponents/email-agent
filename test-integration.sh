@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 # Integration test script for email agent services
 
