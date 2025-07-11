@@ -44,7 +44,7 @@ export const ThreadPreview = React.forwardRef<
       <div
         ref={ref}
         className={cn(
-          "px-4 py-2 border-b border-border cursor-pointer transition-colors",
+          "px-4 py-4 border-b border-border cursor-pointer transition-colors",
           "hover:bg-accent/50",
           isActive && "bg-accent",
           className
@@ -53,19 +53,21 @@ export const ThreadPreview = React.forwardRef<
       >
         <div className="flex gap-3">
           <div className="flex-1 min-w-0">
-            <div className="flex items-start justify-between gap-2 mb-1">
+            <div className="flex justify-between gap-2 mb-1 align-center">
               <h3
                 className={cn(
-                  "font-semibold truncate",
+                  "text-sm truncate",
                   isUnread && "text-foreground",
                   !isUnread && "text-secondary-foreground"
                 )}
               >
                 {title}
               </h3>
-              <time className="text-xs text-secondary-foreground flex-shrink-0">
-                {timestamp}
-              </time>
+              <div className="flex items-center h-full h-min-full">
+                <time className="text-xs text-secondary-foreground my-auto text-nowrap">
+                  {timestamp}
+                </time>
+              </div>
             </div>
             <p className="text-sm text-secondary-foreground truncate mb-2">
               {snippet}
