@@ -16,6 +16,11 @@ async function seed() {
     // Insert sample users
     const insertedUsers = await db.insert(users).values([
       {
+        email: 'demo@user.com',
+        name: 'Demo User',
+        role: 'agent'
+      },
+      {
         email: 'john.agent@company.com',
         name: 'John Agent',
         role: 'agent'
@@ -221,7 +226,7 @@ async function seed() {
 
     console.log('✅ Database seed completed successfully!');
     console.log('\nSeeded data summary:');
-    console.log(`- Users: ${insertedUsers.length} (agent, manager, admin)`);
+    console.log(`- Users: ${insertedUsers.length} (demo, agent, manager, admin)`);
     console.log(`- Threads: ${insertedThreads.length} (active, needs_attention, closed)`);
     console.log(`- Emails: ${insertedEmails.length} (mix of inbound/outbound, includes 1 draft)`);
     console.log(`- Draft responses: ${insertedDrafts.length} (pending, approved, rejected, sent)`);

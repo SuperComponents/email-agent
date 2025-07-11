@@ -25,6 +25,9 @@ export const users = pgTable('users', {
   email: varchar('email', { length: 255 }).unique().notNull(),
   name: varchar('name', { length: 255 }).notNull(),
   role: roleEnum('role').notNull().default('agent'),
+  password_hash: text('password_hash'),
+  last_login_at: timestamp('last_login_at'),
+  refresh_token_revoked_at: timestamp('refresh_token_revoked_at'),
   stack_auth_id: text('stack_auth_id').unique(),
   created_at: timestamp('created_at').defaultNow(),
   updated_at: timestamp('updated_at').defaultNow()

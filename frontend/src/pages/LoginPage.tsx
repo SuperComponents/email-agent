@@ -1,18 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Button } from '../components/atoms/Button';
 import { Input } from '../components/atoms/Input';
 import { Label } from '../components/atoms/Label';
-import { stackClientApp } from '../lib/stack';
+import { useAuth } from '../contexts/AuthContext';
 import { cn } from '../lib/utils';
 
 export function LoginPage() {
   const navigate = useNavigate();
+  const { login, isAuthenticated } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+
+  // Redirect if already authenticated
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/');
+    }
+  }, [isAuthenticated, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -20,16 +28,10 @@ export function LoginPage() {
     setIsLoading(true);
 
     try {
-      // When Stack authentication is re-enabled, use:
-      // await stackClientApp.signIn({ email, password });
-      
-      // For now, just simulate login
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // Navigate to the main app
+      await login({ email, password });
       navigate('/');
     } catch (err) {
-      setError('Invalid email or password. Please try again.');
+      setError(err instanceof Error ? err.message : 'Invalid email or password. Please try again.');
     } finally {
       setIsLoading(false);
     }

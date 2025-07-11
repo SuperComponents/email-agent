@@ -1,12 +1,14 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { AuthLayout } from '../components/templates';
 import { Button } from '../components/atoms/Button';
 import { Input } from '../components/atoms/Input';
 import { Label } from '../components/atoms/Label';
+import { useAuth } from '../contexts/AuthContext';
 
 export function SignupPage() {
   const navigate = useNavigate();
+  const { signup, isAuthenticated } = useAuth();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -15,6 +17,13 @@ export function SignupPage() {
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(false);
+
+  // Redirect if already authenticated
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/');
+    }
+  }, [isAuthenticated, navigate]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -63,14 +72,15 @@ export function SignupPage() {
 
     setIsLoading(true);
     
-    // TODO: Implement actual signup logic here
-    // For now, we'll simulate an API call
     try {
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      // On success, redirect to login or dashboard
+      await signup({
+        name: formData.name,
+        email: formData.email,
+        password: formData.password
+      });
       navigate('/');
     } catch (error) {
-      setErrors({ form: 'Failed to create account. Please try again.' });
+      setErrors({ form: error instanceof Error ? error.message : 'Failed to create account. Please try again.' });
     } finally {
       setIsLoading(false);
     }
@@ -168,7 +178,7 @@ export function SignupPage() {
 
         <div className="mt-6 text-center text-sm text-secondary-foreground">
           Already have an account?{' '}
-          <Link to="/handler/sign-in" className="text-primary hover:underline">
+          <Link to="/login" className="text-primary hover:underline">
             Sign in
           </Link>
         </div>

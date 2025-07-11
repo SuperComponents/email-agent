@@ -10,6 +10,7 @@ import draftRoutes from './routes/drafts.js'
 import agentRoutes from './routes/agent.js'
 import countRoutes from './routes/counts.js'
 import demoRoutes from './routes/demo.js'
+import authRoutes from './routes/auth.js'
 import { authMiddleware } from './middleware/auth.js'
 
 const app = new Hono()
@@ -18,7 +19,10 @@ const app = new Hono()
 app.use('*', corsMiddleware)
 app.use('*', errorHandler)
 
-// 🔐 Protect all API routes
+// 🔑 Auth routes (unprotected)
+app.route('/api/auth', authRoutes)
+
+// 🔐 Protect all other API routes
 app.use('/api/*', authMiddleware)
 
 app.get('/', (c) => {
