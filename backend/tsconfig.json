@@ -16,7 +16,12 @@
     "noFallthroughCasesInSwitch": true,
     "forceConsistentCasingInFileNames": true,
     "esModuleInterop": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "baseUrl": "./",
+    "paths": {
+      "agent3": ["../agent3/dist/src"],
+      "agent3/*": ["../agent3/dist/src/*"]
+    }
   },
   "exclude": ["node_modules", "prod_node_modules", "dist", "drizzle"]
 }
