@@ -23,8 +23,12 @@ export function InboxPage() {
   
   return (
     <AppLayout
-      header={<Header />}
-      sidebar={<ThreadListContainer />}
+      sidebar={
+        <div className="flex flex-col h-full">
+          <Header />
+          <ThreadListContainer />
+        </div>
+      }
       main={<ThreadDetailContainer />}
       panel={isAgentPanelOpen ? <AgentPanelContainer /> : null}
     />
