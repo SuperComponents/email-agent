@@ -1,7 +1,7 @@
-import React from 'react';
-import { Avatar } from '../atoms/Avatar';
-import { Badge } from '../atoms/Badge';
-import { cn } from '../../lib/utils';
+import React from "react";
+import { Avatar } from "../atoms/Avatar";
+import { Badge } from "../atoms/Badge";
+import { cn } from "../../lib/utils";
 
 export interface EmailMessage {
   id: string;
@@ -16,39 +16,39 @@ export interface EmailMessage {
   isSupport?: boolean;
 }
 
-export interface ThreadDetailProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface ThreadDetailProps
+  extends React.HTMLAttributes<HTMLDivElement> {
   subject: string;
   messages: EmailMessage[];
-  status?: 'open' | 'closed' | 'pending';
+  status?: "open" | "closed" | "pending";
   tags?: string[];
 }
 
 export const ThreadDetail = React.forwardRef<HTMLDivElement, ThreadDetailProps>(
-  ({ className, subject, messages, status = 'open', tags = [], ...props }, ref) => {
+  (
+    { className, subject, messages, status = "open", tags = [], ...props },
+    ref
+  ) => {
     return (
       <div
         ref={ref}
-        className={cn('flex flex-col h-full', className)}
+        className={cn("flex flex-col h-full", className)}
         {...props}
       >
-        <div className="px-6 py-4 border-b border-border">
+        <div className="px-6 py-4 border-b border-border h-[60px]">
           <div className="flex items-start justify-between gap-4">
-            <div>
-              <h2 className="text-xl font-semibold mb-2">{subject}</h2>
-              <div className="flex gap-2">
-                {status && (
-                  <Badge
-                    variant={status === 'closed' ? 'secondary' : 'default'}
-                  >
-                    {status}
-                  </Badge>
-                )}
-                {tags.map((tag) => (
-                  <Badge key={tag} variant="outline">
-                    {tag}
-                  </Badge>
-                ))}
-              </div>
+            <h2 className="text-xl font-semibold mb-2">{subject}</h2>
+            <div className="flex gap-2">
+              {status && (
+                <Badge variant={status === "closed" ? "secondary" : "default"}>
+                  {status}
+                </Badge>
+              )}
+              {tags.map((tag) => (
+                <Badge key={tag} variant="outline">
+                  {tag}
+                </Badge>
+              ))}
             </div>
           </div>
         </div>
@@ -72,14 +72,16 @@ export const ThreadDetail = React.forwardRef<HTMLDivElement, ThreadDetailProps>(
                       {message.timestamp}
                     </time>
                   </div>
-                  <div className={cn(
-                    'rounded-lg p-4',
-                    message.isSupport 
-                      ? 'bg-accent border border-accent-foreground/20' 
-                      : 'bg-card border border-border'
-                  )}>
+                  <div
+                    className={cn(
+                      "rounded-lg p-4",
+                      message.isSupport
+                        ? "bg-accent border border-accent-foreground/20"
+                        : "bg-card border border-border"
+                    )}
+                  >
                     <div className="prose prose-sm max-w-none">
-                      {message.content.split('\n').map((paragraph, idx) => (
+                      {message.content.split("\n").map((paragraph, idx) => (
                         <p key={idx} className="mb-2 last:mb-0">
                           {paragraph}
                         </p>
@@ -96,4 +98,4 @@ export const ThreadDetail = React.forwardRef<HTMLDivElement, ThreadDetailProps>(
   }
 );
 
-ThreadDetail.displayName = 'ThreadDetail';
+ThreadDetail.displayName = "ThreadDetail";
