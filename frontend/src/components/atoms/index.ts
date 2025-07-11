@@ -7,6 +7,7 @@ export { Avatar } from './Avatar';
 export { Badge } from './Badge';
 export { Separator } from './Separator';
 export { Icon } from './Icon';
+export { Logo } from './Logo';
 
 export type { ButtonProps } from './Button';
 export type InputProps = React.InputHTMLAttributes<HTMLInputElement>;
@@ -15,3 +16,4 @@ export type { AvatarProps } from './Avatar';
 export type { BadgeProps } from './Badge';
 export type { SeparatorProps } from './Separator';
 export type { IconProps } from './Icon';
+export type { LogoProps } from './Logo';

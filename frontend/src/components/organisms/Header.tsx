@@ -1,12 +1,11 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
 import { cn } from '../../lib/utils';
+import { Logo } from '../atoms';
 
 export type HeaderProps = React.HTMLAttributes<HTMLElement>;
 
 export const Header = React.forwardRef<HTMLElement, HeaderProps>(
     ({ className, ...props }, ref) => {
-        const location = useLocation();
         
         return (
             <header
@@ -17,6 +16,11 @@ export const Header = React.forwardRef<HTMLElement, HeaderProps>(
                 )}
                 {...props}
             >
+                <div className="flex items-center gap-3">
+                    <Logo size="md" />
+                    <span className="text-foreground">ProResponse AI</span>
+                </div>
+                
                 {/* UserButton disabled for testing */}
 
             </header>
