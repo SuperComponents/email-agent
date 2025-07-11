@@ -1,6 +1,7 @@
 import React from "react";
 import { cn } from "../../lib/utils";
 import { Logo } from "../atoms";
+import { UserMenu } from "../molecules";
 
 export type HeaderProps = React.HTMLAttributes<HTMLElement>;
 
@@ -20,7 +21,11 @@ export const Header = React.forwardRef<HTMLElement, HeaderProps>(
           <span className="text-foreground text-xl italic">ProResponse AI</span>
         </div>
 
-        {/* UserButton disabled for testing */}
+        <UserMenu 
+          userName="Support Agent"
+          userEmail="agent@company.com"
+          onLogout={() => console.log('Logout clicked')}
+        />
       </header>
     );
   }
