@@ -115,7 +115,10 @@ export const Composer = React.forwardRef<HTMLDivElement, ComposerProps>(
                   <Icon icon={Smile} size="sm" />
                 </Button>
               </div>
-              <div className="flex gap-2">
+              <div className="flex items-center gap-3">
+                <p className="text-xs text-secondary-foreground">
+                  Press Cmd+Enter to send
+                </p>
                 <Button
                   size="sm"
                   onClick={onSend}
@@ -128,9 +131,6 @@ export const Composer = React.forwardRef<HTMLDivElement, ComposerProps>(
               </div>
             </div>
           </div>
-          <p className="text-xs text-secondary-foreground mt-2">
-            Press Cmd+Enter to send
-          </p>
         </div>
       </div>
     );
