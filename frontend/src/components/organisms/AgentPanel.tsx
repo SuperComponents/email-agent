@@ -1,16 +1,23 @@
 import React from 'react';
+import { Sparkles, UserPlus } from 'lucide-react';
 import { AgentAction, type AgentActionProps } from '../molecules/AgentAction';
 import { Separator } from '../atoms/Separator';
+import { Button } from '../atoms/Button';
+import { Icon } from '../atoms/Icon';
 import { cn } from '../../lib/utils';
 
 export interface AgentPanelProps extends React.HTMLAttributes<HTMLDivElement> {
   actions: AgentActionProps[];
   analysis?: string;
   draftResponse?: string;
+  onUseAgent?: () => void;
+  onDemoCustomerResponse?: () => void;
+  isRegeneratingDraft?: boolean;
+  isGeneratingDemoResponse?: boolean;
 }
 
 export const AgentPanel = React.forwardRef<HTMLDivElement, AgentPanelProps>(
-  ({ className, actions, analysis, draftResponse, ...props }, ref) => {
+  ({ className, actions, analysis, draftResponse, onUseAgent, onDemoCustomerResponse, isRegeneratingDraft, isGeneratingDemoResponse, ...props }, ref) => {
     return (
       <div
         ref={ref}
@@ -21,7 +28,40 @@ export const AgentPanel = React.forwardRef<HTMLDivElement, AgentPanelProps>(
         {...props}
       >
         <div className="p-4">
-          <h3 className="font-semibold mb-4">Agent Activity</h3>
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="font-semibold">Agent Activity</h3>
+          </div>
+          
+          <div className="space-y-2 mb-6">
+            <Button
+              onClick={onUseAgent}
+              size="sm"
+              variant="secondary"
+              className="w-full gap-2"
+              disabled={isRegeneratingDraft}
+            >
+              <Icon 
+                icon={Sparkles} 
+                size="sm" 
+                className={isRegeneratingDraft ? 'animate-pulse' : ''}
+              />
+              <span>{isRegeneratingDraft ? 'Generating...' : 'Use Agent'}</span>
+            </Button>
+            <Button
+              onClick={onDemoCustomerResponse}
+              size="sm"
+              variant="ghost"
+              className="w-full gap-2"
+              disabled={isGeneratingDemoResponse}
+            >
+              <Icon 
+                icon={UserPlus} 
+                size="sm" 
+                className={isGeneratingDemoResponse ? 'animate-pulse' : ''}
+              />
+              <span>{isGeneratingDemoResponse ? 'Generating...' : 'Demo Customer Response'}</span>
+            </Button>
+          </div>
           
           {actions.length > 0 && (
             <div className="space-y-3 mb-6">

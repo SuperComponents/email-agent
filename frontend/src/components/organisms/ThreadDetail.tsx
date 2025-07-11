@@ -1,9 +1,6 @@
 import React from 'react';
-import { Sparkles, UserPlus } from 'lucide-react';
 import { Avatar } from '../atoms/Avatar';
 import { Badge } from '../atoms/Badge';
-import { Button } from '../atoms/Button';
-import { Icon } from '../atoms/Icon';
 import { cn } from '../../lib/utils';
 
 export interface EmailMessage {
@@ -24,14 +21,10 @@ export interface ThreadDetailProps extends React.HTMLAttributes<HTMLDivElement> 
   messages: EmailMessage[];
   status?: 'open' | 'closed' | 'pending';
   tags?: string[];
-  onUseAgent?: () => void;
-  onDemoCustomerResponse?: () => void;
-  isRegeneratingDraft?: boolean;
-  isGeneratingDemoResponse?: boolean;
 }
 
 export const ThreadDetail = React.forwardRef<HTMLDivElement, ThreadDetailProps>(
-  ({ className, subject, messages, status = 'open', tags = [], onUseAgent, onDemoCustomerResponse, isRegeneratingDraft, isGeneratingDemoResponse, ...props }, ref) => {
+  ({ className, subject, messages, status = 'open', tags = [], ...props }, ref) => {
     return (
       <div
         ref={ref}
@@ -56,36 +49,6 @@ export const ThreadDetail = React.forwardRef<HTMLDivElement, ThreadDetailProps>(
                   </Badge>
                 ))}
               </div>
-            </div>
-            <div className="flex gap-2">
-              <Button
-                onClick={onDemoCustomerResponse}
-                size="sm"
-                variant="ghost"
-                className="gap-2"
-                disabled={isGeneratingDemoResponse}
-              >
-                <Icon 
-                  icon={UserPlus} 
-                  size="sm" 
-                  className={isGeneratingDemoResponse ? 'animate-pulse' : ''}
-                />
-                <span>{isGeneratingDemoResponse ? 'Generating...' : 'Demo Customer Response'}</span>
-              </Button>
-              <Button
-                onClick={onUseAgent}
-                size="sm"
-                variant="secondary"
-                className="gap-2"
-                disabled={isRegeneratingDraft}
-              >
-                <Icon 
-                  icon={Sparkles} 
-                  size="sm" 
-                  className={isRegeneratingDraft ? 'animate-pulse' : ''}
-                />
-                <span>{isRegeneratingDraft ? 'Generating...' : 'Use Agent'}</span>
-              </Button>
             </div>
           </div>
         </div>

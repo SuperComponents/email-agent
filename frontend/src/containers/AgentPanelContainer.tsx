@@ -4,7 +4,19 @@ import { AgentPanel } from '../components/organisms';
 import { FileSearch, Brain, MessageSquare } from 'lucide-react';
 import type { AgentActionProps } from '../components/molecules/AgentAction';
 
-export function AgentPanelContainer() {
+export interface AgentPanelContainerProps {
+  onUseAgent?: () => void;
+  onDemoCustomerResponse?: () => void;
+  isRegeneratingDraft?: boolean;
+  isGeneratingDemoResponse?: boolean;
+}
+
+export function AgentPanelContainer({ 
+  onUseAgent, 
+  onDemoCustomerResponse, 
+  isRegeneratingDraft, 
+  isGeneratingDemoResponse 
+}: AgentPanelContainerProps) {
   const selectedThreadId = useUIStore((state) => state.selectedThreadId);
   const isAgentPanelOpen = useUIStore((state) => state.isAgentPanelOpen);
   
@@ -32,6 +44,10 @@ export function AgentPanelContainer() {
       actions={actions}
       analysis={agentActivity?.analysis}
       draftResponse={agentActivity?.suggested_response}
+      onUseAgent={onUseAgent}
+      onDemoCustomerResponse={onDemoCustomerResponse}
+      isRegeneratingDraft={isRegeneratingDraft}
+      isGeneratingDemoResponse={isGeneratingDemoResponse}
     />
   );
 }
