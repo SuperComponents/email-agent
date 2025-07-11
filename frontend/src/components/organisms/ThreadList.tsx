@@ -37,7 +37,7 @@ export const ThreadList = React.forwardRef<HTMLDivElement, ThreadListProps>(
         )}
         {...props}
       >
-        <div className="p-4 border-b border-border space-y-3">
+        <div className="p-4 space-y-3">
           <SearchInput
             placeholder="Search threads..."
             value={searchValue}
@@ -52,7 +52,7 @@ export const ThreadList = React.forwardRef<HTMLDivElement, ThreadListProps>(
           )}
         </div>
         
-        <div className="flex-1 overflow-y-auto">
+        <div className="flex-1 overflow-y-auto border-t border-border/50">
           {threads.map((thread, index) => (
             <ThreadPreview
               key={thread.id || index}
