@@ -2,6 +2,7 @@ import React from 'react';
 import { Send, Paperclip, Smile, Sparkles, FileText, ExternalLink } from 'lucide-react';
 import { Button } from '../atoms/Button';
 import { Icon } from '../atoms/Icon';
+import { Spinner } from '../atoms/Spinner';
 import { EmailHeader } from '../molecules/EmailHeader';
 import { cn } from '../../lib/utils';
 
@@ -111,13 +112,21 @@ export const Composer = React.forwardRef<HTMLDivElement, ComposerProps>(
               </div>
             </div>
           )}
-          <div className="rounded-lg border border-border bg-input focus-within:ring-2 focus-within:ring-ring">
+          <div className="rounded-lg border border-border bg-input focus-within:ring-2 focus-within:ring-ring relative">
+            {isGenerating && (
+              <div className="absolute inset-0 bg-background/80 flex items-center justify-center z-10 rounded-lg">
+                <div className="flex items-center gap-2 text-sm text-secondary-foreground">
+                  <Spinner size="sm" />
+                  <span>Generating response...</span>
+                </div>
+              </div>
+            )}
             <textarea
               value={value}
               onChange={(e) => onChange?.(e.target.value)}
               onKeyDown={handleKeyDown}
               placeholder={placeholder}
-              disabled={disabled}
+              disabled={disabled || isGenerating}
               className="w-full px-4 py-3 bg-transparent resize-none focus:outline-none min-h-[200px] max-h-[500px]"
               rows={8}
             />
