@@ -74,3 +74,13 @@
   --transition-base: 200ms;
   --transition-slow: 300ms;
 }
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
