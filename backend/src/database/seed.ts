@@ -1,6 +1,7 @@
 import { db } from './db.js';
 import { users, threads, emails, draft_responses, agent_actions } from './schema.js';
 import { eq } from 'drizzle-orm';
+import { hashPassword } from '../lib/auth.js';
 
 async function seed() {
   try {
@@ -13,8 +14,17 @@ async function seed() {
     await db.delete(threads);
     await db.delete(users);
 
+    // Hash password for demo user
+    const demoPasswordHash = await hashPassword('Password1!');
+    
     // Insert sample users
     const insertedUsers = await db.insert(users).values([
+      {
+        email: 'demo@user.com',
+        name: 'Demo User',
+        role: 'agent',
+        password_hash: demoPasswordHash
+      },
       {
         email: 'john.agent@company.com',
         name: 'John Agent',
@@ -221,7 +231,7 @@ async function seed() {
 
     console.log('✅ Database seed completed successfully!');
     console.log('\nSeeded data summary:');
-    console.log(`- Users: ${insertedUsers.length} (agent, manager, admin)`);
+    console.log(`- Users: ${insertedUsers.length} (demo, agent, manager, admin)`);
     console.log(`- Threads: ${insertedThreads.length} (active, needs_attention, closed)`);
     console.log(`- Emails: ${insertedEmails.length} (mix of inbound/outbound, includes 1 draft)`);
     console.log(`- Draft responses: ${insertedDrafts.length} (pending, approved, rejected, sent)`);

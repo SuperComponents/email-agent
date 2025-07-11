@@ -10,7 +10,7 @@ import { regenerateDraftSchema, validateRequest } from '../utils/validation.js'
 //   SupportContext, 
 //   AgentConfig
 // } from 'proresponse-agent'
-import { processEmail } from 'agent3';
+// // import { processEmail } from 'agent3';
 
 const app = new Hono()
 
@@ -165,7 +165,14 @@ async function generateEnhancedDraftResponse(
     // Call the enhanced agent
     // const agentResponse = await assistSupportPersonEnhanced(agentThread, enhancedContext, agentConfig)
     const logger = (message: any) => { console.log(message) }
-    const agentResponse = await processEmail(threadId, logger)
+    // const agentResponse = await processEmail(threadId, logger)
+    const agentResponse = { 
+      success: true, 
+      message: 'Agent processing temporarily disabled',
+      draft: 'This is a placeholder draft response.',
+      analysis: 'Agent analysis temporarily disabled.',
+      history: []
+    }
 
     console.log('agentResponse');
     console.log(agentResponse);
@@ -398,7 +405,7 @@ app.post('/:id/regenerate', async (c) => {
     return successResponse(c, {
       status: 'success',
       message: 'Enhanced draft regenerated successfully',
-      draft_id: enhancedResponse.draft.id.toString(),
+      draft_id: '1', // Placeholder ID
 //       enhanced_features: {
 //         thread_name: enhancedResponse.threadName,
 //         confidence: enhancedResponse.confidence,
