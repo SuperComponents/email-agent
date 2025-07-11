@@ -2,13 +2,22 @@
 
 This document outlines the gaps between the frontend expectations (based on MockAPI) and what the current database schema can provide.
 
+**Note**: This analysis is based on the active `agent3/` implementation, which is integrated with the backend. The legacy `agent/` and `agent2/` directories are not part of the current system.
+
+## Current Architecture
+
+- **Active Agent**: `agent3/` - Integrated with backend API
+- **Database**: PostgreSQL with Drizzle ORM
+- **API**: Backend serves data from real database
+- **Frontend**: React app consuming backend API
+
 ## Database Schema Gaps
 
 ### 1. Missing Fields/Features
 
 #### Thread Level
 - **is_unread**: Frontend expects an `is_unread` boolean field on threads, but the database doesn't track read/unread status
-- **tags**: Frontend expects a `tags` array (e.g., "flagged", "urgent"), but the database has no tags table or field
+- **tags**: Frontend expects a `tags` array (e.g., "flagged", "urgent"), but the database has no tags table or field  
 - **customer_name**: Frontend expects a customer name, but database only stores email addresses in `participant_emails`
 - **snippet**: Frontend expects a text snippet of the latest message, requires joining with emails table
 
@@ -17,9 +26,9 @@ This document outlines the gaps between the frontend expectations (based on Mock
 - **thread_id** in response: Frontend expects this field in email responses
 
 #### Draft Level
-- The database tracks drafts differently than the frontend expects:
-  - Database has a full `draft_responses` table with versioning
-  - Frontend expects a simple draft per thread
+- The database tracks drafts comprehensively via `draft_responses` table with versioning
+- Frontend expects a simpler draft-per-thread model
+- **Good alignment**: The `agent3/` system properly creates and manages drafts
 
 ### 2. Filter Misalignments
 
@@ -30,21 +39,53 @@ The frontend filters don't map directly to database fields:
 - **awaiting_customer**: Using `status = 'active'` as a proxy, but not exact
 - **assigned_to_me**: No assignment tracking in database
 
-### 3. Mock Data vs Real Data
+### 3. Agent Integration Status
 
-The frontend was built with rich mock data that includes:
-- Customer avatars
-- Read/unread states
-- Multiple tags per thread
-- Detailed agent activity with tool calls
-- Knowledge base references
+#### ✅ Working (agent3/ integration)
+- **Draft generation**: `agent3/` creates drafts in `draft_responses` table
+- **Action logging**: All agent actions logged to `agent_actions` table
+- **Email processing**: Real email thread processing with database integration
+- **Tool integration**: Email search, tagging, RAG search working
+- **Streaming responses**: Real-time agent processing feedback
+- **Knowledge base integration**: Complete RAG system with full UI management
 
-The database currently lacks tables/fields for:
-- User avatars
-- Read status tracking
-- Tags/labels
-- Tool call tracking
-- Knowledge base integration
+#### ✅ RAG System Status: FULLY IMPLEMENTED
+The RAG (Retrieval-Augmented Generation) system is comprehensively implemented:
+
+**Knowledge Base Management UI** (`frontend/src/pages/KnowledgeBasePage.tsx`):
+- ✅ **Full CRUD operations** - Create, read, update, delete documents
+- ✅ **GitHub integration** - Direct editing of `rag/knowledge_base/` files
+- ✅ **Live document editing** with markdown support
+- ✅ **Version control** - All changes committed to GitHub automatically
+- ✅ **Automatic sync** - GitHub workflow updates OpenAI vector store on changes
+- ✅ **Document management** - File browser, search, and organization
+- ✅ **Real-time collaboration** - Multiple users can manage knowledge base
+
+**RAG Integration** (`agent3/src/agents/tools/rag-search.ts`):
+- ✅ **OpenAI Vector Store** integration with automatic discovery
+- ✅ **Citation support** with confidence scoring and metadata
+- ✅ **Knowledge base search** during email processing
+- ✅ **Semantic search** with file search tool integration
+- ✅ **Production knowledge base** with real content (CyberKnight Collection, DragonScale Gauntlets, etc.)
+
+**GitHub Workflow Automation**:
+- ✅ **Automatic vector store sync** when knowledge base files change
+- ✅ **Branch-based deployment** (master/rag branches)
+- ✅ **Metadata tracking** with vector store keys
+
+### 4. Authentication Status
+
+#### ✅ StackAuth Integration - Infrastructure Complete (Disabled for Testing)
+- **JWT validation**: Complete middleware with `jose` library
+- **Database integration**: `stack_auth_id` field in users table
+- **Frontend components**: StackProvider, StackHandler, UserButton ready
+- **Environment setup**: Variables configured for StackAuth
+- **Current status**: Temporarily disabled with mock authentication for testing
+
+#### ❌ Email Provider OAuth - Not Implemented
+- **Gmail OAuth**: Not implemented (was marked out of scope in original spec)
+- **Microsoft OAuth**: Not implemented
+- **Email client integration**: Not implemented (future feature for email provider sync)
 
 ## Implementation Workarounds
 
@@ -58,11 +99,12 @@ The database currently lacks tables/fields for:
 - Frontend "pending" status → Database "active" status
 - Frontend "awaiting_customer" filter → Database "active" status
 
-### 3. Missing Features Set to Defaults
-- All threads marked as "read"
-- No tags on any threads
-- Confidence scores hardcoded in regenerate endpoint
-- Knowledge base references return empty array
+### 3. Agent Integration ✅
+- **Draft generation**: Real drafts created by `agent3/`
+- **Action logging**: Real agent actions with metadata
+- **Confidence scores**: Actual confidence values from agent processing
+- **Citations**: Real knowledge base references with high-quality scoring
+- **Knowledge base**: Fully functional with comprehensive management UI
 
 ## Recommendations for Full Feature Parity
 
@@ -105,14 +147,28 @@ CREATE TABLE thread_assignments (
 - Implement real-time read/unread tracking
 - Add tag management endpoints
 - Implement thread assignment system
-- Add knowledge base integration
+- Enhance customer profile management
+- Re-enable StackAuth authentication
 
 ## Current Limitations
 
-1. **Authentication**: No auth system implemented - using hardcoded user_id = 1
+1. **Authentication**: StackAuth infrastructure ready but disabled for testing
 2. **Real-time Updates**: No WebSocket support for live updates
 3. **Search**: Limited search capability - only searches thread subjects
-4. **Agent Integration**: Mock agent responses instead of real AI integration
-5. **Email Sending**: Emails are stored but not actually sent
+4. **Customer Profiles**: Limited customer information beyond email addresses
+5. **Email Provider Integration**: No Gmail/Outlook OAuth or sync (future feature)
 
-These gaps don't prevent the frontend from working but limit functionality compared to the full mock implementation.
+## Agent3 Integration Status: ✅ WORKING
+
+The `agent3/` system is fully integrated and working:
+- ✅ **Email processing**: Real thread analysis
+- ✅ **Draft generation**: Creates actual drafts with citations
+- ✅ **Action logging**: Comprehensive agent activity tracking
+- ✅ **Tool integration**: Email search, tagging, RAG search
+- ✅ **Database integration**: Direct PostgreSQL integration
+- ✅ **Streaming responses**: Real-time processing feedback
+- ✅ **Knowledge base integration**: Complete RAG system with full management UI
+
+**Note**: The legacy `agent/` and `agent2/` directories are not integrated and should not be used for gap analysis.
+
+These gaps don't prevent the core functionality from working, but they limit the frontend's rich UI features compared to the original mock implementation. The agent integration and knowledge base systems are solid and production-ready.
