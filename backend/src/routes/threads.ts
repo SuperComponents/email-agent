@@ -27,6 +27,23 @@ interface ThreadEmailRow {
   created_at: Date | null
 }
 
+// Row representing a thread entry fetched in the list query
+interface ThreadRow {
+  id: number
+  subject: string
+  participant_emails: unknown
+  status: 'active' | 'closed' | 'needs_attention'
+  last_activity_at: Date
+  created_at: Date | null
+  latest_email: string | null
+}
+
+// Expected shape of request body for PATCH /api/threads/:id
+interface UpdateThreadBody {
+  status?: 'active' | 'closed' | 'needs_attention'
+  tags?: string[]
+}
+
 const app = new Hono()
 app.use(authMiddleware)
 // GET /api/threads - List all threads with filtering
@@ -87,7 +104,7 @@ app.get('/', async (c) => {
       .orderBy(desc(threads.last_activity_at))
     
     // Transform to match API format
-    const formattedThreads = threadList.map(thread => {
+    const formattedThreads = threadList.map((thread: ThreadRow) => {
       const participants = thread.participant_emails as string[]
       const customerEmail = participants.find(email => !email.includes('@proresponse.ai')) || participants[0]
       
@@ -228,7 +245,7 @@ app.patch('/:id', async (c) => {
       return errorResponse(c, 'Invalid thread ID', 400)
     }
     
-    const updates = await validateRequest(c, updateThreadSchema)
+    const updates = await validateRequest<UpdateThreadBody>(c, updateThreadSchema)
     if (!updates) {
       return errorResponse(c, 'Invalid request body', 400)
     }
