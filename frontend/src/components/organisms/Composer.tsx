@@ -1,5 +1,5 @@
 import React from 'react';
-import { Send, Paperclip, Smile, Save, Sparkles, FileText, ExternalLink } from 'lucide-react';
+import { Send, Paperclip, Smile, Sparkles, FileText, ExternalLink } from 'lucide-react';
 import { Button } from '../atoms/Button';
 import { Icon } from '../atoms/Icon';
 import { cn } from '../../lib/utils';
@@ -17,14 +17,11 @@ export interface ComposerProps {
   value?: string;
   onChange?: (value: string) => void;
   onSend?: () => void;
-  onCancel?: () => void;
-  onSaveDraft?: () => void;
   onRegenerate?: () => void;
   placeholder?: string;
   disabled?: boolean;
   isGenerating?: boolean;
   isSending?: boolean;
-  isSavingDraft?: boolean;
   citations?: Citation[] | Citation;
 }
 
@@ -34,14 +31,11 @@ export const Composer = React.forwardRef<HTMLDivElement, ComposerProps>(
     value = '', 
     onChange, 
     onSend,
-    onCancel,
-    onSaveDraft,
     onRegenerate, 
     placeholder = 'Type your reply...', 
     disabled = false,
     isGenerating = false,
     isSending = false,
-    isSavingDraft = false,
     citations = [],
     ...props 
   }, ref) => {
@@ -122,24 +116,6 @@ export const Composer = React.forwardRef<HTMLDivElement, ComposerProps>(
                 </Button>
               </div>
               <div className="flex gap-2">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={onCancel}
-                  disabled={disabled}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={onSaveDraft}
-                  disabled={disabled || isSavingDraft}
-                  className="gap-1"
-                >
-                  <Icon icon={Save} size="sm" />
-                  <span>{isSavingDraft ? 'Saving...' : 'Save Draft'}</span>
-                </Button>
                 <Button
                   size="sm"
                   onClick={onSend}

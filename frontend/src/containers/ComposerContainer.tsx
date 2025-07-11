@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useUIStore } from '../stores/ui-store';
 import { useComposerStore } from '../stores/composer-store';
-import { useDraft, useUpdateDraft, useSendMessage, useRegenerateDraft } from '../repo/hooks';
+import { useDraft, useSendMessage, useRegenerateDraft } from '../repo/hooks';
 import { Composer } from '../components/organisms';
 
 export function ComposerContainer() {
@@ -13,7 +13,6 @@ export function ComposerContainer() {
   const clearDraft = useComposerStore((state) => state.clearDraft);
   
   const { data: serverDraft, error: draftError } = useDraft(selectedThreadId || '');
-  const updateDraftMutation = useUpdateDraft();
   const sendMessageMutation = useSendMessage();
   const regenerateDraftMutation = useRegenerateDraft();
   
@@ -66,26 +65,6 @@ export function ComposerContainer() {
     }
   };
   
-  const handleSaveDraft = async () => {
-    if (!selectedThreadId) return;
-    
-    try {
-      await updateDraftMutation.mutateAsync({
-        threadId: selectedThreadId,
-        content: localContent,
-      });
-    } catch (error) {
-      console.error('Failed to save draft:', error);
-    }
-  };
-  
-  const handleCancel = () => {
-    setLocalContent('');
-    if (selectedThreadId) {
-      clearDraft(selectedThreadId);
-    }
-  };
-  
   const handleRegenerate = async () => {
     if (!selectedThreadId) return;
     
@@ -110,12 +89,9 @@ export function ComposerContainer() {
       value={localContent}
       onChange={handleContentChange}
       onSend={handleSend}
-      onCancel={handleCancel}
-      onSaveDraft={handleSaveDraft}
       onRegenerate={handleRegenerate}
       isGenerating={regenerateDraftMutation.isPending}
       isSending={sendMessageMutation.isPending}
-      isSavingDraft={updateDraftMutation.isPending}
       citations={serverDraft?.citations}
     />
   );
