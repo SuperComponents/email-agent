@@ -6,7 +6,6 @@ import { Composer } from '../components/organisms';
 
 export function ComposerContainer() {
   const selectedThreadId = useUIStore((state) => state.selectedThreadId);
-  const isComposerOpen = useUIStore((state) => state.isComposerOpen);
   const setComposerOpen = useUIStore((state) => state.setComposerOpen);
   
   const getDraft = useComposerStore((state) => state.getDraft);
@@ -62,7 +61,6 @@ export function ComposerContainer() {
       // Clear draft after sending
       clearDraft(selectedThreadId);
       setLocalContent('');
-      setComposerOpen(false);
     } catch (error) {
       console.error('Failed to send message:', error);
     }
@@ -82,7 +80,10 @@ export function ComposerContainer() {
   };
   
   const handleCancel = () => {
-    setComposerOpen(false);
+    setLocalContent('');
+    if (selectedThreadId) {
+      clearDraft(selectedThreadId);
+    }
   };
   
   const handleRegenerate = async () => {
@@ -100,7 +101,7 @@ export function ComposerContainer() {
     }
   };
   
-  if (!isComposerOpen || !selectedThreadId) {
+  if (!selectedThreadId) {
     return null;
   }
   

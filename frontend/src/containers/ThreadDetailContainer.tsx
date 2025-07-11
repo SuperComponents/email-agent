@@ -8,7 +8,6 @@ import { useQueryClient } from '@tanstack/react-query';
 
 export function ThreadDetailContainer() {
   const selectedThreadId = useUIStore((state) => state.selectedThreadId);
-  const setComposerOpen = useUIStore((state) => state.setComposerOpen);
   const [isRegenerating, setIsRegenerating] = useState(false);
   const [isGeneratingDemo, setIsGeneratingDemo] = useState(false);
   const queryClient = useQueryClient();
@@ -57,9 +56,6 @@ export function ThreadDetailContainer() {
     isSupport: email.is_support_reply
   }));
   
-  const handleReply = () => {
-    setComposerOpen(true, 'reply');
-  };
   
   const handleUseAgent = async () => {
     if (!selectedThreadId) return;
@@ -75,8 +71,6 @@ export function ThreadDetailContainer() {
         queryClient.invalidateQueries({ queryKey: queryKeys.draft(selectedThreadId) }),
         queryClient.invalidateQueries({ queryKey: queryKeys.agentActivity(selectedThreadId) })
       ]);
-      
-      setComposerOpen(true, 'reply');
     } catch (error) {
       console.error('Failed to regenerate draft with agent:', error);
       // You might want to show an error toast here
@@ -110,7 +104,6 @@ export function ThreadDetailContainer() {
         messages={messages}
         status={thread.status as 'open' | 'closed' | 'pending'}
         tags={thread.tags}
-        onReply={handleReply}
         onUseAgent={handleUseAgent}
         onDemoCustomerResponse={handleDemoCustomerResponse}
         isRegeneratingDraft={isRegenerating}

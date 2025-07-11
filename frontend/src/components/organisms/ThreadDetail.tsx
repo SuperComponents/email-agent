@@ -1,5 +1,5 @@
 import React from 'react';
-import { Reply, Sparkles, UserPlus } from 'lucide-react';
+import { Sparkles, UserPlus } from 'lucide-react';
 import { Avatar } from '../atoms/Avatar';
 import { Badge } from '../atoms/Badge';
 import { Button } from '../atoms/Button';
@@ -24,7 +24,6 @@ export interface ThreadDetailProps extends React.HTMLAttributes<HTMLDivElement> 
   messages: EmailMessage[];
   status?: 'open' | 'closed' | 'pending';
   tags?: string[];
-  onReply?: () => void;
   onUseAgent?: () => void;
   onDemoCustomerResponse?: () => void;
   isRegeneratingDraft?: boolean;
@@ -32,7 +31,7 @@ export interface ThreadDetailProps extends React.HTMLAttributes<HTMLDivElement> 
 }
 
 export const ThreadDetail = React.forwardRef<HTMLDivElement, ThreadDetailProps>(
-  ({ className, subject, messages, status = 'open', tags = [], onReply, onUseAgent, onDemoCustomerResponse, isRegeneratingDraft, isGeneratingDemoResponse, ...props }, ref) => {
+  ({ className, subject, messages, status = 'open', tags = [], onUseAgent, onDemoCustomerResponse, isRegeneratingDraft, isGeneratingDemoResponse, ...props }, ref) => {
     return (
       <div
         ref={ref}
@@ -86,14 +85,6 @@ export const ThreadDetail = React.forwardRef<HTMLDivElement, ThreadDetailProps>(
                   className={isRegeneratingDraft ? 'animate-pulse' : ''}
                 />
                 <span>{isRegeneratingDraft ? 'Generating...' : 'Use Agent'}</span>
-              </Button>
-              <Button
-                onClick={onReply}
-                size="sm"
-                className="gap-2"
-              >
-                <Icon icon={Reply} size="sm" />
-                <span>Reply</span>
               </Button>
             </div>
           </div>
