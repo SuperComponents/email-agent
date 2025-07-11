@@ -4,6 +4,7 @@ import { db } from '../database/db.js'
 import { threads, agent_actions, draft_responses, emails } from '../database/schema.js'
 import { successResponse, notFoundResponse, errorResponse } from '../utils/response.js'
 import { regenerateDraftSchema, validateRequest } from '../utils/validation.js'
+import { processEmail, type ProcessEmailResult } from 'agent3'
 // Dynamic import will be used for processEmail to avoid TypeScript module resolution issues
 // import type { 
 //   EmailThread, 
@@ -166,9 +167,7 @@ async function generateEnhancedDraftResponse(
     // Call the enhanced agent
     // const agentResponse = await assistSupportPersonEnhanced(agentThread, enhancedContext, agentConfig)
     const logger = (message: any) => { console.log(message) }
-    // Dynamically import the email agent to avoid build-time module resolution issues
-    const { processEmail } = await import('../../../agent3/src/agents/email-agent.ts')
-    const agentResponse: any = await processEmail(threadId, logger)
+    const agentResponse: ProcessEmailResult = await processEmail(threadId, logger)
 
     console.log('agentResponse')
     console.log(agentResponse)
@@ -333,7 +332,7 @@ app.post('/:id/regenerate', async (c) => {
     }
     
     // Generate enhanced draft response
-    const enhancedResponse: any = await generateEnhancedDraftResponse(threadId)
+    const enhancedResponse: ProcessEmailResult = await generateEnhancedDraftResponse(threadId)
     
     // Create new draft with enhanced metadata
 //     const [newDraft] = await db
