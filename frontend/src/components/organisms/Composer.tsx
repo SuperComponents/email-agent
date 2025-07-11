@@ -2,6 +2,7 @@ import React from 'react';
 import { Send, Paperclip, Smile, Sparkles, FileText, ExternalLink } from 'lucide-react';
 import { Button } from '../atoms/Button';
 import { Icon } from '../atoms/Icon';
+import { EmailHeader } from '../molecules/EmailHeader';
 import { cn } from '../../lib/utils';
 
 export interface Citation {
@@ -23,6 +24,13 @@ export interface ComposerProps {
   isGenerating?: boolean;
   isSending?: boolean;
   citations?: Citation[] | Citation;
+  to?: string;
+  from?: string;
+  cc?: string;
+  bcc?: string;
+  onToChange?: (value: string) => void;
+  onCcChange?: (value: string) => void;
+  onBccChange?: (value: string) => void;
 }
 
 export const Composer = React.forwardRef<HTMLDivElement, ComposerProps>(
@@ -37,6 +45,13 @@ export const Composer = React.forwardRef<HTMLDivElement, ComposerProps>(
     isGenerating = false,
     isSending = false,
     citations = [],
+    to = '',
+    from = '',
+    cc = '',
+    bcc = '',
+    onToChange,
+    onCcChange,
+    onBccChange,
     ...props 
   }, ref) => {
     const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -55,6 +70,16 @@ export const Composer = React.forwardRef<HTMLDivElement, ComposerProps>(
         )}
         {...props}
       >
+        <EmailHeader
+          to={to}
+          from={from}
+          cc={cc}
+          bcc={bcc}
+          onToChange={onToChange}
+          onCcChange={onCcChange}
+          onBccChange={onBccChange}
+          disabled={disabled}
+        />
         <div className="p-4">
           {citations && (Array.isArray(citations) ? citations.length > 0 : citations.text) && (
             <div className="mb-3 p-3 bg-accent/50 rounded-lg border border-accent-foreground/20">

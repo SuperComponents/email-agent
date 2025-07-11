@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useUIStore } from '../stores/ui-store';
 import { useComposerStore } from '../stores/composer-store';
-import { useDraft, useSendMessage, useRegenerateDraft } from '../repo/hooks';
+import { useDraft, useSendMessage, useRegenerateDraft, useThread } from '../repo/hooks';
 import { Composer } from '../components/organisms';
 
 export function ComposerContainer() {
@@ -13,10 +13,14 @@ export function ComposerContainer() {
   const clearDraft = useComposerStore((state) => state.clearDraft);
   
   const { data: serverDraft, error: draftError } = useDraft(selectedThreadId || '');
+  const { data: thread } = useThread(selectedThreadId || '');
   const sendMessageMutation = useSendMessage();
   const regenerateDraftMutation = useRegenerateDraft();
   
   const [localContent, setLocalContent] = useState('');
+  const [to, setTo] = useState('');
+  const [cc, setCc] = useState('');
+  const [bcc, setBcc] = useState('');
   
   // Initialize content from server draft or local draft
   useEffect(() => {
@@ -40,6 +44,18 @@ export function ComposerContainer() {
       }
     }
   }, [selectedThreadId, serverDraft, getDraft, draftError, setComposerOpen]);
+
+  // Initialize email fields from thread data
+  useEffect(() => {
+    if (thread && thread.emails && thread.emails.length > 0) {
+      const lastEmail = thread.emails[thread.emails.length - 1];
+      // Set To field to the original sender for replies
+      setTo(lastEmail.from_email);
+      // CC and BCC can be empty by default
+      setCc('');
+      setBcc('');
+    }
+  }, [thread]);
   
   const handleContentChange = (content: string) => {
     setLocalContent(content);
@@ -93,6 +109,13 @@ export function ComposerContainer() {
       isGenerating={regenerateDraftMutation.isPending}
       isSending={sendMessageMutation.isPending}
       citations={serverDraft?.citations}
+      to={to}
+      from="support@company.com"
+      cc={cc}
+      bcc={bcc}
+      onToChange={setTo}
+      onCcChange={setCc}
+      onBccChange={setBcc}
     />
   );
 }
