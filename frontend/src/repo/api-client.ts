@@ -46,7 +46,10 @@ export async function getThreads(filter?: ThreadFilter, search?: string): Promis
   if (search) params.append('search', search);
   
   const query = params.toString() ? `?${params.toString()}` : '';
-  return fetchAPI<{ threads: Thread[] }>(`/api/threads${query}`);
+  const res = await fetchAPI<{ threads: Thread[] }>(`/api/threads${query}`);
+  console.log('getThreads');
+  console.log(res);
+  return res;
 }
 
 export async function getThread(id: string): Promise<ThreadDetail> {
@@ -69,7 +72,9 @@ export async function sendMessage(threadId: string, content: string) {
 }
 
 export async function getDraft(threadId: string): Promise<Draft> {
-  return fetchAPI<Draft>(`/api/threads/${threadId}/draft`);
+  const draft = await fetchAPI<Draft>(`/api/threads/${threadId}/draft`);
+  console.log('API getDraft response:', draft);
+  return draft;
 }
 
 export async function updateDraft(threadId: string, content: string): Promise<Draft> {
@@ -91,6 +96,12 @@ export async function regenerateDraft(threadId: string, instructions?: string): 
   });
 }
 
+export async function generateDemoCustomerResponse(threadId: string): Promise<{ status: string; message: string }> {
+  return fetchAPI<{ status: string; message: string }>(`/api/threads/${threadId}/demo-customer-response`, {
+    method: 'POST',
+  });
+}
+
 // Filter counts
 export async function getThreadCounts(): Promise<ThreadCounts> {
   return fetchAPI<ThreadCounts>('/api/threads/counts');
@@ -105,5 +116,6 @@ export const APIClient = {
   updateDraft,
   getAgentActivity,
   regenerateDraft,
+  generateDemoCustomerResponse,
   getThreadCounts,
 };

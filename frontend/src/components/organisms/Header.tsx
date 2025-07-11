@@ -1,14 +1,19 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '../../lib/utils';
-import { UserButton } from '@stackframe/react';
-import { Mail, FileText } from 'lucide-react';
+import { Button } from '../atoms/Button';
+import { useAuth } from '../../contexts/AuthContext';
 
 export type HeaderProps = React.HTMLAttributes<HTMLElement>;
 
 export const Header = React.forwardRef<HTMLElement, HeaderProps>(
     ({ className, ...props }, ref) => {
         const location = useLocation();
+        const { user, logout } = useAuth();
+        
+        const handleLogout = async () => {
+            await logout();
+        };
         
         return (
             <header
@@ -19,35 +24,24 @@ export const Header = React.forwardRef<HTMLElement, HeaderProps>(
                 )}
                 {...props}
             >
-                <div className="flex items-center gap-6">
-                    <nav className="flex items-center gap-4">
-                        <Link
-                            to="/"
-                            className={cn(
-                                'flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium transition-colors',
-                                location.pathname === '/' || location.pathname.startsWith('/thread')
-                                    ? 'bg-primary text-primary-foreground'
-                                    : 'text-muted-foreground hover:text-foreground hover:bg-muted'
-                            )}
-                        >
-                            <Mail size={16} />
-                            Inbox
-                        </Link>
-                        <Link
-                            to="/knowledge-base"
-                            className={cn(
-                                'flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium transition-colors',
-                                location.pathname.startsWith('/knowledge-base')
-                                    ? 'bg-primary text-primary-foreground'
-                                    : 'text-muted-foreground hover:text-foreground hover:bg-muted'
-                            )}
-                        >
-                            <FileText size={16} />
-                            Knowledge Base
-                        </Link>
-                    </nav>
+                <div className="flex items-center space-x-4">
+                    <h1 className="text-lg font-semibold">ProResponse AI</h1>
                 </div>
-                <UserButton />
+                
+                <div className="flex items-center space-x-4">
+                    {user && (
+                        <span className="text-sm text-secondary-foreground">
+                            Welcome, {user.name}
+                        </span>
+                    )}
+                    <Button
+                        variant="secondary"
+                        size="sm"
+                        onClick={handleLogout}
+                    >
+                        Logout
+                    </Button>
+                </div>
             </header>
         );
     }

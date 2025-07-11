@@ -1,5 +1,5 @@
 import { pgTable, serial, varchar, text, timestamp, boolean, integer, decimal, jsonb, pgEnum, index } from 'drizzle-orm/pg-core';
-import { relations } from 'drizzle-orm';
+import { relations, desc } from 'drizzle-orm';
 
 // Define enums first
 export const statusEnum = pgEnum('status', ['active', 'closed', 'needs_attention']);
@@ -25,6 +25,9 @@ export const users = pgTable('users', {
   email: varchar('email', { length: 255 }).unique().notNull(),
   name: varchar('name', { length: 255 }).notNull(),
   role: roleEnum('role').notNull().default('agent'),
+  password_hash: text('password_hash'),
+  last_login_at: timestamp('last_login_at'),
+  refresh_token_revoked_at: timestamp('refresh_token_revoked_at'),
   stack_auth_id: text('stack_auth_id').unique(),
   created_at: timestamp('created_at').defaultNow(),
   updated_at: timestamp('updated_at').defaultNow()
@@ -59,6 +62,19 @@ export const emails = pgTable('emails', {
   updated_at: timestamp('updated_at').defaultNow()
 });
 
+// Email Tags Table
+export const email_tags = pgTable('email_tags', {
+  id: serial('id').primaryKey(),
+  email_id: integer('email_id').references(() => emails.id, { onDelete: 'cascade' }).notNull(),
+  tag: varchar('tag', { length: 50 }).notNull(),
+  confidence: decimal('confidence', { precision: 4, scale: 3 }),
+  created_by_user_id: integer('created_by_user_id').references(() => users.id),
+  created_at: timestamp('created_at').defaultNow().notNull()
+}, (table) => ({
+  emailTagIdx: index('email_tag_idx').on(table.email_id, table.tag),
+  tagIdx: index('tag_idx').on(table.tag)
+}));
+
 // Draft Response Table
 export const draft_responses = pgTable('draft_responses', {
   id: serial('id').primaryKey(),
@@ -70,6 +86,7 @@ export const draft_responses = pgTable('draft_responses', {
   version: integer('version').notNull().default(1),
   parent_draft_id: integer('parent_draft_id'),
   confidence_score: decimal('confidence_score', { precision: 4, scale: 3 }),
+  citations: jsonb('citations'),
   created_at: timestamp('created_at').defaultNow(),
   updated_at: timestamp('updated_at').defaultNow()
 });
@@ -86,12 +103,13 @@ export const agent_actions = pgTable('agent_actions', {
     .references(() => draft_responses.id, { onDelete: 'set null' }),
   actor_user_id: integer('actor_user_id')
     .references(() => users.id, { onDelete: 'set null' }),
-  action: agentActionEnum('action').notNull(),
+  action: varchar('action', { length: 100 }).notNull(),
+  description: text('description'),
   metadata: jsonb('metadata'),
   ip_address: varchar('ip_address', { length: 45 }),
   created_at: timestamp('created_at').defaultNow().notNull()
 }, (table) => ({
-  threadTimelineIdx: index('thread_timeline_idx').on(table.thread_id, table.created_at.desc()),
+  threadTimelineIdx: index('thread_timeline_idx').on(table.thread_id, desc(table.created_at)),
   actorIdx: index('actor_idx').on(table.actor_user_id)
 }));
 
@@ -113,7 +131,19 @@ export const emailsRelations = relations(emails, ({ one, many }) => ({
     references: [threads.id]
   }),
   draft_responses: many(draft_responses),
-  agent_actions: many(agent_actions)
+  agent_actions: many(agent_actions),
+  email_tags: many(email_tags)
+}));
+
+export const emailTagsRelations = relations(email_tags, ({ one }) => ({
+  email: one(emails, {
+    fields: [email_tags.email_id],
+    references: [emails.id]
+  }),
+  created_by_user: one(users, {
+    fields: [email_tags.created_by_user_id],
+    references: [users.id]
+  })
 }));
 
 export const draftResponsesRelations = relations(draft_responses, ({ one, many }) => ({
@@ -154,3 +184,15 @@ export const agentActionsRelations = relations(agent_actions, ({ one }) => ({
     references: [users.id]
   })
 }));
+
+// Compatibility exports for old naming conventions
+export const agentActions = agent_actions;
+export const draftResponses = draft_responses;
+export const emailTags = email_tags;
+
+// Export enums with cleaner names
+export const UserRole = roleEnum;
+export const ThreadStatus = statusEnum;
+export const EmailDirection = directionEnum;
+export const DraftResponseStatus = draftStatusEnum;
+export const ActionType = agentActionEnum;

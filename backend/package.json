@@ -9,19 +9,26 @@
     "lint:all": "tsc --noEmit && eslint .",
     "db:generate": "drizzle-kit generate --dialect=postgresql --schema=src/database/schema.ts --out=./drizzle",
     "generate:emails": "tsx src/scripts/generate-emails.ts",
-    "db:migrate": "node dist/src/database/migrate.js"
+    "db:migrate": "tsx ./src/database/migrate.ts",
+    "db": "psql postgresql://localhost:5432/emailsmart_merge"
   },
   "dependencies": {
     "@hono/node-server": "^1.15.0",
     "@neondatabase/serverless": "^1.0.1",
+    "@types/bcrypt": "^5.0.2",
+    "@types/bcryptjs": "^2.4.6",
+    "agent3": "file:../agent3",
+    "bcrypt": "^6.0.0",
+    "bcryptjs": "^3.0.2",
     "dotenv": "^17.1.0",
     "drizzle-orm": "^0.44.2",
     "hono": "^4.8.4",
     "jose": "^6.0.11",
     "openai": "^5.8.3",
+    "pg": "^8.16.3",
     "postgres": "^3.4.0",
-    "zod": "^3.25.76",
-    "proresponse-agent": "file:../agent"
+    "proresponse-agent": "file:../agent",
+    "zod": "^3.25.76"
   },
   "devDependencies": {
     "@eslint/js": "^9.30.1",

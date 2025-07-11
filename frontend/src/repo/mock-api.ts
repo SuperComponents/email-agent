@@ -150,6 +150,7 @@ export class MockAPI {
     
     const draft: Draft = {
       content,
+      citations: {},
       last_updated: new Date().toISOString(),
       is_agent_generated: false
     };

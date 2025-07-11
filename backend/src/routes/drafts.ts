@@ -21,6 +21,7 @@ app.get('/:id/draft', async (c) => {
     const [draft] = await db
       .select({
         content: draft_responses.generated_content,
+        citations: draft_responses.citations,
         created_at: draft_responses.created_at,
         updated_at: draft_responses.updated_at,
         status: draft_responses.status,
@@ -42,6 +43,7 @@ app.get('/:id/draft', async (c) => {
     
     return successResponse(c, {
       content: draft.content,
+      citations: draft.citations,
       last_updated: (draft.updated_at || draft.created_at)!.toISOString(),
       is_agent_generated: draft.created_by_user_id === null
     })
@@ -139,7 +141,8 @@ app.put('/:id/draft', async (c) => {
     
     return successResponse(c, {
       content: body.content,
-      last_updated: now.toISOString()
+      last_updated: now.toISOString(),
+
     })
   } catch (error) {
     console.error('Error updating draft:', error)
