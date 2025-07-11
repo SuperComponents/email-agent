@@ -4,6 +4,7 @@ import { db } from '../database/db.js'
 import { threads, agent_actions, draft_responses, emails } from '../database/schema.js'
 import { successResponse, notFoundResponse, errorResponse } from '../utils/response.js'
 import { regenerateDraftSchema, validateRequest } from '../utils/validation.js'
+// Dynamic import will be used for processEmail to avoid TypeScript module resolution issues
 // import type { 
 //   EmailThread, 
 //   EmailMessage, 
@@ -165,19 +166,14 @@ async function generateEnhancedDraftResponse(
     // Call the enhanced agent
     // const agentResponse = await assistSupportPersonEnhanced(agentThread, enhancedContext, agentConfig)
     const logger = (message: any) => { console.log(message) }
-    // const agentResponse = await processEmail(threadId, logger)
-    const agentResponse = { 
-      success: true, 
-      message: 'Agent processing temporarily disabled',
-      draft: 'This is a placeholder draft response.',
-      analysis: 'Agent analysis temporarily disabled.',
-      history: []
-    }
+    // Dynamically import the email agent to avoid build-time module resolution issues
+    const { processEmail } = await import('../../../agent3/src/agents/email-agent.ts')
+    const agentResponse: any = await processEmail(threadId, logger)
 
-    console.log('agentResponse');
-    console.log(agentResponse);
-    console.log('agentResponse.history');
-    console.log((agentResponse as any)?.history.forEach((x: any) => console.log(x)));
+    console.log('agentResponse')
+    console.log(agentResponse)
+    console.log('agentResponse.history')
+    agentResponse?.history?.forEach((x: any) => console.log(x))
 //     console.log('summary');
 //     console.log(agentResponse.summary);
 
@@ -337,9 +333,7 @@ app.post('/:id/regenerate', async (c) => {
     }
     
     // Generate enhanced draft response
-    const enhancedResponse = await generateEnhancedDraftResponse(
-      threadId
-    )
+    const enhancedResponse: any = await generateEnhancedDraftResponse(threadId)
     
     // Create new draft with enhanced metadata
 //     const [newDraft] = await db
@@ -405,7 +399,7 @@ app.post('/:id/regenerate', async (c) => {
     return successResponse(c, {
       status: 'success',
       message: 'Enhanced draft regenerated successfully',
-      draft_id: '1', // Placeholder ID
+      draft_id: enhancedResponse.draft?.id?.toString() ?? null,
 //       enhanced_features: {
 //         thread_name: enhancedResponse.threadName,
 //         confidence: enhancedResponse.confidence,
