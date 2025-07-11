@@ -5,6 +5,28 @@ import { threads, emails, draft_responses, agent_actions } from '../database/sch
 import { successResponse, notFoundResponse, errorResponse } from '../utils/response.js'
 import { threadFilterSchema, updateThreadSchema, validateRequest } from '../utils/validation.js'
 import { authMiddleware } from '../middleware/auth.js'
+
+// Type helper for agent action rows
+interface AgentActionRow {
+  id: number
+  action: string
+  metadata: unknown
+  created_at: Date
+}
+
+interface ThreadEmailRow {
+  id: number
+  from_email: string
+  to_emails: unknown
+  subject: string
+  body_text: string | null
+  body_html: string | null
+  direction: 'inbound' | 'outbound'
+  is_draft: boolean
+  sent_at: Date | null
+  created_at: Date | null
+}
+
 const app = new Hono()
 app.use(authMiddleware)
 // GET /api/threads - List all threads with filtering
@@ -155,7 +177,7 @@ app.get('/:id', async (c) => {
     const participants = thread.participant_emails as string[]
     const customerEmail = participants.find(email => !email.includes('@proresponse.ai')) || participants[0]
     
-    const formattedEmails = threadEmails.map(email => ({
+    const formattedEmails = threadEmails.map((email: ThreadEmailRow) => ({
       id: email.id.toString(),
       from_name: email.from_email.split('@')[0],
       from_email: email.from_email,
@@ -164,7 +186,7 @@ app.get('/:id', async (c) => {
       is_support_reply: email.direction === 'outbound'
     }))
     
-    const formattedActions = agentActionsList.map(action => ({
+    const formattedActions = agentActionsList.map((action: AgentActionRow) => ({
       id: action.id.toString(),
       type: action.action,
       title: action.action.replace(/_/g, ' '),

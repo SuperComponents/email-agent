@@ -42,6 +42,22 @@ interface DatabaseEmail {
   created_at: Date | null
 }
 
+// Type helpers for explicit typings
+
+interface AgentActionRow {
+  id: number
+  action: string
+  description: string | null
+  metadata: unknown
+  created_at: Date
+}
+
+interface KnowledgeUsedEntry {
+  source: string
+  relevance: number
+  used_at: string
+}
+
 // Helper function to convert database thread to agent EmailThread format
 // function convertToAgentEmailThread(thread: DatabaseThread, threadEmails: DatabaseEmail[]): EmailThread {
 //   console.log(`[Agent-Convert] Converting thread ${thread.id} with ${threadEmails.length} emails to agent format`)
@@ -242,12 +258,12 @@ app.get('/:id/agent-activity', async (c) => {
     // console.log(`[Agent-Activity] Found ${actions.length} actions and ${latestDraft ? 1 : 0} draft(s) for thread ${threadId}`)
     
     // Transform actions with enhanced metadata
-    const formattedActions = actions.map(action => {
+    const formattedActions = actions.map((action: AgentActionRow) => {
       const metadata = action.metadata as Record<string, any> || {}
       return {
         id: action.id.toString(),
         type: action.action,
-        title: action.action.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
+        title: action.action.replace(/_/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase()),
         description: action.description || formatActionDescription(action.action, metadata),
         status: 'completed',
         timestamp: action.created_at.toISOString(),
@@ -267,9 +283,9 @@ app.get('/:id/agent-activity', async (c) => {
       'Thread analyzed with enhanced AI agent including sentiment analysis, RAG knowledge integration, and escalation assessment.' : 
       'No analysis performed yet. Click "Generate Response" to activate enhanced AI analysis.'
     
-    const knowledgeUsed = actions
-      .filter(action => action.metadata && (action.metadata as any).rag_sources_count > 0)
-      .map(action => ({
+    const knowledgeUsed: KnowledgeUsedEntry[] = actions
+      .filter((action: AgentActionRow) => action.metadata && (action.metadata as any).rag_sources_count > 0)
+      .map((action: AgentActionRow): KnowledgeUsedEntry => ({
         source: 'Company Knowledge Base',
         relevance: 0.9,
         used_at: action.created_at.toISOString()
