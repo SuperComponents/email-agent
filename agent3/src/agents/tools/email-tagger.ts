@@ -23,24 +23,24 @@ export const emailTaggerTool = tool({
     type: 'object',
     properties: {
       emailId: { type: 'string', description: 'ID of the email to tag' },
-      tags: { 
-        type: 'array', 
-        items: { 
+      tags: {
+        type: 'array',
+        items: {
           type: 'string',
-          enum: ['spam', 'legal', 'sales', 'support', 'billing', 'technical', 'general']
+          enum: ['spam', 'legal', 'sales', 'support', 'billing', 'technical', 'general'],
         },
-        description: 'Categories to tag the email with' 
+        description: 'Categories to tag the email with',
       },
-      confidence: { 
-        type: 'number', 
+      confidence: {
+        type: 'number',
         description: 'Confidence level for the tagging (0-100)',
         default: 80,
         minimum: 0,
-        maximum: 100
-      }
+        maximum: 100,
+      },
     },
     required: ['emailId', 'tags', 'confidence'],
-    additionalProperties: false
+    additionalProperties: false,
   },
   execute: async (input: unknown) => {
     const { emailId, tags, confidence = 80 } = input as EmailTaggerParams;
@@ -69,13 +69,15 @@ export const emailTaggerTool = tool({
       return {
         success: true,
         emailId,
-        tags: insertedTags.map((t: any) => ({
+        tags: insertedTags.map(t => ({
           tag: t.tag,
           confidence: parseFloat(t.confidence || '0') * 100, // Convert back to percentage
         })),
       };
     } catch (error) {
-      return failure(`Failed to tag email: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      return failure(
+        `Failed to tag email: ${error instanceof Error ? error.message : 'Unknown error'}`,
+      );
     }
   },
 });

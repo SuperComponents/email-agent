@@ -8,18 +8,9 @@ import { db } from '../db/db.js';
 import { emails, draft_responses, agentActions } from '../db/schema.js';
 import { eq, desc } from 'drizzle-orm';
 import { logStreamingToolCalls } from './log-actions.js';
-import type { EmailMessage, DraftResponse, AgentAction } from '../db/types.js';
+import type { EmailMessage, DraftResponse, AgentAction, KnowledgeBaseResult } from '../db/types.js';
 
 export type { EmailMessage };
-
-// Type for knowledge base search result
-interface KnowledgeBaseResult {
-  attributes: Record<string, any>;
-  file_id: string;
-  filename: string;
-  score: number;
-  text: string;
-}
 
 // const EmailResponseSchema = z.object({
 //   draft: z.object({
@@ -80,7 +71,7 @@ async function loadEmailThread(threadId: number): Promise<EmailMessage[]> {
     .select()
     .from(emails)
     .where(eq(emails.thread_id, threadId))
-    .orderBy(emails.created_at) as Promise<EmailMessage[]>
+    .orderBy(emails.created_at) as Promise<EmailMessage[]>;
 }
 
 function formatEmailForContext(email: EmailMessage): string {
@@ -92,13 +83,16 @@ Subject: ${email.subject}
 ${email.body_text || ''}`;
 }
 
-async function buildThreadContext(threadId: number | undefined, currentEmail: EmailMessage): Promise<string> {
+async function buildThreadContext(
+  threadId: number | undefined,
+  currentEmail: EmailMessage,
+): Promise<string> {
   if (!threadId) {
     return formatEmailForContext(currentEmail);
   }
 
   const threadHistory = await loadEmailThread(threadId);
-  
+
   if (threadHistory.length === 0) {
     return formatEmailForContext(currentEmail);
   }
@@ -111,11 +105,11 @@ async function buildThreadContext(threadId: number | undefined, currentEmail: Em
   }
   context += '---\nNew email to process:\n';
   context += formatEmailForContext(currentEmail);
-  
+
   return context;
 }
 
-async function createAgent() {
+function createAgent() {
   return new Agent({
     name: 'EmailProcessor',
     instructions: SYSTEM_PROMPT,
@@ -130,7 +124,7 @@ async function saveDraftResponse(
   thread_id: number,
   generated_content: string,
   confidence?: number,
-  citations?: any
+  citations?: KnowledgeBaseResult | null,
 ): Promise<DraftResponse> {
   const [draft] = await db
     .insert(draft_responses)
@@ -143,8 +137,8 @@ async function saveDraftResponse(
       citations: citations || null,
     })
     .returning();
-  
-  return draft;
+
+  return draft as DraftResponse;
 }
 
 async function getThreadActions(threadId: number): Promise<AgentAction[]> {
@@ -152,12 +146,12 @@ async function getThreadActions(threadId: number): Promise<AgentAction[]> {
     .select()
     .from(agentActions)
     .where(eq(agentActions.thread_id, threadId))
-    .orderBy(agentActions.created_at) as Promise<AgentAction[]>
+    .orderBy(agentActions.created_at) as Promise<AgentAction[]>;
 }
 
 export async function processEmail(
-  threadId: number, 
-  logger: (message: any) => void = console.log
+  threadId: number,
+  logger: (message: unknown) => void = console.log,
 ): Promise<ProcessEmailResult> {
   // Fetch the latest email in the thread
   const [latestEmail] = await db
@@ -166,7 +160,7 @@ export async function processEmail(
     .where(eq(emails.thread_id, threadId))
     .orderBy(desc(emails.created_at))
     .limit(1);
-  
+
   if (!latestEmail) {
     throw new Error(`No emails found in thread ${threadId}`);
   }
@@ -182,22 +176,22 @@ export async function processEmail(
   };
 
   // Create agent and build context
-  const agent = await createAgent();
+  const agent = createAgent();
   const fullMessage = await buildThreadContext(threadId, email);
 
   logger('running agent in streaming mode');
   // Run the agent in streaming mode
   const result = await run(agent, fullMessage, { maxTurns: 100, stream: true });
 
-  let actions: AgentAction[] = [];
+  const actions: AgentAction[] = [];
   let lastEvent: RunItemStreamEvent | undefined;
   for await (const event of result) {
-//     if (event.type == 'agent_updated_stream_event') {
-//       logger(event);
-//     }
+    //     if (event.type == 'agent_updated_stream_event') {
+    //       logger(event);
+    //     }
     // Agent SDK specific events
     if (event.type === 'run_item_stream_event') {
-      const actResult = await logStreamingToolCalls(event, threadId, lastEvent)
+      const actResult = await logStreamingToolCalls(event, threadId, lastEvent);
       if (actResult && actResult.length > 0) {
         actions.push(actResult[0]);
       }
@@ -211,31 +205,30 @@ export async function processEmail(
     }
   }
 
-
   await result.completed;
 
   // Tool calls and actions are already logged in the streaming loop above
 
   // Parse the structured output - finalOutput is already typed from the schema
   // const structuredOutput = result.finalOutput as EmailResponse;
-  const structuredOutput = result.finalOutput
-  
+  const structuredOutput = result.finalOutput;
+
   let highestScoringResult: KnowledgeBaseResult | null = null;
-  
+
   logger('START OUTPUT BLOCK');
-  result.output.forEach((item) => {
+  result.output.forEach(item => {
     logger(JSON.stringify(item, null, 2));
     if (item.type === 'hosted_tool_call') {
       logger('IN HOSTED TOOL CALL');
       logger(item?.providerData?.results);
-      
+
       // Find the result with the highest score
       const results = item?.providerData?.results as KnowledgeBaseResult[] | undefined;
       if (results && Array.isArray(results) && results.length > 0) {
         const currentHighest = results.reduce<KnowledgeBaseResult>((highest, current) => {
-          return (current.score > highest.score) ? current : highest;
+          return current.score > highest.score ? current : highest;
         }, results[0]);
-        
+
         // Update the highest scoring result if this is better than what we've seen
         if (!highestScoringResult || currentHighest.score > highestScoringResult.score) {
           highestScoringResult = currentHighest;
@@ -244,7 +237,6 @@ export async function processEmail(
     }
   });
 
-  
   // Log the overall highest scoring result
   if (highestScoringResult !== null) {
     const result = highestScoringResult as KnowledgeBaseResult;
@@ -252,9 +244,9 @@ export async function processEmail(
     logger({
       filename: result.filename,
       score: result.score,
-      text: result.text?.substring(0, 200) + '...' // First 200 chars
+      text: result.text?.substring(0, 200) + '...', // First 200 chars
     });
-    
+
     if (result.score > 0.6) {
       logger('✓ Score above 0.6 - will attach as citation');
     } else {
@@ -263,16 +255,17 @@ export async function processEmail(
   }
 
   // Save the draft response with citations if available and score is high enough
-  const citationsToAttach = highestScoringResult !== null && (highestScoringResult as KnowledgeBaseResult).score > 0.4 
-    ? highestScoringResult 
-    : null;
-    
+  const citationsToAttach =
+    highestScoringResult !== null && (highestScoringResult as KnowledgeBaseResult).score > 0.4
+      ? highestScoringResult
+      : null;
+
   const draft = await saveDraftResponse(
     email.id,
     threadId,
     structuredOutput!,
     0.85, // Default confidence score, could be calculated based on tool results
-    citationsToAttach
+    citationsToAttach,
   );
 
   return {
