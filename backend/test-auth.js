@@ -15,7 +15,7 @@ async function testAuth() {
     
     // Test signup
     console.log('1. Testing signup...');
-    const signupResponse = await fetch(`${baseUrl}/auth/signup`, {
+    const signupResponse = await fetch(`${baseUrl}/api/auth/signup`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -33,7 +33,7 @@ async function testAuth() {
     
     // Test login
     console.log('2. Testing login...');
-    const loginResponse = await fetch(`${baseUrl}/auth/login`, {
+    const loginResponse = await fetch(`${baseUrl}/api/auth/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -54,7 +54,7 @@ async function testAuth() {
       
       // Test /me endpoint
       console.log('3. Testing /me endpoint...');
-      const meResponse = await fetch(`${baseUrl}/auth/me`, {
+      const meResponse = await fetch(`${baseUrl}/api/auth/me`, {
         method: 'GET',
         headers: {
           'Cookie': cookies || '',
@@ -71,7 +71,7 @@ async function testAuth() {
       
       // Test logout
       console.log('4. Testing logout...');
-      const logoutResponse = await fetch(`${baseUrl}/auth/logout`, {
+      const logoutResponse = await fetch(`${baseUrl}/api/auth/logout`, {
         method: 'POST',
         headers: {
           'Cookie': cookies || '',

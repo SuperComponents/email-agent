@@ -65,3 +65,8 @@ echo "1. Visit http://localhost:5174 (landing page)"
 echo "2. Click 'Sign Up' to test authentication flow"
 echo "3. Complete registration and verify redirect to main app"
 echo "4. Test protected routes and API integration"
+
+# Exit with error if any service is not running
+if [ "$BACKEND_STATUS" != "200" ] || [ "$FRONTEND_STATUS" != "200" ] || [ "$LANDING_STATUS" != "200" ]; then
+    exit 1
+fi

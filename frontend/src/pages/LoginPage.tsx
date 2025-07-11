@@ -106,36 +106,27 @@ export function LoginPage() {
               />
             </div>
 
-            {/* Remember Me & Forgot Password */}
-            <div className="flex items-center justify-between">
-              <div className="flex items-center">
-                <input
-                  id="remember-me"
-                  name="remember-me"
-                  type="checkbox"
-                  checked={rememberMe}
-                  onChange={(e) => setRememberMe(e.target.checked)}
-                  disabled={isLoading}
-                  className={cn(
-                    "h-4 w-4 rounded border-border text-primary",
-                    "focus:ring-2 focus:ring-primary focus:ring-offset-2",
-                    "disabled:cursor-not-allowed disabled:opacity-50"
-                  )}
-                />
-                <Label
-                  htmlFor="remember-me"
-                  className="ml-2 cursor-pointer select-none"
-                >
-                  Remember me
-                </Label>
-              </div>
-
-              <Link
-                to="/forgot-password"
-                className="text-sm text-primary hover:text-primary/80 transition-colors"
+            {/* Remember Me */}
+            <div className="flex items-center">
+              <input
+                id="remember-me"
+                name="remember-me"
+                type="checkbox"
+                checked={rememberMe}
+                onChange={(e) => setRememberMe(e.target.checked)}
+                disabled={isLoading}
+                className={cn(
+                  "h-4 w-4 rounded border-border text-primary",
+                  "focus:ring-2 focus:ring-primary focus:ring-offset-2",
+                  "disabled:cursor-not-allowed disabled:opacity-50"
+                )}
+              />
+              <Label
+                htmlFor="remember-me"
+                className="ml-2 cursor-pointer select-none"
               >
-                Forgot password?
-              </Link>
+                Remember me
+              </Label>
             </div>
 
             {/* Submit Button */}
