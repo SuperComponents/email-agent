@@ -1,0 +1,194 @@
+{
+  "metadata": {
+    "generated_at": "2025-07-11T15:43:34.717Z",
+    "total_documents": 15,
+    "generation_options": {
+      "category": "all",
+      "count": 15,
+      "detail_level": "comprehensive",
+      "by_type": true
+    },
+    "generator_version": "1.0.0",
+    "company": "treslingo"
+  },
+  "documents": [
+    {
+      "title": "Privacy Policy and Data Handling",
+      "category": "policy",
+      "filename": "001-privacy_policy.md",
+      "content": "---\ntitle: Privacy Policy and Data Handling\ncategory: policy\ntags: [privacy, data handling, GDPR, user rights]\nlast_updated: 2023-10-01\n---\n\n# Treslingo Privacy Policy\n\n## Introduction\nAt Treslingo, we value your privacy and are committed to protecting your personal information. This policy outlines how we collect, use, and safeguard your data in compliance with GDPR and other relevant regulations.\n\n## Data Collection\nWe collect the following types of data:\n- **Personal Information**: This includes your name, email address, and payment information when you create an account or subscribe to our premium service.\n- **Usage Data**: We collect information about how you use the app, including lesson progress, time spent on the app, and device information.\n- **Cookies and Tracking Technologies**: We use cookies to enhance your experience and analyze usage patterns.\n\n## Data Usage\nWe utilize your data for the following purposes:\n- To provide and maintain our services, including personalized lesson recommendations.\n- To process transactions and manage your subscription.\n- To communicate with you, including sending updates and promotional offers.\n- To analyze usage and improve our app features.\n\n## Data Sharing\nWe do not sell or rent your personal information. We may share your data with:\n- **Service Providers**: Third-party vendors who assist us in delivering our services.\n- **Legal Authorities**: If required by law or to protect our rights.\n\n## User Rights\nYou have the following rights regarding your personal data:\n- **Access**: You can request a copy of the personal data we hold about you.\n- **Rectification**: You can request corrections to any inaccurate or incomplete data.\n- **Erasure**: You can ask us to delete your personal information when it is no longer necessary.\n- **Data Portability**: You can request the transfer of your data to another service.\n\n## Data Security\nWe implement appropriate security measures to protect your data against unauthorized access, alteration, disclosure, or destruction.\n\n## Changes to This Policy\nWe may update this policy periodically. Any changes will be posted on this page with an updated effective date.\n\n## Contact Us\nFor any questions or concerns about our privacy practices, please contact us at support@treslingo.com.\n\n_Last Updated: October 2023_",
+      "tags": [
+        "privacy",
+        "data handling",
+        "GDPR",
+        "user rights"
+      ],
+      "lastUpdated": "2023-10-01"
+    },
+    {
+      "title": "Terms of Service and Usage Rules",
+      "category": "policy",
+      "filename": "002-terms_of_service.md",
+      "content": "---\ntitle: Terms of Service and Usage Rules\ncategory: policy\ntags: [treslingo, support]\nlast_updated: 2025-07-11T15:41:35.430Z\n---\n\n# Treslingo Terms of Service\n\n## Introduction\nThese Terms of Service govern your use of the Treslingo mobile application and its associated services. By accessing or using our app, you agree to comply with these terms.\n\n## Eligibility\nYou must be at least 13 years old to use Treslingo. If you are under 18, you must have the permission of a parent or guardian.\n\n## Account Creation\nTo access the full features of Treslingo, you need to create an account. You agree to:\n- Provide accurate and complete information during registration.\n- Keep your account credentials confidential.\n- Notify us immediately of any unauthorized use of your account.\n\n## User Responsibilities\nAs a user of Treslingo, you agree to:\n- Use the app solely for personal, educational purposes.\n- Not engage in any activity that disrupts or interferes with the app's functionality.\n- Respect other users and refrain from abusive or harmful behavior.\n\n## Subscription and Billing\n- Premium subscriptions are billed at $9.99 per month, with auto-renewal unless canceled.\n- Family plans are available for $14.99 per month, allowing up to 6 members.\n- Users can opt for a 7-day free trial of premium features.\n\n## Termination\nWe reserve the right to terminate or suspend your account at our discretion, without prior notice, if you violate these terms.\n\n## Disclaimer of Warranties\nTreslingo is provided on an ",
+      "tags": [
+        "treslingo",
+        "support"
+      ],
+      "lastUpdated": "2025-07-11T15:41:35.430Z"
+    },
+    {
+      "title": "Refund and Billing Policies",
+      "category": "policy",
+      "filename": "003-refund_billing_policy.md",
+      "content": "---\ntitle: Refund and Billing Policies\ncategory: policy\ntags: [refund policy, billing, subscription, cancellation]\nlast_updated: 2023-10-01\n---\n\n# Treslingo Refund and Billing Policies\n\n## Introduction\nOur refund and billing policies are designed to provide transparency and fairness for all users. Please read this document carefully to understand your rights and obligations regarding payments and refunds.\n\n## Subscription Billing\n- **Premium Subscription**: $9.99 per month, auto-renews until canceled.\n- **Family Plan**: $14.99 per month, also auto-renews.\n- Users can sign up for a **7-day free trial** to explore premium features.\n\n## Refund Policy\n- You may request a full refund within the first **7 days** of your subscription.\n- After 7 days, refunds will be prorated based on the unused portion of your subscription.\n- To request a refund, please contact our support team at support@treslingo.com with your account details.\n\n## Cancellations\n- Users can cancel their subscription at any time through the app's settings.\n- Cancellations take effect at the end of the current billing cycle, and you will not be charged for the next cycle.\n\n## Payment Methods\nWe accept various payment methods, including credit/debit cards and in-app purchases through Google Play and the App Store. All transactions are subject to the respective platform's policies.\n\n## Billing Issues\nIf you encounter any issues with billing, including unexpected charges or payment failures, please contact us immediately for assistance.\n\n## Changes to Billing Policies\nWe may modify our billing policies from time to time. Users will be notified of any significant changes via email or within the app.\n\n## Contact Us\nFor any inquiries regarding billing or refunds, please reach out to support@treslingo.com.\n\n_Last Updated: October 2023_",
+      "tags": [
+        "refund policy",
+        "billing",
+        "subscription",
+        "cancellation"
+      ],
+      "lastUpdated": "2023-10-01"
+    },
+    {
+      "title": "Common Questions About Treslingo Features",
+      "category": "faq",
+      "filename": "004-common-questions-features.md",
+      "content": "---\ntitle: Common Questions About Treslingo Features\ncategory: faq\ntags: [treslingo, support]\nlast_updated: 2025-07-11T15:42:03.840Z\n---\n\n## Common Questions About Treslingo Features\n\n### 1. What types of lessons are available in Treslingo?\nTreslingo offers a variety of lesson types, including vocabulary, grammar, speaking exercises, listening comprehension, and cultural context stories. Each lesson is designed to be bite-sized, taking between 5 to 10 minutes.\n\n### 2. How does the XP points system work?\nXP points are earned by completing lessons and challenges. Accumulating XP points allows you to level up and unlock achievements within the app. You can view your XP progress on your profile.\n\n### 3. What is the purpose of the daily streak feature?\nThe daily streak feature encourages consistent learning by tracking how many days in a row you complete lessons. If you miss a day, your streak resets. Premium users receive 3 streak freezes per month to maintain their streak even if they miss a day.\n\n### 4. How does offline mode work?\nOffline mode allows premium users to download lessons and access them without an internet connection. To enable offline mode, ensure you have downloaded the lessons while connected to Wi-Fi.\n\n### 5. Can I customize my learning experience?\nYes! Treslingo adapts the difficulty of lessons based on your performance. Additionally, you can track your progress and achievements, which allows for a more personalized learning experience.\n\n### 6. Are there social features in Treslingo?\nYes, Treslingo includes social features that allow you to add friends, create family accounts, and participate in group challenges. This adds a competitive element to your language learning journey.\n\n### 7. How do I receive notifications about my learning progress?\nYou can manage your notification settings in the app under the settings menu. Choose how frequently you'd like to receive reminders to continue your lessons.\n\n---\n**Tags:** features, lessons, XP points, offline mode, social features\n**Last Updated:** 2023-10-01",
+      "tags": [
+        "treslingo",
+        "support"
+      ],
+      "lastUpdated": "2025-07-11T15:42:03.840Z"
+    },
+    {
+      "title": "Account and Billing Quick Help",
+      "category": "faq",
+      "filename": "005-account-billing-help.md",
+      "content": "---\ntitle: Account and Billing Quick Help\ncategory: faq\ntags: [treslingo, support]\nlast_updated: 2025-07-11T15:42:03.840Z\n---\n\n## Account and Billing Quick Help\n\n### 1. How do I create a Treslingo account?\nTo create an account, download the Treslingo app from the App Store or Google Play Store. Open the app, and follow the prompts to sign up using your email address or social media account.\n\n### 2. What should I do if I forgot my password?\nIf you forgot your password, click on the 'Forgot Password?' link on the login page. Follow the instructions to reset your password via the email linked to your account.\n\n### 3. How do I upgrade to a premium subscription?\nTo upgrade to a premium subscription, go to the 'Profile' section of the app, select 'Upgrade to Premium', and follow the payment prompts. The monthly fee is $9.99, and you'll enjoy ad-free access and additional features.\n\n### 4. How can I cancel my subscription?\nTo cancel your subscription, go to the 'Profile' section, select 'Manage Subscription', and follow the prompts to cancel. Remember that you can receive a full refund within 7 days of your payment.\n\n### 5. I’m having issues with billing. What should I do?\nIf you encounter billing issues, first check your payment method and ensure it’s up to date. If the problem persists, contact support via email at support@treslingo.com for assistance.\n\n### 6. What is the family plan option?\nThe family plan allows up to 6 members to share a premium subscription for $14.99/month. You can set this up under the 'Family Accounts' section in the app.\n\n### 7. Is there a student discount available?\nYes, Treslingo offers a 50% discount for students with a valid student ID. To apply the discount, provide your student ID when signing up for the premium plan.\n\n---\n**Tags:** account, billing, subscription, family plan, student discount\n**Last Updated:** 2023-10-01",
+      "tags": [
+        "treslingo",
+        "support"
+      ],
+      "lastUpdated": "2025-07-11T15:42:03.840Z"
+    },
+    {
+      "title": "Learning Tips and Guidance",
+      "category": "faq",
+      "filename": "006-learning-tips-guidance.md",
+      "content": "---\ntitle: Learning Tips and Guidance\ncategory: faq\ntags: [treslingo, support]\nlast_updated: 2025-07-11T15:42:03.840Z\n---\n\n## Learning Tips and Guidance\n\n### 1. How can I improve my Spanish speaking skills using Treslingo?\nTo improve your speaking skills, regularly practice with the speaking exercises that utilize voice recognition technology. Aim to repeat phrases and sentences aloud to enhance your pronunciation.\n\n### 2. What should I do if a lesson feels too easy or too hard?\nIf you find a lesson too easy or too hard, provide feedback through the app. The learning system will adjust the difficulty level based on your performance and feedback, ensuring a better fit for your learning needs.\n\n### 3. How often should I practice to maintain my learning streak?\nAim to practice daily for at least 5-10 minutes to build a habit and maintain your learning streak. Consistency is key to language retention.\n\n### 4. Can I learn about Spanish culture through the app?\nYes! Treslingo includes cultural context lessons that provide insights into Spanish-speaking countries. These lessons enhance your understanding of the language in its cultural context.\n\n### 5. What’s the best way to retain vocabulary?\nUtilize the spaced repetition feature, which is built into the lessons to optimize vocabulary retention. Regularly revisiting words and phrases will help reinforce your memory.\n\n### 6. How do I know if I’m making progress?\nYou can track your progress through the app’s analytics and achievement badges. Regular updates on your XP points and lesson completion will provide a clear picture of your improvement.\n\n### 7. Are there any additional resources for learning Spanish?\nWhile Treslingo is a comprehensive tool for learning Spanish, you can supplement your learning with Spanish books, podcasts, and music for a more immersive experience.\n\n---\n**Tags:** learning tips, speaking skills, vocabulary retention, cultural context, progress tracking\n**Last Updated:** 2023-10-01",
+      "tags": [
+        "treslingo",
+        "support"
+      ],
+      "lastUpdated": "2025-07-11T15:42:03.840Z"
+    },
+    {
+      "title": "Troubleshooting App Crashes and Performance Issues",
+      "category": "troubleshooting",
+      "filename": "007-troubleshooting-app-crashes-performance-issues.md",
+      "content": "---\ntitle: Troubleshooting App Crashes and Performance Issues\ncategory: troubleshooting\ntags: [treslingo, support]\nlast_updated: 2025-07-11T15:42:31.024Z\n---\n\n# Troubleshooting App Crashes and Performance Issues\n\nExperiencing app crashes or performance issues can be frustrating. Follow the steps below to resolve these problems effectively.\n\n## Step-by-Step Troubleshooting Guide\n\n### 1. Check System Requirements\nEnsure that your device meets the minimum system requirements for the Treslingo app:\n- iOS: Version 12.0 or later\n- Android: Version 8.0 or later\n\n### 2. Restart the App\n- Completely close the Treslingo app.\n- Reopen the app to see if the issue persists.\n\n### 3. Clear Cache (Android Only)\n- Go to **Settings > Apps > Treslingo**.\n- Tap on **Storage** and then select **Clear Cache**.\n- Reopen the app and check for improvements.\n\n### 4. Update the App\nEnsure you are using the latest version of the Treslingo app:\n- Visit the App Store (iOS) or Google Play Store (Android).\n- Check for updates and install any available ones.\n\n### 5. Check Device Storage\nLow storage may lead to performance issues:\n- Go to **Settings > Storage** and check available space.\n- If storage is low, delete unnecessary files or apps.\n\n### 6. Reinstall the App\nIf the issue persists:\n- Uninstall the Treslingo app from your device.\n- Reinstall it from the App Store/Google Play Store.\n\n### 7. Contact Support\nIf none of the above steps resolve the issue:\n- Reach out to our support team at [support@treslingo.com](mailto:support@treslingo.com) for further assistance.\n\n## Helpful Tips\n- Regularly updating your device's software can prevent compatibility issues.\n- Avoid using the app in low network areas to prevent crashes related to connectivity.\n\n**Last Updated:** October 2023\n\n**Tags:** app crashes, performance issues, troubleshooting, Treslingo",
+      "tags": [
+        "treslingo",
+        "support"
+      ],
+      "lastUpdated": "2025-07-11T15:42:31.024Z"
+    },
+    {
+      "title": "Troubleshooting Audio/Microphone Problems in Lessons",
+      "category": "troubleshooting",
+      "filename": "008-troubleshooting-audio-microphone-problems.md",
+      "content": "---\ntitle: Troubleshooting Audio/Microphone Problems in Lessons\ncategory: troubleshooting\ntags: [treslingo, support]\nlast_updated: 2025-07-11T15:42:31.024Z\n---\n\n# Troubleshooting Audio/Microphone Problems in Lessons\n\nIf you're having issues with audio or microphone functionality while using the Treslingo app, follow these steps to resolve the problems.\n\n## Step-by-Step Troubleshooting Guide\n\n### 1. Check Device Volume Settings\n- Ensure the media volume is turned up on your device.\n- Check for any silent modes or do not disturb settings that might mute audio.\n\n### 2. Test Your Device's Audio\n- Play music or a video on your device to confirm that audio is functioning correctly outside of the app.\n\n### 3. Check App Permissions\nEnsure that the Treslingo app has permission to use your microphone:\n- Go to **Settings > Apps > Treslingo > Permissions**.\n- Ensure that microphone permission is enabled.\n\n### 4. Verify Internet Connection\nAudio issues may arise from unstable internet connections:\n- Switch to a different Wi-Fi network or try using mobile data.\n\n### 5. Restart Your Device\nA simple restart can often resolve audio issues:\n- Power off your device, wait for a few seconds, and then turn it back on.\n\n### 6. Check for App Updates\n- Open the App Store (iOS) or Google Play Store (Android).\n- Search for Treslingo and install any available updates.\n\n### 7. Reinstall the App\nIf problems persist:\n- Uninstall and then reinstall the Treslingo app.\n\n### 8. Contact Support\nFor ongoing issues, please reach out to our support team:\n- Email us at [support@treslingo.com](mailto:support@treslingo.com).\n\n## Helpful Tips\n- Make sure to speak clearly and at a moderate pace during speaking exercises for better recognition.\n- Consider using headphones if you're experiencing echo or feedback issues.\n\n**Last Updated:** October 2023\n\n**Tags:** audio issues, microphone problems, troubleshooting, Treslingo",
+      "tags": [
+        "treslingo",
+        "support"
+      ],
+      "lastUpdated": "2025-07-11T15:42:31.024Z"
+    },
+    {
+      "title": "Troubleshooting Account Sync and Login Issues",
+      "category": "troubleshooting",
+      "filename": "009-troubleshooting-account-sync-login-issues.md",
+      "content": "---\ntitle: Troubleshooting Account Sync and Login Issues\ncategory: troubleshooting\ntags: [treslingo, support]\nlast_updated: 2025-07-11T15:42:31.024Z\n---\n\n# Troubleshooting Account Sync and Login Issues\n\nIf you're facing issues with account sync or logging into the Treslingo app, follow these troubleshooting steps to resolve the problems.\n\n## Step-by-Step Troubleshooting Guide\n\n### 1. Check Internet Connection\nEnsure you have a stable internet connection:\n- Switch to a different Wi-Fi network or use mobile data.\n- Try loading a website in your browser to confirm connectivity.\n\n### 2. Verify Login Credentials\nMake sure you're entering the correct account information:\n- Check for typos in your email and password.\n- If you’ve forgotten your password, use the **Forgot Password?** link to reset it.\n\n### 3. Update the App\nUsing an outdated version can cause sync issues:\n- Open the App Store (iOS) or Google Play Store (Android).\n- Check for updates for Treslingo and install if available.\n\n### 4. Log Out and Back In\nRe-establish your session by logging out:\n- Go to **Settings > Account > Log Out**.\n- Log back in using your credentials.\n\n### 5. Check for Multiple Devices\nEnsure you are not logged in on multiple devices simultaneously:\n- Log out from other devices to help with sync issues.\n\n### 6. Clear Cache (Android Only)\n- Go to **Settings > Apps > Treslingo**.\n- Tap on **Storage** and select **Clear Cache**.\n- Restart the app and check if the issue is resolved.\n\n### 7. Reinstall the App\nIf login issues persist:\n- Uninstall and then reinstall the Treslingo app on your device.\n\n### 8. Contact Support\nIf none of the above solutions work:\n- Reach out to our support team via [support@treslingo.com](mailto:support@treslingo.com) for assistance.\n\n## Helpful Tips\n- Regularly sync your progress by opening the app and connecting to the internet.\n- Keep your login details secure to avoid unauthorized access.\n\n**Last Updated:** October 2023\n\n**Tags:** account sync, login issues, troubleshooting, Treslingo",
+      "tags": [
+        "treslingo",
+        "support"
+      ],
+      "lastUpdated": "2025-07-11T15:42:31.024Z"
+    },
+    {
+      "title": "How to Maximize Your Learning with Streaks, XP, Gems, and Leaderboards",
+      "category": "general",
+      "filename": "010-how-to-maximize-learning.md",
+      "content": "---\ntitle: How to Maximize Your Learning with Streaks, XP, Gems, and Leaderboards\ncategory: general\ntags: [streaks, XP, gems, leaderboards, learning]\nlast_updated: 2023-10-01\n---\n\n## How to Maximize Your Learning with Streaks, XP, Gems, and Leaderboards\n\n### Streaks\nStreaks are a great way to motivate you to practice daily. Here’s how to manage your streaks:\n\n1. **Understanding Streaks**: A streak is the number of consecutive days you complete lessons. Maintaining a streak can help reinforce your learning habits.\n2. **Daily Streaks**: To keep your streak intact, you must complete at least one lesson each day.\n3. **Streak Freezes**: If you miss a day, you can use a streak freeze. Premium users get 3 freezes per month, while free users get 1. To use a freeze:\n   - Go to your profile.\n   - Select 'Streaks'.\n   - Click on 'Use Streak Freeze' if you have one available.\n\n### XP Points System\nExperience Points (XP) are earned through completing lessons and activities. Here’s how you can maximize your XP:\n\n1. **Earn XP**: Completing lessons will earn you XP. The more challenging the lesson, the more XP you receive.\n2. **Daily Goals**: Set daily goals for XP to track your progress.\n3. **XP Leaderboards**: Compete with friends to see who has the most XP. Check the leaderboard in the social section of the app.\n\n### Gems Currency\nGems are the in-app currency that you can use for various features:\n\n1. **Earning Gems**: You earn gems from completing lessons, achievements, and daily challenges.\n2. **Using Gems**: You can use gems to unlock special features or buy additional streak freezes.\n3. **Saving Gems**: Consider saving your gems for premium features that enhance your learning experience.\n\n### Leaderboards\nLeaderboards help you stay competitive and motivated:\n\n1. **Accessing Leaderboards**: Tap on the 'Social' section in the app.\n2. **Viewing Leaderboards**: You’ll see your rank compared to friends and other users.\n3. **Competing**: Participate in group challenges to boost your rank and earn additional rewards.\n\n### Tips for Success\n- **Set Reminders**: Use app notifications to remind you to practice daily.\n- **Engage with Friends**: Challenge your friends to keep your motivation high.\n- **Track Progress**: Regularly check your XP and leaderboard status to stay motivated.\n\nBy utilizing these features, you can enhance your Spanish learning journey with Treslingo!\n",
+      "tags": [
+        "streaks",
+        "XP",
+        "gems",
+        "leaderboards",
+        "learning"
+      ],
+      "lastUpdated": "2023-10-01"
+    },
+    {
+      "title": "Understanding the Treslingo Learning System: Lesson Types and Difficulty Progression",
+      "category": "general",
+      "filename": "011-learning-system-explanation.md",
+      "content": "---\ntitle: Understanding the Treslingo Learning System: Lesson Types and Difficulty Progression\ncategory: general\ntags: [learning system, lesson types, difficulty progression]\nlast_updated: 2023-10-01\n---\n\n## Understanding the Treslingo Learning System: Lesson Types and Difficulty Progression\n\n### Lesson Types\nTreslingo offers a variety of lesson types to cater to different learning styles:\n\n1. **Vocabulary Lessons**: Focus on teaching new words and phrases through engaging exercises.\n   - **Example**: Flashcards and matching exercises help reinforce vocabulary retention.\n\n2. **Grammar Lessons**: Simple explanations of Spanish grammar concepts.\n   - **Example**: Learn verb conjugations through interactive quizzes.\n\n3. **Speaking Exercises**: Practice pronunciation using voice recognition technology.\n   - **Example**: Repeat phrases after native speakers for accurate pronunciation.\n\n4. **Listening Comprehension**: Improve listening skills with audio from native speakers.\n   - **Example**: Answer questions based on short dialogues or stories.\n\n5. **Cultural Context Lessons**: Gain insights into Spanish-speaking countries and cultures.\n   - **Example**: Immerse in cultural lessons that explain idioms and traditions.\n\n6. **Stories**: Engage with narratives that incorporate vocabulary and grammar lessons.\n   - **Example**: Follow a story while completing comprehension questions.\n\n### Difficulty Progression\nTreslingo uses an adaptive difficulty system that changes based on your performance:\n\n1. **Adaptive Learning**: If you find a lesson easy, the app will present you with more challenging content next. Conversely, if you struggle, it will provide simpler exercises until you're ready to advance.\n2. **Feedback Mechanism**: After each lesson, you will receive feedback on your performance, which informs the app’s adjustments to your learning path.\n3. **Regular Assessments**: Periodic quizzes assess your knowledge and ensure that you are retaining what you’ve learned.\n4. **Cultural Context**: Difficulty also accounts for understanding cultural references, ensuring that all lessons are accessible and relevant.\n\n### Tips for Effective Learning\n- **Practice Regularly**: Aim for daily practice to enhance your retention and keep up with the adaptive lessons.\n- **Utilize Speaking Exercises**: Take advantage of speaking exercises to build confidence in pronunciation.\n- **Engage with Cultural Lessons**: Understanding cultural contexts can enrich your learning experience.\n\nBy familiarizing yourself with these lesson types and the adaptive learning system, you can make the most of your time on Treslingo and achieve your Spanish learning goals more effectively!\n",
+      "tags": [
+        "learning system",
+        "lesson types",
+        "difficulty progression"
+      ],
+      "lastUpdated": "2023-10-01"
+    },
+    {
+      "title": "Account Management: Profile Settings and Family Accounts in Treslingo",
+      "category": "general",
+      "filename": "012-account-management-procedures.md",
+      "content": "---\ntitle: Account Management: Profile Settings and Family Accounts in Treslingo\ncategory: general\ntags: [account management, profile, family accounts, settings]\nlast_updated: 2023-10-01\n---\n\n## Account Management: Profile Settings and Family Accounts in Treslingo\n\n### Profile Management\nManaging your profile is essential to personalize your learning experience:\n\n1. **Accessing Your Profile**:\n   - Open the Treslingo app.\n   - Tap on the profile icon at the bottom of the screen.\n\n2. **Editing Your Profile**:\n   - Tap 'Edit Profile'.\n   - Update your name, profile picture, and learning preferences.\n\n3. **Changing Your Learning Goals**:\n   - Set specific goals (e.g., daily practice time, topics of interest) in the settings menu to tailor your learning experience.\n\n### Account Settings\nYou can manage your account settings from your profile:\n\n1. **Email and Password**:\n   - To change your email or password, go to 'Account Settings'.\n   - Follow the prompts to update your information.\n\n2. **Notifications**:\n   - Adjust your notification preferences to receive reminders for practice sessions or to mute notifications.\n   - Navigate to 'Notifications' in settings and toggle options as per your preference.\n\n### Family Accounts\nTreslingo offers family plans for up to 6 members:\n\n1. **Setting Up a Family Account**:\n   - One primary account holder can create a family account.\n   - Go to 'Account Settings' and select 'Family Accounts'.\n   - Follow the prompts to invite family members via email.\n\n2. **Managing Family Accounts**:\n   - As the primary account holder, you can view progress for each family member.\n   - You can also remove members or adjust permissions from the family account settings.\n\n3. **Billing for Family Plans**:\n   - Family plans are billed at $14.99/month, and all members share the same billing cycle. Make sure to track usage to optimize your subscription.\n\n### Tips for Effective Account Management\n- **Regularly Update Your Profile**: Keep your profile updated to reflect your learning preferences and goals.\n- **Monitor Family Progress**: Check in on family accounts to encourage and support each other’s learning journeys.\n- **Utilize Notifications Wisely**: Customize your notifications to enhance your learning without feeling overwhelmed.\n\nBy effectively managing your account and family settings, you can create a personalized and supportive learning environment on Treslingo!\n",
+      "tags": [
+        "account management",
+        "profile",
+        "family accounts",
+        "settings"
+      ],
+      "lastUpdated": "2023-10-01"
+    },
+    {
+      "title": "Customer Service Escalation Procedures",
+      "category": "procedures",
+      "filename": "013-customer_service_escalation_procedures.md",
+      "content": "---\ntitle: Customer Service Escalation Procedures\ncategory: procedures\ntags: [escalation, customer service, procedures]\nlast_updated: 2023-10-01\n---\n\n# Customer Service Escalation Procedures\n\n## Purpose\nTo provide a clear structure for escalating customer service issues effectively, ensuring timely resolution and customer satisfaction.\n\n## Scope\nThis procedure applies to all customer service representatives handling customer inquiries and complaints.\n\n## Escalation Process Steps\n\n1. **Identify the Issue**  \n   - Determine the nature of the customer's issue (e.g., billing, technical issue, account access).\n   - Record all relevant details in the ticketing system.\n\n2. **Attempt Resolution**  \n   - Use available resources (knowledge base, troubleshooting guides) to resolve the issue at the first point of contact.\n   - If resolved, document the solution in the ticket and close the case.\n\n3. **Determine Escalation Necessity**  \n   - If the issue cannot be resolved in the initial contact:\n     - Assess if the issue requires escalation based on complexity, customer frustration, or urgency.\n\n4. **Escalate to Tier 2 Support**  \n   - For issues that are not resolved, escalate to Tier 2 support by:\n     - Tagging the ticket for Tier 2 review.\n     - Providing a detailed summary of the issue, including steps taken to resolve it.\n\n5. **Notify the Customer**  \n   - Inform the customer about the escalation:\n     - Assure them that their issue is being prioritized.\n     - Provide an estimated response time (if known).\n\n6. **Follow Up**  \n   - Monitor the escalated ticket and follow up with Tier 2 support for updates.\n   - Communicate updates to the customer until resolution is achieved.\n\n7. **Resolution and Feedback**  \n   - Once resolved, update the ticket with the final solution.\n   - Request feedback from the customer to assess their satisfaction with the resolution process.\n\n## Best Practices\n- Keep communication clear and empathetic.\n- Document all interactions with the customer in the ticketing system for reference.\n- Regularly review escalated tickets for trends and training opportunities.\n\n## Last Updated\nOctober 2023\n",
+      "tags": [
+        "escalation",
+        "customer service",
+        "procedures"
+      ],
+      "lastUpdated": "2023-10-01"
+    },
+    {
+      "title": "Account Management Workflows",
+      "category": "procedures",
+      "filename": "014-account_management_workflows.md",
+      "content": "---\ntitle: Account Management Workflows\ncategory: procedures\ntags: [account management, workflows, procedures]\nlast_updated: 2023-10-01\n---\n\n# Account Management Workflows\n\n## Purpose\nTo outline the procedures for managing customer accounts effectively, including account creation, modification, and deletion.\n\n## Scope\nThis workflow applies to all customer service and account management staff.\n\n## Account Creation Procedure\n1. **Customer Request**  \n   - Receive account creation request via chat or email.\n\n2. **Gather Information**  \n   - Collect necessary information:  \n     - Full name  \n     - Email address  \n     - Preferred password  \n     - Any promotional codes (if applicable).\n\n3. **Create Account**  \n   - Use the account management system to create a new account with the provided details.\n   - Ensure the account format is TR-XXXXX.\n\n4. **Send Confirmation**  \n   - Send an email to the customer with account details and a welcome message.\n\n## Account Modification Procedure\n1. **Customer Request**  \n   - Receive request for account modification (e.g., email change, subscription upgrade).\n\n2. **Verify Identity**  \n   - Confirm the identity of the requester. This may include:\n     - Asking security questions.\n     - Sending a verification email to the registered address.\n\n3. **Make Modifications**  \n   - Update the account details in the system as requested.\n   - Notify the customer of successful changes.\n\n## Account Deletion Procedure\n1. **Customer Request**  \n   - Receive account deletion request via chat or email.\n\n2. **Verify Identity**  \n   - Confirm the identity of the customer as per the modification process.\n\n3. **Process Deletion**  \n   - Use the account management system to delete the account while ensuring compliance with the company’s data retention policy.\n   - Notify the customer of the account deletion and provide information on any data retention if applicable.\n\n## Best Practices\n- Always ensure customer data is handled securely and in compliance with privacy policies.\n- Provide clear communication about account statuses and changes.\n\n## Last Updated\nOctober 2023\n",
+      "tags": [
+        "account management",
+        "workflows",
+        "procedures"
+      ],
+      "lastUpdated": "2023-10-01"
+    },
+    {
+      "title": "Technical Support Guidelines",
+      "category": "procedures",
+      "filename": "015-technical_support_guidelines.md",
+      "content": "---\ntitle: Technical Support Guidelines\ncategory: procedures\ntags: [technical support, guidelines, procedures]\nlast_updated: 2023-10-01\n---\n\n# Technical Support Guidelines\n\n## Purpose\nTo establish a clear set of guidelines for providing technical support to customers using the Treslingo app.\n\n## Scope\nThis document is intended for all technical support team members.\n\n## Support Workflow\n1. **Ticket Creation**  \n   - Upon receiving a technical issue, create a support ticket in the ticketing system.\n   - Include detailed information about the problem, including user account details and any error messages.\n\n2. **Initial Analysis**  \n   - Identify the nature of the technical issue (e.g., app crashes, audio problems).\n   - Check known issues database for any ongoing problems related to the reported issue.\n\n3. **Troubleshooting Steps**  \n   - Follow the relevant troubleshooting guide for the specific issue:\n     - **App Crashes**: Check for updates, clear app cache, reinstall the app.\n     - **Audio Issues**: Verify device settings, check app permissions, test with headphones.\n     - **Sync Problems**: Ensure the user is logged into the same account across devices, check internet connection.\n\n4. **Resolution**  \n   - If resolved, document the solution in the ticket and inform the customer.\n   - If not resolved, escalate to Tier 2 support as per the escalation procedures.\n\n5. **Feedback and Follow-Up**  \n   - After resolution, follow up with the customer to ensure satisfaction.\n   - Ask for feedback on the support experience to improve processes.\n\n## Best Practices\n- Maintain a calm and friendly demeanor during interactions.\n- Use clear, non-technical language when communicating with customers.\n- Regularly update knowledge base articles based on resolved issues to assist other team members.\n\n## Last Updated\nOctober 2023\n",
+      "tags": [
+        "technical support",
+        "guidelines",
+        "procedures"
+      ],
+      "lastUpdated": "2023-10-01"
+    }
+  ]
+}

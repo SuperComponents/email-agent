@@ -53,7 +53,7 @@ async function insertEmail(
   // Create thread for this email
   const [thread] = await db.insert(threads).values({
     subject: email.subject,
-    participant_emails: [email.senderEmail, 'support@gauntletairon.com'],
+    participant_emails: [email.senderEmail, 'support@treslingo.com'],
     status: 'active',
     last_activity_at: timestamp,
     created_at: timestamp,
@@ -65,7 +65,7 @@ async function insertEmail(
   await db.insert(emailsTable).values({
     thread_id: thread.id,
     from_email: email.senderEmail,
-    to_emails: ['support@gauntletairon.com'],
+    to_emails: ['support@treslingo.com'],
     cc_emails: null,
     bcc_emails: null,
     subject: email.subject,

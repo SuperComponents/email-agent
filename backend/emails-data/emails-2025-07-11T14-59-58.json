@@ -1,0 +1,3022 @@
+{
+  "metadata": {
+    "generated_at": "2025-07-11T15:04:52.973Z",
+    "total_threads": 100,
+    "total_emails": 100,
+    "generation_options": {
+      "count": 2,
+      "test": false,
+      "startDate": "2025-06-11T15:04:52.971Z",
+      "endDate": "2025-07-11T15:04:52.971Z"
+    },
+    "file_info": {
+      "filename": "emails-2025-07-11T14-59-58.json",
+      "appended_to_existing": true,
+      "batch_number": 1
+    }
+  },
+  "threads": [
+    {
+      "id": 1,
+      "subject": "Help! Lost my streak!",
+      "participant_emails": [
+        "clara.gomez@example.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-06-19T13:00:40.470Z",
+      "created_at": "2025-06-19T13:00:40.470Z",
+      "updated_at": "2025-06-19T13:00:40.470Z"
+    },
+    {
+      "id": 2,
+      "subject": "App is crashing on Android",
+      "participant_emails": [
+        "DylanR@gmail.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-06-24T12:56:15.877Z",
+      "created_at": "2025-06-24T12:56:15.877Z",
+      "updated_at": "2025-06-24T12:56:15.877Z"
+    },
+    {
+      "id": 3,
+      "subject": "Billing question - Canceling Subscription",
+      "participant_emails": [
+        "erika.lee@hotmail.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-07-09T06:16:49.554Z",
+      "created_at": "2025-07-09T06:16:49.554Z",
+      "updated_at": "2025-07-09T06:16:49.554Z"
+    },
+    {
+      "id": 4,
+      "subject": "A bit too easy?",
+      "participant_emails": [
+        "mateo.navarro@elcorreo.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-06-13T08:54:43.728Z",
+      "created_at": "2025-06-13T08:54:43.728Z",
+      "updated_at": "2025-06-13T08:54:43.728Z"
+    },
+    {
+      "id": 5,
+      "subject": "Audio issues with speaking exercises",
+      "participant_emails": [
+        "sofia_martinez@example.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-06-14T12:20:12.504Z",
+      "created_at": "2025-06-14T12:20:12.504Z",
+      "updated_at": "2025-06-14T12:20:12.504Z"
+    },
+    {
+      "id": 6,
+      "subject": "Family account help",
+      "participant_emails": [
+        "john.thompson@example.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-06-17T07:59:21.321Z",
+      "created_at": "2025-06-17T07:59:21.321Z",
+      "updated_at": "2025-06-17T07:59:21.321Z"
+    },
+    {
+      "id": 7,
+      "subject": "Request for refund",
+      "participant_emails": [
+        "fatima.rizvi@example.org",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-06-17T22:48:06.269Z",
+      "created_at": "2025-06-17T22:48:06.269Z",
+      "updated_at": "2025-06-17T22:48:06.269Z"
+    },
+    {
+      "id": 8,
+      "subject": "Progress not saving!",
+      "participant_emails": [
+        "lucas.wang@samplemail.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-06-11T23:47:06.839Z",
+      "created_at": "2025-06-11T23:47:06.839Z",
+      "updated_at": "2025-06-11T23:47:06.839Z"
+    },
+    {
+      "id": 9,
+      "subject": "Streak freezes - How do they work?",
+      "participant_emails": [
+        "nina.fernandez@example.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-06-19T05:42:28.594Z",
+      "created_at": "2025-06-19T05:42:28.594Z",
+      "updated_at": "2025-06-19T05:42:28.594Z"
+    },
+    {
+      "id": 10,
+      "subject": "Not receiving notifications",
+      "participant_emails": [
+        "oscar.perez@online.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-07-06T11:37:28.419Z",
+      "created_at": "2025-07-06T11:37:28.419Z",
+      "updated_at": "2025-07-06T11:37:28.419Z"
+    },
+    {
+      "id": 11,
+      "subject": "Teen friendly content?",
+      "participant_emails": [
+        "rebecca.smith@example.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-07-10T03:21:47.698Z",
+      "created_at": "2025-07-10T03:21:47.698Z",
+      "updated_at": "2025-07-10T03:21:47.698Z"
+    },
+    {
+      "id": 12,
+      "subject": "Legal Complaints",
+      "participant_emails": [
+        "igor.belov@gmail.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-07-08T20:00:32.056Z",
+      "created_at": "2025-07-08T20:00:32.056Z",
+      "updated_at": "2025-07-08T20:00:32.056Z"
+    },
+    {
+      "id": 13,
+      "subject": "How do you earn XP?",
+      "participant_emails": [
+        "ashley.jones@example.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-06-24T02:25:21.256Z",
+      "created_at": "2025-06-24T02:25:21.256Z",
+      "updated_at": "2025-06-24T02:25:21.256Z"
+    },
+    {
+      "id": 14,
+      "subject": "Difficulty level for my grandmother",
+      "participant_emails": [
+        "danny.park@gmail.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-06-16T15:23:48.365Z",
+      "created_at": "2025-06-16T15:23:48.365Z",
+      "updated_at": "2025-06-16T15:23:48.365Z"
+    },
+    {
+      "id": 15,
+      "subject": "App freezing mid-lesson",
+      "participant_emails": [
+        "elena_schmidt@webmail.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-06-24T08:22:47.893Z",
+      "created_at": "2025-06-24T08:22:47.893Z",
+      "updated_at": "2025-06-24T08:22:47.893Z"
+    },
+    {
+      "id": 16,
+      "subject": "Premium tier worth it?",
+      "participant_emails": [
+        "kevin.brightson@example.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-07-01T23:37:52.993Z",
+      "created_at": "2025-07-01T23:37:52.993Z",
+      "updated_at": "2025-07-01T23:37:52.993Z"
+    },
+    {
+      "id": 17,
+      "subject": "Issues with forgotten password",
+      "participant_emails": [
+        "tina.myndok@example.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-06-14T01:22:27.574Z",
+      "created_at": "2025-06-14T01:22:27.574Z",
+      "updated_at": "2025-06-14T01:22:27.574Z"
+    },
+    {
+      "id": 18,
+      "subject": "Lost my streak during a timezone change!",
+      "participant_emails": [
+        "elena.garcia@email.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-06-24T20:58:03.398Z",
+      "created_at": "2025-06-24T20:58:03.398Z",
+      "updated_at": "2025-06-24T20:58:03.398Z"
+    },
+    {
+      "id": 19,
+      "subject": "Audio not working on speaking exercises",
+      "participant_emails": [
+        "liam.thompson@email.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-07-07T17:45:50.558Z",
+      "created_at": "2025-07-07T17:45:50.558Z",
+      "updated_at": "2025-07-07T17:45:50.558Z"
+    },
+    {
+      "id": 20,
+      "subject": "Question about premium features",
+      "participant_emails": [
+        "marco.reyes@email.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-07-10T03:23:19.764Z",
+      "created_at": "2025-07-10T03:23:19.764Z",
+      "updated_at": "2025-07-10T03:23:19.764Z"
+    },
+    {
+      "id": 21,
+      "subject": "Help! Can't log in to my account",
+      "participant_emails": [
+        "clara.johnson@email.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-07-03T23:39:47.048Z",
+      "created_at": "2025-07-03T23:39:47.048Z",
+      "updated_at": "2025-07-03T23:39:47.048Z"
+    },
+    {
+      "id": 22,
+      "subject": "Too easy, need advanced lessons!",
+      "participant_emails": [
+        "daniel.mills@email.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-07-08T19:15:10.424Z",
+      "created_at": "2025-07-08T19:15:10.424Z",
+      "updated_at": "2025-07-08T19:15:10.424Z"
+    },
+    {
+      "id": 23,
+      "subject": "Billing issue with subscription",
+      "participant_emails": [
+        "sofia.martinez@email.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-07-09T13:51:05.895Z",
+      "created_at": "2025-07-09T13:51:05.895Z",
+      "updated_at": "2025-07-09T13:51:05.895Z"
+    },
+    {
+      "id": 24,
+      "subject": "Fun feature suggestion!",
+      "participant_emails": [
+        "natalie.kim@email.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-06-29T03:44:04.434Z",
+      "created_at": "2025-06-29T03:44:04.434Z",
+      "updated_at": "2025-06-29T03:44:04.434Z"
+    },
+    {
+      "id": 25,
+      "subject": "Progress syncing issue",
+      "participant_emails": [
+        "galia.savvidis@email.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-06-29T03:38:01.160Z",
+      "created_at": "2025-06-29T03:38:01.160Z",
+      "updated_at": "2025-06-29T03:38:01.160Z"
+    },
+    {
+      "id": 26,
+      "subject": "Cat mascot is adorable!",
+      "participant_emails": [
+        "samuel.green@email.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-06-24T01:04:25.153Z",
+      "created_at": "2025-06-24T01:04:25.153Z",
+      "updated_at": "2025-06-24T01:04:25.153Z"
+    },
+    {
+      "id": 27,
+      "subject": "Family account questions",
+      "participant_emails": [
+        "megan.li@email.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-06-12T14:20:55.085Z",
+      "created_at": "2025-06-12T14:20:55.085Z",
+      "updated_at": "2025-06-12T14:20:55.085Z"
+    },
+    {
+      "id": 28,
+      "subject": "Lessons keep freezing on me!",
+      "participant_emails": [
+        "raj.patel@email.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-07-10T05:50:24.291Z",
+      "created_at": "2025-07-10T05:50:24.291Z",
+      "updated_at": "2025-07-10T05:50:24.291Z"
+    },
+    {
+      "id": 29,
+      "subject": "Can I change my email for account?",
+      "participant_emails": [
+        "tina.huang@email.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-06-13T09:21:06.503Z",
+      "created_at": "2025-06-13T09:21:06.503Z",
+      "updated_at": "2025-06-13T09:21:06.503Z"
+    },
+    {
+      "id": 30,
+      "subject": "Frustration with lesson difficulty",
+      "participant_emails": [
+        "khalid.abdi@email.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-06-24T08:15:32.037Z",
+      "created_at": "2025-06-24T08:15:32.037Z",
+      "updated_at": "2025-06-24T08:15:32.037Z"
+    },
+    {
+      "id": 31,
+      "subject": "Request for a refund",
+      "participant_emails": [
+        "patricia.wells@email.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-06-29T15:45:49.254Z",
+      "created_at": "2025-06-29T15:45:49.254Z",
+      "updated_at": "2025-06-29T15:45:49.254Z"
+    },
+    {
+      "id": 32,
+      "subject": "Feedback on copyrighted text",
+      "participant_emails": [
+        "carlos.jimenez@email.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-06-25T21:49:46.735Z",
+      "created_at": "2025-06-25T21:49:46.735Z",
+      "updated_at": "2025-06-25T21:49:46.735Z"
+    },
+    {
+      "id": 33,
+      "subject": "Not receiving daily notifications",
+      "participant_emails": [
+        "nina.paterson@email.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-07-04T06:41:07.584Z",
+      "created_at": "2025-07-04T06:41:07.584Z",
+      "updated_at": "2025-07-04T06:41:07.584Z"
+    },
+    {
+      "id": 34,
+      "subject": "Difficulties with lesson completion",
+      "participant_emails": [
+        "omar.badr@email.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-07-05T05:56:29.268Z",
+      "created_at": "2025-07-05T05:56:29.268Z",
+      "updated_at": "2025-07-05T05:56:29.268Z"
+    },
+    {
+      "id": 35,
+      "subject": "Lost Streak - Need Help!",
+      "participant_emails": [
+        "mrodriguez@gmail.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-06-22T13:01:58.215Z",
+      "created_at": "2025-06-22T13:01:58.215Z",
+      "updated_at": "2025-06-22T13:01:58.215Z"
+    },
+    {
+      "id": 36,
+      "subject": "Audio Issue with Speaking Lessons",
+      "participant_emails": [
+        "tommynguyen@outlook.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-07-10T08:45:26.162Z",
+      "created_at": "2025-07-10T08:45:26.162Z",
+      "updated_at": "2025-07-10T08:45:26.162Z"
+    },
+    {
+      "id": 37,
+      "subject": "Confused About Premium Subscription",
+      "participant_emails": [
+        "jenna.smith@email.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-06-13T23:18:16.546Z",
+      "created_at": "2025-06-13T23:18:16.546Z",
+      "updated_at": "2025-06-13T23:18:16.546Z"
+    },
+    {
+      "id": 38,
+      "subject": "Lesson Progress Not Saving!",
+      "participant_emails": [
+        "evelyn.johnson@xyz.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-07-03T19:53:09.237Z",
+      "created_at": "2025-07-03T19:53:09.237Z",
+      "updated_at": "2025-07-03T19:53:09.237Z"
+    },
+    {
+      "id": 39,
+      "subject": "How to Change My Email Address",
+      "participant_emails": [
+        "old_email@example.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-06-27T23:06:26.383Z",
+      "created_at": "2025-06-27T23:06:26.383Z",
+      "updated_at": "2025-06-27T23:06:26.383Z"
+    },
+    {
+      "id": 40,
+      "subject": "My Kids Love Treslingo!",
+      "participant_emails": [
+        "cheryl.adams@gmail.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-06-26T01:49:42.834Z",
+      "created_at": "2025-06-26T01:49:42.834Z",
+      "updated_at": "2025-06-26T01:49:42.834Z"
+    },
+    {
+      "id": 41,
+      "subject": "Streak Freeze Not Working",
+      "participant_emails": [
+        "liam.oreilly@aol.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-06-16T10:44:00.662Z",
+      "created_at": "2025-06-16T10:44:00.662Z",
+      "updated_at": "2025-06-16T10:44:00.662Z"
+    },
+    {
+      "id": 42,
+      "subject": "App Crashes on Android",
+      "participant_emails": [
+        "fatima.al.sayed@hotmail.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-07-11T13:23:48.377Z",
+      "created_at": "2025-07-11T13:23:48.377Z",
+      "updated_at": "2025-07-11T13:23:48.377Z"
+    },
+    {
+      "id": 43,
+      "subject": "Lessons Are Too Easy for Me",
+      "participant_emails": [
+        "james.martin@domain.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-07-06T12:54:25.793Z",
+      "created_at": "2025-07-06T12:54:25.793Z",
+      "updated_at": "2025-07-06T12:54:25.793Z"
+    },
+    {
+      "id": 44,
+      "subject": "Legal Issue with Copyright",
+      "participant_emails": [
+        "anna.wong123@gmail.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-06-11T21:14:46.325Z",
+      "created_at": "2025-06-11T21:14:46.325Z",
+      "updated_at": "2025-06-11T21:14:46.325Z"
+    },
+    {
+      "id": 45,
+      "subject": "Can't Retrieve My Password",
+      "participant_emails": [
+        "carlos.ramos@yahoo.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-07-07T17:31:01.287Z",
+      "created_at": "2025-07-07T17:31:01.287Z",
+      "updated_at": "2025-07-07T17:31:01.287Z"
+    },
+    {
+      "id": 46,
+      "subject": "Notifications Issue",
+      "participant_emails": [
+        "natasha.villegas@outlook.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-06-13T17:17:41.363Z",
+      "created_at": "2025-06-13T17:17:41.363Z",
+      "updated_at": "2025-06-13T17:17:41.363Z"
+    },
+    {
+      "id": 47,
+      "subject": "Feedback on Level Design",
+      "participant_emails": [
+        "kiran.dance@gmail.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-07-08T06:33:48.501Z",
+      "created_at": "2025-07-08T06:33:48.501Z",
+      "updated_at": "2025-07-08T06:33:48.501Z"
+    },
+    {
+      "id": 48,
+      "subject": "Reporting an App Bug",
+      "participant_emails": [
+        "oliver.black@mail.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-06-18T19:13:42.509Z",
+      "created_at": "2025-06-18T19:13:42.509Z",
+      "updated_at": "2025-06-18T19:13:42.509Z"
+    },
+    {
+      "id": 49,
+      "subject": "Questions About Family Accounts",
+      "participant_emails": [
+        "helen.carter@gmail.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-07-10T14:47:02.823Z",
+      "created_at": "2025-07-10T14:47:02.823Z",
+      "updated_at": "2025-07-10T14:47:02.823Z"
+    },
+    {
+      "id": 50,
+      "subject": "Trouble with Lesson Syncing",
+      "participant_emails": [
+        "henry.thompson@workmail.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-06-11T21:54:31.923Z",
+      "created_at": "2025-06-11T21:54:31.923Z",
+      "updated_at": "2025-06-11T21:54:31.923Z"
+    },
+    {
+      "id": 51,
+      "subject": "Billing Queries for Family Account",
+      "participant_emails": [
+        "lola.lin@femails.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-07-03T03:52:59.477Z",
+      "created_at": "2025-07-03T03:52:59.477Z",
+      "updated_at": "2025-07-03T03:52:59.477Z"
+    },
+    {
+      "id": 52,
+      "subject": "Excited About New Updates!",
+      "participant_emails": [
+        "derek.pruitt@example.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-06-14T15:17:43.925Z",
+      "created_at": "2025-06-14T15:17:43.925Z",
+      "updated_at": "2025-06-14T15:17:43.925Z"
+    },
+    {
+      "id": 53,
+      "subject": "Lost my daily streak 😩",
+      "participant_emails": [
+        "maria.g@example.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-07-01T14:35:40.617Z",
+      "created_at": "2025-07-01T14:35:40.617Z",
+      "updated_at": "2025-07-01T14:35:40.617Z"
+    },
+    {
+      "id": 54,
+      "subject": "Help with app crashing",
+      "participant_emails": [
+        "john.d@example.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-07-03T03:02:29.212Z",
+      "created_at": "2025-07-03T03:02:29.212Z",
+      "updated_at": "2025-07-03T03:02:29.212Z"
+    },
+    {
+      "id": 55,
+      "subject": "Forgotten password 🤦‍♂️",
+      "participant_emails": [
+        "emily.s@hotmail.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-06-20T07:15:45.837Z",
+      "created_at": "2025-06-20T07:15:45.837Z",
+      "updated_at": "2025-06-20T07:15:45.837Z"
+    },
+    {
+      "id": 56,
+      "subject": "Question about premium features",
+      "participant_emails": [
+        "mark.t@example.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-06-23T08:42:34.013Z",
+      "created_at": "2025-06-23T08:42:34.013Z",
+      "updated_at": "2025-06-23T08:42:34.013Z"
+    },
+    {
+      "id": 57,
+      "subject": "Disappointed with lesson difficulty",
+      "participant_emails": [
+        "sarah.peters@email.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-06-23T11:46:59.795Z",
+      "created_at": "2025-06-23T11:46:59.795Z",
+      "updated_at": "2025-06-23T11:46:59.795Z"
+    },
+    {
+      "id": 58,
+      "subject": "Audio not working 😕",
+      "participant_emails": [
+        "kevin.lee@example.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-06-21T09:40:23.745Z",
+      "created_at": "2025-06-21T09:40:23.745Z",
+      "updated_at": "2025-06-21T09:40:23.745Z"
+    },
+    {
+      "id": 59,
+      "subject": "Billing confusion",
+      "participant_emails": [
+        "anna.clark@example.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-06-26T22:16:56.317Z",
+      "created_at": "2025-06-26T22:16:56.317Z",
+      "updated_at": "2025-06-26T22:16:56.317Z"
+    },
+    {
+      "id": 60,
+      "subject": "Suggestions for kids' learning",
+      "participant_emails": [
+        "laura.king@email.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-06-24T06:15:18.780Z",
+      "created_at": "2025-06-24T06:15:18.780Z",
+      "updated_at": "2025-06-24T06:15:18.780Z"
+    },
+    {
+      "id": 61,
+      "subject": "Streak freeze not working",
+      "participant_emails": [
+        "simone.t@gmail.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-07-09T22:49:49.604Z",
+      "created_at": "2025-07-09T22:49:49.604Z",
+      "updated_at": "2025-07-09T22:49:49.604Z"
+    },
+    {
+      "id": 62,
+      "subject": "Family account setup",
+      "participant_emails": [
+        "david.johnson@email.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-06-19T19:59:49.761Z",
+      "created_at": "2025-06-19T19:59:49.761Z",
+      "updated_at": "2025-06-19T19:59:49.761Z"
+    },
+    {
+      "id": 63,
+      "subject": "Legal issue with lesson content",
+      "participant_emails": [
+        "karen.a@email.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-07-03T01:30:55.277Z",
+      "created_at": "2025-07-03T01:30:55.277Z",
+      "updated_at": "2025-07-03T01:30:55.277Z"
+    },
+    {
+      "id": 64,
+      "subject": "Too many reminders!",
+      "participant_emails": [
+        "ben.roberts@example.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-06-14T00:38:23.251Z",
+      "created_at": "2025-06-14T00:38:23.251Z",
+      "updated_at": "2025-06-14T00:38:23.251Z"
+    },
+    {
+      "id": 65,
+      "subject": "Progress not syncing",
+      "participant_emails": [
+        "jessica.brown@email.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-07-08T02:07:35.575Z",
+      "created_at": "2025-07-08T02:07:35.575Z",
+      "updated_at": "2025-07-08T02:07:35.575Z"
+    },
+    {
+      "id": 66,
+      "subject": "Feedback on speaking exercises",
+      "participant_emails": [
+        "samuel.lee@email.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-06-27T09:31:23.485Z",
+      "created_at": "2025-06-27T09:31:23.485Z",
+      "updated_at": "2025-06-27T09:31:23.485Z"
+    },
+    {
+      "id": 67,
+      "subject": "App freezing often",
+      "participant_emails": [
+        "nina.patel@example.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-06-29T12:09:14.666Z",
+      "created_at": "2025-06-29T12:09:14.666Z",
+      "updated_at": "2025-06-29T12:09:14.666Z"
+    },
+    {
+      "id": 68,
+      "subject": "Quick question about XP points",
+      "participant_emails": [
+        "olivia.w@example.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-06-12T03:26:02.975Z",
+      "created_at": "2025-06-12T03:26:02.975Z",
+      "updated_at": "2025-06-12T03:26:02.975Z"
+    },
+    {
+      "id": 69,
+      "subject": "Question about lesson availability",
+      "participant_emails": [
+        "daniel.m@email.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-07-06T09:54:07.820Z",
+      "created_at": "2025-07-06T09:54:07.820Z",
+      "updated_at": "2025-07-06T09:54:07.820Z"
+    },
+    {
+      "id": 70,
+      "subject": "Issues with parental controls",
+      "participant_emails": [
+        "rachel.green@email.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-06-20T14:47:06.771Z",
+      "created_at": "2025-06-20T14:47:06.771Z",
+      "updated_at": "2025-06-20T14:47:06.771Z"
+    },
+    {
+      "id": 71,
+      "subject": "Help! I Lost My Streak!",
+      "participant_emails": [
+        "maria.lopez@example.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-06-24T22:45:37.903Z",
+      "created_at": "2025-06-24T22:45:37.903Z",
+      "updated_at": "2025-06-24T22:45:37.903Z"
+    },
+    {
+      "id": 72,
+      "subject": "Audio Not Working on Lessons",
+      "participant_emails": [
+        "tran.jimmy@email.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-06-27T06:37:26.916Z",
+      "created_at": "2025-06-27T06:37:26.916Z",
+      "updated_at": "2025-06-27T06:37:26.916Z"
+    },
+    {
+      "id": 73,
+      "subject": "Subscription Cancellation",
+      "participant_emails": [
+        "carlagomes1234@gmail.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-06-30T12:46:58.351Z",
+      "created_at": "2025-06-30T12:46:58.351Z",
+      "updated_at": "2025-06-30T12:46:58.351Z"
+    },
+    {
+      "id": 74,
+      "subject": "Confused About Family Accounts",
+      "participant_emails": [
+        "frank.smith@provider.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-06-27T00:28:39.041Z",
+      "created_at": "2025-06-27T00:28:39.041Z",
+      "updated_at": "2025-06-27T00:28:39.041Z"
+    },
+    {
+      "id": 75,
+      "subject": "Streak Freeze Help Needed!",
+      "participant_emails": [
+        "emmapatel@hotmail.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-07-06T01:20:17.256Z",
+      "created_at": "2025-07-06T01:20:17.256Z",
+      "updated_at": "2025-07-06T01:20:17.256Z"
+    },
+    {
+      "id": 76,
+      "subject": "App Crashing Every Time I Open It",
+      "participant_emails": [
+        "tyler.nguyen@gmail.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-06-18T06:21:25.249Z",
+      "created_at": "2025-06-18T06:21:25.249Z",
+      "updated_at": "2025-06-18T06:21:25.249Z"
+    },
+    {
+      "id": 77,
+      "subject": "Progress Not Saving",
+      "participant_emails": [
+        "rachael.kim@school.edu",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-06-22T21:05:52.525Z",
+      "created_at": "2025-06-22T21:05:52.525Z",
+      "updated_at": "2025-06-22T21:05:52.525Z"
+    },
+    {
+      "id": 78,
+      "subject": "Too Many Notifications! Stop Them!",
+      "participant_emails": [
+        "zoe.ramirez@samplemail.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-06-27T18:37:57.067Z",
+      "created_at": "2025-06-27T18:37:57.067Z",
+      "updated_at": "2025-06-27T18:37:57.067Z"
+    },
+    {
+      "id": 79,
+      "subject": "Difficulty Level Too Hard!",
+      "participant_emails": [
+        "cmartinez@randommail.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-06-19T21:37:45.778Z",
+      "created_at": "2025-06-19T21:37:45.778Z",
+      "updated_at": "2025-06-19T21:37:45.778Z"
+    },
+    {
+      "id": 80,
+      "subject": "Forgot My Password",
+      "participant_emails": [
+        "lily.watson@fakemail.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-07-09T16:14:56.435Z",
+      "created_at": "2025-07-09T16:14:56.435Z",
+      "updated_at": "2025-07-09T16:14:56.435Z"
+    },
+    {
+      "id": 81,
+      "subject": "Legal Issue with Lessons",
+      "participant_emails": [
+        "john.doe@example.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-06-23T00:19:28.481Z",
+      "created_at": "2025-06-23T00:19:28.481Z",
+      "updated_at": "2025-06-23T00:19:28.481Z"
+    },
+    {
+      "id": 82,
+      "subject": "Complaining About App Freezing",
+      "participant_emails": [
+        "marlene.garcia@webmail.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-07-02T12:37:20.343Z",
+      "created_at": "2025-07-02T12:37:20.343Z",
+      "updated_at": "2025-07-02T12:37:20.343Z"
+    },
+    {
+      "id": 83,
+      "subject": "Inquiring About User Progress and XP",
+      "participant_emails": [
+        "dannychen123@yahoo.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-06-27T09:02:27.540Z",
+      "created_at": "2025-06-27T09:02:27.540Z",
+      "updated_at": "2025-06-27T09:02:27.540Z"
+    },
+    {
+      "id": 84,
+      "subject": "Feature Request: Group Challenges",
+      "participant_emails": [
+        "gael.torres@gmail.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-06-29T00:50:49.072Z",
+      "created_at": "2025-06-29T00:50:49.072Z",
+      "updated_at": "2025-06-29T00:50:49.072Z"
+    },
+    {
+      "id": 85,
+      "subject": "Difficulty Understanding Grammar Lessons",
+      "participant_emails": [
+        "patricia.oneill@gmail.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-07-04T01:50:43.780Z",
+      "created_at": "2025-07-04T01:50:43.780Z",
+      "updated_at": "2025-07-04T01:50:43.780Z"
+    },
+    {
+      "id": 86,
+      "subject": "Transaction Issue for Premium Subscription",
+      "participant_emails": [
+        "alex.w.treslingo@gmail.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-06-17T15:47:22.358Z",
+      "created_at": "2025-06-17T15:47:22.358Z",
+      "updated_at": "2025-06-17T15:47:22.358Z"
+    },
+    {
+      "id": 87,
+      "subject": "Excited About My Progress!",
+      "participant_emails": [
+        "rachel.johnson@mail.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-07-02T21:53:24.823Z",
+      "created_at": "2025-07-02T21:53:24.823Z",
+      "updated_at": "2025-07-02T21:53:24.823Z"
+    },
+    {
+      "id": 88,
+      "subject": "Notification about the New Update",
+      "participant_emails": [
+        "marcosilva@example.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-06-11T17:19:39.785Z",
+      "created_at": "2025-06-11T17:19:39.785Z",
+      "updated_at": "2025-06-11T17:19:39.785Z"
+    },
+    {
+      "id": 89,
+      "subject": "Lost My Streak! Help!",
+      "participant_emails": [
+        "clairepeterson@email.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-06-27T13:07:22.164Z",
+      "created_at": "2025-06-27T13:07:22.164Z",
+      "updated_at": "2025-06-27T13:07:22.164Z"
+    },
+    {
+      "id": 90,
+      "subject": "Audio Problems in Lessons",
+      "participant_emails": [
+        "theresawang@email.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-07-09T12:15:35.627Z",
+      "created_at": "2025-07-09T12:15:35.627Z",
+      "updated_at": "2025-07-09T12:15:35.627Z"
+    },
+    {
+      "id": 91,
+      "subject": "Subscription Confusion",
+      "participant_emails": [
+        "rafael.rodriguez@email.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-07-11T00:23:12.933Z",
+      "created_at": "2025-07-11T00:23:12.933Z",
+      "updated_at": "2025-07-11T00:23:12.933Z"
+    },
+    {
+      "id": 92,
+      "subject": "Still Confused About Lesson Difficulty",
+      "participant_emails": [
+        "jamie.smith@email.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-06-23T12:58:55.334Z",
+      "created_at": "2025-06-23T12:58:55.334Z",
+      "updated_at": "2025-06-23T12:58:55.334Z"
+    },
+    {
+      "id": 93,
+      "subject": "App Keeps Crashing",
+      "participant_emails": [
+        "mark.holloway@email.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-07-03T23:37:02.040Z",
+      "created_at": "2025-07-03T23:37:02.040Z",
+      "updated_at": "2025-07-03T23:37:02.040Z"
+    },
+    {
+      "id": 94,
+      "subject": "Need Help Recovering My Account!",
+      "participant_emails": [
+        "jane.doe@email.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-06-13T08:37:45.207Z",
+      "created_at": "2025-06-13T08:37:45.207Z",
+      "updated_at": "2025-06-13T08:37:45.207Z"
+    },
+    {
+      "id": 95,
+      "subject": "Family Account Setup Issues",
+      "participant_emails": [
+        "lucia.hernandez@email.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-06-19T15:06:43.110Z",
+      "created_at": "2025-06-19T15:06:43.110Z",
+      "updated_at": "2025-06-19T15:06:43.110Z"
+    },
+    {
+      "id": 96,
+      "subject": "Messed Up Lesson Content!",
+      "participant_emails": [
+        "bradley.king@email.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-06-19T08:19:04.378Z",
+      "created_at": "2025-06-19T08:19:04.378Z",
+      "updated_at": "2025-06-19T08:19:04.378Z"
+    },
+    {
+      "id": 97,
+      "subject": "Too Many Notifications!",
+      "participant_emails": [
+        "angela.green@email.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-06-23T17:13:26.551Z",
+      "created_at": "2025-06-23T17:13:26.551Z",
+      "updated_at": "2025-06-23T17:13:26.551Z"
+    },
+    {
+      "id": 98,
+      "subject": "Feedback on Recent Changes",
+      "participant_emails": [
+        "tomas.black@email.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-06-19T00:17:39.348Z",
+      "created_at": "2025-06-19T00:17:39.348Z",
+      "updated_at": "2025-06-19T00:17:39.348Z"
+    },
+    {
+      "id": 99,
+      "subject": "Need Help Restoring My Lost Streak!",
+      "participant_emails": [
+        "maria.gonzalez@email.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-06-28T01:31:58.920Z",
+      "created_at": "2025-06-28T01:31:58.920Z",
+      "updated_at": "2025-06-28T01:31:58.920Z"
+    },
+    {
+      "id": 100,
+      "subject": "Question About Premium Subscription Billing",
+      "participant_emails": [
+        "john.thomas@email.com",
+        "support@treslingo.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-06-21T02:17:10.649Z",
+      "created_at": "2025-06-21T02:17:10.649Z",
+      "updated_at": "2025-06-21T02:17:10.649Z"
+    }
+  ],
+  "emails": [
+    {
+      "id": 1,
+      "thread_id": 1,
+      "from_email": "clara.gomez@example.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Help! Lost my streak!",
+      "body_text": "Hi Treslingo team,\n\nI’m really upset! I had a 42-day streak going and just noticed it reset! I think it’s because of the timezone change after my trip. Is there any way to get my streak back? I was so proud of it and now it feels like all that hard work is gone. \n\nThanks for your help!\n\nBest,\nClara Gomez\nclara.gomez@example.com",
+      "body_html": "<html><body>Hi Treslingo team,<br><br>I’m really upset! I had a 42-day streak going and just noticed it reset! I think it’s because of the timezone change after my trip. Is there any way to get my streak back? I was so proud of it and now it feels like all that hard work is gone. <br><br>Thanks for your help!<br><br>Best,<br>Clara Gomez<br>clara.gomez@example.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-06-19T13:00:40.470Z",
+      "created_at": "2025-06-19T13:00:40.470Z",
+      "updated_at": "2025-06-19T13:00:40.470Z"
+    },
+    {
+      "id": 2,
+      "thread_id": 2,
+      "from_email": "DylanR@gmail.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "App is crashing on Android",
+      "body_text": "Hello,\n\nI’m having a major issue with the Treslingo app on my Samsung Galaxy. It crashes every time I try to start a speaking exercise. I’ve tried reinstalling it, restarting my phone...nothing works! I really need to work on my speaking skills and I can’t do that if the app keeps crashing. Can you please help me fix this?\n\nThanks!\n\nDylan R.\nDylanR@gmail.com",
+      "body_html": "<html><body>Hello,<br><br>I’m having a major issue with the Treslingo app on my Samsung Galaxy. It crashes every time I try to start a speaking exercise. I’ve tried reinstalling it, restarting my phone...nothing works! I really need to work on my speaking skills and I can’t do that if the app keeps crashing. Can you please help me fix this?<br><br>Thanks!<br><br>Dylan R.<br>DylanR@gmail.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-06-24T12:56:15.877Z",
+      "created_at": "2025-06-24T12:56:15.877Z",
+      "updated_at": "2025-06-24T12:56:15.877Z"
+    },
+    {
+      "id": 3,
+      "thread_id": 3,
+      "from_email": "erika.lee@hotmail.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Billing question - Canceling Subscription",
+      "body_text": "Hello,\n\nI hope you're doing well. I would like to cancel my premium subscription (Account: TR-12345). I’ve been enjoying the app, but I need to cut back on expenses right now. Could you please confirm once my subscription is canceled? \n\nWarm regards,\nErika Lee\nerika.lee@hotmail.com",
+      "body_html": "<html><body>Hello,<br><br>I hope you're doing well. I would like to cancel my premium subscription (Account: TR-12345). I’ve been enjoying the app, but I need to cut back on expenses right now. Could you please confirm once my subscription is canceled? <br><br>Warm regards,<br>Erika Lee<br>erika.lee@hotmail.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-07-09T06:16:49.554Z",
+      "created_at": "2025-07-09T06:16:49.554Z",
+      "updated_at": "2025-07-09T06:16:49.554Z"
+    },
+    {
+      "id": 4,
+      "thread_id": 4,
+      "from_email": "mateo.navarro@elcorreo.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "A bit too easy?",
+      "body_text": "Hey,\n\nI’ve been using Treslingo for about a month now and I’m finding the lessons to be a bit too easy. I want to challenge myself more. Is there a way to change my learning level or access more advanced content? Thanks a lot!\n\nCheers,\nMateo\nmateo.navarro@elcorreo.com",
+      "body_html": "<html><body>Hey,<br><br>I’ve been using Treslingo for about a month now and I’m finding the lessons to be a bit too easy. I want to challenge myself more. Is there a way to change my learning level or access more advanced content? Thanks a lot!<br><br>Cheers,<br>Mateo<br>mateo.navarro@elcorreo.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-06-13T08:54:43.728Z",
+      "created_at": "2025-06-13T08:54:43.728Z",
+      "updated_at": "2025-06-13T08:54:43.728Z"
+    },
+    {
+      "id": 5,
+      "thread_id": 5,
+      "from_email": "sofia_martinez@example.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Audio issues with speaking exercises",
+      "body_text": "Hi there,\n\nI am having issues with the audio not working on some of the speaking exercises. I can hear the vocabulary but not the sentences. It's been frustrating since I’m trying to practice pronunciation. What can I do to fix this? Do I need to adjust my settings somehow?\n\nThank you,\nSofia Martinez\nsofia_martinez@example.com",
+      "body_html": "<html><body>Hi there,<br><br>I am having issues with the audio not working on some of the speaking exercises. I can hear the vocabulary but not the sentences. It's been frustrating since I’m trying to practice pronunciation. What can I do to fix this? Do I need to adjust my settings somehow?<br><br>Thank you,<br>Sofia Martinez<br>sofia_martinez@example.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-06-14T12:20:12.504Z",
+      "created_at": "2025-06-14T12:20:12.504Z",
+      "updated_at": "2025-06-14T12:20:12.504Z"
+    },
+    {
+      "id": 6,
+      "thread_id": 6,
+      "from_email": "john.thompson@example.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Family account help",
+      "body_text": "Hello, \n\nI set up a family account for my kids, but I’m struggling to add their profiles. I’ve tried several times, and I think I might be missing a step. Can someone guide me through the process? \n\nLooking forward to your reply.\nBest,\nJohn Thompson\njohn.thompson@example.com",
+      "body_html": "<html><body>Hello, <br><br>I set up a family account for my kids, but I’m struggling to add their profiles. I’ve tried several times, and I think I might be missing a step. Can someone guide me through the process? <br><br>Looking forward to your reply.<br>Best,<br>John Thompson<br>john.thompson@example.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-06-17T07:59:21.321Z",
+      "created_at": "2025-06-17T07:59:21.321Z",
+      "updated_at": "2025-06-17T07:59:21.321Z"
+    },
+    {
+      "id": 7,
+      "thread_id": 7,
+      "from_email": "fatima.rizvi@example.org",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Request for refund",
+      "body_text": "Hi,\n\nI was charged for my subscription but didn’t intend to renew it this month (TR-54321). I thought I had canceled it last time, so I’d like to request a refund if possible. Thanks for understanding!\n\nRegards,\nFatima\nfatima.rizvi@example.org",
+      "body_html": "<html><body>Hi,<br><br>I was charged for my subscription but didn’t intend to renew it this month (TR-54321). I thought I had canceled it last time, so I’d like to request a refund if possible. Thanks for understanding!<br><br>Regards,<br>Fatima<br>fatima.rizvi@example.org</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-06-17T22:48:06.269Z",
+      "created_at": "2025-06-17T22:48:06.269Z",
+      "updated_at": "2025-06-17T22:48:06.269Z"
+    },
+    {
+      "id": 8,
+      "thread_id": 8,
+      "from_email": "lucas.wang@samplemail.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Progress not saving!",
+      "body_text": "Hi Treslingo,\n\nMy progress isn't saving! I spent a couple of hours on lessons and when I logged in today, it’s like I never did any! I’m really anxious about this because I want to keep track of my learning. Can you please help me resolve this issue?\n\nThanks a million,\nLucas\nlucas.wang@samplemail.com",
+      "body_html": "<html><body>Hi Treslingo,<br><br>My progress isn't saving! I spent a couple of hours on lessons and when I logged in today, it’s like I never did any! I’m really anxious about this because I want to keep track of my learning. Can you please help me resolve this issue?<br><br>Thanks a million,<br>Lucas<br>lucas.wang@samplemail.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-06-11T23:47:06.839Z",
+      "created_at": "2025-06-11T23:47:06.839Z",
+      "updated_at": "2025-06-11T23:47:06.839Z"
+    },
+    {
+      "id": 9,
+      "thread_id": 9,
+      "from_email": "nina.fernandez@example.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Streak freezes - How do they work?",
+      "body_text": "Hello!\n\nI’ve heard about streak freezes but I'm not really sure how they work. How can I activate one for my current streak? I would love to know more so I don’t lose my progress when I’m busy.\n\nBest wishes,\nNina\nnina.fernandez@example.com",
+      "body_html": "<html><body>Hello!<br><br>I’ve heard about streak freezes but I'm not really sure how they work. How can I activate one for my current streak? I would love to know more so I don’t lose my progress when I’m busy.<br><br>Best wishes,<br>Nina<br>nina.fernandez@example.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-06-19T05:42:28.594Z",
+      "created_at": "2025-06-19T05:42:28.594Z",
+      "updated_at": "2025-06-19T05:42:28.594Z"
+    },
+    {
+      "id": 10,
+      "thread_id": 10,
+      "from_email": "oscar.perez@online.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Not receiving notifications",
+      "body_text": "Hi team,\n\nI love using Treslingo, but I noticed I’m not getting any notifications anymore, even though I’ve turned them on in my settings. I used to get reminders for daily lessons, and now I feel lost! Can you please check this for me?\n\nThank you,\nOscar\noscar.perez@online.com",
+      "body_html": "<html><body>Hi team,<br><br>I love using Treslingo, but I noticed I’m not getting any notifications anymore, even though I’ve turned them on in my settings. I used to get reminders for daily lessons, and now I feel lost! Can you please check this for me?<br><br>Thank you,<br>Oscar<br>oscar.perez@online.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-07-06T11:37:28.419Z",
+      "created_at": "2025-07-06T11:37:28.419Z",
+      "updated_at": "2025-07-06T11:37:28.419Z"
+    },
+    {
+      "id": 11,
+      "thread_id": 11,
+      "from_email": "rebecca.smith@example.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Teen friendly content?",
+      "body_text": "Hello,\n\nMy daughter just started using Treslingo, and she loves the cat mascot! However, I’m a bit concerned about the content. Is it suitable for her age? She’s only 14. \n\nThanks for your reassurance.\n\nBest,\nRebecca\nrebecca.smith@example.com",
+      "body_html": "<html><body>Hello,<br><br>My daughter just started using Treslingo, and she loves the cat mascot! However, I’m a bit concerned about the content. Is it suitable for her age? She’s only 14. <br><br>Thanks for your reassurance.<br><br>Best,<br>Rebecca<br>rebecca.smith@example.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-07-10T03:21:47.698Z",
+      "created_at": "2025-07-10T03:21:47.698Z",
+      "updated_at": "2025-07-10T03:21:47.698Z"
+    },
+    {
+      "id": 12,
+      "thread_id": 12,
+      "from_email": "igor.belov@gmail.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Legal Complaints",
+      "body_text": "Dear Treslingo,\n\nI’ve noticed that some of the text in the lessons appears to be taken directly from copyrighted material. I am concerned about this and would like to know how Treslingo ensures that all content is original. \n\nSincerely,\nIgor B.\nigor.belov@gmail.com",
+      "body_html": "<html><body>Dear Treslingo,<br><br>I’ve noticed that some of the text in the lessons appears to be taken directly from copyrighted material. I am concerned about this and would like to know how Treslingo ensures that all content is original. <br><br>Sincerely,<br>Igor B.<br>igor.belov@gmail.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-07-08T20:00:32.056Z",
+      "created_at": "2025-07-08T20:00:32.056Z",
+      "updated_at": "2025-07-08T20:00:32.056Z"
+    },
+    {
+      "id": 13,
+      "thread_id": 13,
+      "from_email": "ashley.jones@example.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "How do you earn XP?",
+      "body_text": "Hi there,\n\nI’m curious about how XP points work in the app. I’ve seen the leaderboard and I want to climb it but I have no idea how to earn more XP for my achievements. Can someone explain this to me?\n\nThanks! \n\nAshley\nashley.jones@example.com",
+      "body_html": "<html><body>Hi there,<br><br>I’m curious about how XP points work in the app. I’ve seen the leaderboard and I want to climb it but I have no idea how to earn more XP for my achievements. Can someone explain this to me?<br><br>Thanks! <br><br>Ashley<br>ashley.jones@example.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-06-24T02:25:21.256Z",
+      "created_at": "2025-06-24T02:25:21.256Z",
+      "updated_at": "2025-06-24T02:25:21.256Z"
+    },
+    {
+      "id": 14,
+      "thread_id": 14,
+      "from_email": "danny.park@gmail.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Difficulty level for my grandmother",
+      "body_text": "Hello,\n\nMy grandmother is in her 70s and wants to learn Spanish, but she’s worried it might be too hard. She can be a bit slow with technology. Can you tell me if the lessons are user-friendly for seniors? I really want her to enjoy it!\n\nThank you,\nDanny\ndanny.park@gmail.com",
+      "body_html": "<html><body>Hello,<br><br>My grandmother is in her 70s and wants to learn Spanish, but she’s worried it might be too hard. She can be a bit slow with technology. Can you tell me if the lessons are user-friendly for seniors? I really want her to enjoy it!<br><br>Thank you,<br>Danny<br>danny.park@gmail.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-06-16T15:23:48.365Z",
+      "created_at": "2025-06-16T15:23:48.365Z",
+      "updated_at": "2025-06-16T15:23:48.365Z"
+    },
+    {
+      "id": 15,
+      "thread_id": 15,
+      "from_email": "elena_schmidt@webmail.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "App freezing mid-lesson",
+      "body_text": "Hi Support,\n\nI’ve been facing a frustrating issue with my Treslingo app. It freezes right when I’m in the middle of a lesson! It’s been happening on my iPhone 12. I’d love any help with this as I want to keep up with my learning!\n\nThank you!\nElena\nelena_schmidt@webmail.com",
+      "body_html": "<html><body>Hi Support,<br><br>I’ve been facing a frustrating issue with my Treslingo app. It freezes right when I’m in the middle of a lesson! It’s been happening on my iPhone 12. I’d love any help with this as I want to keep up with my learning!<br><br>Thank you!<br>Elena<br>elena_schmidt@webmail.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-06-24T08:22:47.893Z",
+      "created_at": "2025-06-24T08:22:47.893Z",
+      "updated_at": "2025-06-24T08:22:47.893Z"
+    },
+    {
+      "id": 16,
+      "thread_id": 16,
+      "from_email": "kevin.brightson@example.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Premium tier worth it?",
+      "body_text": "Hi,\n\nI’m thinking about upgrading to the premium tier but I’m not sure it’s worth it. Can you please outline the differences between the free and premium versions? I want to make an informed decision before committing to the subscription.\n\nThanks!\nKevin\nkevin.brightson@example.com",
+      "body_html": "<html><body>Hi,<br><br>I’m thinking about upgrading to the premium tier but I’m not sure it’s worth it. Can you please outline the differences between the free and premium versions? I want to make an informed decision before committing to the subscription.<br><br>Thanks!<br>Kevin<br>kevin.brightson@example.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-07-01T23:37:52.993Z",
+      "created_at": "2025-07-01T23:37:52.993Z",
+      "updated_at": "2025-07-01T23:37:52.993Z"
+    },
+    {
+      "id": 17,
+      "thread_id": 17,
+      "from_email": "tina.myndok@example.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Issues with forgotten password",
+      "body_text": "Hello,\n\nI forgot my password for my Treslingo account (TR-67890) and I’m having trouble resetting it. I checked my email, but I haven't received any reset instructions. Please help, I really want to get back to learning.\n\nThanks,\nTina\ntina.myndok@example.com",
+      "body_html": "<html><body>Hello,<br><br>I forgot my password for my Treslingo account (TR-67890) and I’m having trouble resetting it. I checked my email, but I haven't received any reset instructions. Please help, I really want to get back to learning.<br><br>Thanks,<br>Tina<br>tina.myndok@example.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-06-14T01:22:27.574Z",
+      "created_at": "2025-06-14T01:22:27.574Z",
+      "updated_at": "2025-06-14T01:22:27.574Z"
+    },
+    {
+      "id": 18,
+      "thread_id": 18,
+      "from_email": "elena.garcia@email.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Lost my streak during a timezone change!",
+      "body_text": "Hi Treslingo support,\n\nI’m writing to let you know that I just lost my 52-day streak because I traveled to a different timezone and didn’t realize it. I was so proud of that streak! I usually study every day during my lunch break, but I couldn’t log in yesterday because I was in a different time zone. Is there anything you can do to help me recover my streak?\n\nThanks a lot,\nElena Garcia\n\nP.S. I love the lessons, but the speaking ones are a bit tricky for me!\n\nBest,\nElena\n\nelena.garcia@email.com",
+      "body_html": "<html><body>Hi Treslingo support,<br><br>I’m writing to let you know that I just lost my 52-day streak because I traveled to a different timezone and didn’t realize it. I was so proud of that streak! I usually study every day during my lunch break, but I couldn’t log in yesterday because I was in a different time zone. Is there anything you can do to help me recover my streak?<br><br>Thanks a lot,<br>Elena Garcia<br><br>P.S. I love the lessons, but the speaking ones are a bit tricky for me!<br><br>Best,<br>Elena<br><br>elena.garcia@email.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-06-24T20:58:03.398Z",
+      "created_at": "2025-06-24T20:58:03.398Z",
+      "updated_at": "2025-06-24T20:58:03.398Z"
+    },
+    {
+      "id": 19,
+      "thread_id": 19,
+      "from_email": "liam.thompson@email.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Audio not working on speaking exercises",
+      "body_text": "Hey! \n\nI’ve been using Treslingo for a while now and I really like it, but I’ve been having issues with the audio on the speaking exercises - it’s just not working. I tried reinstalling the app and checking my phone settings, but nothing seems to help. \n\nIt’s really frustrating because I’m at a part in the lessons where I need the audio to practice. I have an iPhone, if that helps.\n\nCould you please assist me? \n\nBest, \nLiam Thompson\n\nliam.thompson@email.com",
+      "body_html": "<html><body>Hey! <br><br>I’ve been using Treslingo for a while now and I really like it, but I’ve been having issues with the audio on the speaking exercises - it’s just not working. I tried reinstalling the app and checking my phone settings, but nothing seems to help. <br><br>It’s really frustrating because I’m at a part in the lessons where I need the audio to practice. I have an iPhone, if that helps.<br><br>Could you please assist me? <br><br>Best, <br>Liam Thompson<br><br>liam.thompson@email.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-07-07T17:45:50.558Z",
+      "created_at": "2025-07-07T17:45:50.558Z",
+      "updated_at": "2025-07-07T17:45:50.558Z"
+    },
+    {
+      "id": 20,
+      "thread_id": 20,
+      "from_email": "marco.reyes@email.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Question about premium features",
+      "body_text": "Hello!\n\nI’m considering upgrading to the premium version of Treslingo but I'm not entirely sure what features I’m missing in the free version. I want to know more about the offline mode and if it really works without a reliable internet connection. I travel a lot and sometimes I have no data.\n\nI would love to keep my streaks going without worrying about Wi-Fi!\n\nThank you for your help! \n\nSincerely,\nMarco Reyes\n\nmarco.reyes@email.com",
+      "body_html": "<html><body>Hello!<br><br>I’m considering upgrading to the premium version of Treslingo but I'm not entirely sure what features I’m missing in the free version. I want to know more about the offline mode and if it really works without a reliable internet connection. I travel a lot and sometimes I have no data.<br><br>I would love to keep my streaks going without worrying about Wi-Fi!<br><br>Thank you for your help! <br><br>Sincerely,<br>Marco Reyes<br><br>marco.reyes@email.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-07-10T03:23:19.764Z",
+      "created_at": "2025-07-10T03:23:19.764Z",
+      "updated_at": "2025-07-10T03:23:19.764Z"
+    },
+    {
+      "id": 21,
+      "thread_id": 21,
+      "from_email": "clara.johnson@email.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Help! Can't log in to my account",
+      "body_text": "Hi there,\n\nI hope you can help me. I’ve tried to log in to my Treslingo account (TR-12345) but I forgot my password. I don’t remember setting up any recovery emails, so I don’t know how to reset it. Can you help me recover my account or reset my password? \n\nI’m really missing my lessons!  \nThanks a lot! \n\nBest wishes,\nClara Johnson\n\nclara.johnson@email.com",
+      "body_html": "<html><body>Hi there,<br><br>I hope you can help me. I’ve tried to log in to my Treslingo account (TR-12345) but I forgot my password. I don’t remember setting up any recovery emails, so I don’t know how to reset it. Can you help me recover my account or reset my password? <br><br>I’m really missing my lessons!  <br>Thanks a lot! <br><br>Best wishes,<br>Clara Johnson<br><br>clara.johnson@email.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-07-03T23:39:47.048Z",
+      "created_at": "2025-07-03T23:39:47.048Z",
+      "updated_at": "2025-07-03T23:39:47.048Z"
+    },
+    {
+      "id": 22,
+      "thread_id": 22,
+      "from_email": "daniel.mills@email.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Too easy, need advanced lessons!",
+      "body_text": "Hi,\n\nI’ve been using Treslingo for about 3 months now, and I feel like I’m not being challenged enough. I’m currently on level 7, but the material seems quite easy for me. Is there any way to speed up the lessons or access more advanced content? I want to learn quicker.\n\nThanks for your help!\n\nBest,\nDaniel Mills\n\ndaniel.mills@email.com",
+      "body_html": "<html><body>Hi,<br><br>I’ve been using Treslingo for about 3 months now, and I feel like I’m not being challenged enough. I’m currently on level 7, but the material seems quite easy for me. Is there any way to speed up the lessons or access more advanced content? I want to learn quicker.<br><br>Thanks for your help!<br><br>Best,<br>Daniel Mills<br><br>daniel.mills@email.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-07-08T19:15:10.424Z",
+      "created_at": "2025-07-08T19:15:10.424Z",
+      "updated_at": "2025-07-08T19:15:10.424Z"
+    },
+    {
+      "id": 23,
+      "thread_id": 23,
+      "from_email": "sofia.martinez@email.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Billing issue with subscription",
+      "body_text": "Hello,\n\nI noticed that I was charged twice for my premium subscription this month and I’m not sure why. I want to keep the subscription, but can you please help me with this billing issue? It says I have only one user logged in, but the charges don’t seem right.\n\nThanks a million! \n\nTake care,\nSofia Martinez\n\nsofia.martinez@email.com",
+      "body_html": "<html><body>Hello,<br><br>I noticed that I was charged twice for my premium subscription this month and I’m not sure why. I want to keep the subscription, but can you please help me with this billing issue? It says I have only one user logged in, but the charges don’t seem right.<br><br>Thanks a million! <br><br>Take care,<br>Sofia Martinez<br><br>sofia.martinez@email.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-07-09T13:51:05.895Z",
+      "created_at": "2025-07-09T13:51:05.895Z",
+      "updated_at": "2025-07-09T13:51:05.895Z"
+    },
+    {
+      "id": 24,
+      "thread_id": 24,
+      "from_email": "natalie.kim@email.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Fun feature suggestion!",
+      "body_text": "Hey Treslingo,\n\nI just wanted to drop a quick email to suggest adding a video lesson feature. Sometimes it’s hard for me to engage just with audio and text, and I think actual video lessons would be super fun! Also, maybe have a practice chat feature where we can practice with other learners? Just a thought!\n\nThanks for your awesome app! \n\nCheers,\nNatalie Kim\n\nnatalie.kim@email.com",
+      "body_html": "<html><body>Hey Treslingo,<br><br>I just wanted to drop a quick email to suggest adding a video lesson feature. Sometimes it’s hard for me to engage just with audio and text, and I think actual video lessons would be super fun! Also, maybe have a practice chat feature where we can practice with other learners? Just a thought!<br><br>Thanks for your awesome app! <br><br>Cheers,<br>Natalie Kim<br><br>natalie.kim@email.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-06-29T03:44:04.434Z",
+      "created_at": "2025-06-29T03:44:04.434Z",
+      "updated_at": "2025-06-29T03:44:04.434Z"
+    },
+    {
+      "id": 25,
+      "thread_id": 25,
+      "from_email": "galia.savvidis@email.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Progress syncing issue",
+      "body_text": "Dear Support Team,\n\nI’m experiencing some strange issues where my progress isn’t syncing across my devices. I use Treslingo on both my iPad and my Android phone, but my lessons seem to reset on my phone. Can you check what might be happening?\n\nI’m on level 5 and would hate to lose my progress. \n\nThank you for your assistance! \n\nRegards,\nGalia Savvidis\n\ngalia.savvidis@email.com",
+      "body_html": "<html><body>Dear Support Team,<br><br>I’m experiencing some strange issues where my progress isn’t syncing across my devices. I use Treslingo on both my iPad and my Android phone, but my lessons seem to reset on my phone. Can you check what might be happening?<br><br>I’m on level 5 and would hate to lose my progress. <br><br>Thank you for your assistance! <br><br>Regards,<br>Galia Savvidis<br><br>galia.savvidis@email.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-06-29T03:38:01.160Z",
+      "created_at": "2025-06-29T03:38:01.160Z",
+      "updated_at": "2025-06-29T03:38:01.160Z"
+    },
+    {
+      "id": 26,
+      "thread_id": 26,
+      "from_email": "samuel.green@email.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Cat mascot is adorable!",
+      "body_text": "Hi there!\n\nI just wanted to email to say how much I love your app! I didn’t expect to enjoy learning Spanish this much and your cat mascot is just the cutest. It always makes me smile when I open the app. \n\nKeep up the great work!\n\nCheers,\nSamuel Green\n\nsamuel.green@email.com",
+      "body_html": "<html><body>Hi there!<br><br>I just wanted to email to say how much I love your app! I didn’t expect to enjoy learning Spanish this much and your cat mascot is just the cutest. It always makes me smile when I open the app. <br><br>Keep up the great work!<br><br>Cheers,<br>Samuel Green<br><br>samuel.green@email.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-06-24T01:04:25.153Z",
+      "created_at": "2025-06-24T01:04:25.153Z",
+      "updated_at": "2025-06-24T01:04:25.153Z"
+    },
+    {
+      "id": 27,
+      "thread_id": 27,
+      "from_email": "megan.li@email.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Family account questions",
+      "body_text": "Hi Treslingo,\n\nI am looking to set up a family account so my kids can also learn Spanish with Treslingo. Can you please give me more details on how that works? Do I need to pay for each account or can we share one premium subscription? I’d appreciate any help!\n\nThank you!\n\nBest regards,\nMegan Li\n\nmegan.li@email.com",
+      "body_html": "<html><body>Hi Treslingo,<br><br>I am looking to set up a family account so my kids can also learn Spanish with Treslingo. Can you please give me more details on how that works? Do I need to pay for each account or can we share one premium subscription? I’d appreciate any help!<br><br>Thank you!<br><br>Best regards,<br>Megan Li<br><br>megan.li@email.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-06-12T14:20:55.085Z",
+      "created_at": "2025-06-12T14:20:55.085Z",
+      "updated_at": "2025-06-12T14:20:55.085Z"
+    },
+    {
+      "id": 28,
+      "thread_id": 28,
+      "from_email": "raj.patel@email.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Lessons keep freezing on me!",
+      "body_text": "Hello,\n\nI need help! The app keeps freezing on me during lessons, and it’s really frustrating. I’ve tried clearing the cache and restarting my phone, but it’s still happening. I love the app and want to keep using it, but these issues are making it hard.\n\nAny advice would be greatly appreciated! \n\nMany thanks,\nRaj Patel\n\nraj.patel@email.com",
+      "body_html": "<html><body>Hello,<br><br>I need help! The app keeps freezing on me during lessons, and it’s really frustrating. I’ve tried clearing the cache and restarting my phone, but it’s still happening. I love the app and want to keep using it, but these issues are making it hard.<br><br>Any advice would be greatly appreciated! <br><br>Many thanks,<br>Raj Patel<br><br>raj.patel@email.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-07-10T05:50:24.291Z",
+      "created_at": "2025-07-10T05:50:24.291Z",
+      "updated_at": "2025-07-10T05:50:24.291Z"
+    },
+    {
+      "id": 29,
+      "thread_id": 29,
+      "from_email": "tina.huang@email.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Can I change my email for account?",
+      "body_text": "Hi,\n\nI am writing to inquire if I can change the email associated with my Treslingo account (TR-67890). I no longer have access to my old email. Is this something you can help with? I’d like to update it to my new email address.\n\nThanks for your support! \n\nBest,\nTina Huang \n\ntina.huang@email.com",
+      "body_html": "<html><body>Hi,<br><br>I am writing to inquire if I can change the email associated with my Treslingo account (TR-67890). I no longer have access to my old email. Is this something you can help with? I’d like to update it to my new email address.<br><br>Thanks for your support! <br><br>Best,<br>Tina Huang <br><br>tina.huang@email.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-06-13T09:21:06.503Z",
+      "created_at": "2025-06-13T09:21:06.503Z",
+      "updated_at": "2025-06-13T09:21:06.503Z"
+    },
+    {
+      "id": 30,
+      "thread_id": 30,
+      "from_email": "khalid.abdi@email.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Frustration with lesson difficulty",
+      "body_text": "Hello!\n\nI have been using Treslingo for a couple of months, and I feel like the lessons are inconsistent in difficulty. Some grammar topics are super easy, while others lead to me feeling overwhelmed. \n\nI want to make sure I’m getting the most out of the app. Is there a way to provide you feedback on specific lessons?\n\nThanks,\nKhalid Abdi\n\nkhalid.abdi@email.com",
+      "body_html": "<html><body>Hello!<br><br>I have been using Treslingo for a couple of months, and I feel like the lessons are inconsistent in difficulty. Some grammar topics are super easy, while others lead to me feeling overwhelmed. <br><br>I want to make sure I’m getting the most out of the app. Is there a way to provide you feedback on specific lessons?<br><br>Thanks,<br>Khalid Abdi<br><br>khalid.abdi@email.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-06-24T08:15:32.037Z",
+      "created_at": "2025-06-24T08:15:32.037Z",
+      "updated_at": "2025-06-24T08:15:32.037Z"
+    },
+    {
+      "id": 31,
+      "thread_id": 31,
+      "from_email": "patricia.wells@email.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Request for a refund",
+      "body_text": "Dear Treslingo,\n\nI’m reaching out regarding a charge I didn't intend to make for my premium subscription this month. I thought I had cancelled it at the end of last month, but I was still billed. \n\nCould you please process a refund for me? I appreciate your help with this matter. \n\nSincerely,\nPatricia Wells\n\npatricia.wells@email.com",
+      "body_html": "<html><body>Dear Treslingo,<br><br>I’m reaching out regarding a charge I didn't intend to make for my premium subscription this month. I thought I had cancelled it at the end of last month, but I was still billed. <br><br>Could you please process a refund for me? I appreciate your help with this matter. <br><br>Sincerely,<br>Patricia Wells<br><br>patricia.wells@email.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-06-29T15:45:49.254Z",
+      "created_at": "2025-06-29T15:45:49.254Z",
+      "updated_at": "2025-06-29T15:45:49.254Z"
+    },
+    {
+      "id": 32,
+      "thread_id": 32,
+      "from_email": "carlos.jimenez@email.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Feedback on copyrighted text",
+      "body_text": "Hi Team,\n\nI just wanted to bring to your attention that I’ve seen some copyrighted content in the lessons, especially a few book excerpts that seemed familiar.  \n\nPlease look into this, as I believe it's important for educational tools to respect copyright. Thank you for your understanding!\n\nBest,\nCarlos Jiménez\n\ncarlos.jimenez@email.com",
+      "body_html": "<html><body>Hi Team,<br><br>I just wanted to bring to your attention that I’ve seen some copyrighted content in the lessons, especially a few book excerpts that seemed familiar.  <br><br>Please look into this, as I believe it's important for educational tools to respect copyright. Thank you for your understanding!<br><br>Best,<br>Carlos Jiménez<br><br>carlos.jimenez@email.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-06-25T21:49:46.735Z",
+      "created_at": "2025-06-25T21:49:46.735Z",
+      "updated_at": "2025-06-25T21:49:46.735Z"
+    },
+    {
+      "id": 33,
+      "thread_id": 33,
+      "from_email": "nina.paterson@email.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Not receiving daily notifications",
+      "body_text": "Hi there!\n\nI used to get daily notifications for my learning streak reminders, but lately, I haven’t been receiving them. I really relied on those notifications to remind me to study. Can you check if there’s a glitch or if I need to turn something back on? \n\nThanks so much! \n\nRegards,\nNina Paterson\n\nnina.paterson@email.com",
+      "body_html": "<html><body>Hi there!<br><br>I used to get daily notifications for my learning streak reminders, but lately, I haven’t been receiving them. I really relied on those notifications to remind me to study. Can you check if there’s a glitch or if I need to turn something back on? <br><br>Thanks so much! <br><br>Regards,<br>Nina Paterson<br><br>nina.paterson@email.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-07-04T06:41:07.584Z",
+      "created_at": "2025-07-04T06:41:07.584Z",
+      "updated_at": "2025-07-04T06:41:07.584Z"
+    },
+    {
+      "id": 34,
+      "thread_id": 34,
+      "from_email": "omar.badr@email.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Difficulties with lesson completion",
+      "body_text": "Dear Treslingo Team,\n\nI wanted to share my experience with the app. I tend to have a hard time finishing some lessons, as I often get stuck on pronunciation exercises. It feels like the app expects too much from me, and I need more guidance to understand how to improve.\n\nCould you provide additional resources or tips on perfecting pronunciation? I'd appreciate it!\n\nThank you!\n\nSincerely,\nOmar Badr\n\nomar.badr@email.com",
+      "body_html": "<html><body>Dear Treslingo Team,<br><br>I wanted to share my experience with the app. I tend to have a hard time finishing some lessons, as I often get stuck on pronunciation exercises. It feels like the app expects too much from me, and I need more guidance to understand how to improve.<br><br>Could you provide additional resources or tips on perfecting pronunciation? I'd appreciate it!<br><br>Thank you!<br><br>Sincerely,<br>Omar Badr<br><br>omar.badr@email.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-07-05T05:56:29.268Z",
+      "created_at": "2025-07-05T05:56:29.268Z",
+      "updated_at": "2025-07-05T05:56:29.268Z"
+    },
+    {
+      "id": 35,
+      "thread_id": 35,
+      "from_email": "mrodriguez@gmail.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Lost Streak - Need Help!",
+      "body_text": "Hi Treslingo Team,\n\nI hope you're doing well! I just wanted to reach out because my daily streak got reset. I was on day 47, and I was so proud of that! I logged in today and saw it was gone. I think it might have been because I traveled to a different timezone and didn’t get a chance to complete my lesson. \n\nCould you please help me recover my streak? I really don’t want to lose my progress! I'm enjoying the app a lot, but this was very frustrating.\n\nThanks so much for your help!\n\nBest,\nMaria Rodriguez\nmrodriguez@gmail.com",
+      "body_html": "<html><body>Hi Treslingo Team,<br><br>I hope you're doing well! I just wanted to reach out because my daily streak got reset. I was on day 47, and I was so proud of that! I logged in today and saw it was gone. I think it might have been because I traveled to a different timezone and didn’t get a chance to complete my lesson. <br><br>Could you please help me recover my streak? I really don’t want to lose my progress! I'm enjoying the app a lot, but this was very frustrating.<br><br>Thanks so much for your help!<br><br>Best,<br>Maria Rodriguez<br>mrodriguez@gmail.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-06-22T13:01:58.215Z",
+      "created_at": "2025-06-22T13:01:58.215Z",
+      "updated_at": "2025-06-22T13:01:58.215Z"
+    },
+    {
+      "id": 36,
+      "thread_id": 36,
+      "from_email": "tommynguyen@outlook.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Audio Issue with Speaking Lessons",
+      "body_text": "Hello,\n\nI’ve been using Treslingo for a while now, and I love it, but I’ve run into a problem. The audio for the speaking exercises isn’t working! I’ve tried restarting the app, checking my volume settings, and even reinstalling, but nothing seems to help.\n\nI’m really trying to improve my speaking skills, and without the audio, it’s difficult to get the pronunciation right. Can you suggest anything else I could try?\n\nThank you for your assistance!\n\nKind regards,\nTommy Nguyen\ntommynguyen@outlook.com",
+      "body_html": "<html><body>Hello,<br><br>I’ve been using Treslingo for a while now, and I love it, but I’ve run into a problem. The audio for the speaking exercises isn’t working! I’ve tried restarting the app, checking my volume settings, and even reinstalling, but nothing seems to help.<br><br>I’m really trying to improve my speaking skills, and without the audio, it’s difficult to get the pronunciation right. Can you suggest anything else I could try?<br><br>Thank you for your assistance!<br><br>Kind regards,<br>Tommy Nguyen<br>tommynguyen@outlook.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-07-10T08:45:26.162Z",
+      "created_at": "2025-07-10T08:45:26.162Z",
+      "updated_at": "2025-07-10T08:45:26.162Z"
+    },
+    {
+      "id": 37,
+      "thread_id": 37,
+      "from_email": "jenna.smith@email.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Confused About Premium Subscription",
+      "body_text": "Hey Treslingo Support,\n\nI have a question regarding my subscription. I signed up for the premium version about a month ago, but I noticed I was still seeing ads the other day. Is there something wrong with my account? I really liked the ad-free experience initially! \n\nCould you check if my payment went through and also clarify how to ensure everything is working properly? \n\nThanks a lot!\n\nCheers,\nJenna Smith\njenna.smith@email.com",
+      "body_html": "<html><body>Hey Treslingo Support,<br><br>I have a question regarding my subscription. I signed up for the premium version about a month ago, but I noticed I was still seeing ads the other day. Is there something wrong with my account? I really liked the ad-free experience initially! <br><br>Could you check if my payment went through and also clarify how to ensure everything is working properly? <br><br>Thanks a lot!<br><br>Cheers,<br>Jenna Smith<br>jenna.smith@email.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-06-13T23:18:16.546Z",
+      "created_at": "2025-06-13T23:18:16.546Z",
+      "updated_at": "2025-06-13T23:18:16.546Z"
+    },
+    {
+      "id": 38,
+      "thread_id": 38,
+      "from_email": "evelyn.johnson@xyz.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Lesson Progress Not Saving!",
+      "body_text": "Hi there,\n\nI’ve been having a really frustrating experience. I spent hours on my Spanish lessons the past week, but when I log in, my progress isn’t saved! I logged out and back in, but it’s still showing that I’m in lesson 3, while I've completed at least lessons 4 and 5. \n\nMy account number is TR-12345. Can you please help me figure this out? I don’t want to keep losing my hard work.\n\nThanks a ton,\nEvelyn Johnson\nevelyn.johnson@xyz.com",
+      "body_html": "<html><body>Hi there,<br><br>I’ve been having a really frustrating experience. I spent hours on my Spanish lessons the past week, but when I log in, my progress isn’t saved! I logged out and back in, but it’s still showing that I’m in lesson 3, while I've completed at least lessons 4 and 5. <br><br>My account number is TR-12345. Can you please help me figure this out? I don’t want to keep losing my hard work.<br><br>Thanks a ton,<br>Evelyn Johnson<br>evelyn.johnson@xyz.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-07-03T19:53:09.237Z",
+      "created_at": "2025-07-03T19:53:09.237Z",
+      "updated_at": "2025-07-03T19:53:09.237Z"
+    },
+    {
+      "id": 39,
+      "thread_id": 39,
+      "from_email": "old_email@example.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "How to Change My Email Address",
+      "body_text": "Hello Treslingo,\n\nI’m trying to update my email address associated with my account, but I can’t find an option in the app. I’d like to switch from my old email (old_email@example.com) to new_email@example.com. \n\nCould you guide me through the steps? I’ve really enjoyed using Treslingo lately—I’m learning so much!\n\nWarm wishes,\nSanjay Patel\nsanjay.patel@example.com",
+      "body_html": "<html><body>Hello Treslingo,<br><br>I’m trying to update my email address associated with my account, but I can’t find an option in the app. I’d like to switch from my old email (old_email@example.com) to new_email@example.com. <br><br>Could you guide me through the steps? I’ve really enjoyed using Treslingo lately—I’m learning so much!<br><br>Warm wishes,<br>Sanjay Patel<br>sanjay.patel@example.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-06-27T23:06:26.383Z",
+      "created_at": "2025-06-27T23:06:26.383Z",
+      "updated_at": "2025-06-27T23:06:26.383Z"
+    },
+    {
+      "id": 40,
+      "thread_id": 40,
+      "from_email": "cheryl.adams@gmail.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "My Kids Love Treslingo!",
+      "body_text": "Hi there!\n\nI just wanted to drop a line to let you know how much my kids enjoy using your app! They’ve been learning Spanish for a few months now, and they’re making great progress. The gamified lessons and the cute cat mascot keep them engaged. \n\nHowever, I’m curious—are there any plans for a family account option? It would be nice to manage their individual progress in one place. \n\nThanks for creating such a fantastic app!\n\nBest regards,\nCheryl Adams\ncheryl.adams@gmail.com",
+      "body_html": "<html><body>Hi there!<br><br>I just wanted to drop a line to let you know how much my kids enjoy using your app! They’ve been learning Spanish for a few months now, and they’re making great progress. The gamified lessons and the cute cat mascot keep them engaged. <br><br>However, I’m curious—are there any plans for a family account option? It would be nice to manage their individual progress in one place. <br><br>Thanks for creating such a fantastic app!<br><br>Best regards,<br>Cheryl Adams<br>cheryl.adams@gmail.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-06-26T01:49:42.834Z",
+      "created_at": "2025-06-26T01:49:42.834Z",
+      "updated_at": "2025-06-26T01:49:42.834Z"
+    },
+    {
+      "id": 41,
+      "thread_id": 41,
+      "from_email": "liam.oreilly@aol.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Streak Freeze Not Working",
+      "body_text": "Hello,\n\nI’m reaching out because I recently tried to use the streak freeze option, but it didn’t seem to apply. I thought I had set it up for my vacation days, but when I returned, my streak was still reset. \n\nI’m very upset because I’ve been consistent for 32 days! Can you assist me in figuring this out? Maybe I missed something? \n\nThanks in advance!\n\nSincerely,\nLiam O’Reilly\nliam.oreilly@aol.com",
+      "body_html": "<html><body>Hello,<br><br>I’m reaching out because I recently tried to use the streak freeze option, but it didn’t seem to apply. I thought I had set it up for my vacation days, but when I returned, my streak was still reset. <br><br>I’m very upset because I’ve been consistent for 32 days! Can you assist me in figuring this out? Maybe I missed something? <br><br>Thanks in advance!<br><br>Sincerely,<br>Liam O’Reilly<br>liam.oreilly@aol.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-06-16T10:44:00.662Z",
+      "created_at": "2025-06-16T10:44:00.662Z",
+      "updated_at": "2025-06-16T10:44:00.662Z"
+    },
+    {
+      "id": 42,
+      "thread_id": 42,
+      "from_email": "fatima.al.sayed@hotmail.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "App Crashes on Android",
+      "body_text": "Hey! \n\nI love using Treslingo, but lately, my app keeps crashing on my Android device. It's very disappointing, especially when I'm in the middle of a lesson. I cleared the app cache, but the issue still persists.\n\nIs there an update or fix in the works? I’d hate to stop using it, but it's hard to learn under these conditions!\n\nThank you for your help!\n\nBest,\nFatima Al-Sayed\nfatima.al.sayed@hotmail.com",
+      "body_html": "<html><body>Hey! <br><br>I love using Treslingo, but lately, my app keeps crashing on my Android device. It's very disappointing, especially when I'm in the middle of a lesson. I cleared the app cache, but the issue still persists.<br><br>Is there an update or fix in the works? I’d hate to stop using it, but it's hard to learn under these conditions!<br><br>Thank you for your help!<br><br>Best,<br>Fatima Al-Sayed<br>fatima.al.sayed@hotmail.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-07-11T13:23:48.377Z",
+      "created_at": "2025-07-11T13:23:48.377Z",
+      "updated_at": "2025-07-11T13:23:48.377Z"
+    },
+    {
+      "id": 43,
+      "thread_id": 43,
+      "from_email": "james.martin@domain.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Lessons Are Too Easy for Me",
+      "body_text": "Dear Treslingo Team,\n\nI wanted to offer some feedback regarding the lesson difficulty. I’ve noticed that the vocabulary and grammar lessons seem quite easy for me. I was hoping for a more challenging experience. Could you tell me if there are plans to introduce more advanced levels or perhaps some tips on how to advance more quickly through the lessons?\n\nI appreciate any help you can provide!\n\nThank you!\n\nRegards,\nJames Martin\njames.martin@domain.com",
+      "body_html": "<html><body>Dear Treslingo Team,<br><br>I wanted to offer some feedback regarding the lesson difficulty. I’ve noticed that the vocabulary and grammar lessons seem quite easy for me. I was hoping for a more challenging experience. Could you tell me if there are plans to introduce more advanced levels or perhaps some tips on how to advance more quickly through the lessons?<br><br>I appreciate any help you can provide!<br><br>Thank you!<br><br>Regards,<br>James Martin<br>james.martin@domain.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-07-06T12:54:25.793Z",
+      "created_at": "2025-07-06T12:54:25.793Z",
+      "updated_at": "2025-07-06T12:54:25.793Z"
+    },
+    {
+      "id": 44,
+      "thread_id": 44,
+      "from_email": "anna.wong123@gmail.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Legal Issue with Copyright",
+      "body_text": "Hi,\n\nI’m writing to you regarding an issue I encountered while using the app. During one of my lessons, I noticed that copyrighted text from a book was used in a vocabulary exercise. I’m concerned about the legality of this and wanted to know what your policy is regarding copyright issues.\n\nThank you for addressing this matter. \n\nSincerely,\nAnna Wong\nanna.wong123@gmail.com",
+      "body_html": "<html><body>Hi,<br><br>I’m writing to you regarding an issue I encountered while using the app. During one of my lessons, I noticed that copyrighted text from a book was used in a vocabulary exercise. I’m concerned about the legality of this and wanted to know what your policy is regarding copyright issues.<br><br>Thank you for addressing this matter. <br><br>Sincerely,<br>Anna Wong<br>anna.wong123@gmail.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-06-11T21:14:46.325Z",
+      "created_at": "2025-06-11T21:14:46.325Z",
+      "updated_at": "2025-06-11T21:14:46.325Z"
+    },
+    {
+      "id": 45,
+      "thread_id": 45,
+      "from_email": "carlos.ramos@yahoo.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Can't Retrieve My Password",
+      "body_text": "Hello,\n\nI seem to have forgotten my password, and I can't access my account. I've tried the reset option, but I didn’t receive an email to change it. My account number is TR-54321. Can you assist me with this? I use the app for my Spanish homework, and I can’t afford to fall behind!\n\nThanks for your help!\n\nBest wishes,\nCarlos Ramos\ncarlos.ramos@yahoo.com",
+      "body_html": "<html><body>Hello,<br><br>I seem to have forgotten my password, and I can't access my account. I've tried the reset option, but I didn’t receive an email to change it. My account number is TR-54321. Can you assist me with this? I use the app for my Spanish homework, and I can’t afford to fall behind!<br><br>Thanks for your help!<br><br>Best wishes,<br>Carlos Ramos<br>carlos.ramos@yahoo.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-07-07T17:31:01.287Z",
+      "created_at": "2025-07-07T17:31:01.287Z",
+      "updated_at": "2025-07-07T17:31:01.287Z"
+    },
+    {
+      "id": 46,
+      "thread_id": 46,
+      "from_email": "natasha.villegas@outlook.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Notifications Issue",
+      "body_text": "Hi Treslingo,\n\nI’ve been having a bit of trouble with my notifications. I’m not getting reminders about my lessons anymore, and it was so helpful when they sent daily notifications! \n\nCould you let me know if there’s a setting I need to change or something else going on with my account? I’d love to keep my learning streak going!\n\nAppreciate it!\n\nCheers,\nNatasha Villegas\nnatasha.villegas@outlook.com",
+      "body_html": "<html><body>Hi Treslingo,<br><br>I’ve been having a bit of trouble with my notifications. I’m not getting reminders about my lessons anymore, and it was so helpful when they sent daily notifications! <br><br>Could you let me know if there’s a setting I need to change or something else going on with my account? I’d love to keep my learning streak going!<br><br>Appreciate it!<br><br>Cheers,<br>Natasha Villegas<br>natasha.villegas@outlook.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-06-13T17:17:41.363Z",
+      "created_at": "2025-06-13T17:17:41.363Z",
+      "updated_at": "2025-06-13T17:17:41.363Z"
+    },
+    {
+      "id": 47,
+      "thread_id": 47,
+      "from_email": "kiran.dance@gmail.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Feedback on Level Design",
+      "body_text": "Hello,\n\nI wanted to share my thoughts after using the app for some time. I really enjoy the layout and cute cat mascot, but I feel that integrating more cultural context would greatly enhance the lessons. Do you think there are plans to include things like idiomatic expressions or local dialects in future updates? That would be awesome!\n\nThanks for considering!\n\nRegards,\nKiran Dance\nkiran.dance@gmail.com",
+      "body_html": "<html><body>Hello,<br><br>I wanted to share my thoughts after using the app for some time. I really enjoy the layout and cute cat mascot, but I feel that integrating more cultural context would greatly enhance the lessons. Do you think there are plans to include things like idiomatic expressions or local dialects in future updates? That would be awesome!<br><br>Thanks for considering!<br><br>Regards,<br>Kiran Dance<br>kiran.dance@gmail.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-07-08T06:33:48.501Z",
+      "created_at": "2025-07-08T06:33:48.501Z",
+      "updated_at": "2025-07-08T06:33:48.501Z"
+    },
+    {
+      "id": 48,
+      "thread_id": 48,
+      "from_email": "oliver.black@mail.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Reporting an App Bug",
+      "body_text": "Dear Treslingo Team,\n\nI wanted to report a bug I encountered while using the app. The app occasionally freezes when I try to access the leaderboards section. I love the competition aspect, so it's a bit frustrating when it doesn’t work.\n\nCan you look into this? I’m using an iPhone 10. \n\nThank you so much for creating such a fun app!\n\nBest,\nOliver Black\noliver.black@mail.com",
+      "body_html": "<html><body>Dear Treslingo Team,<br><br>I wanted to report a bug I encountered while using the app. The app occasionally freezes when I try to access the leaderboards section. I love the competition aspect, so it's a bit frustrating when it doesn’t work.<br><br>Can you look into this? I’m using an iPhone 10. <br><br>Thank you so much for creating such a fun app!<br><br>Best,<br>Oliver Black<br>oliver.black@mail.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-06-18T19:13:42.509Z",
+      "created_at": "2025-06-18T19:13:42.509Z",
+      "updated_at": "2025-06-18T19:13:42.509Z"
+    },
+    {
+      "id": 49,
+      "thread_id": 49,
+      "from_email": "helen.carter@gmail.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Questions About Family Accounts",
+      "body_text": "Hi!\n\nI’m considering getting a family account for Treslingo, but I’m not clear on how that works. How many accounts can I link? And can we all use the premium features with it? My kids are really getting into learning Spanish, and I want to support that!\n\nThanks for the info!\n\nCheers,\nHelen Carter\nhelen.carter@gmail.com",
+      "body_html": "<html><body>Hi!<br><br>I’m considering getting a family account for Treslingo, but I’m not clear on how that works. How many accounts can I link? And can we all use the premium features with it? My kids are really getting into learning Spanish, and I want to support that!<br><br>Thanks for the info!<br><br>Cheers,<br>Helen Carter<br>helen.carter@gmail.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-07-10T14:47:02.823Z",
+      "created_at": "2025-07-10T14:47:02.823Z",
+      "updated_at": "2025-07-10T14:47:02.823Z"
+    },
+    {
+      "id": 50,
+      "thread_id": 50,
+      "from_email": "henry.thompson@workmail.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Trouble with Lesson Syncing",
+      "body_text": "Hello!\n\nI’ve been experiencing some issues with syncing my lessons across devices. I completed several lessons on my tablet, but they’re not showing up on my phone. Is there a way to manually sync it? \n\nI’d appreciate any tips you may have. I don’t want to lose any progress! \n\nThanks in advance,\nHenry Thompson\nhenry.thompson@workmail.com",
+      "body_html": "<html><body>Hello!<br><br>I’ve been experiencing some issues with syncing my lessons across devices. I completed several lessons on my tablet, but they’re not showing up on my phone. Is there a way to manually sync it? <br><br>I’d appreciate any tips you may have. I don’t want to lose any progress! <br><br>Thanks in advance,<br>Henry Thompson<br>henry.thompson@workmail.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-06-11T21:54:31.923Z",
+      "created_at": "2025-06-11T21:54:31.923Z",
+      "updated_at": "2025-06-11T21:54:31.923Z"
+    },
+    {
+      "id": 51,
+      "thread_id": 51,
+      "from_email": "lola.lin@femails.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Billing Queries for Family Account",
+      "body_text": "Dear Treslingo,\n\nI have a question about billing. If I switch to a family account, how would the charges work? I have three children and want to make sure we’re not charged too much! Also, what’s the cancellation policy if we decide it’s not right for us?\n\nThanks for your clarity on this!\n\nBest,\nLola Lin\nlola.lin@femails.com",
+      "body_html": "<html><body>Dear Treslingo,<br><br>I have a question about billing. If I switch to a family account, how would the charges work? I have three children and want to make sure we’re not charged too much! Also, what’s the cancellation policy if we decide it’s not right for us?<br><br>Thanks for your clarity on this!<br><br>Best,<br>Lola Lin<br>lola.lin@femails.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-07-03T03:52:59.477Z",
+      "created_at": "2025-07-03T03:52:59.477Z",
+      "updated_at": "2025-07-03T03:52:59.477Z"
+    },
+    {
+      "id": 52,
+      "thread_id": 52,
+      "from_email": "derek.pruitt@example.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Excited About New Updates!",
+      "body_text": "Hey Treslingo!\n\nI just wanted to say how much I love the app! The new updates are fantastic, and I especially enjoy the extra challenges. They really keep me motivated to learn!\n\nJust a quick question—are there any more updates planned for the future? I’m excited to see what else you come up with!\n\nThank you for the awesome experience!\n\nCheers,\nDerek Pruitt\nderek.pruitt@example.com",
+      "body_html": "<html><body>Hey Treslingo!<br><br>I just wanted to say how much I love the app! The new updates are fantastic, and I especially enjoy the extra challenges. They really keep me motivated to learn!<br><br>Just a quick question—are there any more updates planned for the future? I’m excited to see what else you come up with!<br><br>Thank you for the awesome experience!<br><br>Cheers,<br>Derek Pruitt<br>derek.pruitt@example.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-06-14T15:17:43.925Z",
+      "created_at": "2025-06-14T15:17:43.925Z",
+      "updated_at": "2025-06-14T15:17:43.925Z"
+    },
+    {
+      "id": 53,
+      "thread_id": 53,
+      "from_email": "maria.g@example.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Lost my daily streak 😩",
+      "body_text": "Hey Treslingo team! I’m feeling super frustrated because I was on a 35-day streak and suddenly it was gone! I checked my account (TR-12345) and it says my last login was a day before the streak ended, but I was definitely learning! I travel a lot and have timezone changes affecting my lessons - could that be it? I’d love to hear back soon, I really want to keep my streak going. Thanks!",
+      "body_html": "<html><body>Hey Treslingo team! I’m feeling super frustrated because I was on a 35-day streak and suddenly it was gone! I checked my account (TR-12345) and it says my last login was a day before the streak ended, but I was definitely learning! I travel a lot and have timezone changes affecting my lessons - could that be it? I’d love to hear back soon, I really want to keep my streak going. Thanks!</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-07-01T14:35:40.617Z",
+      "created_at": "2025-07-01T14:35:40.617Z",
+      "updated_at": "2025-07-01T14:35:40.617Z"
+    },
+    {
+      "id": 54,
+      "thread_id": 54,
+      "from_email": "john.d@example.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Help with app crashing",
+      "body_text": "Hello, I just downloaded the Treslingo app on my Android phone, and it keeps crashing every time I try to finish a speaking exercise. I’m really excited about learning Spanish but this issue is making it impossible! My account is TR-67890. Can you assist me? I’m using a Samsung Galaxy model, maybe that’s causing the issue? Thanks!",
+      "body_html": "<html><body>Hello, I just downloaded the Treslingo app on my Android phone, and it keeps crashing every time I try to finish a speaking exercise. I’m really excited about learning Spanish but this issue is making it impossible! My account is TR-67890. Can you assist me? I’m using a Samsung Galaxy model, maybe that’s causing the issue? Thanks!</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-07-03T03:02:29.212Z",
+      "created_at": "2025-07-03T03:02:29.212Z",
+      "updated_at": "2025-07-03T03:02:29.212Z"
+    },
+    {
+      "id": 55,
+      "thread_id": 55,
+      "from_email": "emily.s@hotmail.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Forgotten password 🤦‍♂️",
+      "body_text": "Hi there, I’m having trouble accessing my account (TR-54321). I’ve forgotten my password and can’t remember which email I used. I think I used my school email but I’m not sure. Is there any way to recover my account? I really don’t want to lose my progress. I’ve put in so much effort into my lessons. Thank you!",
+      "body_html": "<html><body>Hi there, I’m having trouble accessing my account (TR-54321). I’ve forgotten my password and can’t remember which email I used. I think I used my school email but I’m not sure. Is there any way to recover my account? I really don’t want to lose my progress. I’ve put in so much effort into my lessons. Thank you!</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-06-20T07:15:45.837Z",
+      "created_at": "2025-06-20T07:15:45.837Z",
+      "updated_at": "2025-06-20T07:15:45.837Z"
+    },
+    {
+      "id": 56,
+      "thread_id": 56,
+      "from_email": "mark.t@example.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Question about premium features",
+      "body_text": "Hi Treslingo! I’m currently using the free version of the app, but I’m thinking about upgrading to premium. Can you please tell me how the offline mode works? Will I be able to access all the lessons I’ve completed without internet? I usually travel for work a lot, so that would be really helpful. Thanks!",
+      "body_html": "<html><body>Hi Treslingo! I’m currently using the free version of the app, but I’m thinking about upgrading to premium. Can you please tell me how the offline mode works? Will I be able to access all the lessons I’ve completed without internet? I usually travel for work a lot, so that would be really helpful. Thanks!</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-06-23T08:42:34.013Z",
+      "created_at": "2025-06-23T08:42:34.013Z",
+      "updated_at": "2025-06-23T08:42:34.013Z"
+    },
+    {
+      "id": 57,
+      "thread_id": 57,
+      "from_email": "sarah.peters@email.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Disappointed with lesson difficulty",
+      "body_text": "Hello, I have been using Treslingo for about a month now (account TR-98765) and I’m finding the vocab lessons quite easy. I was hoping to challenge myself a bit more but it feels like I’m not learning anything new. Is there a way to increase the lesson difficulty? Thanks for your response.",
+      "body_html": "<html><body>Hello, I have been using Treslingo for about a month now (account TR-98765) and I’m finding the vocab lessons quite easy. I was hoping to challenge myself a bit more but it feels like I’m not learning anything new. Is there a way to increase the lesson difficulty? Thanks for your response.</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-06-23T11:46:59.795Z",
+      "created_at": "2025-06-23T11:46:59.795Z",
+      "updated_at": "2025-06-23T11:46:59.795Z"
+    },
+    {
+      "id": 58,
+      "thread_id": 58,
+      "from_email": "kevin.lee@example.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Audio not working 😕",
+      "body_text": "Dear Treslingo team, I’m encountering an audio problem where I can’t hear anything during the speaking and listening exercises. My account number is TR-12345. I’ve tried restarting the app and checking my phone volume, but it’s still not working! This is super frustrating. Please help!",
+      "body_html": "<html><body>Dear Treslingo team, I’m encountering an audio problem where I can’t hear anything during the speaking and listening exercises. My account number is TR-12345. I’ve tried restarting the app and checking my phone volume, but it’s still not working! This is super frustrating. Please help!</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-06-21T09:40:23.745Z",
+      "created_at": "2025-06-21T09:40:23.745Z",
+      "updated_at": "2025-06-21T09:40:23.745Z"
+    },
+    {
+      "id": 59,
+      "thread_id": 59,
+      "from_email": "anna.clark@example.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Billing confusion",
+      "body_text": "Hi Treslingo, I was charged $9.99 for the premium subscription, but I thought I had canceled it last month. My account is TR-24680. Can you please check this for me? I would appreciate it if you could help me understand what happened. Thank you.",
+      "body_html": "<html><body>Hi Treslingo, I was charged $9.99 for the premium subscription, but I thought I had canceled it last month. My account is TR-24680. Can you please check this for me? I would appreciate it if you could help me understand what happened. Thank you.</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-06-26T22:16:56.317Z",
+      "created_at": "2025-06-26T22:16:56.317Z",
+      "updated_at": "2025-06-26T22:16:56.317Z"
+    },
+    {
+      "id": 60,
+      "thread_id": 60,
+      "from_email": "laura.king@email.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Suggestions for kids' learning",
+      "body_text": "Hello, my daughter (she's 10) loves learning with Treslingo, but I think more games could make it even more fun for her! Are there plans to add more interactive activities for kids? Also, is it possible to set up a family account? I’d love to start learning too! Thanks for the great app!",
+      "body_html": "<html><body>Hello, my daughter (she's 10) loves learning with Treslingo, but I think more games could make it even more fun for her! Are there plans to add more interactive activities for kids? Also, is it possible to set up a family account? I’d love to start learning too! Thanks for the great app!</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-06-24T06:15:18.780Z",
+      "created_at": "2025-06-24T06:15:18.780Z",
+      "updated_at": "2025-06-24T06:15:18.780Z"
+    },
+    {
+      "id": 61,
+      "thread_id": 61,
+      "from_email": "simone.t@gmail.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Streak freeze not working",
+      "body_text": "Hi there, I tried to use my streak freeze today because I was sick and couldn’t log in, but it didn’t work! I thought I had done everything right (my account is TR-13579). Please let me know how I can fix this. I was on a 14-day streak. I’m really worried about losing it! Thanks!",
+      "body_html": "<html><body>Hi there, I tried to use my streak freeze today because I was sick and couldn’t log in, but it didn’t work! I thought I had done everything right (my account is TR-13579). Please let me know how I can fix this. I was on a 14-day streak. I’m really worried about losing it! Thanks!</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-07-09T22:49:49.604Z",
+      "created_at": "2025-07-09T22:49:49.604Z",
+      "updated_at": "2025-07-09T22:49:49.604Z"
+    },
+    {
+      "id": 62,
+      "thread_id": 62,
+      "from_email": "david.johnson@email.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Family account setup",
+      "body_text": "Hello! I’ve recently come across the family account option for Treslingo, but I’m not quite sure how it works. I have three kids and would love to enroll them under my account (TR-11111). Can you explain how family accounts function? Can they all learn at different levels?",
+      "body_html": "<html><body>Hello! I’ve recently come across the family account option for Treslingo, but I’m not quite sure how it works. I have three kids and would love to enroll them under my account (TR-11111). Can you explain how family accounts function? Can they all learn at different levels?</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-06-19T19:59:49.761Z",
+      "created_at": "2025-06-19T19:59:49.761Z",
+      "updated_at": "2025-06-19T19:59:49.761Z"
+    },
+    {
+      "id": 63,
+      "thread_id": 63,
+      "from_email": "karen.a@email.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Legal issue with lesson content",
+      "body_text": "Dear Treslingo support, I’ve been using your app and came across some copyrighted text in one of the lessons. I’m worried this might be an issue. Can you confirm if your content is all cleared for use? I’d appreciate your help in addressing this matter. Thank you.",
+      "body_html": "<html><body>Dear Treslingo support, I’ve been using your app and came across some copyrighted text in one of the lessons. I’m worried this might be an issue. Can you confirm if your content is all cleared for use? I’d appreciate your help in addressing this matter. Thank you.</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-07-03T01:30:55.277Z",
+      "created_at": "2025-07-03T01:30:55.277Z",
+      "updated_at": "2025-07-03T01:30:55.277Z"
+    },
+    {
+      "id": 64,
+      "thread_id": 64,
+      "from_email": "ben.roberts@example.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Too many reminders!",
+      "body_text": "Hey Treslingo! I love your app, but the reminder notifications are driving me crazy. I get multiple alerts each day no matter how I set the preferences! Can you help me adjust this? My account is TR-22222. Thank you!",
+      "body_html": "<html><body>Hey Treslingo! I love your app, but the reminder notifications are driving me crazy. I get multiple alerts each day no matter how I set the preferences! Can you help me adjust this? My account is TR-22222. Thank you!</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-06-14T00:38:23.251Z",
+      "created_at": "2025-06-14T00:38:23.251Z",
+      "updated_at": "2025-06-14T00:38:23.251Z"
+    },
+    {
+      "id": 65,
+      "thread_id": 65,
+      "from_email": "jessica.brown@email.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Progress not syncing",
+      "body_text": "Hi, I have been facing an issue where my progress isn’t syncing properly. I completed a few lessons, but when I check my account history it shows I haven’t done them! My account number is TR-31415. I’m worried my hard work is not being saved. Help me out, please.",
+      "body_html": "<html><body>Hi, I have been facing an issue where my progress isn’t syncing properly. I completed a few lessons, but when I check my account history it shows I haven’t done them! My account number is TR-31415. I’m worried my hard work is not being saved. Help me out, please.</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-07-08T02:07:35.575Z",
+      "created_at": "2025-07-08T02:07:35.575Z",
+      "updated_at": "2025-07-08T02:07:35.575Z"
+    },
+    {
+      "id": 66,
+      "thread_id": 66,
+      "from_email": "samuel.lee@email.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Feedback on speaking exercises",
+      "body_text": "Hello Treslingo team, I just wanted to share that the speaking exercises really help me practice pronunciation! However, sometimes I feel they are a bit repetitive. Is there a way you could incorporate more diverse phrases and sentences? I find that would be beneficial. Thank you for considering!",
+      "body_html": "<html><body>Hello Treslingo team, I just wanted to share that the speaking exercises really help me practice pronunciation! However, sometimes I feel they are a bit repetitive. Is there a way you could incorporate more diverse phrases and sentences? I find that would be beneficial. Thank you for considering!</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-06-27T09:31:23.485Z",
+      "created_at": "2025-06-27T09:31:23.485Z",
+      "updated_at": "2025-06-27T09:31:23.485Z"
+    },
+    {
+      "id": 67,
+      "thread_id": 67,
+      "from_email": "nina.patel@example.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "App freezing often",
+      "body_text": "Dear support team, I’m having issues with the app freezing frequently, especially during vocabulary lessons. This is frustrating since I’m in the middle of my routine! My account is TR-45678. Could you please look into this? I can't wait to get back to learning without interruptions. Appreciate your help!",
+      "body_html": "<html><body>Dear support team, I’m having issues with the app freezing frequently, especially during vocabulary lessons. This is frustrating since I’m in the middle of my routine! My account is TR-45678. Could you please look into this? I can't wait to get back to learning without interruptions. Appreciate your help!</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-06-29T12:09:14.666Z",
+      "created_at": "2025-06-29T12:09:14.666Z",
+      "updated_at": "2025-06-29T12:09:14.666Z"
+    },
+    {
+      "id": 68,
+      "thread_id": 68,
+      "from_email": "olivia.w@example.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Quick question about XP points",
+      "body_text": "Hi Treslingo! I noticed I’ve been earning XP points pretty quickly, but I’m not entirely sure what they’re used for. Can you explain how they work and what I can do with them? I love the leaderboards too! Thanks so much!",
+      "body_html": "<html><body>Hi Treslingo! I noticed I’ve been earning XP points pretty quickly, but I’m not entirely sure what they’re used for. Can you explain how they work and what I can do with them? I love the leaderboards too! Thanks so much!</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-06-12T03:26:02.975Z",
+      "created_at": "2025-06-12T03:26:02.975Z",
+      "updated_at": "2025-06-12T03:26:02.975Z"
+    },
+    {
+      "id": 69,
+      "thread_id": 69,
+      "from_email": "daniel.m@email.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Question about lesson availability",
+      "body_text": "Hello! I’m currently using the app, and I wanted to know if there are any plans to add more lessons on advanced grammar topics? I feel like I’m starting to hit a wall with my learning progress. My account number is TR-89101. Any info is greatly appreciated! Thanks!",
+      "body_html": "<html><body>Hello! I’m currently using the app, and I wanted to know if there are any plans to add more lessons on advanced grammar topics? I feel like I’m starting to hit a wall with my learning progress. My account number is TR-89101. Any info is greatly appreciated! Thanks!</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-07-06T09:54:07.820Z",
+      "created_at": "2025-07-06T09:54:07.820Z",
+      "updated_at": "2025-07-06T09:54:07.820Z"
+    },
+    {
+      "id": 70,
+      "thread_id": 70,
+      "from_email": "rachel.green@email.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Issues with parental controls",
+      "body_text": "Hi, I’m a parent and I’d like to set up parental controls for my kid’s account (TR-22233). Can you tell me how I can manage this effectively? I want to ensure that their exposure to the app is safe and age-appropriate. Thank you!",
+      "body_html": "<html><body>Hi, I’m a parent and I’d like to set up parental controls for my kid’s account (TR-22233). Can you tell me how I can manage this effectively? I want to ensure that their exposure to the app is safe and age-appropriate. Thank you!</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-06-20T14:47:06.771Z",
+      "created_at": "2025-06-20T14:47:06.771Z",
+      "updated_at": "2025-06-20T14:47:06.771Z"
+    },
+    {
+      "id": 71,
+      "thread_id": 71,
+      "from_email": "maria.lopez@example.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Help! I Lost My Streak!",
+      "body_text": "Hi Treslingo team,\n\nI’m writing because I lost my daily streak and I’m absolutely devastated. I had a 21-day streak going, and I logged in yesterday, but it said I didn’t complete my lesson. I think it might be because of the time zone change (I’m in California now, but I was in New York last month). \n\nCould you please help me restore my streak? I really love the app and the cat mascot! \n\nThank you,\nMaria Lopez\nmaria.lopez@example.com",
+      "body_html": "<html><body>Hi Treslingo team,<br><br>I’m writing because I lost my daily streak and I’m absolutely devastated. I had a 21-day streak going, and I logged in yesterday, but it said I didn’t complete my lesson. I think it might be because of the time zone change (I’m in California now, but I was in New York last month). <br><br>Could you please help me restore my streak? I really love the app and the cat mascot! <br><br>Thank you,<br>Maria Lopez<br>maria.lopez@example.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-06-24T22:45:37.903Z",
+      "created_at": "2025-06-24T22:45:37.903Z",
+      "updated_at": "2025-06-24T22:45:37.903Z"
+    },
+    {
+      "id": 72,
+      "thread_id": 72,
+      "from_email": "tran.jimmy@email.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Audio Not Working on Lessons",
+      "body_text": "Hey there,\n\nI hope you are doing good! I have been trying to use the speaking and listening exercises, but the audio just won't play. It’s a bit annoying because that’s my fav part of the app! I have checked my phone’s volume and everything seems fine. Can you help me fix this please? \n\nThanks a ton!\nJimmy Tran\ntran.jimmy@email.com",
+      "body_html": "<html><body>Hey there,<br><br>I hope you are doing good! I have been trying to use the speaking and listening exercises, but the audio just won't play. It’s a bit annoying because that’s my fav part of the app! I have checked my phone’s volume and everything seems fine. Can you help me fix this please? <br><br>Thanks a ton!<br>Jimmy Tran<br>tran.jimmy@email.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-06-27T06:37:26.916Z",
+      "created_at": "2025-06-27T06:37:26.916Z",
+      "updated_at": "2025-06-27T06:37:26.916Z"
+    },
+    {
+      "id": 73,
+      "thread_id": 73,
+      "from_email": "carlagomes1234@gmail.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Subscription Cancellation",
+      "body_text": "Hello Treslingo,\n\nI am reaching out because I want to cancel my premium subscription. My account number is TR-02345. I’m currently unable to afford the monthly fee of $9.99. Can you please confirm when the cancellation will take effect? I don't want to get charged again. \n\nThank you for your understanding!\nCarla Gomes\ncarlagomes1234@gmail.com",
+      "body_html": "<html><body>Hello Treslingo,<br><br>I am reaching out because I want to cancel my premium subscription. My account number is TR-02345. I’m currently unable to afford the monthly fee of $9.99. Can you please confirm when the cancellation will take effect? I don't want to get charged again. <br><br>Thank you for your understanding!<br>Carla Gomes<br>carlagomes1234@gmail.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-06-30T12:46:58.351Z",
+      "created_at": "2025-06-30T12:46:58.351Z",
+      "updated_at": "2025-06-30T12:46:58.351Z"
+    },
+    {
+      "id": 74,
+      "thread_id": 74,
+      "from_email": "frank.smith@provider.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Confused About Family Accounts",
+      "body_text": "Hi,\n\nI’m a parent trying to set up a family account. My kids are really excited about learning Spanish with the app! Can you guide me through the process? I want to make sure that everyone has their own progress tracked. \n\nThank you so much for your help!\nFrank Smith\nfrank.smith@provider.com",
+      "body_html": "<html><body>Hi,<br><br>I’m a parent trying to set up a family account. My kids are really excited about learning Spanish with the app! Can you guide me through the process? I want to make sure that everyone has their own progress tracked. <br><br>Thank you so much for your help!<br>Frank Smith<br>frank.smith@provider.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-06-27T00:28:39.041Z",
+      "created_at": "2025-06-27T00:28:39.041Z",
+      "updated_at": "2025-06-27T00:28:39.041Z"
+    },
+    {
+      "id": 75,
+      "thread_id": 75,
+      "from_email": "emmapatel@hotmail.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Streak Freeze Help Needed!",
+      "body_text": "Hi Treslingo,\n\nI didn’t realize I had to use my streak freeze! I missed my lesson yesterday, and I’m so mad at myself. Is there any way you can help me apply my streak freeze since I didn't know how it works?\n\nThanks!\n- Emma Patel\nemmapatel@hotmail.com",
+      "body_html": "<html><body>Hi Treslingo,<br><br>I didn’t realize I had to use my streak freeze! I missed my lesson yesterday, and I’m so mad at myself. Is there any way you can help me apply my streak freeze since I didn't know how it works?<br><br>Thanks!<br>- Emma Patel<br>emmapatel@hotmail.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-07-06T01:20:17.256Z",
+      "created_at": "2025-07-06T01:20:17.256Z",
+      "updated_at": "2025-07-06T01:20:17.256Z"
+    },
+    {
+      "id": 76,
+      "thread_id": 76,
+      "from_email": "tyler.nguyen@gmail.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "App Crashing Every Time I Open It",
+      "body_text": "Hello,\n\nI need urgent help! The app crashes every time I try to open it on my phone (Android). I’ve tried uninstalling and reinstalling multiple times, but it still doesn't work. This is super frustrating, especially since I was almost done with my favorite lessons! \n\nPlease help me resolve this issue!\n- Tyler Nguyen\ntyler.nguyen@gmail.com",
+      "body_html": "<html><body>Hello,<br><br>I need urgent help! The app crashes every time I try to open it on my phone (Android). I’ve tried uninstalling and reinstalling multiple times, but it still doesn't work. This is super frustrating, especially since I was almost done with my favorite lessons! <br><br>Please help me resolve this issue!<br>- Tyler Nguyen<br>tyler.nguyen@gmail.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-06-18T06:21:25.249Z",
+      "created_at": "2025-06-18T06:21:25.249Z",
+      "updated_at": "2025-06-18T06:21:25.249Z"
+    },
+    {
+      "id": 77,
+      "thread_id": 77,
+      "from_email": "rachael.kim@school.edu",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Progress Not Saving",
+      "body_text": "Hello,\n\nI am having a huge problem where my progress isn’t saving! I completed the grammar lesson three times now, and every time I exit the app, it resets. It feels like I’m learning in circles. Account number: TR-05678. Please help! I really enjoy using the app. \n\nBest,\nRachael Kim\nrachael.kim@school.edu",
+      "body_html": "<html><body>Hello,<br><br>I am having a huge problem where my progress isn’t saving! I completed the grammar lesson three times now, and every time I exit the app, it resets. It feels like I’m learning in circles. Account number: TR-05678. Please help! I really enjoy using the app. <br><br>Best,<br>Rachael Kim<br>rachael.kim@school.edu</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-06-22T21:05:52.525Z",
+      "created_at": "2025-06-22T21:05:52.525Z",
+      "updated_at": "2025-06-22T21:05:52.525Z"
+    },
+    {
+      "id": 78,
+      "thread_id": 78,
+      "from_email": "zoe.ramirez@samplemail.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Too Many Notifications! Stop Them!",
+      "body_text": "Hi!\n\nI love Treslingo, but I feel overwhelmed by notifications. I receive reminders to practice way too often and it stresses me out! Can you please help me reduce or customize these notifications? I want to stay motivated, but this feels like too much.\n\nThanks,\n- Zoe Ramirez\nzoe.ramirez@samplemail.com",
+      "body_html": "<html><body>Hi!<br><br>I love Treslingo, but I feel overwhelmed by notifications. I receive reminders to practice way too often and it stresses me out! Can you please help me reduce or customize these notifications? I want to stay motivated, but this feels like too much.<br><br>Thanks,<br>- Zoe Ramirez<br>zoe.ramirez@samplemail.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-06-27T18:37:57.067Z",
+      "created_at": "2025-06-27T18:37:57.067Z",
+      "updated_at": "2025-06-27T18:37:57.067Z"
+    },
+    {
+      "id": 79,
+      "thread_id": 79,
+      "from_email": "cmartinez@randommail.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Difficulty Level Too Hard!",
+      "body_text": "Hey,\n\nI’ve been using Treslingo for a while now, and I’m finding the lessons way too difficult. The vocabulary just seems impossible to grasp. Is there a way to adjust the level or get some easier lessons? I want to learn but feel defeated.\n\nThanks,\n- Carlos Martinez\ncmartinez@randommail.com",
+      "body_html": "<html><body>Hey,<br><br>I’ve been using Treslingo for a while now, and I’m finding the lessons way too difficult. The vocabulary just seems impossible to grasp. Is there a way to adjust the level or get some easier lessons? I want to learn but feel defeated.<br><br>Thanks,<br>- Carlos Martinez<br>cmartinez@randommail.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-06-19T21:37:45.778Z",
+      "created_at": "2025-06-19T21:37:45.778Z",
+      "updated_at": "2025-06-19T21:37:45.778Z"
+    },
+    {
+      "id": 80,
+      "thread_id": 80,
+      "from_email": "lily.watson@fakemail.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Forgot My Password",
+      "body_text": "Hello,\n\nI forgot my password and can’t access my account (TR-09876). I remember the email I used, but I can’t seem to reset it. Can you send me a password reset link? I really need to get back to practicing! \n\nCheers,\n- Lily Watson\nlily.watson@fakemail.com",
+      "body_html": "<html><body>Hello,<br><br>I forgot my password and can’t access my account (TR-09876). I remember the email I used, but I can’t seem to reset it. Can you send me a password reset link? I really need to get back to practicing! <br><br>Cheers,<br>- Lily Watson<br>lily.watson@fakemail.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-07-09T16:14:56.435Z",
+      "created_at": "2025-07-09T16:14:56.435Z",
+      "updated_at": "2025-07-09T16:14:56.435Z"
+    },
+    {
+      "id": 81,
+      "thread_id": 81,
+      "from_email": "john.doe@example.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Legal Issue with Lessons",
+      "body_text": "To whom it may concern,\n\nI’m writing because I noticed some of the lessons contain content that seems copyrighted. There’s a particular dialogue in Lesson 5 that I believe is from a book. Can you please look into this? I think it’s not right to use copyrighted material without permission. \n\nBest regards,\n- John Doe\njohn.doe@example.com",
+      "body_html": "<html><body>To whom it may concern,<br><br>I’m writing because I noticed some of the lessons contain content that seems copyrighted. There’s a particular dialogue in Lesson 5 that I believe is from a book. Can you please look into this? I think it’s not right to use copyrighted material without permission. <br><br>Best regards,<br>- John Doe<br>john.doe@example.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-06-23T00:19:28.481Z",
+      "created_at": "2025-06-23T00:19:28.481Z",
+      "updated_at": "2025-06-23T00:19:28.481Z"
+    },
+    {
+      "id": 82,
+      "thread_id": 82,
+      "from_email": "marlene.garcia@webmail.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Complaining About App Freezing",
+      "body_text": "Hi there,\n\nI’m very frustrated with the app. It keeps freezing while I’m trying to do my lessons. I love learning Spanish, but these glitches have made it really hard. I am using an iPhone 11. If you can help fix this, I would appreciate it.\n\nThank you!!\n- Marlene Garcia\nmarlene.garcia@webmail.com",
+      "body_html": "<html><body>Hi there,<br><br>I’m very frustrated with the app. It keeps freezing while I’m trying to do my lessons. I love learning Spanish, but these glitches have made it really hard. I am using an iPhone 11. If you can help fix this, I would appreciate it.<br><br>Thank you!!<br>- Marlene Garcia<br>marlene.garcia@webmail.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-07-02T12:37:20.343Z",
+      "created_at": "2025-07-02T12:37:20.343Z",
+      "updated_at": "2025-07-02T12:37:20.343Z"
+    },
+    {
+      "id": 83,
+      "thread_id": 83,
+      "from_email": "dannychen123@yahoo.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Inquiring About User Progress and XP",
+      "body_text": "Hello,\n\nI’m very interested in how the XP points work. I feel like I’ve been making a lot of progress, but my XP doesn’t seem to reflect that? I don’t really understand how it’s calculated. Could you explain it to me? \n\nI want to level up!\n- Danny Chen\ndannychen123@yahoo.com",
+      "body_html": "<html><body>Hello,<br><br>I’m very interested in how the XP points work. I feel like I’ve been making a lot of progress, but my XP doesn’t seem to reflect that? I don’t really understand how it’s calculated. Could you explain it to me? <br><br>I want to level up!<br>- Danny Chen<br>dannychen123@yahoo.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-06-27T09:02:27.540Z",
+      "created_at": "2025-06-27T09:02:27.540Z",
+      "updated_at": "2025-06-27T09:02:27.540Z"
+    },
+    {
+      "id": 84,
+      "thread_id": 84,
+      "from_email": "gael.torres@gmail.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Feature Request: Group Challenges",
+      "body_text": "Hi Treslingo,\n\nI love the app! I was thinking it would be great if you could add group challenges or competitions where friends can team up to compete against each other. I think that would make learning more fun! \n\nThank you for considering!\n- Gael Torres\ngael.torres@gmail.com",
+      "body_html": "<html><body>Hi Treslingo,<br><br>I love the app! I was thinking it would be great if you could add group challenges or competitions where friends can team up to compete against each other. I think that would make learning more fun! <br><br>Thank you for considering!<br>- Gael Torres<br>gael.torres@gmail.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-06-29T00:50:49.072Z",
+      "created_at": "2025-06-29T00:50:49.072Z",
+      "updated_at": "2025-06-29T00:50:49.072Z"
+    },
+    {
+      "id": 85,
+      "thread_id": 85,
+      "from_email": "patricia.oneill@gmail.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Difficulty Understanding Grammar Lessons",
+      "body_text": "Hi,\n\nI’m really struggling to understand the grammar lessons. They seem so complicated, and I’m not sure if I’m grasping them correctly. Is there any additional support or resources you can recommend? I really want to do well in this learning journey.\n\nThanks a lot!\n- Patricia O’Neill\npatricia.oneill@gmail.com",
+      "body_html": "<html><body>Hi,<br><br>I’m really struggling to understand the grammar lessons. They seem so complicated, and I’m not sure if I’m grasping them correctly. Is there any additional support or resources you can recommend? I really want to do well in this learning journey.<br><br>Thanks a lot!<br>- Patricia O’Neill<br>patricia.oneill@gmail.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-07-04T01:50:43.780Z",
+      "created_at": "2025-07-04T01:50:43.780Z",
+      "updated_at": "2025-07-04T01:50:43.780Z"
+    },
+    {
+      "id": 86,
+      "thread_id": 86,
+      "from_email": "alex.w.treslingo@gmail.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Transaction Issue for Premium Subscription",
+      "body_text": "Hi,\n\nI was charged twice for my premium subscription this month, and I’d like to understand why. My account number is TR-13579. Could you look into this and let me know if I can get a refund for one of the charges? \n\nThank you.\n- Alex Williams\nalex.w.treslingo@gmail.com",
+      "body_html": "<html><body>Hi,<br><br>I was charged twice for my premium subscription this month, and I’d like to understand why. My account number is TR-13579. Could you look into this and let me know if I can get a refund for one of the charges? <br><br>Thank you.<br>- Alex Williams<br>alex.w.treslingo@gmail.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-06-17T15:47:22.358Z",
+      "created_at": "2025-06-17T15:47:22.358Z",
+      "updated_at": "2025-06-17T15:47:22.358Z"
+    },
+    {
+      "id": 87,
+      "thread_id": 87,
+      "from_email": "rachel.johnson@mail.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Excited About My Progress!",
+      "body_text": "Hello!\n\nI just wanted to share how much I love Treslingo! I’m a beginner but I’ve already made so much progress in just a few weeks! The cat mascot is adorable and makes it feel less stressful. I’m working hard to keep my streak alive! \n\nJust wanted to say thank you!\n- Rachel Johnson\nrachel.johnson@mail.com",
+      "body_html": "<html><body>Hello!<br><br>I just wanted to share how much I love Treslingo! I’m a beginner but I’ve already made so much progress in just a few weeks! The cat mascot is adorable and makes it feel less stressful. I’m working hard to keep my streak alive! <br><br>Just wanted to say thank you!<br>- Rachel Johnson<br>rachel.johnson@mail.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-07-02T21:53:24.823Z",
+      "created_at": "2025-07-02T21:53:24.823Z",
+      "updated_at": "2025-07-02T21:53:24.823Z"
+    },
+    {
+      "id": 88,
+      "thread_id": 88,
+      "from_email": "marcosilva@example.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Notification about the New Update",
+      "body_text": "Hi,\n\nI recently received a notification about a new update and I’m curious to know what changes have been made. Are there any new features that I should be aware of? \n\nThanks for keeping us informed!\n- Marco Silva\nmarcosilva@example.com",
+      "body_html": "<html><body>Hi,<br><br>I recently received a notification about a new update and I’m curious to know what changes have been made. Are there any new features that I should be aware of? <br><br>Thanks for keeping us informed!<br>- Marco Silva<br>marcosilva@example.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-06-11T17:19:39.785Z",
+      "created_at": "2025-06-11T17:19:39.785Z",
+      "updated_at": "2025-06-11T17:19:39.785Z"
+    },
+    {
+      "id": 89,
+      "thread_id": 89,
+      "from_email": "clairepeterson@email.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Lost My Streak! Help!",
+      "body_text": "Hi Treslingo Support,\n\nI hope you're doing well. I just wanted to reach out because I've been using the app daily for almost 2 months now, and I was super proud of my streak of 58 days. However, yesterday I traveled to a different timezone for a family visit and the app didn't register the lesson I completed before midnight my time! 😭 \n\nI'm really bummed out and would love to know if there's any way to get my streak back. It really helps me stay motivated. Thank you so much!\n\nBest,\nClaire Peterson\nAccount: TR-12345\n\nclairepeterson@email.com",
+      "body_html": "<html><body>Hi Treslingo Support,<br><br>I hope you're doing well. I just wanted to reach out because I've been using the app daily for almost 2 months now, and I was super proud of my streak of 58 days. However, yesterday I traveled to a different timezone for a family visit and the app didn't register the lesson I completed before midnight my time! 😭 <br><br>I'm really bummed out and would love to know if there's any way to get my streak back. It really helps me stay motivated. Thank you so much!<br><br>Best,<br>Claire Peterson<br>Account: TR-12345<br><br>clairepeterson@email.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-06-27T13:07:22.164Z",
+      "created_at": "2025-06-27T13:07:22.164Z",
+      "updated_at": "2025-06-27T13:07:22.164Z"
+    },
+    {
+      "id": 90,
+      "thread_id": 90,
+      "from_email": "theresawang@email.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Audio Problems in Lessons",
+      "body_text": "Dear Treslingo Team,\n\nI have been enjoying your app but recently faced a frustrating issue. The audio in both the speaking and listening exercises has stopped working completely. I tried reinstalling the app, but it didn’t help. I'm worried it's affecting my pronunciation and understanding of the language. \n\nI’m currently using an iPhone 12 and have the latest iOS. Could you guide me on how to fix this? Maybe I need to change some settings?\n\nThanks a ton!\n\nTheresa Wang\nAccount: TR-54321\n\ntheresawang@email.com",
+      "body_html": "<html><body>Dear Treslingo Team,<br><br>I have been enjoying your app but recently faced a frustrating issue. The audio in both the speaking and listening exercises has stopped working completely. I tried reinstalling the app, but it didn’t help. I'm worried it's affecting my pronunciation and understanding of the language. <br><br>I’m currently using an iPhone 12 and have the latest iOS. Could you guide me on how to fix this? Maybe I need to change some settings?<br><br>Thanks a ton!<br><br>Theresa Wang<br>Account: TR-54321<br><br>theresawang@email.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-07-09T12:15:35.627Z",
+      "created_at": "2025-07-09T12:15:35.627Z",
+      "updated_at": "2025-07-09T12:15:35.627Z"
+    },
+    {
+      "id": 91,
+      "thread_id": 91,
+      "from_email": "rafael.rodriguez@email.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Subscription Confusion",
+      "body_text": "Hello,\n\nSo I signed up for the premium version a week ago, and I was charged $9.99. But now I'm seeing ads again, and when I check my account, it looks like I'm back on the free tier. Did my subscription lapse somehow? I really enjoyed the ad-free learning experience! \n\nPlease let me know what’s going on. My account number is TR-67890.\n\nThank you,\nRafael Rodriguez\nrafael.rodriguez@email.com",
+      "body_html": "<html><body>Hello,<br><br>So I signed up for the premium version a week ago, and I was charged $9.99. But now I'm seeing ads again, and when I check my account, it looks like I'm back on the free tier. Did my subscription lapse somehow? I really enjoyed the ad-free learning experience! <br><br>Please let me know what’s going on. My account number is TR-67890.<br><br>Thank you,<br>Rafael Rodriguez<br>rafael.rodriguez@email.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-07-11T00:23:12.933Z",
+      "created_at": "2025-07-11T00:23:12.933Z",
+      "updated_at": "2025-07-11T00:23:12.933Z"
+    },
+    {
+      "id": 92,
+      "thread_id": 92,
+      "from_email": "jamie.smith@email.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Still Confused About Lesson Difficulty",
+      "body_text": "Hey there,\n\nI just wanted to share that I find some of the vocabulary lessons way too easy for me. I’ve been studying Spanish for a few years now, and I feel like I'm not really learning anything new. \n\nIs there a way to adjust the difficulty settings or maybe use more advanced lessons? I want to challenge myself but I still like the app’s format! \n\nThanks for your help!\n\nJamie Smith\nAccount: TR-24680\n\njamie.smith@email.com",
+      "body_html": "<html><body>Hey there,<br><br>I just wanted to share that I find some of the vocabulary lessons way too easy for me. I’ve been studying Spanish for a few years now, and I feel like I'm not really learning anything new. <br><br>Is there a way to adjust the difficulty settings or maybe use more advanced lessons? I want to challenge myself but I still like the app’s format! <br><br>Thanks for your help!<br><br>Jamie Smith<br>Account: TR-24680<br><br>jamie.smith@email.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-06-23T12:58:55.334Z",
+      "created_at": "2025-06-23T12:58:55.334Z",
+      "updated_at": "2025-06-23T12:58:55.334Z"
+    },
+    {
+      "id": 93,
+      "thread_id": 93,
+      "from_email": "mark.holloway@email.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "App Keeps Crashing",
+      "body_text": "Hello, Treslingo Team,\n\nI’m writing to report that the app keeps crashing on my Android device. It happened during a speaking exercise, and it’s super annoying because I can’t complete my lessons. I usually lose hearts when this happens! \n\nI am using a Samsung Galaxy S21 and I have cleared the cache. Any suggestions?  \n\nThanks in advance.\n\nMark Holloway \nAccount: TR-76543\nmark.holloway@email.com",
+      "body_html": "<html><body>Hello, Treslingo Team,<br><br>I’m writing to report that the app keeps crashing on my Android device. It happened during a speaking exercise, and it’s super annoying because I can’t complete my lessons. I usually lose hearts when this happens! <br><br>I am using a Samsung Galaxy S21 and I have cleared the cache. Any suggestions?  <br><br>Thanks in advance.<br><br>Mark Holloway <br>Account: TR-76543<br>mark.holloway@email.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-07-03T23:37:02.040Z",
+      "created_at": "2025-07-03T23:37:02.040Z",
+      "updated_at": "2025-07-03T23:37:02.040Z"
+    },
+    {
+      "id": 94,
+      "thread_id": 94,
+      "from_email": "jane.doe@email.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Need Help Recovering My Account!",
+      "body_text": "Hi,\n\nI hope this message finds you well. I can't seem to get into my Treslingo account! I forgot my password but also changed my email last month, so I’m not sure I can reset it. \n\nCould you assist me in recovering my account? I miss my progress and all the lessons I've completed! My old email was jane.doe@email.com and my account number is TR-13579.\n\nThank you for your help!\n\nJane Doe",
+      "body_html": "<html><body>Hi,<br><br>I hope this message finds you well. I can't seem to get into my Treslingo account! I forgot my password but also changed my email last month, so I’m not sure I can reset it. <br><br>Could you assist me in recovering my account? I miss my progress and all the lessons I've completed! My old email was jane.doe@email.com and my account number is TR-13579.<br><br>Thank you for your help!<br><br>Jane Doe</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-06-13T08:37:45.207Z",
+      "created_at": "2025-06-13T08:37:45.207Z",
+      "updated_at": "2025-06-13T08:37:45.207Z"
+    },
+    {
+      "id": 95,
+      "thread_id": 95,
+      "from_email": "lucia.hernandez@email.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Family Account Setup Issues",
+      "body_text": "Hi Treslingo Support,\n\nI'm trying to set up a family account for my kids. I thought it would be easy, but I can only add one child at a time. I want all three of them to learn Spanish together! \n\nIs there a way to manage multiple accounts under one family plan? I just want to ensure I can track all their progress.  \n\nThanks for your assistance!\n\nLucia Hernandez\nAccount: TR-98765\n\nlucia.hernandez@email.com",
+      "body_html": "<html><body>Hi Treslingo Support,<br><br>I'm trying to set up a family account for my kids. I thought it would be easy, but I can only add one child at a time. I want all three of them to learn Spanish together! <br><br>Is there a way to manage multiple accounts under one family plan? I just want to ensure I can track all their progress.  <br><br>Thanks for your assistance!<br><br>Lucia Hernandez<br>Account: TR-98765<br><br>lucia.hernandez@email.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-06-19T15:06:43.110Z",
+      "created_at": "2025-06-19T15:06:43.110Z",
+      "updated_at": "2025-06-19T15:06:43.110Z"
+    },
+    {
+      "id": 96,
+      "thread_id": 96,
+      "from_email": "bradley.king@email.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Messed Up Lesson Content!",
+      "body_text": "Hello,\n\nI’d like to bring something to your attention that I found concerning. In one of my vocabulary lessons, there was a text that seemed to be a direct copy from a textbook. I think that might infringe on copyright laws or something! \n\nCan you look into this? I really enjoy using Treslingo but I wouldn’t want to support any illegal content. \n\nThank you,\n\nBradley King\nAccount: TR-86420\nbradley.king@email.com",
+      "body_html": "<html><body>Hello,<br><br>I’d like to bring something to your attention that I found concerning. In one of my vocabulary lessons, there was a text that seemed to be a direct copy from a textbook. I think that might infringe on copyright laws or something! <br><br>Can you look into this? I really enjoy using Treslingo but I wouldn’t want to support any illegal content. <br><br>Thank you,<br><br>Bradley King<br>Account: TR-86420<br>bradley.king@email.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-06-19T08:19:04.378Z",
+      "created_at": "2025-06-19T08:19:04.378Z",
+      "updated_at": "2025-06-19T08:19:04.378Z"
+    },
+    {
+      "id": 97,
+      "thread_id": 97,
+      "from_email": "angela.green@email.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Too Many Notifications!",
+      "body_text": "Hi Treslingo!\n\nI hope you’re doing great! I’m a huge fan of your app, but I’m getting WAY too many notifications reminding me to practice. It feels overwhelming and makes me want to run away from actually using the app. \n\nIs there a way to reduce the frequency of these reminders? I want to keep practicing but not feel chased! Thanks!\n\nAngela Green\nAccount: TR-19283\nangela.green@email.com",
+      "body_html": "<html><body>Hi Treslingo!<br><br>I hope you’re doing great! I’m a huge fan of your app, but I’m getting WAY too many notifications reminding me to practice. It feels overwhelming and makes me want to run away from actually using the app. <br><br>Is there a way to reduce the frequency of these reminders? I want to keep practicing but not feel chased! Thanks!<br><br>Angela Green<br>Account: TR-19283<br>angela.green@email.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-06-23T17:13:26.551Z",
+      "created_at": "2025-06-23T17:13:26.551Z",
+      "updated_at": "2025-06-23T17:13:26.551Z"
+    },
+    {
+      "id": 98,
+      "thread_id": 98,
+      "from_email": "tomas.black@email.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Feedback on Recent Changes",
+      "body_text": "Hey Treslingo Team,\n\nI just wanted to reach out and give some feedback. I noticed that the recent update made some user interface changes, and I find it a bit harder to navigate now. \n\nI loved how straightforward it was before! Appreciate you taking the time to read this. Looking forward to more great learning experiences with you guys!\n\nBest,\nTomas Black\nAccount: TR-31415\n\ntomas.black@email.com",
+      "body_html": "<html><body>Hey Treslingo Team,<br><br>I just wanted to reach out and give some feedback. I noticed that the recent update made some user interface changes, and I find it a bit harder to navigate now. <br><br>I loved how straightforward it was before! Appreciate you taking the time to read this. Looking forward to more great learning experiences with you guys!<br><br>Best,<br>Tomas Black<br>Account: TR-31415<br><br>tomas.black@email.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-06-19T00:17:39.348Z",
+      "created_at": "2025-06-19T00:17:39.348Z",
+      "updated_at": "2025-06-19T00:17:39.348Z"
+    },
+    {
+      "id": 99,
+      "thread_id": 99,
+      "from_email": "maria.gonzalez@email.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Need Help Restoring My Lost Streak!",
+      "body_text": "Hi Treslingo Support Team,\n\nI hope you’re doing well! I’m writing to express my frustration about losing my daily streak. I was on a 65-day streak and feeling super proud of myself, but I woke up today to find that it’s dropped to zero! I have no idea how this happened. I live in a different timezone (UTC-5), and I usually practice late at night, so I’m wondering if the change in the clock last weekend had anything to do with it.\n\nI really love using Treslingo to learn Spanish, and I’ve been making great progress with the speaking and grammar exercises. But losing my streak has been really disheartening. Is there any way you could help me recover it? I’ve attached a screenshot of my profile showing my previous streak and progress.\n\nThank you so much for your help!\n\nBest regards,\n\nMaria Gonzalez\nmaria.gonzalez@email.com",
+      "body_html": "<html><body>Hi Treslingo Support Team,<br><br>I hope you’re doing well! I’m writing to express my frustration about losing my daily streak. I was on a 65-day streak and feeling super proud of myself, but I woke up today to find that it’s dropped to zero! I have no idea how this happened. I live in a different timezone (UTC-5), and I usually practice late at night, so I’m wondering if the change in the clock last weekend had anything to do with it.<br><br>I really love using Treslingo to learn Spanish, and I’ve been making great progress with the speaking and grammar exercises. But losing my streak has been really disheartening. Is there any way you could help me recover it? I’ve attached a screenshot of my profile showing my previous streak and progress.<br><br>Thank you so much for your help!<br><br>Best regards,<br><br>Maria Gonzalez<br>maria.gonzalez@email.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-06-28T01:31:58.920Z",
+      "created_at": "2025-06-28T01:31:58.920Z",
+      "updated_at": "2025-06-28T01:31:58.920Z"
+    },
+    {
+      "id": 100,
+      "thread_id": 100,
+      "from_email": "john.thomas@email.com",
+      "to_emails": [
+        "support@treslingo.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Question About Premium Subscription Billing",
+      "body_text": "Dear Treslingo Team,\n\nI hope you can assist me with a billing question I have regarding my premium subscription. I signed up for it a couple of months ago, and since then, I’ve been charged $9.99 each month. However, I wasn’t sure if my subscription was automatically renewed. I thought I’d seen an option to cancel it before the next billing cycle, but now I can’t find that information in the app!\n\nI have found it super helpful having no ads and being able to download lessons for offline use while commuting to work. But, to be honest, I’m still on the fence about whether I want to continue the premium service because my free time is limited, and I don’t want to be charged if I'm not using it enough. I would appreciate it if you could let me know how to manage my billing options – maybe I can pause or cancel it instead?\n\nThank you for your help. Looking forward to your prompt response!\n\nSincerely,\n\nJohn Thomas\njohn.thomas@email.com",
+      "body_html": "<html><body>Dear Treslingo Team,<br><br>I hope you can assist me with a billing question I have regarding my premium subscription. I signed up for it a couple of months ago, and since then, I’ve been charged $9.99 each month. However, I wasn’t sure if my subscription was automatically renewed. I thought I’d seen an option to cancel it before the next billing cycle, but now I can’t find that information in the app!<br><br>I have found it super helpful having no ads and being able to download lessons for offline use while commuting to work. But, to be honest, I’m still on the fence about whether I want to continue the premium service because my free time is limited, and I don’t want to be charged if I'm not using it enough. I would appreciate it if you could let me know how to manage my billing options – maybe I can pause or cancel it instead?<br><br>Thank you for your help. Looking forward to your prompt response!<br><br>Sincerely,<br><br>John Thomas<br>john.thomas@email.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-06-21T02:17:10.649Z",
+      "created_at": "2025-06-21T02:17:10.649Z",
+      "updated_at": "2025-06-21T02:17:10.649Z"
+    }
+  ]
+}

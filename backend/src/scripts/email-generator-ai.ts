@@ -23,54 +23,62 @@ export interface EmailBatch {
 
 
 const COMPANY_CONTEXT = `
-GauntletAIron is a premium armor manufacturer specializing in armored gloves and protective gear for military, law enforcement, industrial workers, and collectors.
+Treslingo is a popular mobile language learning app that teaches Spanish through gamified lessons, similar to Duolingo but with a friendly cat mascot.
 
-Products:
-- TacticalPro Series ($450-$850): Military/law enforcement grade with kevlar lining
-- DragonScale Gauntlets ($1200-$2500): Premium leather with titanium plating, handcrafted
-- WorkForce Heavy ($250-$450): Industrial protection, heat resistant
-- CyberKnight Collection ($800-$1500): Futuristic design for collectors, LED accents
-- RoadGuard Series ($350-$650): Motorcycle protection with impact absorption
+App Features:
+- Free tier: Basic lessons, limited hearts, ads
+- Premium tier ($9.99/month): No ads, unlimited hearts, offline mode
+- Daily streaks with streak freezes available
+- XP points, gems, leaderboards, and achievements
+- Lesson types: vocabulary, grammar, speaking, listening comprehension
+- Social features: friends, leaderboards, family accounts
+- Mobile-only app (iOS and Android)
 
-Common issues:
-- Sizing problems (gloves run small)
-- Delivery delays (custom orders take 4-6 weeks)
-- Break-in period for leather products
-- Maintenance questions (leather care, metal polishing)
-- Custom fitting services available
+Common user issues:
+- Lost streaks due to timezone changes or technical glitches
+- Billing and subscription problems (charges, cancellations, refunds)
+- Audio not working in speaking/listening exercises
+- Progress not saving or syncing properly
+- Notification issues (too many reminders, not receiving reminders)
+- Account recovery problems (forgotten passwords, email changes)
+- Difficulty level complaints (too easy/too hard)
+- Legal complaints about copyrighted text appearing in lessons
+- App crashes or freezing during lessons
 
-Order format: GA-XXXXX (5 digits)
-Warranty: 2 years standard, 5 years premium
-Support email: support@gauntletairon.com
-Phone: 1-800-GAUNTLET
+Account format: TR-XXXXX (5 digits)
+Premium subscription: Monthly auto-renewal
+Support email: support@treslingo.com
+App Store ratings: 4.8/5 stars
 `;
 
 
 const EMAIL_CATEGORIES = `
 Email distribution (approximate):
-- 40% Normal support
-- 20% Technical issues 
-- 15% Complaints
-- 10% Sales inquiries 
-- 15% Edge cases (legal threats, spam, angry customers, partnerships, media)
+- 35% Learning support (lost streaks, progress issues, difficulty level)
+- 25% Technical issues (app crashes, audio problems, syncing issues)
+- 20% Billing/subscription support (charges, cancellations, premium features)
+- 10% Account issues (password resets, email changes, family accounts)
+- 10% Edge cases (legal complaints about copyrighted content, feature requests, angry users)
 `;
 
 
 export async function generateEmailBatch(count: number = 20): Promise<GeneratedEmail[]> {
-  const systemPrompt = `You are generating realistic customer support emails for GauntletAIron.
+  const systemPrompt = `You are generating realistic customer support emails for Treslingo.
 ${COMPANY_CONTEXT}
 
 ${EMAIL_CATEGORIES}
 
 Generate emails that feel authentic with:
 - Natural language (including occasional typos for some customers)
-- Realistic details (order numbers, dates, product names)
-- Appropriate tone for the customer type
+- Realistic details (account numbers, streak counts, lesson progress)
+- Appropriate tone for the customer type (frustrated learners, excited students, confused parents)
 - Varied writing styles and education levels
+- Different age groups (kids, teens, adults, seniors)
+- International users with varying English proficiency
 - Make emails longer and more detailed - real customers often explain their situation in detail`;
 
 
-  const userPrompt = `Generate ${count} diverse customer support emails. Each should be completely different in topic, tone, and style. Make them feel like real emails from real people with real problems or questions.
+  const userPrompt = `Generate ${count} diverse customer support emails for Treslingo Spanish learning app. Each should be completely different in topic, tone, and style. Make them feel like real emails from real people with real problems or questions about learning Spanish.
 
 Return a JSON object with an "emails" array containing ${count} email objects. Each email must have all fields: subject, body, senderName, senderEmail.`;
 
@@ -134,8 +142,8 @@ Return a JSON object with an "emails" array containing ${count} email objects. E
 
 
       // Ensure customer emails don't use company domain
-      if (email.senderEmail.includes('@gauntletairon.com')) {
-        email.senderEmail = email.senderEmail.replace('@gauntletairon.com', '@gmail.com');
+      if (email.senderEmail.includes('@treslingo.com')) {
+        email.senderEmail = email.senderEmail.replace('@treslingo.com', '@gmail.com');
       }
 
 
@@ -145,7 +153,7 @@ Return a JSON object with an "emails" array containing ${count} email objects. E
 
     return emails;
   } catch (error) {
-    console.error('Failed to parse GPT response:', content);
+    console.error('Failed to parse GPT response:', error, content);
     throw new Error('Invalid JSON response from GPT');
   }
 }

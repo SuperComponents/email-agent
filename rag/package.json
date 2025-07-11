@@ -23,7 +23,10 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "agent": "tsx scripts/openai-vector-agent.ts",
-    "psql": "psql emailsmart_rag"
+    "psql": "psql emailsmart_rag",
+    "generate:knowledge": "tsx scripts/generate-knowledge.ts",
+    "generate:knowledge-json": "tsx scripts/generate-knowledge-json.ts",
+    "knowledge-to-markdown": "tsx scripts/knowledge-to-markdown.ts"
   },
   "dependencies": {
     "dotenv": "^17.1.0",

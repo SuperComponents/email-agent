@@ -9,6 +9,8 @@
     "lint:all": "tsc --noEmit && eslint .",
     "db:generate": "drizzle-kit generate --dialect=postgresql --schema=src/database/schema.ts --out=./drizzle",
     "generate:emails": "tsx src/scripts/generate-emails.ts",
+    "generate:emails-json": "tsx src/scripts/generate-emails-json.ts",
+    "json-to-sql": "tsx src/scripts/json-to-sql.ts",
     "db:migrate": "node dist/src/database/migrate.js"
   },
   "dependencies": {
