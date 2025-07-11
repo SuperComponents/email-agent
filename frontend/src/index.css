@@ -1,5 +1,10 @@
 @import "tailwindcss";
 
+/* Global styles */
+html, body {
+  overscroll-behavior: none;
+}
+
 @theme {
   /* Colors - semantic tokens for theming support */
   --color-background: #fafafa;
