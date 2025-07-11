@@ -1,5 +1,6 @@
 import { Hono } from 'hono'
 import { eq, and, or, like, desc, sql } from 'drizzle-orm'
+import type { SQL } from 'drizzle-orm'
 import { db } from '../database/db.js'
 import { threads, emails, draft_responses, agent_actions } from '../database/schema.js'
 import { successResponse, notFoundResponse, errorResponse } from '../utils/response.js'
@@ -81,7 +82,7 @@ app.get('/', async (c) => {
     }
     
     // Query threads with latest email info
-    const whereClause = conditions.length > 0 ? and(...conditions) : undefined
+    const whereClause: SQL | undefined = conditions.length > 0 ? and(...conditions) : undefined
     
     const threadList = await db
       .select({
