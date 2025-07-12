@@ -26,11 +26,11 @@
 }
 
 .btn.btn-primary {
-  @apply border-neutral-500 bg-neutral-750 text-white shadow-sm;
+  @apply border-transparent bg-gradient-to-r from-primary to-ai-purple text-white shadow-sm;
 }
 
 .btn.btn-primary:hover:not(:disabled) {
-  @apply border-neutral-600 bg-neutral-850;
+  @apply shadow-lg;
 }
 
 .btn.btn-secondary {
@@ -123,6 +123,17 @@
 /* Custom utility classes */
 .z-modal {
   z-index: 9999;
+}
+
+/* Animation delay utilities */
+.animation-delay-100 {
+  animation-delay: 100ms;
+}
+.animation-delay-200 {
+  animation-delay: 200ms;
+}
+.animation-delay-300 {
+  animation-delay: 300ms;
 }
 
 .reveal {

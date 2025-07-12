@@ -535,13 +535,107 @@
 /* Performance optimizations */
 .gpu-accelerated {
   transform: translateZ(0);
-  will-change: transform;
+  /* will-change is now managed dynamically by JavaScript for better performance */
 }
 
-@media (prefers-reduced-motion) {
+@media (prefers-reduced-motion: reduce) {
   *,
   ::before,
   ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* Ensure animated elements are visible */
+  .animate-float,
+  .animate-gradient,
+  .animate-glow,
+  .animate-sparkle,
+  .animate-shimmer,
+  .animate-slide-up,
+  .animate-aurora {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  /* Remove hover animations */
+  .hover-lift:hover {
+    transform: none;
+    box-shadow: none;
+  }
+
+  /* Disable parallax effects */
+  .parallax-layer-1,
+  .parallax-layer-2,
+  .parallax-layer-3 {
+    transform: none !important;
+  }
+
+  /* Ensure gradient text remains visible */
+  .gradient-text {
+    animation: none !important;
+    background-position: 0 0 !important;
+  }
+
+  /* Disable sparkle decorations */
+  .sparkle-container::before,
+  .sparkle-container::after {
+    animation: none !important;
+    opacity: 1 !important;
+  }
+
+  /* Disable premium card aurora effect */
+  .premium-card::before {
+    animation: none !important;
+    opacity: 0 !important;
+  }
+
+  /* Make sure content is still accessible */
+  .button-ripple::after {
+    transition: none !important;
+  }
+
+  /* Disable magnetic hover */
+  .magnetic-hover {
+    transition: none !important;
+  }
+
+  /* Disable glow effects */
+  .glow-hover:hover {
+    box-shadow: none !important;
+  }
+
+  /* Disable text gradient hover */
+  .text-gradient-hover {
+    transition: none !important;
+  }
+
+  /* Disable underline animation */
+  .underline-hover::after {
+    transition: none !important;
+    width: 100% !important;
+  }
+
+  /* Disable 3D button effects */
+  .button-3d {
+    transition: none !important;
+    transform: none !important;
+  }
+
+  .button-3d::before {
+    transform: none !important;
+  }
+
+  /* Disable number transitions */
+  .number-transition {
+    transition: none !important;
+  }
+
+  /* Disable loading animations */
+  .loading-dot {
     animation: none !important;
   }
 }
