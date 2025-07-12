@@ -88,6 +88,9 @@ COPY --from=builder --chown=nodejs:nodejs /build/backend/package.json ./
 COPY --chown=nodejs:nodejs docker-entrypoint.sh ./
 RUN chmod +x docker-entrypoint.sh
 
+# Create logs directory with proper permissions
+RUN mkdir -p logs && chown -R nodejs:nodejs logs
+
 # Switch to non-root user
 USER nodejs
 
