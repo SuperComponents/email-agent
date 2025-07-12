@@ -9,9 +9,8 @@ import {
   decimal,
   jsonb,
   pgEnum,
-  index,
 } from 'drizzle-orm/pg-core';
-import { relations, desc } from 'drizzle-orm';
+import { relations } from 'drizzle-orm';
 
 // Define enums first
 export const statusEnum = pgEnum('status', ['active', 'closed', 'needs_attention']);
@@ -86,10 +85,10 @@ export const email_tags = pgTable(
     created_by_user_id: integer('created_by_user_id').references(() => users.id),
     created_at: timestamp('created_at').defaultNow().notNull(),
   },
-  table => ({
-    emailTagIdx: index('email_tag_idx').on(table.email_id, table.tag),
-    tagIdx: index('tag_idx').on(table.tag),
-  }),
+  //   table => ({
+  //     emailTagIdx: index('email_tag_idx').on(table.email_id, table.tag),
+  //     tagIdx: index('tag_idx').on(table.tag),
+  //   }),
 );
 
 // Draft Response Table
@@ -131,10 +130,10 @@ export const agent_actions = pgTable(
     ip_address: varchar('ip_address', { length: 45 }),
     created_at: timestamp('created_at').defaultNow().notNull(),
   },
-  table => ({
-    threadTimelineIdx: index('thread_timeline_idx').on(table.thread_id, desc(table.created_at)),
-    actorIdx: index('actor_idx').on(table.actor_user_id),
-  }),
+  //   table => ({
+  //     threadTimelineIdx: index('thread_timelinee_idx').on(table.thread_id, desc(table.created_at)),
+  //     actorIdx: index('actorr_idx').on(table.actor_user_id),
+  //   }),
 );
 
 // Define relations

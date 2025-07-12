@@ -5,29 +5,16 @@ import type {
   FunctionCallResultItem,
   RunItemStreamEvent,
 } from '@openai/agents';
-import { db } from '../db/db.js';
-import { agentActions } from '../db/schema.js';
 import type { AgentAction, ToolCallMetadata } from '../db/types.js';
+import { logAgentAction } from '../db/query.js';
+import {
+  isHostedOrFunctionCall,
+  isHostedToolCall,
+  isFunctionCall,
+  isFunctionCallResult,
+} from './guards.js';
 
 type ToolResult = HostedToolCallItem | FunctionCallItem | FunctionCallResultItem;
-
-function isHostedOrFunctionCall(
-  call: AgentOutputItem,
-): call is HostedToolCallItem | FunctionCallItem {
-  return call.type === 'hosted_tool_call' || call.type === 'function_call';
-}
-
-function isHostedToolCall(call: AgentOutputItem): call is HostedToolCallItem {
-  return call.type === 'hosted_tool_call';
-}
-
-function isFunctionCall(call: AgentOutputItem): call is FunctionCallItem {
-  return call.type === 'function_call';
-}
-
-function isFunctionCallResult(call: AgentOutputItem): call is FunctionCallResultItem {
-  return call.type === 'function_call_result';
-}
 
 function getResultCallOrUndefined(call: AgentOutputItem, output: AgentOutputItem[]) {
   if (isFunctionCall(call)) {
@@ -70,15 +57,12 @@ async function logCall(
   thread_id: number,
   result?: ToolResult,
 ): Promise<AgentAction[]> {
-  return db
-    .insert(agentActions)
-    .values({
-      thread_id,
-      action: call.name,
-      description: generateDescription(call),
-      metadata: getMetadata(call, result),
-    })
-    .returning() as Promise<AgentAction[]>;
+  return logAgentAction({
+    thread_id,
+    action: call.name,
+    description: generateDescription(call),
+    metadata: getMetadata(call, result),
+  });
 }
 
 function getMetadata(call: ToolResult, result?: ToolResult): ToolCallMetadata {

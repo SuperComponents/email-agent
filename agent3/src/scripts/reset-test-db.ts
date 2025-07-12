@@ -1,16 +1,17 @@
-import { beforeAll } from 'vitest';
+#!/usr/bin/env tsx
+import { config } from 'dotenv';
 
-// Global test setup - runs once before all test files
-// Increase timeout to 30 seconds for database reset
-beforeAll(async () => {
-  // Import after environment is set up
-  const { _testDbUrl } = await import('../db/db.js');
-  const { env, DATABASE_URL } = await import('../config/environment.js');
-  const { ensureTestDatabase } = await import('../db/reset-schema.js');
+// Load environment variables from .env
+config();
 
+import { _testDbUrl } from '../db/db.js';
+import { env, DATABASE_URL } from '../config/environment.js';
+import { ensureTestDatabase } from '../db/reset-schema.js';
+
+async function resetTestDb() {
   // Verify TEST_DATABASE_URL is set
   if (!env.TEST_DATABASE_URL) {
-    throw new Error('TEST_DATABASE_URL must be set in .env for tests');
+    throw new Error('TEST_DATABASE_URL must be set in .env');
   }
 
   // Verify we're actually using TEST_DATABASE_URL
@@ -19,7 +20,7 @@ beforeAll(async () => {
       'CRITICAL: Database mismatch!\n' +
         `Expected to use TEST_DATABASE_URL: ${env.TEST_DATABASE_URL}\n` +
         `But actually using: ${_testDbUrl}\n` +
-        'This could mean tests are running against the wrong database!',
+        "This could mean we're not using the test database!",
     );
   }
 
@@ -33,5 +34,14 @@ beforeAll(async () => {
   }
 
   // Reset database to fresh state
-  await ensureTestDatabase();
-});
+  try {
+    await ensureTestDatabase();
+    console.log('✅ Test database reset complete');
+  } catch (error) {
+    console.error('\n❌ Failed to reset test database:', error);
+    throw error;
+  }
+}
+
+// Run the reset
+void resetTestDb();

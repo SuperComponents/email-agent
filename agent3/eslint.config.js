@@ -52,6 +52,20 @@ export default tseslint.config(
       'no-console': 'off',
       semi: ['error', 'always'],
       quotes: ['error', 'single', { avoidEscape: true }],
+      'no-restricted-globals': [
+        'error',
+        {
+          name: 'process',
+          message: 'Use environment.ts instead of accessing process directly',
+        },
+      ],
+    },
+  },
+  {
+    // Allow process only in environment.ts and test setup scripts
+    files: ['src/config/environment.ts', 'src/scripts/reset-test-db.ts'],
+    rules: {
+      'no-restricted-globals': 'off',
     },
   },
 );

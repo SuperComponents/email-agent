@@ -1,7 +1,6 @@
 import { fileSearchTool } from '@openai/agents';
 import { OpenAI } from 'openai';
-
-// const openai = new OpenAI({ apiKey: env.OPENAI_API_KEY });
+import { env } from '../../config/environment.js';
 
 export const OPENAI_VECTOR_STORE_KEY = 'emailsmart-knowledge-base';
 
@@ -38,7 +37,7 @@ async function getVectorStoreId(
   return vectorStore.id;
 }
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+const openai = new OpenAI({ apiKey: env.OPENAI_API_KEY });
 const vectorStoreId = await getVectorStoreId(openai);
 
 const knowledgeBaseSearchTool = fileSearchTool(vectorStoreId, {

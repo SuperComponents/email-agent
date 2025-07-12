@@ -1,13 +1,6 @@
 // Database table type definitions based on newschema.ts
 
-// Type for knowledge base search result
-export interface KnowledgeBaseResult {
-  attributes: Record<string, unknown>;
-  file_id: string;
-  filename: string;
-  score: number;
-  text: string;
-}
+import type { KnowledgeBaseResult } from '../agents/guards.js';
 
 export interface User {
   id: number;
