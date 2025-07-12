@@ -9,11 +9,8 @@ until nc -z "$DB_HOST" "$DB_PORT"; do
   sleep 2
 done
 
-echo "Running database migrations..."
-node dist/src/database/migrate.js
-
-echo "Seeding database..."
-node dist/src/database/seed.js
+echo "Resetting and migrating database..."
+npm run db:reset
 
 echo "Starting server on port 3000..."
 exec node dist/src/index.js 

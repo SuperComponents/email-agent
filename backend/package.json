@@ -13,6 +13,7 @@
     "db:generate": "drizzle-kit generate --dialect=postgresql --schema=src/database/schema.ts --out=./drizzle",
     "generate:emails": "tsx src/scripts/generate-emails.ts",
     "db:migrate": "tsx ./src/database/migrate.ts",
+    "db:reset": "node ./dist/src/database/reset.js",
     "db": "psql postgresql://localhost:5432/emailsmart_merge"
   },
   "dependencies": {
