@@ -1,9 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import type { ComponentType } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { Header } from '../../components/organisms/Header';
 
 // A simple decorator to provide routing context in Storybook.
-const withRouter = (Story: React.ComponentType) => (
+const withRouter = (Story: ComponentType) => (
   <BrowserRouter>
     <Story />
   </BrowserRouter>
