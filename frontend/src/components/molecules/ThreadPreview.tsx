@@ -15,6 +15,7 @@ export interface ThreadPreviewProps
   timestamp: string;
   isActive?: boolean;
   isUnread?: boolean;
+  workerActive?: boolean;
   badges?: Array<{
     label: string;
     variant?: "default" | "secondary" | "destructive" | "outline";
@@ -33,6 +34,7 @@ export const ThreadPreview = React.forwardRef<
       timestamp,
       isActive,
       isUnread,
+      workerActive = false,
       badges = [],
       ...props
     },
@@ -70,7 +72,14 @@ export const ThreadPreview = React.forwardRef<
               >
                 {title}
               </h3>
-              <div className="flex items-center h-full h-min-full">
+              <div className="flex items-center gap-2 h-full h-min-full">
+                {workerActive && (
+                  <div className="flex gap-1">
+                    <div className="w-1 h-1 bg-primary rounded-full animate-pulse [animation-delay:0ms]"></div>
+                    <div className="w-1 h-1 bg-primary rounded-full animate-pulse [animation-delay:200ms]"></div>
+                    <div className="w-1 h-1 bg-primary rounded-full animate-pulse [animation-delay:400ms]"></div>
+                  </div>
+                )}
                 <time className={cn(
                   "text-xs my-auto text-nowrap",
                   isUnread ? "text-foreground font-medium" : "text-secondary-foreground"

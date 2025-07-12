@@ -5,6 +5,7 @@ import { threads, emails, draft_responses, agent_actions, internal_notes, users,
 import { successResponse, notFoundResponse, errorResponse } from '../utils/response.js';
 import { threadFilterSchema, updateThreadSchema, validateRequest } from '../utils/validation.js';
 import { authMiddleware } from '../middleware/auth.js';
+import { workerManager } from '../services/worker-interface.js';
 const app = new Hono();
 app.use(authMiddleware);
 // GET /api/threads - List all threads with filtering
@@ -118,6 +119,9 @@ app.get('/', async c => {
       const customerEmail =
         participants.find(email => !email.includes('@proresponse.ai')) || participants[0];
 
+      // Get worker status for this thread
+      const workerStatus = workerManager.getWorkerStatus(thread.id);
+
       return {
         id: thread.id.toString(),
         subject: thread.subject,
@@ -128,6 +132,7 @@ app.get('/', async c => {
         is_unread: thread.is_unread,
         status: thread.status,
         tags: threadTags[thread.id] || [],
+        worker_active: workerStatus === 'running',
       };
     });
 

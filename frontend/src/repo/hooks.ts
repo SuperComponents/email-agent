@@ -18,6 +18,7 @@ export function useThreads(filter?: ThreadFilter, search?: string) {
     queryKey: queryKeys.threads(filter, search),
     queryFn: () => APIClient.getThreads(filter, search),
     placeholderData: (previousData) => previousData,
+    refetchInterval: 2000, // Poll every 2 seconds to keep worker status up to date
   });
 }
 
