@@ -1,23 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { BrowserRouter } from 'react-router-dom';
-import { StackProvider, StackClientApp } from '@stackframe/react';
 import { Header } from '../../components/organisms/Header';
 
-// Create a mock StackClientApp instance for Storybook.
-// This prevents the need for real environment variables in our stories.
-const mockStackApp = new StackClientApp({
-  projectId: (import.meta.env.VITE_STACK_PROJECT_ID as string | undefined) || 'mock-project-id',
-  publishableClientKey: (import.meta.env.VITE_STACK_PUBLISHABLE_CLIENT_KEY as string | undefined) || 'mock-client-key',
-  tokenStore: 'cookie',
-});
-
-// A decorator to wrap stories with the necessary providers.
-// The UserButton component requires both StackProvider and a Router.
-const withProviders = (Story: React.ComponentType) => (
+// A simple decorator to provide routing context in Storybook.
+const withRouter = (Story: React.ComponentType) => (
   <BrowserRouter>
-    <StackProvider app={mockStackApp}>
-      <Story />
-    </StackProvider>
+    <Story />
   </BrowserRouter>
 );
 
@@ -28,7 +16,7 @@ const meta: Meta<typeof Header> = {
     layout: 'fullscreen',
   },
   // Apply the decorator to all stories in this file.
-  decorators: [withProviders],
+  decorators: [withRouter],
   tags: ['autodocs'],
 };
 
