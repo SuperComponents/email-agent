@@ -38,8 +38,8 @@ export const AgentPanel = React.forwardRef<HTMLDivElement, AgentPanelProps>(
     const [message, setMessage] = useState('');
     console.log('actions', actions);
     
-    // Check if agent is currently working (has any pending actions)
-    const isAgentWorking = actions.some(action => action.status === 'pending');
+    // Check if agent is currently working (has any pending actions OR worker is running)
+    const isAgentWorking = actions.some(action => action.status === 'pending') || workerStatus?.status === 'running';
     
     // Get status color based on worker status
     const getStatusColor = (status: string) => {
