@@ -75,14 +75,23 @@ describe('Agent Action Logging', () => {
     // Verify action details
     // Note: The new schema has a different structure for agent actions
     // The metadata field contains tool information
-    const searchAction = actions.find(a => a.action === 'search_emails');
+    const getCustomerHistoryAction = actions.find(a => a.action === 'get_customer_history');
+    const searchCustomerEmailsAction = actions.find(a => a.action === 'search_customer_emails');
     const tagAction = actions.find(a => a.action === 'tag_email');
 
-    if (searchAction) {
-      expect(searchAction.thread_id).toBe(threadId);
-      const metadata = searchAction.metadata as ToolCallMetadata;
+    if (getCustomerHistoryAction) {
+      expect(getCustomerHistoryAction.thread_id).toBe(threadId);
+      const metadata = getCustomerHistoryAction.metadata as ToolCallMetadata;
       expect(metadata?.status).toBe('success');
-      expect(searchAction.description).toContain('Searched for emails from');
+      expect(getCustomerHistoryAction.description).toContain('Got customer history from');
+      expect(metadata?.parameters).toBeTruthy();
+    }
+
+    if (searchCustomerEmailsAction) {
+      expect(searchCustomerEmailsAction.thread_id).toBe(threadId);
+      const metadata = searchCustomerEmailsAction.metadata as ToolCallMetadata;
+      expect(metadata?.status).toBe('success');
+      expect(searchCustomerEmailsAction.description).toContain('Searched for emails from');
       expect(metadata?.parameters).toBeTruthy();
     }
 
@@ -113,7 +122,10 @@ describe('Agent Action Logging', () => {
 
       if (action.action) {
         switch (action.action) {
-          case 'search_emails':
+          case 'get_customer_history':
+            expect(action.description).toMatch(/Got customer history from .+@.+/);
+            break;
+          case 'search_customer_emails':
             expect(action.description).toMatch(/Searched for emails from .+@.+/);
             break;
           case 'tag_email':

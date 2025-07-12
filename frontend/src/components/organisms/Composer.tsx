@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState, useRef } from 'react';
 import { Send, Paperclip, Smile, Sparkles, FileText, ExternalLink } from 'lucide-react';
+import EmojiPicker from 'emoji-picker-react';
 import { Button } from '../atoms/Button';
 import { Icon } from '../atoms/Icon';
 import { Spinner } from '../atoms/Spinner';
@@ -55,12 +56,39 @@ export const Composer = React.forwardRef<HTMLDivElement, ComposerProps>(
     onBccChange,
     ...props 
   }, ref) => {
+    const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+    const emojiButtonRef = useRef<HTMLButtonElement>(null);
+    
     const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
       if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
         e.preventDefault();
         onSend?.();
       }
     };
+
+    const handleEmojiClick = (emojiData: { emoji: string }) => {
+      if (onChange) {
+        onChange(value + emojiData.emoji);
+      }
+      setShowEmojiPicker(false);
+    };
+
+    // Close emoji picker when clicking outside
+    React.useEffect(() => {
+      const handleClickOutside = (event: MouseEvent) => {
+        if (emojiButtonRef.current && !emojiButtonRef.current.contains(event.target as Node)) {
+          const emojiPicker = document.querySelector('.EmojiPickerReact');
+          if (emojiPicker && !emojiPicker.contains(event.target as Node)) {
+            setShowEmojiPicker(false);
+          }
+        }
+      };
+
+      if (showEmojiPicker) {
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+      }
+    }, [showEmojiPicker]);
 
     return (
       <div
@@ -145,9 +173,28 @@ export const Composer = React.forwardRef<HTMLDivElement, ComposerProps>(
                 <Button variant="ghost" size="sm" disabled={disabled}>
                   <Icon icon={Paperclip} size="sm" />
                 </Button>
-                <Button variant="ghost" size="sm" disabled={disabled}>
-                  <Icon icon={Smile} size="sm" />
-                </Button>
+                <div className="relative">
+                  <Button 
+                    ref={emojiButtonRef}
+                    variant="ghost" 
+                    size="sm" 
+                    disabled={disabled}
+                    onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+                  >
+                    <Icon icon={Smile} size="sm" />
+                  </Button>
+                  {showEmojiPicker && (
+                    <div className="absolute bottom-full mb-2 left-0 z-50">
+                      <EmojiPicker 
+                        onEmojiClick={handleEmojiClick}
+                        autoFocusSearch={false}
+                        previewConfig={{
+                          showPreview: false
+                        }}
+                      />
+                    </div>
+                  )}
+                </div>
               </div>
               <div className="flex items-center gap-3">
                 <p className="text-xs text-secondary-foreground">

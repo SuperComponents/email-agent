@@ -1,0 +1,147 @@
+# Repomix ignore patterns - Security-focused exclusions
+# Add patterns to ignore here, one per line
+
+# Environment files (all variations)
+.env
+.env.*
+.env.local
+.env.development
+.env.production
+.env.staging
+.env.test
+.env.example
+.env.sample
+*.env
+*.env.*
+
+# API Keys and Secrets
+*api-key*
+*api_key*
+*apikey*
+*secret*
+*secrets*
+*credential*
+*credentials*
+*password*
+*passwords*
+*token*
+*tokens*
+*auth*
+*private*
+*private-key*
+*private_key*
+*privatekey*
+*id_rsa*
+*id_ed25519*
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+*.jks
+*.keystore
+
+# Configuration files with sensitive data
+config/local.json
+config/production.json
+config/secrets.json
+config/credentials.json
+*config/local*
+*config/production*
+*config/secrets*
+*config/credentials*
+
+# Database files and credentials
+*.db
+*.sqlite
+*.sqlite3
+database.yml
+database.json
+db.json
+*database*credentials*
+*db*credentials*
+
+# Cloud provider configs
+.aws/
+.gcp/
+.azure/
+*aws*credentials*
+*gcp*credentials*
+*azure*credentials*
+*firebase*config*
+*supabase*config*
+
+# Authentication and session files
+*session*
+*auth*token*
+*jwt*secret*
+*oauth*secret*
+*github*token*
+*gitlab*token*
+*bitbucket*token*
+
+# Log files that might contain sensitive data
+*.log
+*error.log
+*debug.log
+*access.log
+logs/
+log/
+
+# Temporary files and caches
+*.tmp
+*.temp
+.cache/
+.tmp/
+temp/
+tmp/
+
+# OS and IDE files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+*~
+*.swp
+*.swo
+.vscode/settings.json
+.idea/
+
+# Build artifacts that might contain embedded secrets
+dist/
+build/
+*.bundle.js
+*.bundle.js.map
+
+# Backup files
+*.backup
+*.bak
+*.old
+*~
+
+# Docker files that might contain secrets
+docker-compose.override.yml
+docker-compose.local.yml
+docker-compose.production.yml
+*docker*secret*
+*docker*env*
+
+# Package manager files with potential secrets
+.npmrc
+.yarnrc
+.pip/
+pip.conf
+pip.ini
+
+# Common secret file names
+secrets.txt
+secrets.json
+secrets.yaml
+secrets.yml
+passwords.txt
+credentials.txt
+api-keys.txt
+tokens.txt
