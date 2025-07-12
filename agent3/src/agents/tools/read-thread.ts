@@ -15,7 +15,7 @@ export const readThreadTool = tool({
   name: 'read_thread',
   description: 'Read the full email thread context. This returns all emails in the current thread.',
   parameters: ReadThreadParamsSchema,
-  execute: async (_args: ReadThreadParams, runContext?: RunContext<EmailContext>) => {
+  execute: (_args: ReadThreadParams, runContext?: RunContext<EmailContext>) => {
     if (!runContext?.context) {
       return {
         success: false,
@@ -25,7 +25,7 @@ export const readThreadTool = tool({
 
     return {
       success: true,
-      ...runContext.context
+      ...runContext.context,
     };
   },
 });

@@ -7,6 +7,41 @@ import { FileSearch, Brain, MessageSquare } from 'lucide-react';
 import type { AgentActionProps } from '../components/molecules/AgentAction';
 import { apiClient } from '../lib/api';
 
+// Types for function call arguments
+interface WriteDraftArgs {
+  emailId: number;
+  threadId: number;
+  messageBody: string;
+  citationFilename?: string;
+  citationScore?: number;
+  citationText?: string;
+  confidence?: number;
+}
+
+interface TagEmailArgs {
+  emailId: string;
+  tags: string[];
+  confidence?: number;
+}
+
+interface SearchEmailsArgs {
+  senderEmail?: string;
+}
+
+interface SearchKnowledgeBaseArgs {
+  query: string;
+}
+
+interface ExplainNextToolCallArgs {
+  explanation: string;
+  nextToolName: string;
+}
+
+interface FileSearchProviderData {
+  queries: string[];
+  [key: string]: unknown;
+}
+
 export function AgentPanelContainer() {
   const selectedThreadId = useUIStore((state) => state.selectedThreadId);
   const isAgentPanelOpen = useUIStore((state) => state.isAgentPanelOpen);
@@ -83,7 +118,7 @@ export function AgentPanelContainer() {
     }
   });
   
-  const actions: AgentActionProps[] = actionsReversed?.map((action, index) => {
+  const actions: AgentActionProps[] = (actionsReversed?.map((action): AgentActionProps | null => {
       // Skip function_call_result items
       if (action.result?.type === 'function_call_result') {
         return null;
@@ -114,7 +149,7 @@ export function AgentPanelContainer() {
         try {
           const argumentsText = action.result?.arguments;
           if (argumentsText) {
-            const parsed = JSON.parse(argumentsText);
+            const parsed = JSON.parse(argumentsText) as ExplainNextToolCallArgs;
             messageContent = parsed.explanation || '';
           }
         } catch (e) {
@@ -134,27 +169,33 @@ export function AgentPanelContainer() {
       }
       
       // For non-message actions, generate display based on function name and parameters
-      let displayTitle = action.result?.name || action.title;
+      const displayTitle = action.result?.name || action.title;
       let displayDescription = action.description;
       
       // Generate better descriptions for function calls
       if (action.result?.type === 'function_call' && action.result?.name) {
         try {
-          const args = action.result.arguments ? JSON.parse(action.result.arguments) : {};
-          
           switch (action.result.name) {
-            case 'search_emails':
+            case 'search_emails': {
+              const args = action.result.arguments ? JSON.parse(action.result.arguments) as SearchEmailsArgs : {};
               displayDescription = `Searched for emails from ${args.senderEmail || 'all senders'}`;
               break;
-            case 'tag_email':
-              displayDescription = `Tagged email ${args.emailId} as ${args.tags?.join(', ') || 'unknown'}`;
+            }
+            case 'tag_email': {
+              const args = action.result.arguments ? JSON.parse(action.result.arguments) as TagEmailArgs : { emailId: '', tags: [] };
+              displayDescription = `Tagged email ${args.emailId} as ${args.tags.join(', ') || 'unknown'}`;
               break;
-            case 'search_knowledge_base':
+            }
+            case 'search_knowledge_base': {
+              const args = action.result.arguments ? JSON.parse(action.result.arguments) as SearchKnowledgeBaseArgs : { query: '' };
               displayDescription = `Searched knowledge base for: "${args.query || 'unknown query'}"`;
               break;
-            case 'write_draft':
+            }
+            case 'write_draft': {
+              const args = action.result.arguments ? JSON.parse(action.result.arguments) as WriteDraftArgs : { emailId: 0 };
               displayDescription = `Created draft response for email ${args.emailId}`;
               break;
+            }
             case 'read_thread':
               displayDescription = 'Read email thread';
               break;
@@ -166,25 +207,19 @@ export function AgentPanelContainer() {
       
       // Handle hosted_tool_call types (like file_search_call)
       if (action.result?.type === 'hosted_tool_call' && action.result?.name === 'file_search_call') {
-        const providerData = action.result.providerData as any;
+        const providerData = action.result.providerData as FileSearchProviderData;
         const queries = providerData?.queries || [];
         displayDescription = `Searched knowledge base with queries: ${queries.join(', ')}`;
       }
-      
-      // Check if this is a function_call and attach its result data
-      const functionCallResultData = action.result?.type === 'function_call' 
-        ? functionCallResults.get(index) 
-        : undefined;
       
       return {
         icon: action.type === 'analyze' ? Brain : action.type === 'search' ? FileSearch : MessageSquare,
         title: displayTitle,
         description: displayDescription,
         timestamp: new Date(action.timestamp).toLocaleTimeString(),
-        status: action.status === 'completed' ? 'completed' : action.status === 'failed' ? 'failed' : 'pending',
-        ...(functionCallResultData && { functionCallResultData })
+        status: action.status === 'completed' ? 'completed' : action.status === 'failed' ? 'failed' : 'pending'
       };
-    }).filter(Boolean) || [];
+    }) || []).filter((action): action is AgentActionProps => action !== null);
   
   const handleSendMessage = async (message: string) => {
     if (!selectedThreadId) return;
@@ -199,5 +234,5 @@ export function AgentPanelContainer() {
     }
   };
   
-  return <AgentPanel actions={actions} onSendMessage={handleSendMessage} />;
+  return <AgentPanel actions={actions} onSendMessage={(message) => void handleSendMessage(message)} />;
 }

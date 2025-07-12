@@ -19,7 +19,7 @@ export async function getThreadActionHistory(threadId: number): Promise<AgentInp
     .from(agentActions)
     .where(eq(agentActions.thread_id, threadId))
     .orderBy(agentActions.created_at);
-  
+
   // Map to metadata property, which is always an AgentInputItem
   return actions.map(action => action.metadata as AgentInputItem);
 }

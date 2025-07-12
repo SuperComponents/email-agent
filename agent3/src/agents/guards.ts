@@ -5,7 +5,6 @@ import type {
   FunctionCallResultItem,
   RunItemStreamEvent,
   RunStreamEvent,
-  AssistantMessageItem,
 } from '@openai/agents';
 
 export interface KnowledgeBaseResult {
@@ -85,19 +84,16 @@ export function isRunItemStreamEvent(event: RunStreamEvent): event is RunItemStr
 //   };
 // }
 
-
 export interface OutputMessage {
   providerData: Record<string, unknown>;
   id: string;
-  type: "message",
-  role: "assistant",
-  status: "completed",
-  content: Array<
-    {
-      type: "output_text",
-      text: string
-    }>
-  
+  type: 'message';
+  role: 'assistant';
+  status: 'completed';
+  content: Array<{
+    type: 'output_text';
+    text: string;
+  }>;
 }
 // const abc = 1 as any as AssistantMessageItem
 

@@ -2,8 +2,14 @@ import { tool } from '@openai/agents';
 import { z } from 'zod';
 
 const ExplainNextToolCallParamsSchema = z.object({
-  explanation: z.string().describe('A brief explanation of what you plan to do with your next tool call'),
-  nextToolName: z.string().describe('The name of the tool you plan to use next (e.g., search_emails, tag_email, search_knowledge_base, write_draft)'),
+  explanation: z
+    .string()
+    .describe('A brief explanation of what you plan to do with your next tool call'),
+  nextToolName: z
+    .string()
+    .describe(
+      'The name of the tool you plan to use next (e.g., search_emails, tag_email, search_knowledge_base, write_draft)',
+    ),
 });
 
 type ExplainNextToolCallParams = z.infer<typeof ExplainNextToolCallParamsSchema>;
@@ -24,7 +30,7 @@ Examples:
 - explanation: "I'll search the knowledge base for information about our refund policy to answer their question"
   nextToolName: "search_knowledge_base"`,
   parameters: ExplainNextToolCallParamsSchema,
-  execute: async (input: ExplainNextToolCallParams) => {
+  execute: (input: ExplainNextToolCallParams) => {
     // Log the explanation with the next tool name
     console.log(`🤔 Next action: ${input.explanation} [Next tool: ${input.nextToolName}]`);
     return {

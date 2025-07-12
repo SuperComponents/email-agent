@@ -11,11 +11,10 @@ export interface AgentActionProps extends React.HTMLAttributes<HTMLDivElement> {
   status?: 'pending' | 'completed' | 'failed';
   isMessage?: boolean;
   messageRole?: 'user' | 'assistant';
-  functionCallResultData?: any; // Attached result data for function_call items
 }
 
 export const AgentAction = React.forwardRef<HTMLDivElement, AgentActionProps>(
-  ({ className, icon, title, description, timestamp, status = 'completed', isMessage, messageRole, functionCallResultData, ...props }, ref) => {
+  ({ className, icon, title, description, timestamp, status = 'completed', isMessage, messageRole, ...props }, ref) => {
     // Message-style display for chat messages
     if (isMessage) {
       return (

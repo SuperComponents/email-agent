@@ -17,7 +17,7 @@ import { writeDraftTool } from './tools/write-draft.js';
 import { explainNextToolCallTool } from './tools/explain-next-tool-call.js';
 import { logCall2, logStreamingToolCalls } from './log-actions.js';
 import type { EmailMessage, DraftResponse, AgentAction } from '../db/types.js';
-import { isMessage, isRunItemStreamEvent } from './guards.js';
+import { isRunItemStreamEvent } from './guards.js';
 import {
   getThreadActions,
   getThreadActionHistory,
@@ -105,6 +105,9 @@ ${email.body_text || ''}`;
   return context;
 }
 
+// Keeping for potential future use
+// @ts-expect-error - Preserved for future use
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 async function buildThreadContext(
   threadId: number | undefined,
   currentEmail: EmailMessage,
@@ -135,23 +138,30 @@ function createAgent() {
   return new Agent<EmailContext>({
     name: 'EmailProcessor',
     instructions: SYSTEM_PROMPT,
-    tools: [readThreadTool, explainNextToolCallTool, emailSearchTool, emailTaggerTool, ragSearchTool, writeDraftTool],
+    tools: [
+      readThreadTool,
+      explainNextToolCallTool,
+      emailSearchTool,
+      emailTaggerTool,
+      ragSearchTool,
+      writeDraftTool,
+    ],
     model: env.OPENAI_MODEL,
-//     toolUseBehavior: {
-//       stopAtToolNames: ['write_draft']
-//     }
-//     model: new OpenAIResponsesModel({
-// 
-//        model: 'o3-mini',
-//        modelSettings: {
-//         providerData: {
-//           reasoning: {
-//             effort: 'high',
-//             summary: 'auto',
-//           },
-//         },
-//       },
-//     })
+    //     toolUseBehavior: {
+    //       stopAtToolNames: ['write_draft']
+    //     }
+    //     model: new OpenAIResponsesModel({
+    //
+    //        model: 'o3-mini',
+    //        modelSettings: {
+    //         providerData: {
+    //           reasoning: {
+    //             effort: 'high',
+    //             summary: 'auto',
+    //           },
+    //         },
+    //       },
+    //     })
     // model:  'o3-mini'
   });
 }
@@ -176,8 +186,8 @@ async function processStreamingEvents(
         actions.push(actResult[0]);
       }
       lastEvent = event;
-//       logger(event);
-//       logger('is message output: ' + isMessage(event.item.rawItem))
+      //       logger(event);
+      //       logger('is message output: ' + isMessage(event.item.rawItem))
 
       // const item = event.item;
       // if (isMessageOutputItem(item)) {
@@ -198,12 +208,12 @@ export async function processEmail(
   logger: (message: unknown) => void = console.log,
   userMessage: string = 'Process the latest email in this thread and create an appropriate response.',
 ): Promise<ProcessEmailResult> {
-  // Fetch the latest email in the thread
-  const email = (await getLatestEmailInThreadOrFail(threadId)) as EmailMessage;
+  // Fetch the latest email in the thread - kept for validation but not used directly
+  await getLatestEmailInThreadOrFail(threadId);
 
   // Create agent and build context
   const agent = createAgent();
-  
+
   // Get all emails in the thread for context
   const threadEmails = await getSortedEmailsByThreadId(threadId);
 
@@ -213,21 +223,20 @@ export async function processEmail(
 
   // Create the context with all emails in the thread
   const context: EmailContext = {
-    emails: threadEmails
+    emails: threadEmails,
   };
 
   // Get previous agent actions for this thread as history
   const previousActions = await getThreadActionHistory(threadId);
-  let history: AgentInputItem[] = [...previousActions];
-  history.push(user(userMessage));
+  const history: AgentInputItem[] = [...previousActions, user(userMessage)];
 
-  const result = await run(agent, history, { 
-    maxTurns: 100, 
-    stream: true, 
-    context 
-  })
+  const result = await run(agent, history, {
+    maxTurns: 100,
+    stream: true,
+    context,
+  });
 
-  await logCall2(user(userMessage), threadId)
+  await logCall2(user(userMessage), threadId);
 
   // Process streaming events and collect actions
   const actions = await processStreamingEvents(result, threadId, logger);
@@ -240,16 +249,16 @@ export async function processEmail(
   logger('🤔  WHY:');
   logger('🤔  WHY:');
   logger('🤔  WHY:');
-//   for (const item of result.newItems) {
-//     if (item.type === 'reasoning_item') {
-//       // item.rawItem.content is an array of text chunks
-//       logger(item.rawItem.content.map(c => c.text).join('\n'));
-//     }
-//   }
+  //   for (const item of result.newItems) {
+  //     if (item.type === 'reasoning_item') {
+  //       // item.rawItem.content is an array of text chunks
+  //       logger(item.rawItem.content.map(c => c.text).join('\n'));
+  //     }
+  //   }
 
   // Log the raw agent result
   logAgentRunResult(result);
-  
+
   // Log the history separately
   logAgentHistory(result.history);
 
@@ -265,10 +274,10 @@ export async function processEmail(
   }
 
   // Log all output for debugging
-//   logger('START OUTPUT BLOCK');
-//   result.output.forEach(item => {
-//     logger(JSON.stringify(item, null, 2));
-//   });
+  //   logger('START OUTPUT BLOCK');
+  //   result.output.forEach(item => {
+  //     logger(JSON.stringify(item, null, 2));
+  //   });
 
   // Get the draft that was created by the write_draft tool
   const draft = await getLatestDraftForThread(threadId);
