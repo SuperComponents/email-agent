@@ -50,6 +50,8 @@ services:
     image: postgres:16-alpine
     container_name: email-agent-db
     restart: unless-stopped
+    ports:
+      - "5433:5432"
     environment:
       POSTGRES_USER: email_agent
       POSTGRES_PASSWORD: email_agent_pw
