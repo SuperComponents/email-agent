@@ -51,43 +51,6 @@ export const AgentPanel = React.forwardRef<HTMLDivElement, AgentPanelProps>(
           <h3 className="font-semibold">Activity</h3>
         </div>
         <div className="flex-1 overflow-y-auto p-4">
-          <div className="space-y-3 mb-6">
-            <div className="text-xs text-secondary-foreground leading-relaxed">
-              Use the agent to analyze this conversation and generate a helpful response. The agent
-              will search your knowledge base and provide citations.
-            </div>
-            <div className="space-y-2">
-              <Button
-                onClick={onUseAgent}
-                size="sm"
-                variant="secondary"
-                className="w-full gap-2"
-                disabled={isRegeneratingDraft}
-              >
-                <Icon
-                  icon={Sparkles}
-                  size="sm"
-                  className={isRegeneratingDraft ? 'animate-pulse' : ''}
-                />
-                <span>{isRegeneratingDraft ? 'Generating...' : 'Use Agent'}</span>
-              </Button>
-              <Button
-                onClick={onDemoCustomerResponse}
-                size="sm"
-                variant="ghost"
-                className="w-full gap-2"
-                disabled={isGeneratingDemoResponse}
-              >
-                <Icon
-                  icon={UserPlus}
-                  size="sm"
-                  className={isGeneratingDemoResponse ? 'animate-pulse' : ''}
-                />
-                <span>{isGeneratingDemoResponse ? 'Generating...' : 'Demo Customer Response'}</span>
-              </Button>
-            </div>
-          </div>
-
           {actions.length > 0 ? (
             <div className="space-y-3 mb-6">
               {actions.map((action, index) => (
