@@ -1,6 +1,7 @@
 import React from 'react';
 import { cn } from '../../lib/utils';
 import { Button } from '../atoms/Button';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 
 export type HeaderProps = React.HTMLAttributes<HTMLElement>;
@@ -27,6 +28,19 @@ export const Header = React.forwardRef<HTMLElement, HeaderProps>(
                 </div>
                 
                 <div className="flex items-center space-x-4">
+                    <Link to="/knowledge-base" data-tour="knowledge-base-link" className="text-sm text-primary hover:underline">
+                        Knowledge Base
+                    </Link>
+                    <Button
+                        variant="secondary"
+                        size="sm"
+                        onClick={() => {
+                            localStorage.removeItem('onboardingCompleted');
+                            window.dispatchEvent(new Event('startOnboardingTour'));
+                        }}
+                    >
+                        Product Tour
+                    </Button>
                     {user && (
                         <span className="text-sm text-secondary-foreground">
                             Welcome, {user.name}

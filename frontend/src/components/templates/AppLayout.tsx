@@ -20,19 +20,19 @@ export const AppLayout = React.forwardRef<HTMLDivElement, AppLayoutProps>(
         
         <div className="flex-1 flex overflow-hidden">
           {sidebar && (
-            <aside className="w-80 flex-shrink-0 border-r border-border overflow-hidden">
+            <aside className="w-80 flex-shrink-0 border-r border-border overflow-hidden" data-tour="sidebar">
               {sidebar}
             </aside>
           )}
           
           {main && (
-            <main className="flex-1 flex flex-col overflow-hidden">
+            <main className="flex-1 flex flex-col overflow-hidden" data-tour="thread">
               {main}
             </main>
           )}
           
           {panel && (
-            <aside className="w-96 flex-shrink-0 border-l border-border overflow-hidden">
+            <aside className="w-96 flex-shrink-0 border-l border-border overflow-hidden" data-tour="agent-panel">
               {panel}
             </aside>
           )}

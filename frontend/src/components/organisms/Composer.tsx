@@ -59,6 +59,7 @@ export const Composer = React.forwardRef<HTMLDivElement, ComposerProps>(
           'border-t border-border bg-card',
           className
         )}
+        data-tour="composer"
         {...props}
       >
         <div className="p-4">

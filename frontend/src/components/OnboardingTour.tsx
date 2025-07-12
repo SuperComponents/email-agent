@@ -19,15 +19,35 @@ const steps: Step[] = [
     },
   },
   {
-    target: 'aside', // Thread list sidebar (first <aside> rendered by AppLayout)
+    target: '[data-tour="sidebar"]',
     title: 'Conversation list',
     content:
       'All customer conversations live here. Filter, search, or click a thread to open it.',
   },
   {
-    target: 'main', // Main area where thread details are rendered
+    target: '[data-tour="thread"]',
     title: 'Message thread',
     content: 'This area shows the full conversation with the customer.',
+  },
+  {
+    target: '[data-tour="use-agent-btn"]',
+    title: 'AI assistance',
+    content: 'Click "Use Agent" to let the AI draft a reply you can tweak before sending.',
+  },
+  {
+    target: '[data-tour="composer"]',
+    title: 'Reply composer',
+    content: 'Write or edit your response here. Cmd/Ctrl+Enter sends it.',
+  },
+  {
+    target: '[data-tour="agent-panel"]',
+    title: 'Agent activity log',
+    content: 'See and chat with the AI as it researches and drafts replies.',
+  },
+  {
+    target: '[data-tour="knowledge-base-link"]',
+    title: 'Knowledge base',
+    content: 'Add docs & FAQs to keep the AI answers accurate.',
   },
   // Additional steps can be added later when corresponding selectors are present
 ];
@@ -41,6 +61,13 @@ export function OnboardingTour() {
     if (!completed) {
       setRun(true);
     }
+
+    const handleStart = () => {
+      setRun(true);
+    };
+
+    window.addEventListener('startOnboardingTour', handleStart);
+    return () => window.removeEventListener('startOnboardingTour', handleStart);
   }, []);
 
   const handleCallback = useCallback((data: CallBackProps) => {

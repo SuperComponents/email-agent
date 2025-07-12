@@ -78,6 +78,7 @@ export const ThreadDetail = React.forwardRef<HTMLDivElement, ThreadDetailProps>(
                 size="sm"
                 variant="secondary"
                 className="gap-2"
+                data-tour="use-agent-btn"
                 disabled={isRegeneratingDraft}
               >
                 <Icon 
