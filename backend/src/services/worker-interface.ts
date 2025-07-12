@@ -6,6 +6,7 @@ import { AgentWorkerService } from './agent-worker.js';
 class WorkerManager {
   private workers = new Map<number, AgentWorkerService>();
   private config: AgentWorkerServiceConfig;
+  private startingWorkers = new Set<number>(); // Track workers currently being started
 
   constructor(config: AgentWorkerServiceConfig = {}) {
     this.config = config;
@@ -22,16 +23,23 @@ class WorkerManager {
     // Set up event listeners
     worker.on('error', (error) => {
       console.error(`[WorkerManager] Worker error for thread ${threadId}:`, error);
+      this.startingWorkers.delete(threadId);
     });
 
     worker.on('stopped', () => {
       console.log(`[WorkerManager] Worker stopped for thread ${threadId}`);
       this.workers.delete(threadId);
+      this.startingWorkers.delete(threadId);
     });
 
     worker.on('failed', () => {
       console.error(`[WorkerManager] Worker failed permanently for thread ${threadId}`);
       this.workers.delete(threadId);
+      this.startingWorkers.delete(threadId);
+    });
+
+    worker.on('running', () => {
+      this.startingWorkers.delete(threadId);
     });
 
     // Start the worker
@@ -39,6 +47,24 @@ class WorkerManager {
     this.workers.set(threadId, worker);
 
     return worker;
+  }
+
+  async startWorkerForThreadIfNotActive(threadId: number): Promise<AgentWorkerService | null> {
+    // Check if worker is already running or starting
+    if (this.workers.has(threadId) || this.startingWorkers.has(threadId)) {
+      console.log(`[WorkerManager] Worker for thread ${threadId} already active or starting, skipping`);
+      return this.workers.get(threadId) || null;
+    }
+
+    // Mark as starting to prevent race conditions
+    this.startingWorkers.add(threadId);
+    
+    try {
+      return await this.startWorkerForThread(threadId);
+    } catch (error) {
+      this.startingWorkers.delete(threadId);
+      throw error;
+    }
   }
 
   async stopWorkerForThread(threadId: number, reason?: string): Promise<void> {

@@ -1,7 +1,7 @@
 # Variables
 FRONTEND_DIR ?= frontend
 BACKEND_DIR ?= backend
-AGENT_DIR ?= agent3
+AGENT_DIR ?= agent4
 DOCKER_COMPOSE = docker compose
 
 # Default target - show help

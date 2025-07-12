@@ -1,6 +1,7 @@
 import { db } from '../database/db.js';
 import { emails, threads } from '../database/schema.js';
 import { logAgentAction } from '../database/logAgentAction.js';
+import { workerManager } from './worker-interface.js';
 import OpenAI from 'openai';
 import { OPENAI_API_KEY } from '../config/env.js';
 import fs from 'fs/promises';
@@ -184,6 +185,16 @@ async function createEmailFromScenario(scenario: Scenario) {
         timestamp: new Date().toISOString(),
       },
     });
+
+    // Automatically start agent worker for the new thread
+    try {
+      console.log(`🤖 Starting agent worker for new thread ${thread.id}`);
+      await workerManager.startWorkerForThreadIfNotActive(thread.id);
+      console.log(`✅ Agent worker started for thread ${thread.id}`);
+    } catch (error) {
+      console.error(`❌ Failed to start agent worker for thread ${thread.id}:`, error);
+      // Don't throw error - email creation should still succeed even if worker fails
+    }
 
     emailCount++;
     console.log(`✉️  Generated email from scenario: ${scenario.title} (Total: ${emailCount})`);

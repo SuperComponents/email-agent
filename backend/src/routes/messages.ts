@@ -5,6 +5,7 @@ import { threads, emails } from '../database/schema.js';
 import { successResponse, notFoundResponse, errorResponse } from '../utils/response.js';
 import { sendMessageSchema, validateRequest } from '../utils/validation.js';
 import { logAgentAction } from '../database/logAgentAction.js';
+import { workerManager } from '../services/worker-interface.js';
 import OpenAI from 'openai';
 import { OPENAI_API_KEY } from '../config/env.js';
 
@@ -120,6 +121,16 @@ async function generateDemoCustomerResponse(threadId: number) {
     },
   });
 
+  // Automatically start agent worker for the customer response
+  try {
+    console.log(`🤖 Starting agent worker for customer response in thread ${threadId}`);
+    await workerManager.startWorkerForThreadIfNotActive(threadId);
+    console.log(`✅ Agent worker started for thread ${threadId}`);
+  } catch (error) {
+    console.error(`❌ Failed to start agent worker for thread ${threadId}:`, error);
+    // Don't throw error - customer response should still be processed even if worker fails
+  }
+
   return newEmail;
 }
 
@@ -182,12 +193,14 @@ app.post('/:id/messages', async c => {
 
     // Schedule automatic demo customer response after 10-30 seconds
     const delayMs = Math.floor(Math.random() * 4000) + 3000; // Random between 10-30 seconds
-    setTimeout(async () => {
-      try {
-        await generateDemoCustomerResponse(threadId);
-      } catch (error) {
-        console.error('Failed to generate automatic demo customer response:', error);
-      }
+    setTimeout(() => {
+      void (async () => {
+        try {
+          await generateDemoCustomerResponse(threadId);
+        } catch (error) {
+          console.error('Failed to generate automatic demo customer response:', error);
+        }
+      })();
     }, delayMs);
 
     return successResponse(c, {
