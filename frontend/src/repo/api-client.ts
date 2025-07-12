@@ -63,6 +63,18 @@ export async function updateThread(id: string, updates: { status?: string; tags?
   });
 }
 
+export async function markThreadAsRead(id: string): Promise<{ id: string; is_unread: boolean }> {
+  return fetchAPI<{ id: string; is_unread: boolean }>(`/api/threads/${id}/read`, {
+    method: 'PATCH',
+  });
+}
+
+export async function markThreadAsUnread(id: string): Promise<{ id: string; is_unread: boolean }> {
+  return fetchAPI<{ id: string; is_unread: boolean }>(`/api/threads/${id}/unread`, {
+    method: 'PATCH',
+  });
+}
+
 // Message endpoints
 export async function sendMessage(threadId: string, content: string): Promise<unknown> {
   return fetchAPI(`/api/threads/${threadId}/messages`, {
@@ -168,6 +180,8 @@ export const APIClient = {
   getThreads,
   getThread,
   updateThread,
+  markThreadAsRead,
+  markThreadAsUnread,
   sendMessage,
   getDraft,
   updateDraft,

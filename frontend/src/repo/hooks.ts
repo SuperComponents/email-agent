@@ -90,6 +90,34 @@ export function useUpdateThread() {
   });
 }
 
+export function useMarkThreadAsRead() {
+  const queryClient = useQueryClient();
+  
+  return useMutation({
+    mutationFn: (id: string) => APIClient.markThreadAsRead(id),
+    onSuccess: (_, id) => {
+      // Invalidate and refetch thread data
+      void queryClient.invalidateQueries({ queryKey: queryKeys.thread(id) });
+      void queryClient.invalidateQueries({ queryKey: queryKeys.threads() });
+      void queryClient.invalidateQueries({ queryKey: queryKeys.threadCounts });
+    },
+  });
+}
+
+export function useMarkThreadAsUnread() {
+  const queryClient = useQueryClient();
+  
+  return useMutation({
+    mutationFn: (id: string) => APIClient.markThreadAsUnread(id),
+    onSuccess: (_, id) => {
+      // Invalidate and refetch thread data
+      void queryClient.invalidateQueries({ queryKey: queryKeys.thread(id) });
+      void queryClient.invalidateQueries({ queryKey: queryKeys.threads() });
+      void queryClient.invalidateQueries({ queryKey: queryKeys.threadCounts });
+    },
+  });
+}
+
 export function useSendMessage() {
   const queryClient = useQueryClient();
   

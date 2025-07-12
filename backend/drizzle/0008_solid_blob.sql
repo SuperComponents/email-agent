@@ -1,0 +1,1 @@
+ALTER TABLE "threads" ADD COLUMN "is_unread" boolean DEFAULT true NOT NULL;

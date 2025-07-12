@@ -27,7 +27,10 @@ app.get('/', async c => {
         case 'awaiting_customer':
           conditions.push(eq(threads.status, 'active'));
           break;
-        // Note: For MVP, we'll need to handle unread, flagged, urgent differently
+        case 'unread':
+          conditions.push(eq(threads.is_unread, true));
+          break;
+        // Note: For MVP, we'll need to handle flagged, urgent differently
         // as they depend on additional fields or email states
       }
     }
@@ -50,6 +53,7 @@ app.get('/', async c => {
         subject: threads.subject,
         participant_emails: threads.participant_emails,
         status: threads.status,
+        is_unread: threads.is_unread,
         last_activity_at: threads.last_activity_at,
         created_at: threads.created_at,
         // Get latest email content for snippet
@@ -77,7 +81,7 @@ app.get('/', async c => {
         customer_name: customerEmail.split('@')[0], // Simplified for MVP
         customer_email: customerEmail,
         timestamp: thread.last_activity_at.toISOString(),
-        is_unread: false, // TODO: Implement unread tracking
+        is_unread: thread.is_unread,
         status: thread.status,
         tags: [], // TODO: Implement tags
       };
@@ -108,6 +112,17 @@ app.get('/:id', async c => {
 
     if (!thread) {
       return notFoundResponse(c, 'Thread');
+    }
+
+    // Mark thread as read when it's accessed
+    if (thread.is_unread) {
+      await db
+        .update(threads)
+        .set({
+          is_unread: false,
+          updated_at: new Date(),
+        })
+        .where(eq(threads.id, threadId));
     }
 
     // Get emails for thread
@@ -282,6 +297,92 @@ app.patch('/:id', async c => {
     return errorResponse(
       c,
       error instanceof Error ? error.message : 'Failed to update thread',
+      500,
+    );
+  }
+});
+
+// PATCH /api/threads/:id/read - Mark thread as read
+app.patch('/:id/read', async c => {
+  try {
+    const threadId = parseInt(c.req.param('id'));
+
+    if (isNaN(threadId)) {
+      return errorResponse(c, 'Invalid thread ID', 400);
+    }
+
+    // Check thread exists
+    const [existingThread] = await db
+      .select({ id: threads.id, is_unread: threads.is_unread })
+      .from(threads)
+      .where(eq(threads.id, threadId))
+      .limit(1);
+
+    if (!existingThread) {
+      return notFoundResponse(c, 'Thread');
+    }
+
+    // Update thread to mark as read
+    await db
+      .update(threads)
+      .set({
+        is_unread: false,
+        updated_at: new Date(),
+      })
+      .where(eq(threads.id, threadId));
+
+    return successResponse(c, {
+      id: threadId.toString(),
+      is_unread: false,
+    });
+  } catch (error) {
+    console.error('Error marking thread as read:', error);
+    return errorResponse(
+      c,
+      error instanceof Error ? error.message : 'Failed to mark thread as read',
+      500,
+    );
+  }
+});
+
+// PATCH /api/threads/:id/unread - Mark thread as unread
+app.patch('/:id/unread', async c => {
+  try {
+    const threadId = parseInt(c.req.param('id'));
+
+    if (isNaN(threadId)) {
+      return errorResponse(c, 'Invalid thread ID', 400);
+    }
+
+    // Check thread exists
+    const [existingThread] = await db
+      .select({ id: threads.id, is_unread: threads.is_unread })
+      .from(threads)
+      .where(eq(threads.id, threadId))
+      .limit(1);
+
+    if (!existingThread) {
+      return notFoundResponse(c, 'Thread');
+    }
+
+    // Update thread to mark as unread
+    await db
+      .update(threads)
+      .set({
+        is_unread: true,
+        updated_at: new Date(),
+      })
+      .where(eq(threads.id, threadId));
+
+    return successResponse(c, {
+      id: threadId.toString(),
+      is_unread: true,
+    });
+  } catch (error) {
+    console.error('Error marking thread as unread:', error);
+    return errorResponse(
+      c,
+      error instanceof Error ? error.message : 'Failed to mark thread as unread',
       500,
     );
   }

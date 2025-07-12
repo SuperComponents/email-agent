@@ -131,13 +131,14 @@ async function createEmailFromScenario(scenario: Scenario) {
   try {
     const emailData = await generateEmailFromScenario(scenario);
     
-    // Create thread
+    // Create thread (new threads are unread by default due to schema default)
     const [thread] = await db
       .insert(threads)
       .values({
         subject: scenario.title,
         participant_emails: [emailData.persona.email, 'support@treslingo.com'],
         status: scenario.severity === 'high' ? 'needs_attention' : 'active',
+        is_unread: true, // Explicitly set new threads as unread
         last_activity_at: new Date(),
         created_at: new Date(),
         updated_at: new Date(),

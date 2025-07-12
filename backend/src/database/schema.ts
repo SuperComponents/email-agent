@@ -54,6 +54,7 @@ export const threads = pgTable('threads', {
   subject: varchar('subject', { length: 500 }).notNull(),
   participant_emails: jsonb('participant_emails').notNull(),
   status: statusEnum('status').notNull().default('active'),
+  is_unread: boolean('is_unread').notNull().default(true),
   last_activity_at: timestamp('last_activity_at').notNull().defaultNow(),
   created_at: timestamp('created_at').defaultNow(),
   updated_at: timestamp('updated_at').defaultNow(),
