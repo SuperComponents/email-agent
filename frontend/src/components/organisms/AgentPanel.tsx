@@ -1,30 +1,46 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { AgentAction, type AgentActionProps } from '../molecules/AgentAction';
-import { Separator } from '../atoms/Separator';
+import { Button } from '../atoms/Button';
+import { Send } from 'lucide-react';
 import { cn } from '../../lib/utils';
 
 export interface AgentPanelProps extends React.HTMLAttributes<HTMLDivElement> {
   actions: AgentActionProps[];
-  analysis?: string;
-  draftResponse?: string;
+  onSendMessage?: (message: string) => void;
 }
 
 export const AgentPanel = React.forwardRef<HTMLDivElement, AgentPanelProps>(
-  ({ className, actions, analysis, draftResponse, ...props }, ref) => {
+  ({ className, actions, onSendMessage, ...props }, ref) => {
+    const [message, setMessage] = useState('');
+    
+    const handleSend = () => {
+      if (message.trim() && onSendMessage) {
+        onSendMessage(message.trim());
+        setMessage('');
+      }
+    };
+    
+    const handleKeyPress = (e: React.KeyboardEvent) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        handleSend();
+      }
+    };
+    
     return (
       <div
         ref={ref}
         className={cn(
-          'h-full bg-card border-l border-border overflow-y-auto',
+          'h-full bg-card border-l border-border flex flex-col',
           className
         )}
         {...props}
       >
-        <div className="p-4">
+        <div className="flex-1 overflow-y-auto p-4">
           <h3 className="font-semibold mb-4">Agent Activity</h3>
           
           {actions.length > 0 && (
-            <div className="space-y-3 mb-6">
+            <div className="space-y-3">
               <h4 className="text-sm font-medium text-secondary-foreground">
                 Tool Calls
               </h4>
@@ -33,34 +49,28 @@ export const AgentPanel = React.forwardRef<HTMLDivElement, AgentPanelProps>(
               ))}
             </div>
           )}
-
-          {analysis && (
-            <>
-              <Separator className="my-4" />
-              <div className="space-y-3">
-                <h4 className="text-sm font-medium text-secondary-foreground">
-                  Analysis
-                </h4>
-                <div className="text-sm text-foreground/90 leading-relaxed">
-                  {analysis}
-                </div>
-              </div>
-            </>
-          )}
-
-          {draftResponse && (
-            <>
-              <Separator className="my-4" />
-              <div className="space-y-3">
-                <h4 className="text-sm font-medium text-secondary-foreground">
-                  Draft Response
-                </h4>
-                <div className="text-sm bg-accent/50 rounded-lg p-3 border border-accent-foreground/20">
-                  {draftResponse}
-                </div>
-              </div>
-            </>
-          )}
+        </div>
+        
+        <div className="border-t border-border p-4">
+          <div className="flex gap-2">
+            <textarea
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              onKeyPress={handleKeyPress}
+              placeholder="Type a message..."
+              className="flex-1 min-h-[80px] p-3 rounded-lg border border-border bg-background resize-none focus:outline-none focus:ring-2 focus:ring-ring"
+              rows={3}
+            />
+            <Button
+              onClick={handleSend}
+              disabled={!message.trim()}
+              className="self-end"
+              size="sm"
+            >
+              <Send size={16} className="mr-1" />
+              Send
+            </Button>
+          </div>
         </div>
       </div>
     );

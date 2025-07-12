@@ -57,16 +57,23 @@ export function isRunItemStreamEvent(event: RunStreamEvent): event is RunItemStr
   return event.type === 'run_item_stream_event';
 }
 
-interface MessageOutputItem {
-  type: 'message_output_item';
-  rawItem?: unknown;
+export interface OutputMessage {
+  providerData: Record<string, unknown>;
+  id: string;
+  type: 'message';
+  role: 'assistant';
+  status: 'completed';
+  content: Array<{
+    type: 'output_text';
+    text: string;
+  }>;
 }
 
-export function isMessageOutputItem(item: unknown): item is MessageOutputItem {
+export function isMessage(item: AgentOutputItem): item is OutputMessage {
   return (
     typeof item === 'object' &&
     item !== null &&
     'type' in item &&
-    (item as { type?: string }).type === 'message_output_item'
+    (item as { type?: string }).type === 'message'
   );
 }

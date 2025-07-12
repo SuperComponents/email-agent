@@ -3,6 +3,7 @@ import { emails, agentActions, draft_responses, emailTags } from './schema.js';
 import { eq, desc, and, like } from 'drizzle-orm';
 import type { Email, AgentAction, EmailMessage, DraftResponse } from './types.js';
 import type { KnowledgeBaseResult } from '../agents/guards.js';
+import type { AgentInputItem } from '@openai/agents';
 
 export async function getThreadActions(threadId: number): Promise<AgentAction[]> {
   return db
@@ -10,6 +11,17 @@ export async function getThreadActions(threadId: number): Promise<AgentAction[]>
     .from(agentActions)
     .where(eq(agentActions.thread_id, threadId))
     .orderBy(agentActions.created_at) as Promise<AgentAction[]>;
+}
+
+export async function getThreadActionHistory(threadId: number): Promise<AgentInputItem[]> {
+  const actions = await db
+    .select()
+    .from(agentActions)
+    .where(eq(agentActions.thread_id, threadId))
+    .orderBy(agentActions.created_at);
+
+  // Map to metadata property, which is always an AgentInputItem
+  return actions.map(action => action.metadata as AgentInputItem);
 }
 
 export async function getLatestEmailInThreadOrFail(threadId: number): Promise<Email> {

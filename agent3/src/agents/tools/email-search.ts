@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { searchEmails } from '../../db/query.js';
 
 const EmailSearchParamsSchema = z.object({
+  // toolCallMotivation: z.string().describe('Why are you making this tool call?'),
   senderEmail: z.string().describe('Email address of the sender to search for'),
   query: z
     .string()

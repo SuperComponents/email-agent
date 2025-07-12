@@ -22,6 +22,7 @@ export const updateDraftSchema = z.object({
 
 export const regenerateDraftSchema = z.object({
   instructions: z.string().optional(),
+  userMessage: z.string().optional(),
 });
 
 export const validateRequest = async <T>(c: Context, schema: z.ZodSchema<T>): Promise<T | null> => {

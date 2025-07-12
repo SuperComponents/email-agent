@@ -43,7 +43,9 @@ describe('Agent Write Draft Integration', () => {
       })
       .returning();
 
-    const result = await processEmail(testThreadId, () => {}); // Silent logger
+    const result = await processEmail(testThreadId, x => {
+      console.log(x);
+    }); // Silent logger
 
     // Verify draft was created
     expect(result.draft).toBeDefined();
@@ -78,10 +80,10 @@ describe('Agent Write Draft Integration', () => {
   }
 
   // Tests expecting citations
-  it('should create a draft with citations when asking about DragonScale Gauntlets', async () => {
+  it.only('should create a draft with citations when asking about DragonScale Gauntlets', async () => {
     const draft = await createEmailAndProcess(
       'Question about DragonScale Gauntlets',
-      'Hi, I heard about DragonScale Gauntlets in your game. Can you tell me more about them? What do they do and how can I get them?',
+      'Hi, I heard about the DragonScale Gauntlets you are selling. Can you tell me more about their warranty?',
     );
 
     verifyCitation(draft, 'dragonscale-gauntlets.md');

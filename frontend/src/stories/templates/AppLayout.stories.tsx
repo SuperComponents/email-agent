@@ -119,8 +119,6 @@ export const Default: Story = {
       panel={
         <AgentPanel
           actions={agentActions}
-          analysis="Customer cannot proceed past payment step. Appears related to issue fixed in v2.4."
-          draftResponse="Try clearing your browser cache and cookies. This should resolve the issue immediately."
         />
       }
     />
