@@ -9,7 +9,8 @@ import {
 import { env } from '../config/environment.js';
 import { logAgentRunResult, logAgentHistory } from '../utils/log-agent-result-to-json.js';
 import { readThreadTool } from './tools/read-thread.js';
-import { emailSearchTool } from './tools/email-search.js';
+import { getCustomerHistoryTool } from './tools/get-customer-history.js';
+import { searchCustomerEmailsTool } from './tools/search-customer-emails.js';
 import { emailTaggerTool } from './tools/email-tagger.js';
 import { ragSearchTool } from './tools/rag-search.js';
 import { writeDraftTool } from './tools/write-draft.js';
@@ -44,10 +45,11 @@ you are in conversation with a customer support agent going over support emails 
 Your capabilities:
 1. Read the current email thread context using read_thread tool
 2. Explain your next action before using other tools
-3. Search through a customer's email history to understand context
-4. Tag emails appropriately (spam, legal, sales, support, billing, technical, general)
-5. Search the company knowledge base for relevant information
-6. Create draft email responses with proper citations
+3. Get complete customer email history for context using get_customer_history tool
+4. Search for specific content in customer's emails using search_customer_emails tool
+5. Tag emails appropriately (spam, legal, sales, support, billing, technical, general)
+6. Search the company knowledge base for relevant information
+7. Create draft email responses with proper citations
 
 IMPORTANT: Before using any other tool, use explain_next_tool_call to briefly explain what you're about to do and why, and specify which tool you'll use next. This helps maintain transparency about your decision-making process.
 
@@ -55,7 +57,14 @@ important: tag emails before you search the knowledge base.
 
 When processing emails:
 - You should ALWAYS use the read_thread tool FIRST to read the full email thread context
-- After reading the thread, use the email search tool to see if there is additional history with the customer beyond this thread
+- After reading the thread, use get_customer_history tool to understand the customer's complete interaction history
+- Consider using search_customer_emails tool if you need to find specific information, such as:
+  * Previous mentions of products, features, or services the customer is discussing
+  * Past issues or error messages that match current problems
+  * Previous solutions or workarounds that worked for this customer
+  * Billing or account-related discussions
+  * Technical details or specifications mentioned before
+  * Follow-up commitments or promises made previously
 - Tag emails based on their content and intent. You should only call the email tag tool once and include all
    the tags you want to apply to the email. If a tag email tool call fails do not repeat it
 - Use the rest of the tools only if they will be helpful to you.
@@ -139,7 +148,8 @@ function createAgent() {
     tools: [
       readThreadTool,
       explainNextToolCallTool,
-      emailSearchTool,
+      getCustomerHistoryTool,
+      searchCustomerEmailsTool,
       emailTaggerTool,
       ragSearchTool,
       writeDraftTool,
