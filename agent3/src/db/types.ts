@@ -1,5 +1,7 @@
 // Database table type definitions based on newschema.ts
 
+import type { KnowledgeBaseResult } from '../agents/guards.js';
+
 export interface User {
   id: number;
   email: string;
@@ -56,7 +58,7 @@ export interface DraftResponse {
   version: number;
   parent_draft_id: number | null;
   confidence_score: string | null; // decimal stored as string
-  citations: any | null; // jsonb field for knowledge base citations
+  citations: KnowledgeBaseResult | null; // jsonb field for knowledge base citations
   created_at: Date | null;
   updated_at: Date | null;
 }
@@ -69,7 +71,7 @@ export interface AgentAction {
   actor_user_id: number | null;
   action: string;
   description: string | null;
-  metadata: Record<string, any> | null;
+  metadata: Record<string, unknown> | null;
   ip_address: string | null;
   created_at: Date;
 }

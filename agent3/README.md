@@ -2,7 +2,30 @@
 
 **This is the PRIMARY and ACTIVE AI agent implementation for the OpenSupport project.**
 
+
 ## Status: ✅ ACTIVE & INTEGRATED
+
+1. Install Bun: https://bun.sh
+2. Install dependencies: `npm install` or `bun install`
+3. Create `.env` file with `DATABASE_URL`
+4. Generate database: `npm run db:push`
+
+## Test Setup
+
+1. Create a separate test database in PostgreSQL
+2. Add `TEST_DATABASE_URL` to your `.env` file pointing to the test database
+3. Run tests: `npm test`
+
+Tests automatically:
+
+- Use `TEST_DATABASE_URL` when `NODE_ENV=test`
+- Drop and recreate the database schema for each test run
+- Start with a completely fresh database state
+
+To manually reset the test database:
+
+```bash
+npm run test:db:setup
 
 - **Integration Status**: Fully integrated with backend API
 - **Development Status**: Actively maintained and developed
@@ -173,4 +196,8 @@ Upcoming features and improvements:
 
 ---
 
-**This is the active agent implementation. For legacy agents, see `/agent/LEGACY.md` and `/agent2/LEGACY.md`.**
+- Runtime: Bun (with Node.js fallback)
+- Web Framework: Hono
+- Database: SQLite with Drizzle ORM
+- Language: TypeScript
+

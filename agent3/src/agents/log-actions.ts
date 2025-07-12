@@ -1,34 +1,32 @@
-import type { AgentOutputItem, HostedToolCallItem, FunctionCallItem, FunctionCallResultItem, RunItemStreamEvent } from '@openai/agents';
-import { db } from '../db/db.js';
-import { agentActions } from '../db/schema.js';
+import type {
+  AgentOutputItem,
+  HostedToolCallItem,
+  FunctionCallItem,
+  FunctionCallResultItem,
+  RunItemStreamEvent,
+} from '@openai/agents';
 import type { AgentAction, ToolCallMetadata } from '../db/types.js';
+import { logAgentAction } from '../db/query.js';
+import {
+  isHostedOrFunctionCall,
+  isHostedToolCall,
+  isFunctionCall,
+  isFunctionCallResult,
+} from './guards.js';
 
-type ToolResult = HostedToolCallItem | FunctionCallItem | FunctionCallResultItem
-
-
-function isHostedOrFunctionCall(call: AgentOutputItem): call is HostedToolCallItem | FunctionCallItem {
-  return call.type === 'hosted_tool_call' || call.type === 'function_call';
-}
-
-function isHostedToolCall(call: AgentOutputItem): call is HostedToolCallItem {
-  return call.type === 'hosted_tool_call';
-}
-
-function isFunctionCall(call: AgentOutputItem): call is FunctionCallItem {
-  return call.type === 'function_call';
-}
-
-function isFunctionCallResult(call: AgentOutputItem): call is FunctionCallResultItem {
-  return call.type === 'function_call_result';
-}
+type ToolResult = HostedToolCallItem | FunctionCallItem | FunctionCallResultItem;
 
 function getResultCallOrUndefined(call: AgentOutputItem, output: AgentOutputItem[]) {
   if (isFunctionCall(call)) {
-    return output.filter(isFunctionCallResult).find(r => r.callId === call.callId)
+    return output.filter(isFunctionCallResult).find(r => r.callId === call.callId);
   }
 }
 
-export async function logStreamingToolCalls(current: RunItemStreamEvent, thread_id: number, last?: RunItemStreamEvent) {
+export async function logStreamingToolCalls(
+  current: RunItemStreamEvent,
+  thread_id: number,
+  last?: RunItemStreamEvent,
+) {
   const currentRawItem = current.item.rawItem;
   const lastRawItem = last?.item.rawItem;
 
@@ -42,14 +40,14 @@ export async function logStreamingToolCalls(current: RunItemStreamEvent, thread_
 
 export async function logAndProcessToolCalls(
   output: AgentOutputItem[],
-  thread_id: number
+  thread_id: number,
 ): Promise<AgentAction[]> {
   if (!output) return [];
 
-  const promises = output.filter(isHostedOrFunctionCall).map(call => 
-    logCall(call, thread_id, getResultCallOrUndefined(call, output))
-  );
-  
+  const promises = output
+    .filter(isHostedOrFunctionCall)
+    .map(call => logCall(call, thread_id, getResultCallOrUndefined(call, output)));
+
   const results = await Promise.all(promises);
   return results.flat();
 }
@@ -57,17 +55,17 @@ export async function logAndProcessToolCalls(
 async function logCall(
   call: ToolResult,
   thread_id: number,
-  result?: ToolResult
+  result?: ToolResult,
 ): Promise<AgentAction[]> {
-  return db.insert(agentActions).values({
+  return logAgentAction({
     thread_id,
     action: call.name,
     description: generateDescription(call),
     metadata: getMetadata(call, result),
-  }).returning() as Promise<AgentAction[]>;
+  });
 }
 
-function getMetadata(call: ToolResult, result?: ToolResult): Record<string, any> {
+function getMetadata(call: ToolResult, result?: ToolResult): ToolCallMetadata {
   const base: ToolCallMetadata = {
     callId: call.id || '',
     timestamp: Date.now(),
@@ -76,7 +74,7 @@ function getMetadata(call: ToolResult, result?: ToolResult): Record<string, any>
   };
 
   if (isHostedToolCall(call)) {
-    const data = call.providerData || {};
+    const data = (call.providerData as { queries?: string[]; results?: unknown[] }) || {};
     base.parameters = {
       queries: data.queries || [],
       ...(data.results?.length && { resultCount: data.results.length }),
@@ -87,7 +85,7 @@ function getMetadata(call: ToolResult, result?: ToolResult): Record<string, any>
 
   if (isFunctionCall(call) && result && isFunctionCallResult(result)) {
     base.parameters = parseJson(call.arguments) || {};
-    
+
     if (result.output?.type === 'text') {
       try {
         base.result = parseJson(result.output.text);
@@ -103,22 +101,31 @@ function getMetadata(call: ToolResult, result?: ToolResult): Record<string, any>
 }
 
 function generateDescription(call: ToolResult): string {
-  const params = call.type === 'function_call' ? parseJson(call.arguments) || {} : call.providerData || {};
-  
-  const descriptions: Record<string, (p: any) => string> = {
+  const params =
+    call.type === 'function_call' ? parseJson(call.arguments) || {} : call.providerData || {};
+
+  interface DescriptionParams {
+    senderEmail?: string;
+    emailId?: string | number;
+    tags?: string[];
+    query?: string;
+    queries?: string[];
+  }
+
+  const descriptions: Record<string, (p: DescriptionParams) => string> = {
     search_emails: p => `Searched for emails from ${p.senderEmail || 'all senders'}`,
     tag_email: p => `Tagged email ${p.emailId} as ${p.tags?.join(', ') || 'unknown'}`,
     search_knowledge_base: p => `Searched knowledge base for: "${p.query || 'unknown query'}"`,
     file_search_call: p => `Searched knowledge base with queries: ${(p.queries || []).join(', ')}`,
   };
-  
-  return descriptions[call.name]?.(params) || `Called ${call.name} tool`;
+
+  return descriptions[call.name]?.(params as DescriptionParams) || `Called ${call.name} tool`;
 }
 
-function parseJson(str: string | undefined): null |Record<string, any> {
+function parseJson(str: string | undefined): null | Record<string, unknown> {
   if (!str) return null;
   try {
-    return JSON.parse(str);
+    return JSON.parse(str) as Record<string, unknown>;
   } catch {
     return null;
   }
