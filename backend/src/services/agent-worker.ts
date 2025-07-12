@@ -92,7 +92,7 @@ export class AgentWorkerService extends EventEmitter {
 
   private async startWorker(initialEvents: Event[]): Promise<void> {
     const workerPath = this.config.workerPath || 
-      path.resolve(__dirname, '../../../agent4/src/worker.js');
+      path.resolve(__dirname, '../../../node_modules/@proresponse/agent/dist/worker.js');
 
     this.worker = new Worker(workerPath, {
       workerData: {}

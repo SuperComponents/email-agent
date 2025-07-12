@@ -123,7 +123,7 @@ async function generateEnhancedDraftResponse(
     const worker = await workerManager.startWorkerForThread(threadId, initialEvents);
 
     // Set up a promise to wait for completion
-    const agentResponse = await new Promise((resolve, reject) => {
+    const agentResponse = await new Promise<{ success: boolean; message: string; threadId: number }>((resolve, reject) => {
       const timeout = setTimeout(() => {
         reject(new Error('Agent processing timeout'));
       }, 120000); // 2 minute timeout
@@ -376,7 +376,7 @@ app.post('/:id/regenerate', async c => {
     return successResponse(c, {
       status: 'success',
       message: 'Enhanced draft regenerated successfully',
-      draft_id: enhancedResponse.draft?.id.toString(),
+      thread_id: enhancedResponse.threadId,
       //       enhanced_features: {
       //         thread_name: enhancedResponse.threadName,
       //         confidence: enhancedResponse.confidence,

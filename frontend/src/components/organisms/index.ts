@@ -4,6 +4,7 @@ export { ThreadDetail } from './ThreadDetail';
 export { AgentPanel } from './AgentPanel';
 export { Composer } from './Composer';
 export { EmailSimulationControl } from './EmailSimulationControl';
+export { WorkerTesting } from './WorkerTesting';
 
 export type { HeaderProps } from './Header';
 export type { ThreadListProps } from './ThreadList';

@@ -3,6 +3,7 @@ import { Sparkles, UserPlus, Send } from 'lucide-react';
 import { AgentAction, type AgentActionProps } from '../molecules/AgentAction';
 import { Button } from '../atoms/Button';
 import { Icon } from '../atoms/Icon';
+import { WorkerTesting } from './WorkerTesting';
 import { cn } from '../../lib/utils';
 
 export interface AgentPanelProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -13,6 +14,7 @@ export interface AgentPanelProps extends React.HTMLAttributes<HTMLDivElement> {
   onSendMessage?: (message: string) => void;
   isRegeneratingDraft?: boolean;
   isGeneratingDemoResponse?: boolean;
+  currentThreadId?: number;
 }
 
 export const AgentPanel = React.forwardRef<HTMLDivElement, AgentPanelProps>(
@@ -25,6 +27,7 @@ export const AgentPanel = React.forwardRef<HTMLDivElement, AgentPanelProps>(
       onSendMessage,
       isRegeneratingDraft,
       isGeneratingDemoResponse,
+      currentThreadId,
       ...props
     },
     ref,
@@ -50,9 +53,13 @@ export const AgentPanel = React.forwardRef<HTMLDivElement, AgentPanelProps>(
         <div className="border-b border-border p-4 h-[60px]">
           <h3 className="font-semibold">Activity</h3>
         </div>
-        <div className="flex-1 overflow-y-auto p-4">
+        <div className="flex-1 overflow-y-auto p-4 space-y-4">
+          {/* Worker Testing Controls */}
+          <WorkerTesting threadId={currentThreadId} />
+          
+          {/* Agent Actions */}
           {actions.length > 0 ? (
-            <div className="space-y-3 mb-6">
+            <div className="space-y-3">
               {actions.map((action, index) => (
                 <AgentAction key={index} {...action} />
               ))}

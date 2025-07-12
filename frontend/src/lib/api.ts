@@ -70,6 +70,31 @@ class ApiClient {
   async delete<T = unknown>(endpoint: string, options: RequestInit = {}): Promise<ApiResponse<T>> {
     return this.request<T>(endpoint, { ...options, method: 'DELETE' })
   }
+
+  // Worker management methods
+  async startWorker(threadId: number): Promise<ApiResponse<{ success: boolean; threadId: number; status: string; message: string }>> {
+    return this.post<{ success: boolean; threadId: number; status: string; message: string }>('/api/workers/start', { threadId })
+  }
+
+  async stopWorker(threadId: number, reason?: string): Promise<ApiResponse<{ success: boolean; threadId: number; status: string; message: string }>> {
+    return this.post<{ success: boolean; threadId: number; status: string; message: string }>(`/api/workers/stop/${threadId}`, { reason })
+  }
+
+  async forceStopWorker(threadId: number): Promise<ApiResponse<{ success: boolean; threadId: number; status: string; message: string }>> {
+    return this.post<{ success: boolean; threadId: number; status: string; message: string }>(`/api/workers/force-stop/${threadId}`)
+  }
+
+  async getWorkerStatus(threadId: number): Promise<ApiResponse<{ threadId: number; status: string; isActive: boolean }>> {
+    return this.get<{ threadId: number; status: string; isActive: boolean }>(`/api/workers/status/${threadId}`)
+  }
+
+  async listWorkers(): Promise<ApiResponse<{ workers: Array<{ threadId: number; status: string }>; totalActive: number }>> {
+    return this.get<{ workers: Array<{ threadId: number; status: string }>; totalActive: number }>('/api/workers/list')
+  }
+
+  async stopAllWorkers(): Promise<ApiResponse<{ success: boolean; message: string }>> {
+    return this.post<{ success: boolean; message: string }>('/api/workers/stop-all')
+  }
 }
 
 export const apiClient = new ApiClient(API_BASE_URL)

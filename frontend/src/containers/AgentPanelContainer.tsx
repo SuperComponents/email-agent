@@ -296,6 +296,7 @@ export function AgentPanelContainer({
       onSendMessage={handleSendMessage}
       isRegeneratingDraft={isRegeneratingDraft}
       isGeneratingDemoResponse={isGeneratingDemoResponse}
+      currentThreadId={selectedThreadId ? parseInt(selectedThreadId) : undefined}
     />
   );
 }
