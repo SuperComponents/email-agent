@@ -134,3 +134,50 @@ export function useCreateInternalNote() {
     },
   });
 }
+
+// Email simulation hooks
+export function useSimulationStatus() {
+  return useQuery({
+    queryKey: ['simulation-status'],
+    queryFn: () => APIClient.getSimulationStatus(),
+    refetchInterval: 2000, // Poll every 2 seconds when simulation might be running
+  });
+}
+
+export function useStartEmailSimulation() {
+  const queryClient = useQueryClient();
+  
+  return useMutation({
+    mutationFn: ({ intervalMs }: { intervalMs?: number } = {}) =>
+      APIClient.startEmailSimulation(intervalMs),
+    onSuccess: () => {
+      // Invalidate simulation status to refetch
+      void queryClient.invalidateQueries({ queryKey: ['simulation-status'] });
+    },
+  });
+}
+
+export function useStopEmailSimulation() {
+  const queryClient = useQueryClient();
+  
+  return useMutation({
+    mutationFn: () => APIClient.stopEmailSimulation(),
+    onSuccess: () => {
+      // Invalidate simulation status to refetch
+      void queryClient.invalidateQueries({ queryKey: ['simulation-status'] });
+    },
+  });
+}
+
+export function useGenerateSingleEmail() {
+  const queryClient = useQueryClient();
+  
+  return useMutation({
+    mutationFn: () => APIClient.generateSingleEmail(),
+    onSuccess: () => {
+      // Invalidate threads to show new email
+      void queryClient.invalidateQueries({ queryKey: queryKeys.threads() });
+      void queryClient.invalidateQueries({ queryKey: ['simulation-status'] });
+    },
+  });
+}

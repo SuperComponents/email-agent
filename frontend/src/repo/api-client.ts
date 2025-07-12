@@ -114,6 +114,56 @@ export async function getThreadCounts(): Promise<ThreadCounts> {
   return fetchAPI<ThreadCounts>('/api/threads/counts');
 }
 
+// Email simulation endpoints
+export async function startEmailSimulation(intervalMs?: number): Promise<{ success: boolean; message: string; intervalMs?: number; scenariosCount?: number }> {
+  return fetchAPI<{ success: boolean; message: string; intervalMs?: number; scenariosCount?: number }>('/api/demo/start-email-simulation', {
+    method: 'POST',
+    body: JSON.stringify({ intervalMs }),
+  });
+}
+
+export async function stopEmailSimulation(): Promise<{ success: boolean; message: string; totalEmailsGenerated?: number }> {
+  return fetchAPI<{ success: boolean; message: string; totalEmailsGenerated?: number }>('/api/demo/stop-email-simulation', {
+    method: 'POST',
+  });
+}
+
+export async function getSimulationStatus(): Promise<{ 
+  success: boolean; 
+  status: { 
+    isRunning: boolean; 
+    emailsGenerated: number; 
+    startTime: string | null 
+  } 
+}> {
+  return fetchAPI<{ 
+    success: boolean; 
+    status: { 
+      isRunning: boolean; 
+      emailsGenerated: number; 
+      startTime: string | null 
+    } 
+  }>('/api/demo/simulation-status');
+}
+
+export async function generateSingleEmail(): Promise<{ 
+  success: boolean; 
+  message: string; 
+  thread?: { id: string; subject: string }; 
+  email?: { id: string; from_email: string; subject: string; body_text: string }; 
+  scenario?: { id: string; title: string; category: string; severity: string } 
+}> {
+  return fetchAPI<{ 
+    success: boolean; 
+    message: string; 
+    thread?: { id: string; subject: string }; 
+    email?: { id: string; from_email: string; subject: string; body_text: string }; 
+    scenario?: { id: string; title: string; category: string; severity: string } 
+  }>('/api/demo/generate-scenario-email', {
+    method: 'POST',
+  });
+}
+
 export const APIClient = {
   getThreads,
   getThread,
@@ -126,4 +176,8 @@ export const APIClient = {
   generateDemoCustomerResponse,
   createInternalNote,
   getThreadCounts,
+  startEmailSimulation,
+  stopEmailSimulation,
+  getSimulationStatus,
+  generateSingleEmail,
 };
