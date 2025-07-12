@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { Send, Paperclip, Smile, Sparkles, FileText, ExternalLink, MessageSquare, Lock } from 'lucide-react';
+import { Send, Paperclip, Smile, FileText, ExternalLink, MessageSquare, Lock } from 'lucide-react';
 import EmojiPicker from 'emoji-picker-react';
 import { Button } from '../atoms/Button';
 import { Icon } from '../atoms/Icon';
@@ -219,18 +219,6 @@ export const Composer = React.forwardRef<HTMLDivElement, ComposerProps>(
             />
             <div className="flex items-center justify-between px-3 py-2 border-t border-border">
               <div className="flex gap-1">
-                {!isInternalNote && (
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={onRegenerate}
-                    disabled={disabled || isGenerating}
-                    title="Generate with AI"
-                  >
-                    <Icon icon={Sparkles} size="sm" />
-                    {isGenerating && <span className="ml-1 text-xs">Generating...</span>}
-                  </Button>
-                )}
                 <Button variant="ghost" size="sm" disabled={disabled}>
                   <Icon icon={Paperclip} size="sm" />
                 </Button>
