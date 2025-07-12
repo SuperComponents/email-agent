@@ -18,7 +18,11 @@
   "dependencies": {
     "@hono/node-server": "^1.15.0",
     "@neondatabase/serverless": "^1.0.1",
+    "@types/bcrypt": "^5.0.2",
+    "@types/bcryptjs": "^2.4.6",
     "agent3": "file:../agent3",
+    "bcrypt": "^6.0.0",
+    "bcryptjs": "^3.0.2",
     "dotenv": "^17.1.0",
     "drizzle-orm": "^0.44.2",
     "hono": "^4.8.4",

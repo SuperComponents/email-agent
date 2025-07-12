@@ -75,13 +75,13 @@ export function App() {
             </Button>
             
             <Button asChild variant="ghost" size="sm">
-              <a href={APP_URL}>Sign In</a>
+              <a href={`${APP_URL}/login`}>Sign In</a>
             </Button>
             <Button 
               size="sm"
               className="bg-gradient-to-r from-mocha to-mocha-light hover:from-mocha-dark hover:to-mocha text-white border-0"
             >
-              <a href={`${APP_URL}/handler/sign-up`}>Get Started Free</a>
+              <a href={`${APP_URL}/signup`}>Get Started Free</a>
             </Button>
           </div>
         </div>
@@ -118,16 +118,22 @@ export function App() {
               <Button 
                 size="lg"
                 className="bg-gradient-to-r from-mocha to-mocha-light hover:from-mocha-dark hover:to-mocha text-white border-0 text-lg px-8 py-6 rounded-full group"
+                asChild
               >
-                Start Free Trial
-                <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+                <a href={`${APP_URL}/signup`}>
+                  Start Free Trial
+                  <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+                </a>
               </Button>
               <Button 
                 size="lg"
                 variant="outline"
                 className="text-lg px-8 py-6 rounded-full border-2"
+                asChild
               >
-                View Live Demo
+                <a href={`${APP_URL}/login`}>
+                  View Live Demo
+                </a>
               </Button>
             </div>
 
@@ -363,8 +369,8 @@ export function App() {
                     <span className="text-sm">All core features</span>
                   </li>
                 </ul>
-                <Button variant="outline" className="w-full">
-                  Deploy Now
+                <Button variant="outline" className="w-full" asChild>
+                  <a href={`${APP_URL}/signup`}>Deploy Now</a>
                 </Button>
               </CardContent>
             </Card>
@@ -402,8 +408,8 @@ export function App() {
                     <span className="text-sm">Advanced analytics</span>
                   </li>
                 </ul>
-                <Button className="w-full bg-gradient-to-r from-mocha to-mocha-light hover:from-mocha-dark hover:to-mocha text-white border-0">
-                  Start Free Trial
+                <Button className="w-full bg-gradient-to-r from-mocha to-mocha-light hover:from-mocha-dark hover:to-mocha text-white border-0" asChild>
+                  <a href={`${APP_URL}/signup`}>Start Free Trial</a>
                 </Button>
               </CardContent>
             </Card>
@@ -540,15 +546,17 @@ export function App() {
                   <Button 
                     size="lg"
                     className="bg-gradient-to-r from-mocha to-mocha-light hover:from-mocha-dark hover:to-mocha text-white border-0 text-lg px-8 py-6 rounded-full"
+                    asChild
                   >
-                    Deploy Open Source Version
+                    <a href={`${APP_URL}/signup`}>Deploy Open Source Version</a>
                   </Button>
                   <Button 
                     size="lg"
                     variant="outline"
                     className="text-lg px-8 py-6 rounded-full"
+                    asChild
                   >
-                    Start Cloud Trial
+                    <a href={`${APP_URL}/signup`}>Start Cloud Trial</a>
                   </Button>
                 </div>
                 <p className="text-sm text-muted-foreground mt-6">

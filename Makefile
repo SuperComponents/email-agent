@@ -1,7 +1,7 @@
 # Variables
 FRONTEND_DIR ?= frontend
 BACKEND_DIR ?= backend
-AGENT_DIR ?= agent
+AGENT_DIR ?= agent3
 DOCKER_COMPOSE = docker compose
 
 # Default target - show help
@@ -188,11 +188,6 @@ lf:
 lb:
 	cd $(BACKEND_DIR) && npm run lint:all
 
-# Build agent TypeScript project
-.PHONY: build-agent
-build-agent:
-	cd $(AGENT_DIR) && npm run build
-
 # Run agent example
 .PHONY: agent-example
 agent-example: build-agent
@@ -213,3 +208,8 @@ test-api:
 .PHONY: clean
 clean:
 	cd $(AGENT_DIR) && npm run clean 2>/dev/null || true
+
+# Build agent
+.PHONY: build-agent
+build-agent:
+	cd $(AGENT_DIR) && npm run build

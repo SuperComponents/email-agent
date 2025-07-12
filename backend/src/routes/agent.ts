@@ -166,6 +166,13 @@ async function generateEnhancedDraftResponse(
     // const agentResponse = await assistSupportPersonEnhanced(agentThread, enhancedContext, agentConfig)
     const logger = (message: any) => { console.log(message) }
     const agentResponse = await processEmail(threadId, logger)
+    // const agentResponse = { 
+    //   success: true, 
+    //   message: 'Agent processing temporarily disabled',
+    //   draft: 'This is a placeholder draft response.',
+    //   analysis: 'Agent analysis temporarily disabled.',
+    //   history: []
+    // }
 
     console.log('agentResponse');
     console.log(agentResponse);
@@ -398,7 +405,7 @@ app.post('/:id/regenerate', async (c) => {
     return successResponse(c, {
       status: 'success',
       message: 'Enhanced draft regenerated successfully',
-      draft_id: enhancedResponse.draft.id.toString(),
+      draft_id: enhancedResponse.draft.id.toString(), 
 //       enhanced_features: {
 //         thread_name: enhancedResponse.threadName,
 //         confidence: enhancedResponse.confidence,
