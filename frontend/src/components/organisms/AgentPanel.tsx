@@ -1,20 +1,24 @@
 import React, { useState } from 'react';
-import { Sparkles, UserPlus, Send } from 'lucide-react';
+import { Send, Play } from 'lucide-react';
 import { AgentAction, type AgentActionProps } from '../molecules/AgentAction';
-import { Separator } from '../atoms/Separator';
 import { Button } from '../atoms/Button';
 import { Icon } from '../atoms/Icon';
+import { Badge } from '../atoms/Badge';
+import { DotsLoader } from '../atoms/DotsLoader';
 import { cn } from '../../lib/utils';
 
 export interface AgentPanelProps extends React.HTMLAttributes<HTMLDivElement> {
   actions: AgentActionProps[];
-  analysis?: string;
   draftResponse?: string;
-  onUseAgent?: () => void;
-  onDemoCustomerResponse?: () => void;
   onSendMessage?: (message: string) => void;
-  isRegeneratingDraft?: boolean;
-  isGeneratingDemoResponse?: boolean;
+  currentThreadId?: number;
+  workerStatus?: {
+    threadId: number;
+    status: string;
+    isActive: boolean;
+  };
+  onStartWorker?: () => void;
+  isStartingWorker?: boolean;
 }
 
 export const AgentPanel = React.forwardRef<HTMLDivElement, AgentPanelProps>(
@@ -22,17 +26,39 @@ export const AgentPanel = React.forwardRef<HTMLDivElement, AgentPanelProps>(
     {
       className,
       actions,
-      analysis,
-      onUseAgent,
-      onDemoCustomerResponse,
       onSendMessage,
-      isRegeneratingDraft,
-      isGeneratingDemoResponse,
+      currentThreadId,
+      workerStatus,
+      onStartWorker,
+      isStartingWorker,
       ...props
     },
     ref,
   ) => {
     const [message, setMessage] = useState('');
+    console.log('actions', actions);
+
+    // Check if agent is currently working (has any pending actions OR worker is running)
+    const isAgentWorking =
+      actions.some(action => action.status === 'pending') || workerStatus?.status === 'running';
+
+    // Get status color based on worker status
+    const getStatusColor = (status: string) => {
+      switch (status) {
+        case 'running':
+          return 'bg-green-500';
+        case 'stopped':
+          return 'bg-gray-500';
+        case 'starting':
+          return 'bg-yellow-500';
+        case 'stopping':
+          return 'bg-orange-500';
+        case 'not_found':
+          return 'bg-red-500';
+        default:
+          return 'bg-gray-400';
+      }
+    };
 
     const handleSend = () => {
       if (message.trim() && onSendMessage) {
@@ -53,66 +79,25 @@ export const AgentPanel = React.forwardRef<HTMLDivElement, AgentPanelProps>(
         <div className="border-b border-border p-4 h-[60px]">
           <h3 className="font-semibold">Activity</h3>
         </div>
-        <div className="flex-1 overflow-y-auto p-4">
-          <div className="space-y-3 mb-6">
-            <div className="text-xs text-secondary-foreground leading-relaxed">
-              Use the agent to analyze this conversation and generate a helpful response. The agent
-              will search your knowledge base and provide citations.
-            </div>
-            <div className="space-y-2">
-              <Button
-                onClick={onUseAgent}
-                size="sm"
-                variant="secondary"
-                className="w-full gap-2"
-                disabled={isRegeneratingDraft}
-              >
-                <Icon
-                  icon={Sparkles}
-                  size="sm"
-                  className={isRegeneratingDraft ? 'animate-pulse' : ''}
-                />
-                <span>{isRegeneratingDraft ? 'Generating...' : 'Use Agent'}</span>
-              </Button>
-              <Button
-                onClick={onDemoCustomerResponse}
-                size="sm"
-                variant="ghost"
-                className="w-full gap-2"
-                disabled={isGeneratingDemoResponse}
-              >
-                <Icon
-                  icon={UserPlus}
-                  size="sm"
-                  className={isGeneratingDemoResponse ? 'animate-pulse' : ''}
-                />
-                <span>{isGeneratingDemoResponse ? 'Generating...' : 'Demo Customer Response'}</span>
-              </Button>
-            </div>
-          </div>
-
+        <div className="flex-1 overflow-y-auto p-4 space-y-4">
+          {/* Agent Actions */}
           {actions.length > 0 ? (
-            <div className="space-y-3 mb-6">
-              <h4 className="text-sm font-medium text-secondary-foreground">Tool Calls</h4>
+            <div className="space-y-3">
               {actions.map((action, index) => (
                 <AgentAction key={index} {...action} />
               ))}
+              {/* Show loader when agent is working */}
+              {isAgentWorking && (
+                <div className="flex justify-center py-3">
+                  <DotsLoader text="Working" />
+                </div>
+              )}
             </div>
           ) : (
             <div className="text-center py-6 text-xs text-secondary-foreground">
               <p>No agent activity yet.</p>
               <p className="mt-1">Click "Use Agent" to start analyzing this conversation.</p>
             </div>
-          )}
-
-          {analysis && (
-            <>
-              <Separator className="my-4" />
-              <div className="space-y-3">
-                <h4 className="text-sm font-medium text-secondary-foreground">Analysis</h4>
-                <div className="text-sm text-foreground/90 leading-relaxed">{analysis}</div>
-              </div>
-            </>
           )}
         </div>
 

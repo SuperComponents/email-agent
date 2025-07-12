@@ -4,18 +4,15 @@ import { db } from '../database/db.js';
 import { threads, agent_actions, draft_responses, emails } from '../database/schema.js';
 import { successResponse, notFoundResponse, errorResponse } from '../utils/response.js';
 import { regenerateDraftSchema, validateRequest } from '../utils/validation.js';
-// import type {
-//   EmailThread,
-//   EmailMessage,
-//   SupportContext,
-//   AgentConfig
-// } from 'proresponse-agent'
-import { processEmail } from 'agent3';
+import { workerManager } from '../services/worker-interface.js';
+import type { Event } from '@proresponse/agent';
+import { type EnhancedAgentMetadata } from '../services/agent-metadata-types.js';
 
 const app = new Hono();
 
-// Type definitions
-interface AgentMetadata {
+// Type definitions - using enhanced metadata from the new type system
+// Legacy interface for backwards compatibility
+interface LegacyAgentMetadata {
   confidence_score?: string | number;
   confidence?: string | number;
   customer_sentiment?: string;
@@ -24,10 +21,6 @@ interface AgentMetadata {
   suggested_priority?: string;
 }
 
-interface AgentResponse {
-  history?: Array<unknown>;
-  [key: string]: unknown;
-}
 
 // Helper function to convert database thread to agent EmailThread format
 // function convertToAgentEmailThread(thread: DatabaseThread, threadEmails: DatabaseEmail[]): EmailThread {
@@ -75,127 +68,99 @@ interface AgentResponse {
 //   return agentThread
 // }
 
-// Enhanced helper function to generate draft response using proresponse-agent
+// Enhanced helper function to generate draft response using agent4 worker
 async function generateEnhancedDraftResponse(
   threadId: number,
-  userMessage?: string,
-  // customInstructions?: string,
-  // supportContext?: SupportContext
-) {
+  userMessage?: string
+): Promise<{ success: boolean; message: string; threadId: number }> {
   try {
     console.log(`[Agent-Enhanced] Starting enhanced draft generation for thread ${threadId}`);
 
-    // Get thread details
+    // Check if thread exists
     const [thread] = await db.select().from(threads).where(eq(threads.id, threadId)).limit(1);
-
     if (!thread) {
       throw new Error(`Thread ${threadId} not found`);
     }
 
-    // Get all emails in the thread
+    // Check if emails exist in thread
     const threadEmails = await db
-      .select({
-        id: emails.id,
-        thread_id: emails.thread_id,
-        from_email: emails.from_email,
-        to_emails: emails.to_emails,
-        cc_emails: emails.cc_emails,
-        bcc_emails: emails.bcc_emails,
-        subject: emails.subject,
-        body_text: emails.body_text,
-        body_html: emails.body_html,
-        direction: emails.direction,
-        sent_at: emails.sent_at,
-        created_at: emails.created_at,
-      })
+      .select({ id: emails.id })
       .from(emails)
       .where(eq(emails.thread_id, threadId))
-      .orderBy(emails.created_at);
+      .limit(1);
 
     if (threadEmails.length === 0) {
       throw new Error(`No emails found in thread ${threadId}`);
     }
 
-    console.log(`[Agent-Enhanced] Found ${threadEmails.length} emails in thread ${threadId}`);
+    console.log(`[Agent-Enhanced] Starting worker for thread ${threadId}`);
 
-    // Convert to agent format
-    // const agentThread = convertToAgentEmailThread(thread, threadEmails)
+    // Get initial event state for the thread (existing agent actions)
+    const existingActions = await db
+      .select()
+      .from(agent_actions)
+      .where(eq(agent_actions.thread_id, threadId))
+      .orderBy(agent_actions.created_at);
 
-    // Prepare enhanced support context
-    // const enhancedContext: SupportContext = {
-    //   ...supportContext,
-    //   internalNotes: customInstructions ? [customInstructions] : undefined,
-    //   urgencyReason: thread.status === 'needs_attention' ? 'Thread marked as needs attention' : undefined,
-    //   escalationLevel: 'none' // TODO: Implement escalation tracking
-    // }
+    const initialEvents: Event[] = existingActions.map(action => ({
+      id: action.id.toString(),
+      timestamp: action.created_at,
+      type: action.action,
+      actor: 'system',
+      data: action.metadata || {}
+    }));
 
-    // Agent configuration with enhanced features
-    const agentConfig = {
-      model: 'gpt-4o',
-      includeRAG: true,
-      generateThreadName: true,
-      maxRAGResults: 5,
-      enableSentimentAnalysis: true,
-      confidenceThreshold: 0.7,
-      escalationKeywords: [
-        'legal',
-        'lawyer',
-        'attorney',
-        'sue',
-        'lawsuit',
-        'manager',
-        'supervisor',
-        'escalate',
-        'complaint',
-        'unacceptable',
-        'terrible',
-        'horrible',
-        'awful',
-        'cancel',
-        'refund immediately',
-        'switch',
-        'competitor',
-        'frustrated',
-        'angry',
-        'disappointed',
-        'furious',
-      ],
-    };
+    // Add user message as an event if provided
+    if (userMessage) {
+      initialEvents.push({
+        id: `user_message_${Date.now()}`,
+        timestamp: new Date(),
+        type: 'user_message',
+        actor: 'user',
+        data: { message: userMessage }
+      });
+    }
 
-    console.log(`[Agent-Enhanced] Calling enhanced agent with config:`, agentConfig);
+    // Start the worker for this thread
+    const worker = await workerManager.startWorkerForThread(threadId, initialEvents);
 
-    // Call the enhanced agent
-    // const agentResponse = await assistSupportPersonEnhanced(agentThread, enhancedContext, agentConfig)
-    const logger = (message: unknown) => {
-      console.log(message);
-    };
-    const agentResponse = await processEmail(threadId, logger, userMessage);
-    // const agentResponse = {
-    //   success: true,
-    //   message: 'Agent processing temporarily disabled',
-    //   draft: 'This is a placeholder draft response.',
-    //   analysis: 'Agent analysis temporarily disabled.',
-    //   history: []
-    // }
+    // Set up a promise to wait for completion
+    const agentResponse = await new Promise<{ success: boolean; message: string; threadId: number }>((resolve, reject) => {
+      const timeout = setTimeout(() => {
+        reject(new Error('Agent processing timeout'));
+      }, 120000); // 2 minute timeout
 
-    console.log('agentResponse');
-    console.log(agentResponse);
-    console.log('agentResponse.history');
-    console.log((agentResponse as unknown as AgentResponse)?.history?.forEach(x => console.log(x)));
-    //     console.log('summary');
-    //     console.log(agentResponse.summary);
+      worker.on('stopped', () => {
+        clearTimeout(timeout);
+        resolve({
+          success: true,
+          message: 'Agent processing completed',
+          threadId: threadId
+        });
+      });
 
-    console.log(`[Agent-Enhanced] Enhanced agent response received successfully`);
-    //     console.log(`[Agent-Enhanced] Agent confidence: ${(agentResponse.confidence * 100).toFixed(1)}%`)
-    //     console.log(`[Agent-Enhanced] Agent suggested priority: ${agentResponse.suggestedPriority}`)
-    //     console.log(`[Agent-Enhanced] Agent escalation recommended: ${agentResponse.escalationRecommended}`)
-    //     console.log(`[Agent-Enhanced] Agent thread name: "${agentResponse.threadName}"`)
-    //     console.log(`[Agent-Enhanced] Agent customer sentiment: ${agentResponse.customerSentiment}`)
-    //     console.log(`[Agent-Enhanced] Agent RAG sources: ${agentResponse.ragSources?.length || 0}`)
+      worker.on('failed', (error) => {
+        clearTimeout(timeout);
+        reject(error);
+      });
 
+      worker.on('error', (error) => {
+        clearTimeout(timeout);
+        reject(error);
+      });
+    });
+
+    console.log(`[Agent-Enhanced] Enhanced agent processing completed successfully`);
     return agentResponse;
+
   } catch (error) {
     console.error(`[Agent-Enhanced] Error in enhanced draft generation:`, error);
+    // Clean up worker if it exists
+    try {
+      await workerManager.stopWorkerForThread(threadId, 'Error occurred');
+    } catch (cleanupError) {
+      console.error(`[Agent-Enhanced] Error during cleanup:`, cleanupError);
+    }
     throw error;
   }
 }
@@ -251,21 +216,56 @@ app.get('/:id/agent-activity', async c => {
 
     // Transform actions with enhanced metadata
     const formattedActions = actions.map(action => {
-      const metadata = (action.metadata as AgentMetadata) || {};
+      // The metadata is now already in enhanced format thanks to agent-worker.ts
+      const metadata = (action.metadata as EnhancedAgentMetadata) || {};
+      
+      // For backwards compatibility, also check legacy format
+      const legacyMetadata = (action.metadata as LegacyAgentMetadata) || {};
+      
       return {
         id: action.id.toString(),
         type: action.action,
         title: action.action.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
-        description: action.description || formatActionDescription(action.action, metadata),
+        description: action.description || formatActionDescription(action.action, metadata, legacyMetadata),
         status: 'completed',
         timestamp: action.created_at.toISOString(),
         result: {
+          // Use enhanced metadata with fallbacks to legacy format
+          confidence: metadata.confidence ?? legacyMetadata.confidence ?? legacyMetadata.confidence_score ?? null,
+          sentiment: metadata.sentiment ?? legacyMetadata.customer_sentiment ?? null,
+          escalation_recommended: metadata.escalation_recommended ?? legacyMetadata.escalation_recommended ?? false,
+          rag_sources_used: metadata.rag_sources_used ?? legacyMetadata.rag_sources_count ?? 0,
+          suggested_priority: metadata.suggested_priority ?? legacyMetadata.suggested_priority ?? null,
+          
+          // Additional enhanced fields
+          tool_name: metadata.tool_name,
+          processing_time_ms: metadata.processing_time_ms,
+          
+          // Complete tool input/output for frontend access
+          tool_input: metadata.tool_input || {},
+          tool_output: metadata.tool_output || {},
+          
+          // Raw metadata for maximum flexibility
+          raw_metadata: metadata,
+          raw_legacy_metadata: legacyMetadata || {},
+          
+          // Computed fields for easy frontend access
+          has_draft_content: !!(metadata.tool_output?.body || metadata.tool_output?.draft || metadata.tool_output?.final_draft),
+          draft_subject: metadata.tool_output?.subject || null,
+          draft_body_preview: metadata.tool_output?.body ? metadata.tool_output.body.substring(0, 200) : null,
+          draft_tags: metadata.tool_output?.tags || [],
+          urgency_change: metadata.tool_output?.old_urgency && metadata.tool_output?.new_urgency ? 
+            `${metadata.tool_output.old_urgency} → ${metadata.tool_output.new_urgency}` : null,
+          category_change: metadata.tool_output?.old_category && metadata.tool_output?.new_category ? 
+            `${metadata.tool_output.old_category} → ${metadata.tool_output.new_category}` : null,
+          action_reason: metadata.tool_output?.reason || null,
+          suggested_actions: metadata.tool_output?.suggested_actions || [],
+          context_summary: metadata.tool_output?.summary || null,
+          key_points: metadata.tool_output?.key_points || [],
+          recommended_actions: metadata.tool_output?.recommended_actions || [],
+          
+          // Include full metadata for debugging/advanced use
           ...metadata,
-          confidence: metadata.confidence_score || metadata.confidence || null,
-          sentiment: metadata.customer_sentiment || null,
-          escalation_recommended: metadata.escalation_recommended || false,
-          rag_sources_used: metadata.rag_sources_count || 0,
-          suggested_priority: metadata.suggested_priority || null,
         },
       };
     });
@@ -279,8 +279,8 @@ app.get('/:id/agent-activity', async c => {
       .filter(
         action =>
           action.metadata &&
-          (action.metadata as AgentMetadata).rag_sources_count &&
-          (action.metadata as AgentMetadata).rag_sources_count! > 0,
+          (action.metadata as LegacyAgentMetadata).rag_sources_count &&
+          (action.metadata as LegacyAgentMetadata).rag_sources_count! > 0,
       )
       .map(action => ({
         source: 'Company Knowledge Base',
@@ -413,7 +413,7 @@ app.post('/:id/regenerate', async c => {
     return successResponse(c, {
       status: 'success',
       message: 'Enhanced draft regenerated successfully',
-      draft_id: enhancedResponse.draft?.id.toString(),
+      thread_id: enhancedResponse.threadId,
       //       enhanced_features: {
       //         thread_name: enhancedResponse.threadName,
       //         confidence: enhancedResponse.confidence,
@@ -435,8 +435,8 @@ app.post('/:id/regenerate', async c => {
   }
 });
 
-// Helper function to format action descriptions
-function formatActionDescription(action: string, metadata: AgentMetadata): string {
+// Helper function to format action descriptions with ALL agent event data
+function formatActionDescription(action: string, metadata: EnhancedAgentMetadata, legacyMetadata?: LegacyAgentMetadata): string {
   const baseDescription =
     {
       email_read: 'Email analyzed with enhanced AI agent',
@@ -449,31 +449,126 @@ function formatActionDescription(action: string, metadata: AgentMetadata): strin
       thread_assigned: 'Thread assigned to support agent',
       thread_status_changed: 'Thread status updated',
       thread_archived: 'Thread archived',
+      internal_note_created: 'Internal note or user message recorded',
     }[action] || 'Enhanced agent action performed';
 
-  // Add enhanced metadata details
-  const details = [];
-  if (metadata.confidence_score || metadata.confidence) {
-    const confidence = metadata.confidence_score || metadata.confidence;
+  // Show ALL available metadata for complete visibility
+  const allData = [];
+  
+  // Original tool name
+  if (metadata.tool_name) {
+    allData.push(`Tool: ${metadata.tool_name}`);
+  }
+  
+  // Core analysis fields
+  const confidence = metadata.confidence ?? legacyMetadata?.confidence ?? legacyMetadata?.confidence_score;
+  if (confidence != null) {
     const confidenceValue = typeof confidence === 'string' ? parseFloat(confidence) : confidence;
     if (typeof confidenceValue === 'number' && !isNaN(confidenceValue)) {
-      details.push(`Confidence: ${(confidenceValue * 100).toFixed(1)}%`);
+      allData.push(`Confidence: ${(confidenceValue * 100).toFixed(1)}%`);
     }
   }
-  if (metadata.customer_sentiment) {
-    details.push(`Sentiment: ${metadata.customer_sentiment}`);
+  
+  const sentiment = metadata.sentiment ?? legacyMetadata?.customer_sentiment;
+  if (sentiment) {
+    allData.push(`Sentiment: ${sentiment}`);
   }
-  if (metadata.escalation_recommended) {
-    details.push('Escalation recommended');
+  
+  const escalationRecommended = metadata.escalation_recommended ?? legacyMetadata?.escalation_recommended;
+  if (escalationRecommended) {
+    allData.push(`Escalation: RECOMMENDED`);
   }
-  if (metadata.rag_sources_count && metadata.rag_sources_count > 0) {
-    details.push(`${metadata.rag_sources_count} knowledge sources used`);
+  
+  const suggestedPriority = metadata.suggested_priority ?? legacyMetadata?.suggested_priority;
+  if (suggestedPriority) {
+    allData.push(`Priority: ${suggestedPriority}`);
   }
-  if (metadata.suggested_priority) {
-    details.push(`Priority: ${metadata.suggested_priority}`);
+  
+  const ragSources = metadata.rag_sources_used ?? legacyMetadata?.rag_sources_count;
+  if (ragSources && ragSources > 0) {
+    allData.push(`RAG Sources: ${ragSources}`);
   }
+  
+  // Performance metrics
+  if (metadata.processing_time_ms) {
+    allData.push(`Processing: ${metadata.processing_time_ms}ms`);
+  }
+  
+  // Tool input summary (show key fields)
+  if (metadata.tool_input && Object.keys(metadata.tool_input).length > 0) {
+    const inputKeys = Object.keys(metadata.tool_input).slice(0, 3); // Show first 3 keys
+    allData.push(`Input Keys: [${inputKeys.join(', ')}]`);
+  }
+  
+  // Tool output summary (show structure)
+  if (metadata.tool_output && Object.keys(metadata.tool_output).length > 0) {
+    const outputKeys = Object.keys(metadata.tool_output);
+    
+    // Show specific important output fields based on tool type
+    if (metadata.tool_name?.includes('compose') || metadata.tool_name?.includes('draft')) {
+      // For draft tools, show draft details
+      const output = metadata.tool_output;
+      if (output.subject) allData.push(`Subject: "${output.subject}"`);
+      if (output.priority) allData.push(`Draft Priority: ${output.priority}`);
+      if (output.tags?.length) allData.push(`Tags: [${output.tags.slice(0, 3).join(', ')}]`);
+      if (output.body) {
+        const bodyPreview = output.body.substring(0, 100);
+        allData.push(`Body Preview: "${bodyPreview}${output.body.length > 100 ? '...' : ''}"`);
+      }
+    } else if (metadata.tool_name?.includes('urgency')) {
+      // For urgency tools, show urgency changes
+      const output = metadata.tool_output;
+      if (output.old_urgency && output.new_urgency) {
+        allData.push(`Urgency: ${output.old_urgency} → ${output.new_urgency}`);
+      }
+    } else if (metadata.tool_name?.includes('category')) {
+      // For category tools, show category changes
+      const output = metadata.tool_output;
+      if (output.old_category && output.new_category) {
+        allData.push(`Category: ${output.old_category} → ${output.new_category}`);
+      }
+    } else if (metadata.tool_name?.includes('action_needed')) {
+      // For user action tools, show reason and priority
+      const output = metadata.tool_output;
+      if (output.reason) allData.push(`Reason: "${output.reason}"`);
+      if (output.suggested_actions?.length) {
+        allData.push(`Suggested: [${output.suggested_actions.slice(0, 2).join(', ')}]`);
+      }
+    } else if (metadata.tool_name?.includes('summarize')) {
+      // For context tools, show summary info
+      const output = metadata.tool_output;
+      if (output.summary) {
+        const summaryPreview = output.summary.substring(0, 150);
+        allData.push(`Summary: "${summaryPreview}${output.summary.length > 150 ? '...' : ''}"`);
+      }
+      if (output.key_points?.length) {
+        allData.push(`Key Points: ${output.key_points.length} items`);
+      }
+      if (output.recommended_actions?.length) {
+        allData.push(`Recommendations: ${output.recommended_actions.length} items`);
+      }
+    } else {
+      // Generic output info for unknown tools
+      allData.push(`Output Keys: [${outputKeys.slice(0, 4).join(', ')}]`);
+    }
+  }
+  
+  // Legacy metadata fields for backwards compatibility
+  if (legacyMetadata) {
+    const legacyKeys = Object.keys(legacyMetadata).filter(key => 
+      !['confidence_score', 'customer_sentiment', 'escalation_recommended', 
+        'rag_sources_count', 'suggested_priority'].includes(key)
+    );
+    if (legacyKeys.length > 0) {
+      allData.push(`Legacy Fields: [${legacyKeys.slice(0, 3).join(', ')}]`);
+    }
+  }
+  
+  // Raw metadata size for debugging
+  const metadataSize = JSON.stringify(metadata).length + JSON.stringify(legacyMetadata || {}).length;
+  allData.push(`Data Size: ${metadataSize} chars`);
 
-  return details.length > 0 ? `${baseDescription} (${details.join(', ')})` : baseDescription;
+  return `${baseDescription} | ${allData.join(' | ')}`;
 }
 
 export default app;

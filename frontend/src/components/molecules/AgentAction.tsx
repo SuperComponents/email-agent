@@ -3,6 +3,41 @@ import type { LucideIcon } from 'lucide-react';
 import { Icon } from '../atoms/Icon';
 import { cn } from '../../lib/utils';
 
+function formatTimeAgo(timestamp: string): string {
+  const now = new Date();
+  console.log('timestamp', timestamp);
+  const time = new Date(timestamp);
+
+  // If timestamp is invalid, return the original timestamp
+  if (isNaN(time.getTime())) {
+    return timestamp;
+  }
+
+  const diffInSeconds = Math.floor((now.getTime() - time.getTime()) / 1000);
+
+  // Handle negative differences (future timestamps)
+  if (diffInSeconds < 0) {
+    return 'just now';
+  }
+
+  if (diffInSeconds < 60) {
+    return `${diffInSeconds}s ago`;
+  }
+
+  const diffInMinutes = Math.floor(diffInSeconds / 60);
+  if (diffInMinutes < 60) {
+    return `${diffInMinutes}m ago`;
+  }
+
+  const diffInHours = Math.floor(diffInMinutes / 60);
+  if (diffInHours < 24) {
+    return `${diffInHours}h ago`;
+  }
+
+  const diffInDays = Math.floor(diffInHours / 24);
+  return `${diffInDays}d ago`;
+}
+
 export interface AgentActionProps extends React.HTMLAttributes<HTMLDivElement> {
   icon: LucideIcon;
   title: string;
@@ -11,11 +46,42 @@ export interface AgentActionProps extends React.HTMLAttributes<HTMLDivElement> {
   status?: 'pending' | 'completed' | 'failed';
   isMessage?: boolean;
   messageRole?: 'user' | 'assistant';
+  result?: {
+    tool_name?: string;
+    urgency_change?: string;
+    confidence?: number;
+    sentiment?: string;
+    escalation_recommended?: boolean;
+    suggested_priority?: string;
+    rag_sources_used?: number;
+    draft_subject?: string;
+    draft_body_preview?: string;
+    category_change?: string;
+    action_reason?: string;
+    [key: string]: any;
+  };
+  type?: string; // Database action type like 'thread_status_changed'
 }
 
 export const AgentAction = React.forwardRef<HTMLDivElement, AgentActionProps>(
-  ({ className, icon, title, description, timestamp, status = 'completed', isMessage, messageRole, ...props }, ref) => {
+  (
+    {
+      className,
+      icon,
+      title,
+      description,
+      timestamp,
+      status = 'completed',
+      isMessage,
+      messageRole,
+      result,
+      type,
+      ...props
+    },
+    ref,
+  ) => {
     // Message-style display for chat messages
+
     if (isMessage) {
       return (
         <div
@@ -23,25 +89,29 @@ export const AgentAction = React.forwardRef<HTMLDivElement, AgentActionProps>(
           className={cn(
             'flex gap-2 mb-3',
             messageRole === 'user' ? 'justify-end' : 'justify-start',
-            className
+            className,
           )}
           {...props}
         >
           <div
             className={cn(
               'max-w-[80%] rounded-lg px-4 py-2',
-              messageRole === 'user' 
-                ? 'bg-primary text-primary-foreground ml-8' 
-                : 'bg-accent/50 border border-accent-foreground/20 mr-8'
+              messageRole === 'user'
+                ? 'bg-primary text-primary-foreground ml-8'
+                : 'bg-accent/50 border border-accent-foreground/20 mr-8',
             )}
           >
             <p className="text-sm whitespace-pre-wrap">{description}</p>
             {timestamp && (
-              <time className={cn(
-                "text-xs mt-1 block",
-                messageRole === 'user' ? 'text-primary-foreground/70' : 'text-secondary-foreground'
-              )}>
-                {timestamp}
+              <time
+                className={cn(
+                  'text-xs mt-1 block',
+                  messageRole === 'user'
+                    ? 'text-primary-foreground/70'
+                    : 'text-secondary-foreground',
+                )}
+              >
+                {formatTimeAgo(timestamp)}
               </time>
             )}
           </div>
@@ -58,7 +128,7 @@ export const AgentAction = React.forwardRef<HTMLDivElement, AgentActionProps>(
           status === 'completed' && 'border-l-primary/50',
           status === 'pending' && 'border-l-secondary',
           status === 'failed' && 'border-l-destructive/50',
-          className
+          className,
         )}
         {...props}
       >
@@ -69,27 +139,94 @@ export const AgentAction = React.forwardRef<HTMLDivElement, AgentActionProps>(
             'mt-0.5 flex-shrink-0',
             status === 'completed' && 'text-primary',
             status === 'pending' && 'text-secondary-foreground animate-pulse',
-            status === 'failed' && 'text-destructive'
+            status === 'failed' && 'text-destructive',
           )}
         />
         <div className="flex-1 min-w-0">
           <div className="flex items-start justify-between gap-2">
-            <h4 className="text-xs font-medium leading-tight">{title}</h4>
             {timestamp && (
               <time className="text-xs text-secondary-foreground flex-shrink-0">
-                {timestamp}
+                {formatTimeAgo(timestamp)}
               </time>
             )}
           </div>
-          {description && (
-            <p className="text-xs text-secondary-foreground mt-0.5 leading-tight">
-              {description}
-            </p>
+
+          {/* Special handling for urgency update events */}
+          {type === 'thread_status_changed' && result?.tool_name === 'update_thread_urgency' && (
+            <div className="mt-1">
+              <span className="text-sm font-medium text-foreground">
+                Urgency:{' '}
+                {result?.tool_output?.args?.urgency ||
+                  result?.suggested_priority ||
+                  result?.tool_output?.new_urgency ||
+                  'unknown'}
+              </span>
+            </div>
           )}
+
+          {/* Special handling for user action needed events */}
+          {type === 'thread_assigned' && result?.tool_name === 'user_action_needed' && (
+            <div className="mt-1">
+              <span className="text-sm font-medium text-foreground">
+                {result?.action_reason ||
+                  result?.tool_output?.reason ||
+                  result?.tool_output?.args?.reason ||
+                  'User action required'}
+              </span>
+            </div>
+          )}
+
+          {/* Special handling for category update events */}
+          {type === 'thread_status_changed' && result?.tool_name === 'update_thread_category' && (
+            <div className="mt-1">
+              <span className="text-sm font-medium text-foreground">
+                Category:{' '}
+                {result?.tool_output?.args?.category ||
+                  result?.tool_output?.new_category ||
+                  'unknown'}
+              </span>
+            </div>
+          )}
+
+          {/* Special handling for summarize context events */}
+          {type === 'email_read' && result?.tool_name === 'summarize_useful_context' && (
+            <div className="mt-1">
+              <span className="text-sm font-medium text-foreground">
+                {result?.context_summary ||
+                  result?.tool_output?.summary ||
+                  result?.tool_output?.args?.summary ||
+                  'Context analyzed'}
+              </span>
+            </div>
+          )}
+
+          {/* Special handling for knowledge base search events */}
+          {result?.tool_name === 'search-knowledge-base' && (
+            <div className="mt-1">
+              <span className="text-sm font-medium text-foreground">
+                Searched and found{' '}
+                {result?.rag_sources_used ||
+                  result?.tool_output?.results_count ||
+                  result?.tool_output?.length ||
+                  0}{' '}
+                related documents in the knowledge base
+              </span>
+            </div>
+          )}
+
+          {/* Fallback to description for other events */}
+          {!(type === 'thread_status_changed' && result?.tool_name === 'update_thread_urgency') &&
+            !(type === 'thread_assigned' && result?.tool_name === 'user_action_needed') &&
+            !(type === 'thread_status_changed' && result?.tool_name === 'update_thread_category') &&
+            !(type === 'email_read' && result?.tool_name === 'summarize_useful_context') &&
+            !(result?.tool_name === 'search-knowledge-base') &&
+            description && (
+              <p className="text-xs text-secondary-foreground leading-tight mt-1">{description}</p>
+            )}
         </div>
       </div>
     );
-  }
+  },
 );
 
 AgentAction.displayName = 'AgentAction';

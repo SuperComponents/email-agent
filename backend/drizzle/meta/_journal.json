@@ -50,6 +50,20 @@
       "when": 1752255403549,
       "tag": "0006_flawless_virginia_dare",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1752342264077,
+      "tag": "0007_right_tiger_shark",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1752358220821,
+      "tag": "0008_solid_blob",
+      "breakpoints": true
     }
   ]
 }

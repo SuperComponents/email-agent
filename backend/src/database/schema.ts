@@ -29,6 +29,9 @@ export const agentActionEnum = pgEnum('agent_action', [
   'thread_assigned',
   'thread_status_changed',
   'thread_archived',
+  'internal_note_created',
+  'internal_note_updated',
+  'internal_note_deleted',
 ]);
 
 // User Table
@@ -51,6 +54,7 @@ export const threads = pgTable('threads', {
   subject: varchar('subject', { length: 500 }).notNull(),
   participant_emails: jsonb('participant_emails').notNull(),
   status: statusEnum('status').notNull().default('active'),
+  is_unread: boolean('is_unread').notNull().default(true),
   last_activity_at: timestamp('last_activity_at').notNull().defaultNow(),
   created_at: timestamp('created_at').defaultNow(),
   updated_at: timestamp('updated_at').defaultNow(),
@@ -115,6 +119,29 @@ export const draft_responses = pgTable('draft_responses', {
   updated_at: timestamp('updated_at').defaultNow(),
 });
 
+// Internal Notes Table
+export const internal_notes = pgTable(
+  'internal_notes',
+  {
+    id: serial('id').primaryKey(),
+    thread_id: integer('thread_id')
+      .references(() => threads.id, { onDelete: 'cascade' })
+      .notNull(),
+    author_user_id: integer('author_user_id')
+      .references(() => users.id, { onDelete: 'set null' })
+      .notNull(),
+    content: text('content').notNull(),
+    is_pinned: boolean('is_pinned').notNull().default(false),
+    created_at: timestamp('created_at').defaultNow().notNull(),
+    updated_at: timestamp('updated_at').defaultNow().notNull(),
+  },
+  table => ({
+    threadIdx: index('internal_notes_thread_idx').on(table.thread_id),
+    authorIdx: index('internal_notes_author_idx').on(table.author_user_id),
+    threadPinnedIdx: index('internal_notes_thread_pinned_idx').on(table.thread_id, table.is_pinned),
+  }),
+);
+
 // Agent Actions Table
 export const agent_actions = pgTable(
   'agent_actions',
@@ -125,6 +152,9 @@ export const agent_actions = pgTable(
       .notNull(),
     email_id: integer('email_id').references(() => emails.id, { onDelete: 'set null' }),
     draft_response_id: integer('draft_response_id').references(() => draft_responses.id, {
+      onDelete: 'set null',
+    }),
+    internal_note_id: integer('internal_note_id').references(() => internal_notes.id, {
       onDelete: 'set null',
     }),
     actor_user_id: integer('actor_user_id').references(() => users.id, { onDelete: 'set null' }),
@@ -144,12 +174,14 @@ export const agent_actions = pgTable(
 export const usersRelations = relations(users, ({ many }) => ({
   draft_responses: many(draft_responses),
   agent_actions: many(agent_actions),
+  internal_notes: many(internal_notes),
 }));
 
 export const threadsRelations = relations(threads, ({ many }) => ({
   emails: many(emails),
   draft_responses: many(draft_responses),
   agent_actions: many(agent_actions),
+  internal_notes: many(internal_notes),
 }));
 
 export const emailsRelations = relations(emails, ({ one, many }) => ({
@@ -193,6 +225,18 @@ export const draftResponsesRelations = relations(draft_responses, ({ one, many }
   agent_actions: many(agent_actions),
 }));
 
+export const internalNotesRelations = relations(internal_notes, ({ one, many }) => ({
+  thread: one(threads, {
+    fields: [internal_notes.thread_id],
+    references: [threads.id],
+  }),
+  author_user: one(users, {
+    fields: [internal_notes.author_user_id],
+    references: [users.id],
+  }),
+  agent_actions: many(agent_actions),
+}));
+
 export const agentActionsRelations = relations(agent_actions, ({ one }) => ({
   thread: one(threads, {
     fields: [agent_actions.thread_id],
@@ -206,6 +250,10 @@ export const agentActionsRelations = relations(agent_actions, ({ one }) => ({
     fields: [agent_actions.draft_response_id],
     references: [draft_responses.id],
   }),
+  internal_note: one(internal_notes, {
+    fields: [agent_actions.internal_note_id],
+    references: [internal_notes.id],
+  }),
   actor_user: one(users, {
     fields: [agent_actions.actor_user_id],
     references: [users.id],
@@ -216,6 +264,7 @@ export const agentActionsRelations = relations(agent_actions, ({ one }) => ({
 export const agentActions = agent_actions;
 export const draftResponses = draft_responses;
 export const emailTags = email_tags;
+export const internalNotes = internal_notes;
 
 // Export enums with cleaner names
 export const UserRole = roleEnum;

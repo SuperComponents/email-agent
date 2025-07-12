@@ -1,1 +1,0 @@
-ALTER TABLE "agent_actions" ALTER COLUMN "action" SET DATA TYPE varchar(100);

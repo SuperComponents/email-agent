@@ -36,6 +36,8 @@ services:
       DATABASE_URL: postgres://email_agent:email_agent_pw@db:5432/email_agent
       DB_HOST: db
       DB_PORT: 5432
+    volumes:
+      - ./demo-data:/demo-data:ro
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "node", "-e", "require('http').get('http://localhost:3000/', (r) => process.exit(r.statusCode === 200 ? 0 : 1))"]

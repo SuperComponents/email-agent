@@ -169,6 +169,35 @@ export function generateMockThreadDetail(thread: Thread): ThreadDetail {
       email: thread.customer_email
     },
     emails,
+    internal_notes: [
+      // Add some sample internal notes for testing
+      {
+        id: `note-${thread.id}-1`,
+        content: `Customer seems frustrated. This is their second issue this week. Should consider escalating or providing additional support.`,
+        is_pinned: false,
+        created_at: new Date(new Date(thread.timestamp).getTime() - 1800000).toISOString(), // 30 min before first email
+        updated_at: new Date(new Date(thread.timestamp).getTime() - 1800000).toISOString(),
+        author: {
+          id: '1',
+          name: 'Sarah Johnson',
+          email: 'sarah@company.com'
+        },
+        can_edit: false
+      },
+      {
+        id: `note-${thread.id}-2`,
+        content: `📌 IMPORTANT: Customer has premium support plan. Response time SLA is 2 hours.`,
+        is_pinned: true,
+        created_at: new Date(new Date(thread.timestamp).getTime() + 900000).toISOString(), // 15 min after first email
+        updated_at: new Date(new Date(thread.timestamp).getTime() + 900000).toISOString(),
+        author: {
+          id: '2',
+          name: 'Mike Chen',
+          email: 'mike@company.com'
+        },
+        can_edit: true
+      }
+    ],
     agent_activity: {
       analysis: randomElement(agentAnalyses),
       draft_response: `Dear ${thread.customer_name},\n\nThank you for reaching out. ${randomElement(agentAnalyses)}\n\nBest regards,\nSupport Team`,
