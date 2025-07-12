@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
-import Joyride, { CallBackProps, STATUS, Step } from 'react-joyride';
+import Joyride, { STATUS } from 'react-joyride';
+import type { CallBackProps, Step } from 'react-joyride';
 
 // Storage key that marks the tour as completed / skipped
 const TOUR_STORAGE_KEY = 'onboardingCompleted';
