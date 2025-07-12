@@ -26,7 +26,7 @@ export function ThreadDetailContainer() {
   if (error) {
     return (
       <div className="p-4 text-red-600">
-        Error loading thread: {(error as Error).message}
+        Error loading thread: {error instanceof Error ? error.message : 'Unknown error'}
       </div>
     );
   }
@@ -111,8 +111,8 @@ export function ThreadDetailContainer() {
         status={thread.status as 'open' | 'closed' | 'pending'}
         tags={thread.tags}
         onReply={handleReply}
-        onUseAgent={handleUseAgent}
-        onDemoCustomerResponse={handleDemoCustomerResponse}
+        onUseAgent={() => void handleUseAgent()}
+        onDemoCustomerResponse={() => void handleDemoCustomerResponse()}
         isRegeneratingDraft={isRegenerating}
         isGeneratingDemoResponse={isGeneratingDemo}
       />

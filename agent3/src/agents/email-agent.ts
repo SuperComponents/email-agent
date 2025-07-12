@@ -3,7 +3,6 @@ import {
   run,
   type AgentInputItem,
   RunItemStreamEvent,
-  type AgentOutputItem,
   type RunStreamEvent,
 } from '@openai/agents';
 // import { z } from 'zod';
@@ -14,12 +13,7 @@ import { ragSearchTool } from './tools/rag-search.js';
 import { writeDraftTool } from './tools/write-draft.js';
 import { logStreamingToolCalls } from './log-actions.js';
 import type { EmailMessage, DraftResponse, AgentAction } from '../db/types.js';
-import {
-  isRunItemStreamEvent,
-  isMessageOutputItem,
-  isHostedFileSearchToolCall,
-  type KnowledgeBaseResult,
-} from './guards.js';
+import { isRunItemStreamEvent, isMessageOutputItem } from './guards.js';
 import {
   getThreadActions,
   getLatestEmailInThreadOrFail,
@@ -29,9 +23,7 @@ import {
 
 export type { EmailMessage };
 
- // Minimum score threshold for attaching citations
-const MIN_CITATION_SCORE_THRESHOLD = 0.4;
-
+// Minimum score threshold for attaching citations
 
 // const EmailResponseSchema = z.object({
 //   draft: z.object({
@@ -133,56 +125,6 @@ function createAgent() {
     tools: [emailSearchTool, emailTaggerTool, ragSearchTool, writeDraftTool],
     model: env.OPENAI_MODEL,
   });
-}
-
-function extractHighestScoringRAGSearchResult(
-  output: AgentOutputItem[],
-): KnowledgeBaseResult | null {
-  let highestScoringResult: KnowledgeBaseResult | null = null;
-
-  output.forEach(item => {
-    if (isHostedFileSearchToolCall(item)) {
-      // Find the result with the highest score
-      const results = item.providerData.results;
-      if (results && results.length > 0) {
-        const currentHighest = results.reduce<KnowledgeBaseResult>((highest, current) => {
-          return current.score > highest.score ? current : highest;
-        }, results[0]);
-
-        // Update the highest scoring result if this is better than what we've seen
-        if (!highestScoringResult || currentHighest.score > highestScoringResult.score) {
-          highestScoringResult = currentHighest;
-        }
-      }
-    }
-  });
-
-  return highestScoringResult;
-}
-
-function isLikelyCitation(
-  result: KnowledgeBaseResult | null,
-  logger: (message: unknown) => void,
-): result is KnowledgeBaseResult {
-  if (result === null) {
-    return false;
-  }
-
-  logger('OVERALL HIGHEST SCORING RESULT:');
-  logger({
-    filename: result.filename,
-    score: result.score,
-    text: result.text?.substring(0, 200) + '...', // First 200 chars
-  });
-
-  if (result.score > 0.6) {
-    logger('✓ Score above 0.6 - will attach as citation');
-  } else {
-    logger('✗ Score below 0.6 - will NOT attach as citation');
-  }
-
-  // Return true if score is high enough to be considered a citation
-  return result.score > MIN_CITATION_SCORE_THRESHOLD;
 }
 
 async function processStreamingEvents(

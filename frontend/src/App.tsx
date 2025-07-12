@@ -11,7 +11,7 @@ import { ProtectedRoute } from './components/ProtectedRoute';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { AuthProvider } from './contexts/AuthContext';
 import { stackClientApp } from './lib/stack';
-import { StackHandler, StackProvider, StackTheme } from '@stackframe/react';
+import { StackHandler } from '@stackframe/react';
 
 
 function HandlerRoutes() {

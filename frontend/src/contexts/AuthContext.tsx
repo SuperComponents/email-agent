@@ -1,26 +1,8 @@
-import React, { createContext, useContext, useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import type { ReactNode } from 'react'
 import type { User, LoginData, SignupData } from '../types/auth'
 import { apiClient } from '../lib/api'
-
-interface AuthContextType {
-  user: User | null
-  login: (data: LoginData) => Promise<void>
-  signup: (data: SignupData) => Promise<void>
-  logout: () => Promise<void>
-  isLoading: boolean
-  isAuthenticated: boolean
-}
-
-const AuthContext = createContext<AuthContextType | undefined>(undefined)
-
-export const useAuth = () => {
-  const context = useContext(AuthContext)
-  if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider')
-  }
-  return context
-}
+import { AuthContext } from './auth-context-instance'
 
 interface AuthProviderProps {
   children: ReactNode
@@ -33,7 +15,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   // Check if user is authenticated on mount
   useEffect(() => {
-    checkAuthStatus()
+    void checkAuthStatus()
   }, [])
 
   const checkAuthStatus = async () => {
@@ -41,7 +23,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       setIsLoading(true)
       const response = await apiClient.get('/api/auth/me')
       
-      if (response.success) {
+      if (response.success && response.user) {
         setUser(response.user)
         setIsAuthenticated(true)
       } else {
@@ -61,7 +43,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     try {
       const response = await apiClient.post('/api/auth/login', data)
       
-      if (response.success) {
+      if (response.success && response.user) {
         setUser(response.user)
         setIsAuthenticated(true)
       } else {
@@ -77,7 +59,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     try {
       const response = await apiClient.post('/api/auth/signup', data)
       
-      if (response.success) {
+      if (response.success && response.user) {
         setUser(response.user)
         setIsAuthenticated(true)
       } else {

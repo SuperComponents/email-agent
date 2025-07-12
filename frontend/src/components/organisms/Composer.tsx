@@ -9,7 +9,7 @@ export interface Citation {
   filename: string;
   score: number;
   text: string;
-  attributes?: any;
+  attributes?: Record<string, unknown>;
 }
 
 export interface ComposerProps {

@@ -42,9 +42,9 @@ export function useDraft(threadId: string) {
     queryKey: queryKeys.draft(threadId),
     queryFn: () => APIClient.getDraft(threadId),
     enabled: !!threadId,
-    retry: (failureCount, error: any) => {
+    retry: (failureCount, error: unknown) => {
       // Don't retry on 404 errors
-      if (error?.status === 404) {
+      if (error && typeof error === 'object' && 'status' in error && error.status === 404) {
         return false;
       }
       return failureCount < 3;
@@ -72,9 +72,9 @@ export function useUpdateThread() {
       APIClient.updateThread(id, updates),
     onSuccess: (_, variables) => {
       // Invalidate and refetch thread data
-      queryClient.invalidateQueries({ queryKey: queryKeys.thread(variables.id) });
-      queryClient.invalidateQueries({ queryKey: queryKeys.threads() });
-      queryClient.invalidateQueries({ queryKey: queryKeys.threadCounts });
+      void queryClient.invalidateQueries({ queryKey: queryKeys.thread(variables.id) });
+      void queryClient.invalidateQueries({ queryKey: queryKeys.threads() });
+      void queryClient.invalidateQueries({ queryKey: queryKeys.threadCounts });
     },
   });
 }
@@ -87,8 +87,8 @@ export function useSendMessage() {
       APIClient.sendMessage(threadId, content),
     onSuccess: (_, variables) => {
       // Invalidate thread to refetch with new message
-      queryClient.invalidateQueries({ queryKey: queryKeys.thread(variables.threadId) });
-      queryClient.invalidateQueries({ queryKey: queryKeys.threads() });
+      void queryClient.invalidateQueries({ queryKey: queryKeys.thread(variables.threadId) });
+      void queryClient.invalidateQueries({ queryKey: queryKeys.threads() });
     },
   });
 }
@@ -114,9 +114,9 @@ export function useRegenerateDraft() {
       APIClient.regenerateDraft(threadId, instructions),
     onSuccess: (_, variables) => {
       // Invalidate draft and agent activity
-      queryClient.invalidateQueries({ queryKey: queryKeys.draft(variables.threadId) });
-      queryClient.invalidateQueries({ queryKey: queryKeys.agentActivity(variables.threadId) });
-      queryClient.invalidateQueries({ queryKey: queryKeys.thread(variables.threadId) });
+      void queryClient.invalidateQueries({ queryKey: queryKeys.draft(variables.threadId) });
+      void queryClient.invalidateQueries({ queryKey: queryKeys.agentActivity(variables.threadId) });
+      void queryClient.invalidateQueries({ queryKey: queryKeys.thread(variables.threadId) });
     },
   });
 }

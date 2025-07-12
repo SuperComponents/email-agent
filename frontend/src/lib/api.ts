@@ -1,11 +1,12 @@
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000'
+import type { User } from '../types/auth'
 
-interface ApiResponse<T = any> {
+const API_BASE_URL = (import.meta.env.VITE_API_URL as string | undefined) || 'http://localhost:3000'
+
+interface ApiResponse<T = unknown> {
   success: boolean
   data?: T
   error?: string
-  user?: any
-  [key: string]: any
+  user?: User
 }
 
 class ApiClient {
@@ -15,7 +16,7 @@ class ApiClient {
     this.baseUrl = baseUrl
   }
 
-  private async request<T = any>(
+  private async request<T = unknown>(
     endpoint: string,
     options: RequestInit = {}
   ): Promise<ApiResponse<T>> {
@@ -34,11 +35,11 @@ class ApiClient {
       const response = await fetch(url, config)
       
       if (!response.ok) {
-        const errorData = await response.json().catch(() => null)
+        const errorData = await response.json().catch(() => null) as { error?: string } | null
         throw new Error(errorData?.error || `HTTP error! status: ${response.status}`)
       }
 
-      const data = await response.json()
+      const data = await response.json() as ApiResponse<T>
       return data
     } catch (error) {
       console.error('API request failed:', error)
@@ -46,11 +47,11 @@ class ApiClient {
     }
   }
 
-  async get<T = any>(endpoint: string, options: RequestInit = {}): Promise<ApiResponse<T>> {
+  async get<T = unknown>(endpoint: string, options: RequestInit = {}): Promise<ApiResponse<T>> {
     return this.request<T>(endpoint, { ...options, method: 'GET' })
   }
 
-  async post<T = any>(endpoint: string, data?: any, options: RequestInit = {}): Promise<ApiResponse<T>> {
+  async post<T = unknown>(endpoint: string, data?: unknown, options: RequestInit = {}): Promise<ApiResponse<T>> {
     return this.request<T>(endpoint, {
       ...options,
       method: 'POST',
@@ -58,7 +59,7 @@ class ApiClient {
     })
   }
 
-  async put<T = any>(endpoint: string, data?: any, options: RequestInit = {}): Promise<ApiResponse<T>> {
+  async put<T = unknown>(endpoint: string, data?: unknown, options: RequestInit = {}): Promise<ApiResponse<T>> {
     return this.request<T>(endpoint, {
       ...options,
       method: 'PUT',
@@ -66,7 +67,7 @@ class ApiClient {
     })
   }
 
-  async delete<T = any>(endpoint: string, options: RequestInit = {}): Promise<ApiResponse<T>> {
+  async delete<T = unknown>(endpoint: string, options: RequestInit = {}): Promise<ApiResponse<T>> {
     return this.request<T>(endpoint, { ...options, method: 'DELETE' })
   }
 }

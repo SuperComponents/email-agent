@@ -38,12 +38,20 @@ export const writeDraftTool = tool({
     'Create a draft email response. IMPORTANT: If you used file search results to construct the draft, you MUST include the highest scoring citation.',
   parameters: WriteDraftParamsSchema,
   execute: async (input: WriteDraftParams) => {
-    const { emailId, threadId, messageBody, citationFilename, citationScore, citationText, confidence } = input;
+    const {
+      emailId,
+      threadId,
+      messageBody,
+      citationFilename,
+      citationScore,
+      citationText,
+      confidence,
+    } = input;
 
     try {
       // Reconstruct citations object if citation data is provided
-      const citations: KnowledgeBaseResult | null = 
-        citationFilename && citationScore !== undefined && citationText
+      const citations: KnowledgeBaseResult | null =
+        citationFilename && citationScore !== undefined && citationScore !== null && citationText
           ? {
               attributes: {},
               file_id: '',

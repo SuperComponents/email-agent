@@ -44,7 +44,7 @@ describe('Agent Write Draft Integration', () => {
       .returning();
 
     const result = await processEmail(testThreadId, () => {}); // Silent logger
-    
+
     // Verify draft was created
     expect(result.draft).toBeDefined();
     expect(result.error).toBeUndefined();
@@ -63,14 +63,14 @@ describe('Agent Write Draft Integration', () => {
     const writeDraftAction = result.actions.find(a => a.action === 'write_draft');
     expect(writeDraftAction).toBeDefined();
 
-    return savedDraft;
+    return savedDraft as DraftResponse;
   }
 
   // Helper function to verify citation contains expected filename
   function verifyCitation(draft: DraftResponse, expectedFilename: string) {
     expect(draft.citations).toBeTruthy();
     if (draft.citations) {
-      const citations = draft.citations as any;
+      const citations = draft.citations;
       expect(citations.filename).toBeTruthy();
       expect(citations.filename).toContain(expectedFilename);
       expect(citations.text).toBeTruthy();
@@ -81,27 +81,27 @@ describe('Agent Write Draft Integration', () => {
   it('should create a draft with citations when asking about DragonScale Gauntlets', async () => {
     const draft = await createEmailAndProcess(
       'Question about DragonScale Gauntlets',
-      'Hi, I heard about DragonScale Gauntlets in your game. Can you tell me more about them? What do they do and how can I get them?'
+      'Hi, I heard about DragonScale Gauntlets in your game. Can you tell me more about them? What do they do and how can I get them?',
     );
-    
+
     verifyCitation(draft, 'dragonscale-gauntlets.md');
   });
 
   it('should create a draft with citations when asking about Roadguard Series', async () => {
     const draft = await createEmailAndProcess(
       'Information about Roadguard Series',
-      'Can you provide details about the Roadguard Series? I am interested in their protective capabilities and pricing.'
+      'Can you provide details about the Roadguard Series? I am interested in their protective capabilities and pricing.',
     );
-    
+
     verifyCitation(draft, 'roadguard-series.md');
   });
 
   it('should create a draft with citations when asking about CyberKnight Collection', async () => {
     const draft = await createEmailAndProcess(
       'CyberKnight Collection inquiry',
-      'I would like to know more about the CyberKnight Collection. What makes it special and how does it differ from other collections?'
+      'I would like to know more about the CyberKnight Collection. What makes it special and how does it differ from other collections?',
     );
-    
+
     verifyCitation(draft, 'cyberknight-collection.md');
   });
 
@@ -109,17 +109,17 @@ describe('Agent Write Draft Integration', () => {
   it('should handle questions comparing multiple products', async () => {
     const draft = await createEmailAndProcess(
       'Comparing DragonScale and CyberKnight',
-      'What is the difference between the DragonScale Gauntlets and the CyberKnight Collection? Which one would be better for a warrior class player?'
+      'What is the difference between the DragonScale Gauntlets and the CyberKnight Collection? Which one would be better for a warrior class player?',
     );
-    
+
     // The current implementation only stores the highest scoring citation
     // So we check that at least one relevant citation is included
     expect(draft.citations).toBeTruthy();
     if (draft.citations) {
-      const citations = draft.citations as any;
+      const citations = draft.citations;
       expect(citations.filename).toBeTruthy();
       // Should contain either dragonscale-gauntlets.md or cyberknight-collection.md
-      const hasRelevantCitation = 
+      const hasRelevantCitation =
         citations.filename.includes('dragonscale-gauntlets.md') ||
         citations.filename.includes('cyberknight-collection.md');
       expect(hasRelevantCitation).toBe(true);
@@ -128,38 +128,38 @@ describe('Agent Write Draft Integration', () => {
 
   // Tests not expecting citations (or expecting unrelated citations)
   it('should create a draft when asking about cars', async () => {
-    const draft = await createEmailAndProcess(
+    await createEmailAndProcess(
       'Question about cars',
-      'Hi, I was wondering if you sell cars? I need a new vehicle for my daily commute.'
+      'Hi, I was wondering if you sell cars? I need a new vehicle for my daily commute.',
     );
-    
+
     // Citations may or may not exist for this query
   });
 
   it('should create a draft when asking about weather', async () => {
-    const draft = await createEmailAndProcess(
+    await createEmailAndProcess(
       'Weather inquiry',
-      'What is the weather forecast for tomorrow in San Francisco? Should I bring an umbrella?'
+      'What is the weather forecast for tomorrow in San Francisco? Should I bring an umbrella?',
     );
-    
+
     // Citations may or may not exist for this query
   });
 
   it('should create a draft when asking about store hours', async () => {
-    const draft = await createEmailAndProcess(
+    await createEmailAndProcess(
       'Store hours',
-      'What time does your physical store open? I would like to visit this weekend.'
+      'What time does your physical store open? I would like to visit this weekend.',
     );
-    
+
     // Citations may or may not exist for this query
   });
 
   it('should create a draft when asking about refund policy', async () => {
-    const draft = await createEmailAndProcess(
+    await createEmailAndProcess(
       'Refund question',
-      'What is your refund policy? I bought something last week and it does not fit properly.'
+      'What is your refund policy? I bought something last week and it does not fit properly.',
     );
-    
+
     // Citations may or may not exist for this query
   });
 });

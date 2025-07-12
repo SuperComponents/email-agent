@@ -3,7 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { Button } from '../components/atoms/Button';
 import { Input } from '../components/atoms/Input';
 import { Label } from '../components/atoms/Label';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../hooks/useAuth';
 import { cn } from '../lib/utils';
 
 export function LoginPage() {
@@ -18,7 +18,7 @@ export function LoginPage() {
   // Redirect if already authenticated
   useEffect(() => {
     if (isAuthenticated) {
-      navigate('/');
+      void navigate('/');
     }
   }, [isAuthenticated, navigate]);
 
@@ -29,7 +29,7 @@ export function LoginPage() {
 
     try {
       await login({ email, password });
-      navigate('/');
+      void navigate('/');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Invalid email or password. Please try again.');
     } finally {
@@ -43,7 +43,7 @@ export function LoginPage() {
 
     try {
       await login({ email: 'demo@user.com', password: 'Password1!' });
-      navigate('/');
+      void navigate('/');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Demo login failed. Please try again.');
     } finally {
@@ -65,7 +65,7 @@ export function LoginPage() {
         </div>
 
         {/* Login Form */}
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+        <form className="mt-8 space-y-6" onSubmit={(e) => void handleSubmit(e)}>
           <div className="space-y-4 rounded-lg border border-border bg-card p-6 shadow-sm">
             {/* Error Message */}
             {error && (
@@ -147,7 +147,7 @@ export function LoginPage() {
               size="md"
               className="w-full"
               disabled={isLoading}
-              onClick={handleDemoLogin}
+              onClick={() => void handleDemoLogin()}
             >
               Demo Login
             </Button>

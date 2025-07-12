@@ -34,7 +34,7 @@ export function ThreadListContainer() {
   }, []);
   
   const handleThreadClick = useCallback((threadId: string) => {
-    navigate(`/thread/${threadId}`);
+    void navigate(`/thread/${threadId}`);
   }, [navigate]);
   
   // Transform API threads to ThreadPreviewProps
@@ -55,11 +55,11 @@ export function ThreadListContainer() {
     badges: [
       ...(thread.status !== 'open' ? [{ 
         label: thread.status, 
-        variant: (thread.status === 'closed' ? 'secondary' : 'default') as 'secondary' | 'default'
+        variant: thread.status === 'closed' ? 'secondary' as const : 'default' as const
       }] : []),
       ...thread.tags.map(tag => ({ 
         label: tag, 
-        variant: (tag === 'urgent' ? 'destructive' : 'outline') as 'destructive' | 'outline'
+        variant: tag === 'urgent' ? 'destructive' as const : 'outline' as const
       }))
     ]
   })) || [];

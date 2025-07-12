@@ -104,11 +104,11 @@ describe('RAG Search Integration', () => {
     expect(result.actions).toBeInstanceOf(Array);
 
     // Check that draft was saved to database
-    expect(result.draft.id).toBeDefined();
-    expect(result.draft.email_id).toBe(emailId);
-    expect(result.draft.thread_id).toBe(threadId);
-    expect(result.draft.generated_content).toBeDefined();
-    expect(result.draft.status).toBe('pending');
+    expect(result.draft?.id).toBeDefined();
+    expect(result.draft?.email_id).toBe(emailId);
+    expect(result.draft?.thread_id).toBe(threadId);
+    expect(result.draft?.generated_content).toBeDefined();
+    expect(result.draft?.status).toBe('pending');
 
     // Check that actions were logged to database
     expect(result.actions.length).toBeGreaterThan(0);
@@ -127,12 +127,12 @@ describe('RAG Search Integration', () => {
     expect(params?.queries!.length).toBeGreaterThan(0);
 
     // Check if the response mentions warranty details
-    const response = result.draft.generated_content || '';
+    const response = result.draft?.generated_content || '';
     const responseContainsWarranty = response.toLowerCase().includes('warranty');
     expect(responseContainsWarranty).toBe(true);
 
     console.log('\n=== Test Assertions Passed ===');
-    console.log('- Draft saved to database with ID:', result.draft.id);
+    console.log('- Draft saved to database with ID:', result.draft?.id);
     console.log('- Actions logged to database:', result.actions.length);
     console.log('- RAG search action found:', kbSearchAction?.action);
     console.log('- Response contains warranty information:', responseContainsWarranty);

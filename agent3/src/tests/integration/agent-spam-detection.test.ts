@@ -76,7 +76,7 @@ describe('Email Agent - Spam Detection', () => {
 
     // Assertions - result now contains draft and actions
     expect(result.draft).toBeTruthy();
-    expect(result.draft.generated_content).toBeTruthy();
+    expect(result.draft?.generated_content).toBeTruthy();
 
     // Verify tags were saved to database
     const savedTags = await db
@@ -128,7 +128,7 @@ describe('Email Agent - Spam Detection', () => {
 
     // Assertions - result now contains draft and actions
     expect(result.draft).toBeTruthy();
-    expect(result.draft.generated_content).toBeTruthy();
+    expect(result.draft?.generated_content).toBeTruthy();
 
     // Verify tags were saved to database
     const savedTags = await db
@@ -188,7 +188,7 @@ describe('Email Agent - Spam Detection', () => {
 
     // Assertions - result now contains draft and actions
     expect(result.draft).toBeTruthy();
-    expect(result.draft.generated_content).toBeTruthy();
+    expect(result.draft?.generated_content).toBeTruthy();
 
     // Should still detect spam despite thread context
     const savedTags = await db

@@ -1,6 +1,6 @@
 import type { Thread, ThreadDetail, Draft, AgentActivityDetail, ThreadCounts, ThreadFilter } from '../types/api';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+const API_BASE_URL = (import.meta.env.VITE_API_URL as string | undefined) || 'http://localhost:3000';
 
 class APIError extends Error {
   status: number;
@@ -26,11 +26,11 @@ async function fetchAPI<T>(endpoint: string, options?: RequestInit): Promise<T> 
     });
     
     if (!response.ok) {
-      const error = await response.json().catch(() => ({ error: { message: 'Unknown error' } }));
+      const error = await response.json().catch(() => ({ error: { message: 'Unknown error' } })) as { error?: { message?: string } };
       throw new APIError(response.status, error.error?.message || 'Request failed');
     }
     
-    return await response.json();
+    return await response.json() as T;
   } catch (error) {
     if (error instanceof APIError) {
       throw error;
@@ -64,7 +64,7 @@ export async function updateThread(id: string, updates: { status?: string; tags?
 }
 
 // Message endpoints
-export async function sendMessage(threadId: string, content: string) {
+export async function sendMessage(threadId: string, content: string): Promise<unknown> {
   return fetchAPI(`/api/threads/${threadId}/messages`, {
     method: 'POST',
     body: JSON.stringify({ content }),

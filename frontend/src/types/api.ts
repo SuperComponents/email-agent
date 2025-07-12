@@ -52,7 +52,11 @@ export interface ThreadDetail {
 
 export interface Draft {
   content: string;
-  citations: any;
+  citations: Array<{
+    source: string;
+    text: string;
+    relevance: number;
+  }> | null;
   last_updated: string;
   is_agent_generated: boolean;
 }

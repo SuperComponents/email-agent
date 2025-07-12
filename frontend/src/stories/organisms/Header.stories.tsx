@@ -6,8 +6,8 @@ import { Header } from '../../components/organisms/Header';
 // Create a mock StackClientApp instance for Storybook.
 // This prevents the need for real environment variables in our stories.
 const mockStackApp = new StackClientApp({
-  projectId: import.meta.env.VITE_STACK_PROJECT_ID || 'mock-project-id',
-  publishableClientKey: import.meta.env.VITE_STACK_PUBLISHABLE_CLIENT_KEY || 'mock-client-key',
+  projectId: (import.meta.env.VITE_STACK_PROJECT_ID as string | undefined) || 'mock-project-id',
+  publishableClientKey: (import.meta.env.VITE_STACK_PUBLISHABLE_CLIENT_KEY as string | undefined) || 'mock-client-key',
   tokenStore: 'cookie',
 });
 

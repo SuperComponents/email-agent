@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { GitHubService } from '../services/github';
 import { Button } from '../components/atoms/Button';
@@ -13,7 +13,7 @@ interface KnowledgeDocument {
   path: string;
 }
 
-export function KnowledgeBasePage() {
+function KnowledgeBasePage() {
   const { documentName } = useParams<{ documentName?: string }>();
   const navigate = useNavigate();
   
@@ -28,7 +28,7 @@ export function KnowledgeBasePage() {
 
   // Load documents on component mount
   useEffect(() => {
-    loadDocuments();
+    void loadDocuments();
   }, []);
 
   // Sync URL to document selection - URL is the single source of truth
@@ -42,7 +42,7 @@ export function KnowledgeBasePage() {
       } else {
         console.log('Document not found from URL, redirecting to knowledge base');
         // Document not found, redirect to knowledge base without document
-        navigate('/knowledge-base', { replace: true });
+        void navigate('/knowledge-base', { replace: true });
       }
     } else if (!documentName) {
       console.log('No document in URL, clearing selection');
@@ -84,14 +84,14 @@ export function KnowledgeBasePage() {
       // Ask for confirmation if there are unsaved changes
       if (window.confirm('You have unsaved changes. Are you sure you want to switch documents?')) {
         // Navigate to the document URL
-        navigate(`/knowledge-base/${encodeURIComponent(doc.name)}`);
+        void navigate(`/knowledge-base/${encodeURIComponent(doc.name)}`);
         setIsEditing(false);
         setIsCreating(false);
         setEditContent('');
       }
     } else {
       // Navigate to the document URL
-      navigate(`/knowledge-base/${encodeURIComponent(doc.name)}`);
+      void navigate(`/knowledge-base/${encodeURIComponent(doc.name)}`);
     }
   };
 
@@ -147,7 +147,7 @@ export function KnowledgeBasePage() {
         // Update local state
         setDocuments(docs => docs.filter(doc => doc.path !== selectedDocument.path));
         // Navigate back to knowledge base without document
-        navigate('/knowledge-base');
+        void navigate('/knowledge-base');
         console.log('Document deleted successfully');
       } catch (err) {
         setError('Failed to delete document');
@@ -164,7 +164,7 @@ export function KnowledgeBasePage() {
     setNewDocName('');
     setEditContent('# New Document\n\nEnter your content here...');
     // Navigate to knowledge base without document
-    navigate('/knowledge-base');
+    void navigate('/knowledge-base');
     setIsEditing(false);
   };
 
@@ -197,7 +197,7 @@ export function KnowledgeBasePage() {
       setNewDocName('');
       setEditContent('');
       // Navigate to the new document
-      navigate(`/knowledge-base/${encodeURIComponent(fileName)}`);
+      void navigate(`/knowledge-base/${encodeURIComponent(fileName)}`);
       console.log('New document created successfully');
     } catch (err) {
       setError('Failed to create document');
@@ -294,7 +294,7 @@ export function KnowledgeBasePage() {
                 <div className="flex gap-2">
                   <Button
                     size="sm"
-                    onClick={handleSaveNew}
+                    onClick={() => void handleSaveNew()}
                     disabled={loading}
                     className="flex items-center gap-2"
                   >
@@ -336,7 +336,7 @@ export function KnowledgeBasePage() {
                   <Button
                     size="sm"
                     variant="secondary"
-                    onClick={handleCopyLink}
+                    onClick={() => void handleCopyLink()}
                     disabled={loading}
                     className="flex items-center gap-2"
                     title="Copy link to this document"
@@ -348,7 +348,7 @@ export function KnowledgeBasePage() {
                     <>
                       <Button
                         size="sm"
-                        onClick={handleSave}
+                        onClick={() => void handleSave()}
                         disabled={loading}
                         className="flex items-center gap-2"
                       >
@@ -380,7 +380,7 @@ export function KnowledgeBasePage() {
                       <Button
                         size="sm"
                         variant="secondary"
-                        onClick={handleDelete}
+                        onClick={() => void handleDelete()}
                         disabled={loading}
                         className="flex items-center gap-2 text-red-600 hover:text-red-700"
                       >
@@ -418,4 +418,6 @@ export function KnowledgeBasePage() {
       }
     />
   );
-}; 
+}
+
+export { KnowledgeBasePage }; 

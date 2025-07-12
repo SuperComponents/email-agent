@@ -1,5 +1,4 @@
 import { StackClientApp } from '@stackframe/react';
-import { useNavigate } from 'react-router-dom';
 
 // Temporarily disabled for testing
 // export const stackClientApp = new StackClientApp({
@@ -30,4 +29,4 @@ export const stackClientApp = {
     currentUser: null,
     currentUserPromise: Promise.resolve(null),
   },
-} as any;
+} as unknown as StackClientApp;

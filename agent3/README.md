@@ -2,7 +2,6 @@
 
 **This is the PRIMARY and ACTIVE AI agent implementation for the OpenSupport project.**
 
-
 ## Status: ✅ ACTIVE & INTEGRATED
 
 1. Install Bun: https://bun.sh
@@ -24,7 +23,7 @@ Tests automatically:
 
 To manually reset the test database:
 
-```bash
+````bash
 npm run test:db:setup
 
 - **Integration Status**: Fully integrated with backend API
@@ -69,11 +68,12 @@ import { processEmail } from 'agent3';
 // Process an email thread
 const result = await processEmail(threadId, logger);
 // Returns: { draft: DraftResponse, actions: AgentAction[] }
-```
+````
 
 ## Development
 
 ### Setup
+
 ```bash
 # Install dependencies
 cd agent3/
@@ -88,6 +88,7 @@ npm test
 ```
 
 ### Environment Variables
+
 ```bash
 # Required
 OPENAI_API_KEY=your-openai-api-key
@@ -98,6 +99,7 @@ DATABASE_URL=postgresql://user:password@localhost:5432/dbname
 ```
 
 ### Testing
+
 ```bash
 # Run all tests
 npm test
@@ -121,16 +123,19 @@ This agent works with the following core tables:
 ## Tools Available
 
 ### Email Search Tool
+
 - Searches through customer's email history
 - Provides context for response generation
 - Helps understand customer relationship history
 
 ### Email Tagger Tool
+
 - Automatically categorizes emails
 - Supports: spam, legal, sales, support, billing, technical, general
 - Provides confidence scores for classifications
 
 ### RAG Search Tool
+
 - Searches company knowledge base
 - Provides relevant context for responses
 - Includes citation tracking
@@ -200,4 +205,3 @@ Upcoming features and improvements:
 - Web Framework: Hono
 - Database: SQLite with Drizzle ORM
 - Language: TypeScript
-

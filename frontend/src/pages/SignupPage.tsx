@@ -4,7 +4,7 @@ import { AuthLayout } from '../components/templates';
 import { Button } from '../components/atoms/Button';
 import { Input } from '../components/atoms/Input';
 import { Label } from '../components/atoms/Label';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../hooks/useAuth';
 
 export function SignupPage() {
   const navigate = useNavigate();
@@ -21,7 +21,7 @@ export function SignupPage() {
   // Redirect if already authenticated
   useEffect(() => {
     if (isAuthenticated) {
-      navigate('/');
+      void navigate('/');
     }
   }, [isAuthenticated, navigate]);
 
@@ -78,7 +78,7 @@ export function SignupPage() {
         email: formData.email,
         password: formData.password
       });
-      navigate('/');
+      void navigate('/');
     } catch (error) {
       setErrors({ form: error instanceof Error ? error.message : 'Failed to create account. Please try again.' });
     } finally {
@@ -91,7 +91,7 @@ export function SignupPage() {
       <div className="bg-card rounded-lg shadow-md p-8">
         <h2 className="text-2xl font-bold text-center mb-6">Create an account</h2>
         
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={(e) => void handleSubmit(e)} className="space-y-4">
           {errors.form && (
             <div className="bg-destructive/10 text-destructive text-sm p-3 rounded-md">
               {errors.form}

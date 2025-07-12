@@ -1,14 +1,12 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
 import { cn } from '../../lib/utils';
 import { Button } from '../atoms/Button';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth } from '../../hooks/useAuth';
 
 export type HeaderProps = React.HTMLAttributes<HTMLElement>;
 
 export const Header = React.forwardRef<HTMLElement, HeaderProps>(
     ({ className, ...props }, ref) => {
-        const location = useLocation();
         const { user, logout } = useAuth();
         
         const handleLogout = async () => {
@@ -37,7 +35,7 @@ export const Header = React.forwardRef<HTMLElement, HeaderProps>(
                     <Button
                         variant="secondary"
                         size="sm"
-                        onClick={handleLogout}
+                        onClick={() => void handleLogout()}
                     >
                         Logout
                     </Button>

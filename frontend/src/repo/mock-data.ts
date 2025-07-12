@@ -180,7 +180,7 @@ export function generateMockThreadDetail(thread: Thread): ThreadDetail {
 export function generateMockDraft(): Draft {
   return {
     content: `Dear Customer,\n\n${randomElement(agentAnalyses)}\n\nPlease let me know if you need any further assistance.\n\nBest regards,\nSupport Team`,
-    citations: {},
+    citations: [],
     last_updated: generateTimestamp(0),
     is_agent_generated: true
   };

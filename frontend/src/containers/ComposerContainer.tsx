@@ -13,7 +13,7 @@ export function ComposerContainer() {
   const setDraft = useComposerStore((state) => state.setDraft);
   const clearDraft = useComposerStore((state) => state.clearDraft);
   
-  const { data: serverDraft, error: draftError } = useDraft(selectedThreadId || '');
+  const { data: serverDraft, error: draftError } = useDraft(selectedThreadId || '') as { data: { content: string; citations?: unknown } | undefined; error: { status?: number } | null };
   const updateDraftMutation = useUpdateDraft();
   const sendMessageMutation = useSendMessage();
   const regenerateDraftMutation = useRegenerateDraft();
@@ -36,7 +36,7 @@ export function ComposerContainer() {
         if (serverDraft.content.trim()) {
           setComposerOpen(true, 'reply');
         }
-      } else if ((draftError as any)?.status === 404) {
+      } else if (draftError?.status === 404) {
         // No draft exists yet, start with empty content
         setLocalContent('');
       }
@@ -108,14 +108,14 @@ export function ComposerContainer() {
     <Composer
       value={localContent}
       onChange={handleContentChange}
-      onSend={handleSend}
+      onSend={() => void handleSend()}
       onCancel={handleCancel}
-      onSaveDraft={handleSaveDraft}
-      onRegenerate={handleRegenerate}
+      onSaveDraft={() => void handleSaveDraft()}
+      onRegenerate={() => void handleRegenerate()}
       isGenerating={regenerateDraftMutation.isPending}
       isSending={sendMessageMutation.isPending}
       isSavingDraft={updateDraftMutation.isPending}
-      citations={serverDraft?.citations}
+      citations={serverDraft?.citations as import('../components/organisms/Composer').Citation[] | import('../components/organisms/Composer').Citation | undefined}
     />
   );
 }
