@@ -16,9 +16,9 @@ const aiResponses: Record<string, string> = {
   'Show me pricing options':
     'We offer three plans:\n\n• Open Source (Free): Self-host with all core features\n• Cloud Pro ($29/mo): Managed hosting with 99.9% uptime\n• Enterprise (Custom): Dedicated infrastructure and custom AI training\n\nAll plans include unlimited agents and conversations!',
   'Can I self-host this?':
-    'Absolutely! OpenSupport is 100% open source. You can deploy it on your own infrastructure with just a few commands. We provide Docker images, Kubernetes configs, and detailed documentation. Your data never leaves your servers!',
+    'Absolutely! ProResponse AI is 100% open source. You can deploy it on your own infrastructure with just a few commands. We provide Docker images, Kubernetes configs, and detailed documentation. Your data never leaves your servers!',
   'Integration options?':
-    'OpenSupport integrates with all major platforms:\n\n• Email providers (Gmail, Outlook, etc.)\n• Chat platforms (Slack, Discord, Teams)\n• CRMs (Salesforce, HubSpot, Pipedrive)\n• APIs for custom integrations\n\nSetup takes less than 5 minutes!',
+    'ProResponse AI integrates with all major platforms:\n\n• Email providers (Gmail, Outlook, etc.)\n• Chat platforms (Slack, Discord, Teams)\n• CRMs (Salesforce, HubSpot, Pipedrive)\n• APIs for custom integrations\n\nSetup takes less than 5 minutes!',
 };
 
 export function FloatingChat() {
@@ -41,7 +41,7 @@ export function FloatingChat() {
         {
           text:
             aiResponses[question] ||
-            "I'd be happy to help! Feel free to ask any questions about OpenSupport.",
+            "I'd be happy to help! Feel free to ask any questions about ProResponse AI.",
           isAi: true,
         },
       ]);
@@ -147,7 +147,7 @@ export function FloatingChat() {
                     <Sparkles className="w-12 h-12 text-purple-primary mx-auto mb-4 animate-sparkle" />
                     <p className="text-muted-foreground mb-4">
                       Hi! I'm your AI assistant. Ask me anything about
-                      OpenSupport!
+                      ProResponse AI!
                     </p>
                     <div className="space-y-2">
                       {quickActions.map((action, index) => (

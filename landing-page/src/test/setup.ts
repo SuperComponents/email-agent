@@ -41,8 +41,6 @@ global.IntersectionObserver = jest.fn().mockImplementation(() => ({
 global.requestAnimationFrame = jest.fn((cb) => setTimeout(cb, 16)) as any;
 global.cancelAnimationFrame = jest.fn() as any;
 
-
-
 // Mock framer-motion
 jest.mock('framer-motion', () => ({
   motion: {

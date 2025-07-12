@@ -3,7 +3,10 @@ import { usePrefersReducedMotion } from '../src/hooks/usePrefersReducedMotion';
 
 describe('usePrefersReducedMotion Hook', () => {
   let mockMatchMedia: jest.Mock;
-  let mockEventListener: { addEventListener: jest.Mock; removeEventListener: jest.Mock };
+  let mockEventListener: {
+    addEventListener: jest.Mock;
+    removeEventListener: jest.Mock;
+  };
 
   beforeEach(() => {
     mockEventListener = {
@@ -45,9 +48,14 @@ describe('usePrefersReducedMotion Hook', () => {
 
   it('listens for media query changes', () => {
     renderHook(() => usePrefersReducedMotion());
-    
-    expect(mockMatchMedia).toHaveBeenCalledWith('(prefers-reduced-motion: reduce)');
-    expect(mockEventListener.addEventListener).toHaveBeenCalledWith('change', expect.any(Function));
+
+    expect(mockMatchMedia).toHaveBeenCalledWith(
+      '(prefers-reduced-motion: reduce)'
+    );
+    expect(mockEventListener.addEventListener).toHaveBeenCalledWith(
+      'change',
+      expect.any(Function)
+    );
   });
 
   it('updates state when media query changes', () => {
@@ -73,9 +81,12 @@ describe('usePrefersReducedMotion Hook', () => {
 
   it('removes event listener on cleanup', () => {
     const { unmount } = renderHook(() => usePrefersReducedMotion());
-    
+
     unmount();
-    
-    expect(mockEventListener.removeEventListener).toHaveBeenCalledWith('change', expect.any(Function));
+
+    expect(mockEventListener.removeEventListener).toHaveBeenCalledWith(
+      'change',
+      expect.any(Function)
+    );
   });
 });

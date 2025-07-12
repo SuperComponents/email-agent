@@ -71,7 +71,7 @@ export function App() {
               <MessageSquare className="w-6 h-6 text-white" />
             </div>
             <span className="text-2xl font-bold gradient-text">
-              OpenSupport
+              ProResponse AI
             </span>
           </div>
 
@@ -163,12 +163,12 @@ export function App() {
                 <TextReveal
                   text="Customer Support"
                   className="bg-gradient-to-r from-purple-dark via-purple-primary to-ai-purple bg-clip-text text-transparent"
-                  aria-hidden="true"
+                  aria-hidden={true}
                 />
               </span>
               <span className="block mt-2 text-4xl md:text-6xl lg:text-7xl text-muted-foreground font-light">
                 That Actually{' '}
-                <span className="text-purple-primary font-bold neon-glow">
+                <span className="text-purple-primary font-bold drop-shadow-sm">
                   Cares
                 </span>
               </span>
@@ -271,7 +271,7 @@ export function App() {
                 Why teams are switching to
               </span>
               <span className="block animate-gradient bg-gradient-to-r from-purple-dark via-purple-primary to-ai-purple bg-clip-text text-transparent text-5xl md:text-6xl lg:text-7xl">
-                OpenSupport
+                ProResponse AI
               </span>
             </h2>
 
@@ -334,7 +334,7 @@ export function App() {
             <div className="text-center mb-12">
               <h2 className="text-4xl md:text-5xl font-bold mb-4">
                 <span className="animate-gradient bg-gradient-to-r from-purple-dark via-purple-primary to-ai-purple bg-clip-text text-transparent">
-                  See OpenSupport in Action
+                  See ProResponse AI in Action
                 </span>
               </h2>
               <p className="text-xl text-muted-foreground">
@@ -478,7 +478,7 @@ export function App() {
       </section>
 
       {/* Pricing Section */}
-      <section id="pricing" className="relative z-10 px-6 pb-32 lg:px-12">
+      <section id="pricing" className="relative z-10 px-6 pt-32 pb-32 lg:px-12">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-5xl md:text-6xl font-bold mb-4 animate-slide-up">
@@ -630,7 +630,7 @@ export function App() {
                   ))}
                 </div>
                 <p className="text-lg mb-6">
-                  "Switching to OpenSupport reduced our response time by 85%.
+                  "Switching to ProResponse AI reduced our response time by 85%.
                   Our customers love the instant, accurate responses."
                 </p>
                 <div className="flex items-center gap-4">
@@ -763,7 +763,7 @@ export function App() {
                   <MessageSquare className="w-5 h-5 text-white" />
                 </div>
                 <span className="text-xl font-bold gradient-text">
-                  OpenSupport
+                  ProResponse AI
                 </span>
               </div>
               <p className="text-sm text-muted-foreground">
@@ -867,7 +867,7 @@ export function App() {
           </div>
 
           <div className="border-t pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
-            <div>© 2025 OpenSupport. All rights reserved.</div>
+            <div>© 2025 ProResponse AI. All rights reserved.</div>
             <div className="flex gap-6">
               <a href="#" className="hover:text-foreground transition-colors">
                 Privacy

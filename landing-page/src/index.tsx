@@ -4,9 +4,7 @@ import index from './index.html';
 const server = serve({
   port: 3001,
   routes: {
-    // Serve index.html for all unmatched routes.
-    '/*': index,
-
+    // API routes
     '/api/hello': {
       async GET(req) {
         return Response.json({
@@ -28,6 +26,9 @@ const server = serve({
         message: `Hello, ${name}!`,
       });
     },
+
+    // Serve index.html for all unmatched routes (SPA fallback)
+    '/*': index,
   },
 
   development: process.env.NODE_ENV !== 'production' && {
