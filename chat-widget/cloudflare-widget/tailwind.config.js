@@ -28,12 +28,15 @@ module.exports = {
           950: '#030712',
         },
         // Custom colors for the widget
-        primary: '#F48120',
+        primary: '#4338ca',
+        'primary-light': '#6366f1',
+        'ai-purple': '#8b5cf6',
         destructive: '#ef4444',
         accent: '#3b82f6',
         'muted-foreground': '#6b7280',
-        ring: '#3b82f6',
+        ring: '#4338ca',
         'assistant-border': '#e5e7eb',
+        success: '#10b981',
       },
       spacing: {
         '6.5': '1.625rem',
@@ -47,6 +50,9 @@ module.exports = {
         'scaleFadeInSm': 'scaleFadeInSm 0.2s ease-in-out',
         'scaleFadeOutSm': 'scaleFadeOutSm 0.2s ease-in-out',
         'refresh': 'refresh 0.5s ease-in-out infinite',
+        'ping': 'ping 1s cubic-bezier(0, 0, 0.2, 1) infinite',
+        'bounce': 'bounce 1s infinite',
+        'sparkle': 'sparkle 1.5s ease-in-out infinite',
       },
       keyframes: {
         fade: {
@@ -67,6 +73,24 @@ module.exports = {
         },
         refresh: {
           'to': { transform: 'rotate(360deg) scale(0.9)' },
+        },
+        ping: {
+          '75%, 100%': {
+            transform: 'scale(2)',
+            opacity: '0',
+          },
+        },
+        bounce: {
+          '0%, 100%': {
+            transform: 'translateY(0)',
+          },
+          '50%': {
+            transform: 'translateY(-25%)',
+          },
+        },
+        sparkle: {
+          '0%, 100%': { transform: 'scale(1) rotate(0deg)' },
+          '50%': { transform: 'scale(1.2) rotate(180deg)' },
         },
       },
     },

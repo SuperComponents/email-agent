@@ -2,6 +2,7 @@ import { Loader } from "@/components/loader/Loader";
 import { Slot } from "@/components/slot/Slot";
 import { Tooltip } from "@/components/tooltip/Tooltip";
 import { cn } from "@/lib/utils";
+import { motion } from "framer-motion";
 
 export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   as?: React.ElementType;
@@ -35,42 +36,37 @@ const ButtonComponent = ({
   variant = "secondary",
   ...props
 }: ButtonProps) => {
-  return (
-    <Slot
-      as={as ?? "button"}
-      className={cn(
-        "btn add-focus group interactive flex w-max shrink-0 items-center font-medium select-none",
+  const MotionComponent = as === "a" ? motion.a : motion.button;
+  const isMotionCompatible = !as || as === "a" || as === "button";
 
-        {
-          "btn-primary": variant === "primary",
-          "btn-secondary": variant === "secondary",
-          "btn-tertiary": variant === "tertiary",
-          "btn-ghost": variant === "ghost",
-          "btn-destructive": variant === "destructive",
+  const buttonClasses = cn(
+    "btn add-focus group interactive flex w-max shrink-0 items-center font-medium select-none transition-all duration-300",
+    {
+      "btn-primary": variant === "primary",
+      "btn-secondary": variant === "secondary",
+      "btn-tertiary": variant === "tertiary",
+      "btn-ghost": variant === "ghost",
+      "btn-destructive": variant === "destructive",
 
-          "add-size-sm gap-1": size === "sm",
-          "add-size-md gap-1.5": size === "md",
-          "add-size-base gap-2": size === "base",
+      "add-size-sm gap-1": size === "sm",
+      "add-size-md gap-1.5": size === "md",
+      "add-size-base gap-2": size === "base",
 
-          square: shape === "square",
-          circular: shape === "circular",
+      square: shape === "square",
+      circular: shape === "circular",
 
-          "flex-row-reverse": displayContent === "items-first",
+      "flex-row-reverse": displayContent === "items-first",
 
-          "add-disable": disabled,
+      "add-disable": disabled,
 
-          toggle: toggled,
-        },
-        className
-      )}
-      disabled={disabled}
-      href={href}
-      rel={external ? "noopener noreferrer" : undefined}
-      target={external ? "_blank" : undefined}
-      {...props}
-    >
+      toggle: toggled,
+    },
+    className
+  );
+
+  const content = (
+    <>
       {title}
-
       {loading ? (
         <span
           className={cn({
@@ -86,6 +82,38 @@ const ButtonComponent = ({
       ) : (
         children
       )}
+    </>
+  );
+
+  if (isMotionCompatible) {
+    return (
+      <MotionComponent
+        className={buttonClasses}
+        disabled={disabled}
+        href={href}
+        rel={external ? "noopener noreferrer" : undefined}
+        target={external ? "_blank" : undefined}
+        whileHover={{ scale: disabled ? 1 : 1.05 }}
+        whileTap={{ scale: disabled ? 1 : 0.95 }}
+        transition={{ type: "spring", stiffness: 400, damping: 17 }}
+        {...props}
+      >
+        {content}
+      </MotionComponent>
+    );
+  }
+
+  return (
+    <Slot
+      as={as ?? "button"}
+      className={buttonClasses}
+      disabled={disabled}
+      href={href}
+      rel={external ? "noopener noreferrer" : undefined}
+      target={external ? "_blank" : undefined}
+      {...props}
+    >
+      {content}
     </Slot>
   );
 };

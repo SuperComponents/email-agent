@@ -2,6 +2,7 @@ import { useEffect, useState, useRef, useCallback } from "react";
 import { useAgent } from "agents/react";
 import { useAgentChat } from "agents/ai-react";
 import type { tools } from "./tools";
+import { motion, AnimatePresence } from "framer-motion";
 
 // Component imports
 import { Button } from "@/components/button/Button";
@@ -11,6 +12,7 @@ import { Toggle } from "@/components/toggle/Toggle";
 import { Textarea } from "@/components/textarea/Textarea";
 import { MemoizedMarkdown } from "@/components/memoized-markdown";
 import { ToolInvocationCard } from "@/components/tool-invocation-card/ToolInvocationCard";
+import { TypingIndicator } from "@/components/TypingIndicator";
 
 // Icon imports
 import {
@@ -224,77 +226,98 @@ export default function Chat() {
             </div>
           )}
 
-          {agentMessages.map((m: Message, index) => {
-            const isUser = m.role === "user";
-            const showAvatar =
-              index === 0 || agentMessages[index - 1]?.role !== m.role;
+          <AnimatePresence initial={false}>
+            {agentMessages.map((m: Message, index) => {
+              const isUser = m.role === "user";
+              const showAvatar =
+                index === 0 || agentMessages[index - 1]?.role !== m.role;
 
-            return (
-              <div key={m.id}>
-                {showDebug && (
-                  <pre className="text-xs text-muted-foreground overflow-scroll">
-                    {JSON.stringify(m, null, 2)}
-                  </pre>
-                )}
-                <div
-                  className={`flex ${isUser ? "justify-end" : "justify-start"}`}
+              return (
+                <motion.div
+                  key={m.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{
+                    type: "spring",
+                    stiffness: 500,
+                    damping: 30,
+                  }}
                 >
+                  {showDebug && (
+                    <pre className="text-xs text-muted-foreground overflow-scroll">
+                      {JSON.stringify(m, null, 2)}
+                    </pre>
+                  )}
                   <div
-                    className={`flex gap-2 max-w-[85%] ${
-                      isUser ? "flex-row-reverse" : "flex-row"
-                    }`}
+                    className={`flex ${isUser ? "justify-end" : "justify-start"}`}
                   >
-                    {showAvatar && !isUser ? (
-                      <Avatar username={"AI"} />
-                    ) : (
-                      !isUser && <div className="w-8" />
-                    )}
+                    <div
+                      className={`flex gap-2 max-w-[85%] ${
+                        isUser ? "flex-row-reverse" : "flex-row"
+                      }`}
+                    >
+                      {showAvatar && !isUser ? (
+                        <Avatar username={"AI"} />
+                      ) : (
+                        !isUser && <div className="w-8" />
+                      )}
 
-                    <div>
                       <div>
-                        {m.parts?.map((part, i) => {
-                          if (part.type === "text") {
-                            return (
-                              // biome-ignore lint/suspicious/noArrayIndexKey: immutable index
-                              <div key={i}>
-                                <Card
-                                  className={`p-3 rounded-md bg-neutral-100 dark:bg-neutral-900 ${
-                                    isUser
-                                      ? "rounded-br-none"
-                                      : "rounded-bl-none border-assistant-border"
-                                  } ${
-                                    part.text.startsWith("scheduled message")
-                                      ? "border-accent/50"
-                                      : ""
-                                  } relative`}
+                        <div>
+                          {m.parts?.map((part, i) => {
+                            if (part.type === "text") {
+                              return (
+                                // biome-ignore lint/suspicious/noArrayIndexKey: immutable index
+                                <motion.div 
+                                  key={i}
+                                  initial={{ scale: 0.8, opacity: 0 }}
+                                  animate={{ scale: 1, opacity: 1 }}
+                                  transition={{
+                                    type: "spring",
+                                    stiffness: 500,
+                                    damping: 30,
+                                    delay: i * 0.05,
+                                  }}
                                 >
-                                  {part.text.startsWith(
-                                    "scheduled message"
-                                  ) && (
-                                    <span className="absolute -top-3 -left-2 text-base">
-                                      🕒
-                                    </span>
-                                  )}
-                                  <MemoizedMarkdown
-                                    id={`${m.id}-${i}`}
-                                    content={part.text.replace(
-                                      /^scheduled message: /,
-                                      ""
+                                  <Card
+                                    className={`p-3 rounded-2xl ${
+                                      isUser
+                                        ? "bg-gradient-to-r from-primary to-ai-purple text-white rounded-tr-none"
+                                        : "bg-neutral-100 dark:bg-neutral-900 rounded-tl-none border-assistant-border"
+                                    } ${
+                                      part.text.startsWith("scheduled message")
+                                        ? "border-accent/50"
+                                        : ""
+                                    } relative transition-all duration-300 hover:shadow-lg`}
+                                  >
+                                    {part.text.startsWith(
+                                      "scheduled message"
+                                    ) && (
+                                      <span className="absolute -top-3 -left-2 text-base">
+                                        🕒
+                                      </span>
                                     )}
-                                  />
-                                </Card>
-                                <p
-                                  className={`text-xs text-muted-foreground mt-1 ${
-                                    isUser ? "text-right" : "text-left"
-                                  }`}
-                                >
-                                  {formatTime(
-                                    new Date(m.createdAt as unknown as string)
-                                  )}
-                                </p>
-                              </div>
-                            );
-                          }
+                                    <MemoizedMarkdown
+                                      id={`${m.id}-${i}`}
+                                      content={part.text.replace(
+                                        /^scheduled message: /,
+                                        ""
+                                      )}
+                                    />
+                                  </Card>
+                                  <p
+                                    className={`text-xs text-muted-foreground mt-1 ${
+                                      isUser ? "text-right" : "text-left"
+                                    }`}
+                                  >
+                                    {formatTime(
+                                      new Date(m.createdAt as unknown as string)
+                                    )}
+                                  </p>
+                                </motion.div>
+                              );
+                            }
 
                           if (part.type === "tool-invocation") {
                             const toolInvocation = part.toolInvocation;
@@ -320,13 +343,35 @@ export default function Chat() {
                           }
                           return null;
                         })}
+                        </div>
                       </div>
                     </div>
                   </div>
+                </motion.div>
+              );
+            })}
+          </AnimatePresence>
+          
+          {/* Typing Indicator */}
+          <AnimatePresence>
+            {isLoading && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.2 }}
+                className="flex justify-start"
+              >
+                <div className="flex gap-2 max-w-[85%]">
+                  <Avatar username={"AI"} />
+                  <div className="bg-neutral-100 dark:bg-neutral-900 rounded-2xl rounded-tl-none p-3 shadow-sm">
+                    <TypingIndicator />
+                  </div>
                 </div>
-              </div>
-            );
-          })}
+              </motion.div>
+            )}
+          </AnimatePresence>
+          
           <div ref={messagesEndRef} />
         </div>
 
@@ -382,7 +427,7 @@ export default function Chat() {
                   <button
                     type="button"
                     onClick={stop}
-                    className="inline-flex items-center cursor-pointer justify-center gap-2 whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-primary text-primary-foreground hover:bg-primary/90 rounded-full p-1.5 h-fit border border-neutral-200 dark:border-neutral-800"
+                    className="inline-flex items-center cursor-pointer justify-center gap-2 whitespace-nowrap text-sm font-medium ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-destructive focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-destructive text-white hover:bg-destructive/90 hover:scale-105 active:scale-95 rounded-full p-1.5 h-fit"
                     aria-label="Stop generation"
                   >
                     <Stop size={16} />
@@ -390,7 +435,7 @@ export default function Chat() {
                 ) : (
                   <button
                     type="submit"
-                    className="inline-flex items-center cursor-pointer justify-center gap-2 whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-primary text-primary-foreground hover:bg-primary/90 rounded-full p-1.5 h-fit border border-neutral-200 dark:border-neutral-800"
+                    className="inline-flex items-center cursor-pointer justify-center gap-2 whitespace-nowrap text-sm font-medium ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-gradient-to-r from-primary to-ai-purple text-white hover:shadow-lg hover:scale-105 active:scale-95 rounded-full p-1.5 h-fit"
                     disabled={pendingToolCallConfirmation || !agentInput.trim()}
                     aria-label="Send message"
                   >
