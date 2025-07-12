@@ -6,7 +6,6 @@ import {
   fileSearchTool,
   setDefaultOpenAIKey,
 } from "@openai/agents";
-import { getVectorStoreId } from "./vector-store";
 import openai from "../openai";
 import { OPENAI_API_KEY } from "../env";
 
@@ -15,7 +14,7 @@ import { OpenAI } from "openai";
 setDefaultOpenAIKey(OPENAI_API_KEY!);
 
 async function runRAGTool(query: string) {
-  const VECTOR_STORE_ID = await getVectorStoreId(openai);
+  const VECTOR_STORE_ID = "vs_6872d5a6c80c8191bb598cce020ca4fa";
 
   const knowledgeBaseSearchTool = fileSearchTool(VECTOR_STORE_ID, {
     includeSearchResults: true,
