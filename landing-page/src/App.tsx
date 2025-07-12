@@ -491,7 +491,7 @@ export function App() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto pt-6">
             <Card className="relative overflow-hidden">
               <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-ai-blue to-ai-purple" />
               <CardContent className="p-8">
@@ -524,7 +524,7 @@ export function App() {
               </CardContent>
             </Card>
 
-            <Card className="relative overflow-hidden gradient-border premium-card shadow-2xl scale-105">
+            <Card className="relative gradient-border premium-card shadow-2xl scale-105">
               <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-purple-primary to-purple-light animate-gradient" />
               <div className="absolute -top-4 -right-4 px-4 py-1 bg-gradient-to-r from-purple-primary to-purple-light text-white text-sm font-medium rounded-full sparkle-container shadow-lg">
                 Popular
