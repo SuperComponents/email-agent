@@ -1,0 +1,573 @@
+{
+  "users": [
+    {
+      "id": 72,
+      "email": "demo@user.com",
+      "name": "Demo User",
+      "role": "agent",
+      "password_hash": "$2b$12$wpj0yHT6dsXDHC/uc.13NO153HE2GYveGyYIVbX6OiWsJcitEK87S",
+      "last_login_at": null,
+      "refresh_token_revoked_at": null,
+      "stack_auth_id": null,
+      "created_at": "2025-07-12T15:59:09.495Z",
+      "updated_at": "2025-07-12T15:59:09.495Z"
+    },
+    {
+      "id": 73,
+      "email": "john.agent@company.com",
+      "name": "John Agent",
+      "role": "agent",
+      "password_hash": null,
+      "last_login_at": null,
+      "refresh_token_revoked_at": null,
+      "stack_auth_id": null,
+      "created_at": "2025-07-12T15:59:09.495Z",
+      "updated_at": "2025-07-12T15:59:09.495Z"
+    },
+    {
+      "id": 74,
+      "email": "sarah.manager@company.com",
+      "name": "Sarah Manager",
+      "role": "manager",
+      "password_hash": null,
+      "last_login_at": null,
+      "refresh_token_revoked_at": null,
+      "stack_auth_id": null,
+      "created_at": "2025-07-12T15:59:09.495Z",
+      "updated_at": "2025-07-12T15:59:09.495Z"
+    },
+    {
+      "id": 75,
+      "email": "mike.admin@company.com",
+      "name": "Mike Admin",
+      "role": "admin",
+      "password_hash": null,
+      "last_login_at": null,
+      "refresh_token_revoked_at": null,
+      "stack_auth_id": null,
+      "created_at": "2025-07-12T15:59:09.495Z",
+      "updated_at": "2025-07-12T15:59:09.495Z"
+    }
+  ],
+  "threads": [
+    {
+      "id": 73,
+      "subject": "Sizing Issue with TacticalPro Gloves",
+      "participant_emails": [
+        "ben.thompson@email.com",
+        "support@gauntletairon.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-06-14T09:27:46.526Z",
+      "created_at": "2025-06-14T09:27:46.526Z",
+      "updated_at": "2025-06-14T09:27:46.526Z"
+    },
+    {
+      "id": 74,
+      "subject": "Order Delay for DragonScale Gauntlets",
+      "participant_emails": [
+        "sarah.k@email.com",
+        "support@gauntletairon.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-06-13T23:59:59.540Z",
+      "created_at": "2025-06-13T23:59:59.540Z",
+      "updated_at": "2025-06-13T23:59:59.540Z"
+    },
+    {
+      "id": 75,
+      "subject": "Break-In Period for CyberKnight Collection",
+      "participant_emails": [
+        "chris.j@email.com",
+        "support@gauntletairon.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-07-07T19:17:42.615Z",
+      "created_at": "2025-07-07T19:17:42.615Z",
+      "updated_at": "2025-07-07T19:17:42.615Z"
+    },
+    {
+      "id": 76,
+      "subject": "Leather Care Instructions Needed",
+      "participant_emails": [
+        "emma.lee@email.com",
+        "support@gauntletairon.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-07-03T15:06:02.011Z",
+      "created_at": "2025-07-03T15:06:02.011Z",
+      "updated_at": "2025-07-03T15:06:02.011Z"
+    },
+    {
+      "id": 77,
+      "subject": "Interested in Custom Fitting Services",
+      "participant_emails": [
+        "mark.r@email.com",
+        "support@gauntletairon.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-06-24T23:19:21.451Z",
+      "created_at": "2025-06-24T23:19:21.451Z",
+      "updated_at": "2025-06-24T23:19:21.451Z"
+    },
+    {
+      "id": 78,
+      "subject": "Metal Polishing for RoadGuard Series",
+      "participant_emails": [
+        "jess@email.com",
+        "support@gauntletairon.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-06-28T02:09:15.817Z",
+      "created_at": "2025-06-28T02:09:15.817Z",
+      "updated_at": "2025-06-28T02:09:15.817Z"
+    },
+    {
+      "id": 79,
+      "subject": "ANGRY: Poor Customer Service!",
+      "participant_emails": [
+        "alexb@email.com",
+        "support@gauntletairon.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-07-10T08:25:14.433Z",
+      "created_at": "2025-07-10T08:25:14.433Z",
+      "updated_at": "2025-07-10T08:25:14.433Z"
+    },
+    {
+      "id": 80,
+      "subject": "Sales Inquiry - Bulk Order Discount",
+      "participant_emails": [
+        "officer.kate@email.com",
+        "support@gauntletairon.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-07-06T19:49:19.082Z",
+      "created_at": "2025-07-06T19:49:19.082Z",
+      "updated_at": "2025-07-06T19:49:19.082Z"
+    },
+    {
+      "id": 81,
+      "subject": "Legal Inquiry Regarding Order",
+      "participant_emails": [
+        "liam.s@email.com",
+        "support@gauntletairon.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-06-15T07:13:59.811Z",
+      "created_at": "2025-06-15T07:13:59.811Z",
+      "updated_at": "2025-06-15T07:13:59.811Z"
+    },
+    {
+      "id": 82,
+      "subject": "Partnership Inquiry for Promotional Events",
+      "participant_emails": [
+        "tom.r@email.com",
+        "support@gauntletairon.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-06-28T08:15:48.839Z",
+      "created_at": "2025-06-28T08:15:48.839Z",
+      "updated_at": "2025-06-28T08:15:48.839Z"
+    },
+    {
+      "id": 83,
+      "subject": "Help with Order Payment Issue",
+      "participant_emails": [
+        "lucy@email.com",
+        "support@gauntletairon.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-06-23T23:00:05.569Z",
+      "created_at": "2025-06-23T23:00:05.569Z",
+      "updated_at": "2025-06-23T23:00:05.569Z"
+    },
+    {
+      "id": 84,
+      "subject": "Warranty Coverage Inquiry",
+      "participant_emails": [
+        "jeff.d@email.com",
+        "support@gauntletairon.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-06-29T11:33:09.905Z",
+      "created_at": "2025-06-29T11:33:09.905Z",
+      "updated_at": "2025-06-29T11:33:09.905Z"
+    },
+    {
+      "id": 85,
+      "subject": "Request for Product Specifications",
+      "participant_emails": [
+        "nina.m@email.com",
+        "support@gauntletairon.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-06-20T23:31:46.018Z",
+      "created_at": "2025-06-20T23:31:46.018Z",
+      "updated_at": "2025-06-20T23:31:46.018Z"
+    },
+    {
+      "id": 86,
+      "subject": "Issue with LED Lights on CyberKnight Gloves",
+      "participant_emails": [
+        "mike.p@email.com",
+        "support@gauntletairon.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-07-05T11:23:29.629Z",
+      "created_at": "2025-07-05T11:23:29.629Z",
+      "updated_at": "2025-07-05T11:23:29.629Z"
+    },
+    {
+      "id": 87,
+      "subject": "Gloves Running Small?",
+      "participant_emails": [
+        "liam.w@email.com",
+        "support@gauntletairon.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-06-15T17:54:07.764Z",
+      "created_at": "2025-06-15T17:54:07.764Z",
+      "updated_at": "2025-06-15T17:54:07.764Z"
+    },
+    {
+      "id": 88,
+      "subject": "Feedback on last order",
+      "participant_emails": [
+        "rita.j@email.com",
+        "support@gauntletairon.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-07-10T15:40:40.254Z",
+      "created_at": "2025-07-10T15:40:40.254Z",
+      "updated_at": "2025-07-10T15:40:40.254Z"
+    },
+    {
+      "id": 89,
+      "subject": "Checking Status of Custom Order",
+      "participant_emails": [
+        "danny.g@email.com",
+        "support@gauntletairon.com"
+      ],
+      "status": "active",
+      "last_activity_at": "2025-06-13T04:24:06.917Z",
+      "created_at": "2025-06-13T04:24:06.917Z",
+      "updated_at": "2025-06-13T04:24:06.917Z"
+    }
+  ],
+  "emails": [
+    {
+      "id": 127,
+      "thread_id": 73,
+      "from_email": "ben.thompson@email.com",
+      "to_emails": [
+        "support@gauntletairon.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Sizing Issue with TacticalPro Gloves",
+      "body_text": "Hi there,\n\nI recently purchased a pair of TacticalPro gloves (Order: GA-12345), and they feel a bit snug. I'm not sure if I ordered the wrong size or if they just run small? I usually wear a size large in other brands, but these feel tighter around my fingers. Can you please guide me on how to exchange them for a bigger size?\n\nThanks,\nBen Thompson\nben.thompson@email.com",
+      "body_html": "<html><body>Hi there,<br><br>I recently purchased a pair of TacticalPro gloves (Order: GA-12345), and they feel a bit snug. I'm not sure if I ordered the wrong size or if they just run small? I usually wear a size large in other brands, but these feel tighter around my fingers. Can you please guide me on how to exchange them for a bigger size?<br><br>Thanks,<br>Ben Thompson<br>ben.thompson@email.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-06-14T09:27:46.526Z",
+      "created_at": "2025-06-14T09:27:46.526Z",
+      "updated_at": "2025-06-14T09:27:46.526Z"
+    },
+    {
+      "id": 128,
+      "thread_id": 74,
+      "from_email": "sarah.k@email.com",
+      "to_emails": [
+        "support@gauntletairon.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Order Delay for DragonScale Gauntlets",
+      "body_text": "Hello,\n\nI placed an order for the DragonScale Gauntlets (GA-67890) back on July 10th, and I was expecting them to arrive by now, but it's already been over 6 weeks. Could you provide me with an update on my order status? I'm really looking forward to receiving them as they are a birthday gift for my husband.\n\nAppreciate your help!\nSarah K.\nsarah.k@email.com",
+      "body_html": "<html><body>Hello,<br><br>I placed an order for the DragonScale Gauntlets (GA-67890) back on July 10th, and I was expecting them to arrive by now, but it's already been over 6 weeks. Could you provide me with an update on my order status? I'm really looking forward to receiving them as they are a birthday gift for my husband.<br><br>Appreciate your help!<br>Sarah K.<br>sarah.k@email.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-06-13T23:59:59.540Z",
+      "created_at": "2025-06-13T23:59:59.540Z",
+      "updated_at": "2025-06-13T23:59:59.540Z"
+    },
+    {
+      "id": 129,
+      "thread_id": 75,
+      "from_email": "chris.j@email.com",
+      "to_emails": [
+        "support@gauntletairon.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Break-In Period for CyberKnight Collection",
+      "body_text": "Hi GauntletAIron,\n\nI just got my CyberKnight gloves (GA-11223) and they look amazing! However, they are a bit stiff. I read something about a break-in period for leather gloves, but how long should I expect this to last? Anything specific I should do to make them more comfortable?\n\nThanks for the guidance!\nChris J.\nchris.j@email.com",
+      "body_html": "<html><body>Hi GauntletAIron,<br><br>I just got my CyberKnight gloves (GA-11223) and they look amazing! However, they are a bit stiff. I read something about a break-in period for leather gloves, but how long should I expect this to last? Anything specific I should do to make them more comfortable?<br><br>Thanks for the guidance!<br>Chris J.<br>chris.j@email.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-07-07T19:17:42.615Z",
+      "created_at": "2025-07-07T19:17:42.615Z",
+      "updated_at": "2025-07-07T19:17:42.615Z"
+    },
+    {
+      "id": 130,
+      "thread_id": 76,
+      "from_email": "emma.lee@email.com",
+      "to_emails": [
+        "support@gauntletairon.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Leather Care Instructions Needed",
+      "body_text": "Hey Support,\n\nI own a pair of DragonScale Gauntlets (GA-33445), and I want to make sure I'm taking care of them properly. Could you send me the best practices for cleaning and maintaining the leather? I really want these to last as long as possible!\n\nThanks a ton!\nEmma Lee\nemma.lee@email.com",
+      "body_html": "<html><body>Hey Support,<br><br>I own a pair of DragonScale Gauntlets (GA-33445), and I want to make sure I'm taking care of them properly. Could you send me the best practices for cleaning and maintaining the leather? I really want these to last as long as possible!<br><br>Thanks a ton!<br>Emma Lee<br>emma.lee@email.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-07-03T15:06:02.011Z",
+      "created_at": "2025-07-03T15:06:02.011Z",
+      "updated_at": "2025-07-03T15:06:02.011Z"
+    },
+    {
+      "id": 131,
+      "thread_id": 77,
+      "from_email": "mark.r@email.com",
+      "to_emails": [
+        "support@gauntletairon.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Interested in Custom Fitting Services",
+      "body_text": "Hello,\n\nI’ve been looking at your WorkForce Heavy gloves (GA-55667), but I've got unique hand proportions. Do you offer any custom fitting services? I'd love to know more about how that works before making a purchase.\n\nThanks!\nMark R.\nmark.r@email.com",
+      "body_html": "<html><body>Hello,<br><br>I’ve been looking at your WorkForce Heavy gloves (GA-55667), but I've got unique hand proportions. Do you offer any custom fitting services? I'd love to know more about how that works before making a purchase.<br><br>Thanks!<br>Mark R.<br>mark.r@email.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-06-24T23:19:21.451Z",
+      "created_at": "2025-06-24T23:19:21.451Z",
+      "updated_at": "2025-06-24T23:19:21.451Z"
+    },
+    {
+      "id": 132,
+      "thread_id": 78,
+      "from_email": "jess@email.com",
+      "to_emails": [
+        "support@gauntletairon.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Metal Polishing for RoadGuard Series",
+      "body_text": "Hi!\n\nI’ve recently bought the RoadGuard gloves (GA-77889) and noticed some scratches on the metal parts. What’s the best way to polish them without damaging the material? Thanks for your help!\n\nCheers,\nJess\njess@email.com",
+      "body_html": "<html><body>Hi!<br><br>I’ve recently bought the RoadGuard gloves (GA-77889) and noticed some scratches on the metal parts. What’s the best way to polish them without damaging the material? Thanks for your help!<br><br>Cheers,<br>Jess<br>jess@email.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-06-28T02:09:15.817Z",
+      "created_at": "2025-06-28T02:09:15.817Z",
+      "updated_at": "2025-06-28T02:09:15.817Z"
+    },
+    {
+      "id": 133,
+      "thread_id": 79,
+      "from_email": "alexb@email.com",
+      "to_emails": [
+        "support@gauntletairon.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "ANGRY: Poor Customer Service!",
+      "body_text": "To whom it may concern,\n\nI am extremely frustrated with your service! I’ve been waiting for my order (GA-44556) for over a month, and no one has bothered to respond to my previous messages! This is unacceptable! I expect a proper update ASAP or I will take further action!\n\nSincerely,\nAlex B.\nalexb@email.com",
+      "body_html": "<html><body>To whom it may concern,<br><br>I am extremely frustrated with your service! I’ve been waiting for my order (GA-44556) for over a month, and no one has bothered to respond to my previous messages! This is unacceptable! I expect a proper update ASAP or I will take further action!<br><br>Sincerely,<br>Alex B.<br>alexb@email.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-07-10T08:25:14.433Z",
+      "created_at": "2025-07-10T08:25:14.433Z",
+      "updated_at": "2025-07-10T08:25:14.433Z"
+    },
+    {
+      "id": 134,
+      "thread_id": 80,
+      "from_email": "officer.kate@email.com",
+      "to_emails": [
+        "support@gauntletairon.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Sales Inquiry - Bulk Order Discount",
+      "body_text": "Hello,\n\nI work for a local police department, and we are interested in purchasing a bulk order of the TacticalPro Series gloves (GA-99887). Do you offer any discounts for larger orders? If so, could you provide details on prices and how to proceed?\n\nThank you!\nOfficer Kate\nofficer.kate@email.com",
+      "body_html": "<html><body>Hello,<br><br>I work for a local police department, and we are interested in purchasing a bulk order of the TacticalPro Series gloves (GA-99887). Do you offer any discounts for larger orders? If so, could you provide details on prices and how to proceed?<br><br>Thank you!<br>Officer Kate<br>officer.kate@email.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-07-06T19:49:19.082Z",
+      "created_at": "2025-07-06T19:49:19.082Z",
+      "updated_at": "2025-07-06T19:49:19.082Z"
+    },
+    {
+      "id": 135,
+      "thread_id": 81,
+      "from_email": "liam.s@email.com",
+      "to_emails": [
+        "support@gauntletairon.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Legal Inquiry Regarding Order",
+      "body_text": "Dear GauntletAIron,\n\nI am writing to address a serious issue regarding my order (GA-22334). I believe your assembly process may have been negligent, resulting in my gloves falling apart after only two weeks. I would like to discuss potential compensation. Please respond promptly.\n\nBest,\nLiam S.\nliam.s@email.com",
+      "body_html": "<html><body>Dear GauntletAIron,<br><br>I am writing to address a serious issue regarding my order (GA-22334). I believe your assembly process may have been negligent, resulting in my gloves falling apart after only two weeks. I would like to discuss potential compensation. Please respond promptly.<br><br>Best,<br>Liam S.<br>liam.s@email.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-06-15T07:13:59.811Z",
+      "created_at": "2025-06-15T07:13:59.811Z",
+      "updated_at": "2025-06-15T07:13:59.811Z"
+    },
+    {
+      "id": 136,
+      "thread_id": 82,
+      "from_email": "tom.r@email.com",
+      "to_emails": [
+        "support@gauntletairon.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Partnership Inquiry for Promotional Events",
+      "body_text": "Hello GauntletAIron Team,\n\nI represent a local motorcycle club, and we’re planning a series of events. We’d love to explore potential partnership opportunities with GauntletAIron. Your RoadGuard Series gloves would be perfect for our members! Can we set up a call to discuss?\n\nLooking forward to hearing from you!\nTom R.\ntom.r@email.com",
+      "body_html": "<html><body>Hello GauntletAIron Team,<br><br>I represent a local motorcycle club, and we’re planning a series of events. We’d love to explore potential partnership opportunities with GauntletAIron. Your RoadGuard Series gloves would be perfect for our members! Can we set up a call to discuss?<br><br>Looking forward to hearing from you!<br>Tom R.<br>tom.r@email.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-06-28T08:15:48.839Z",
+      "created_at": "2025-06-28T08:15:48.839Z",
+      "updated_at": "2025-06-28T08:15:48.839Z"
+    },
+    {
+      "id": 137,
+      "thread_id": 83,
+      "from_email": "lucy@email.com",
+      "to_emails": [
+        "support@gauntletairon.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Help with Order Payment Issue",
+      "body_text": "Hi,\n\nI tried to place an order for the CyberKnight Collection (GA-45678) but received a payment error. My card has sufficient funds, and I’ve tried multiple times. Can you help me resolve this so I can finalize my order? \n\nThanks!\nLucy\nlucy@email.com",
+      "body_html": "<html><body>Hi,<br><br>I tried to place an order for the CyberKnight Collection (GA-45678) but received a payment error. My card has sufficient funds, and I’ve tried multiple times. Can you help me resolve this so I can finalize my order? <br><br>Thanks!<br>Lucy<br>lucy@email.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-06-23T23:00:05.569Z",
+      "created_at": "2025-06-23T23:00:05.569Z",
+      "updated_at": "2025-06-23T23:00:05.569Z"
+    },
+    {
+      "id": 138,
+      "thread_id": 84,
+      "from_email": "jeff.d@email.com",
+      "to_emails": [
+        "support@gauntletairon.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Warranty Coverage Inquiry",
+      "body_text": "Hi,\n\nI have a pair of WorkForce Heavy gloves (GA-98765) that I purchased last year, and they are starting to show some wear. Can you let me know what the warranty covers? I’d like to understand if the issues I’m facing are eligible for replacement.\n\nThanks,\nJeff D.\njeff.d@email.com",
+      "body_html": "<html><body>Hi,<br><br>I have a pair of WorkForce Heavy gloves (GA-98765) that I purchased last year, and they are starting to show some wear. Can you let me know what the warranty covers? I’d like to understand if the issues I’m facing are eligible for replacement.<br><br>Thanks,<br>Jeff D.<br>jeff.d@email.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-06-29T11:33:09.905Z",
+      "created_at": "2025-06-29T11:33:09.905Z",
+      "updated_at": "2025-06-29T11:33:09.905Z"
+    },
+    {
+      "id": 139,
+      "thread_id": 85,
+      "from_email": "nina.m@email.com",
+      "to_emails": [
+        "support@gauntletairon.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Request for Product Specifications",
+      "body_text": "Hello,\n\nI'm considering the DragonScale Gauntlets, but I need more details on the specifications, such as weight and specific materials used. This information will help me make an informed decision. Could you please provide that?\n\nThank you,\nNina M.\nnina.m@email.com",
+      "body_html": "<html><body>Hello,<br><br>I'm considering the DragonScale Gauntlets, but I need more details on the specifications, such as weight and specific materials used. This information will help me make an informed decision. Could you please provide that?<br><br>Thank you,<br>Nina M.<br>nina.m@email.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-06-20T23:31:46.018Z",
+      "created_at": "2025-06-20T23:31:46.018Z",
+      "updated_at": "2025-06-20T23:31:46.018Z"
+    },
+    {
+      "id": 140,
+      "thread_id": 86,
+      "from_email": "mike.p@email.com",
+      "to_emails": [
+        "support@gauntletairon.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Issue with LED Lights on CyberKnight Gloves",
+      "body_text": "Hey,\n\nI just got my CyberKnight gloves (GA-56789), and the LED lights aren’t working. I’ve checked the batteries, but they still won’t turn on. Can you guide me on what to do next? I’d hate to have to send them back!\n\nBest,\nMike P.\nmike.p@email.com",
+      "body_html": "<html><body>Hey,<br><br>I just got my CyberKnight gloves (GA-56789), and the LED lights aren’t working. I’ve checked the batteries, but they still won’t turn on. Can you guide me on what to do next? I’d hate to have to send them back!<br><br>Best,<br>Mike P.<br>mike.p@email.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-07-05T11:23:29.629Z",
+      "created_at": "2025-07-05T11:23:29.629Z",
+      "updated_at": "2025-07-05T11:23:29.629Z"
+    },
+    {
+      "id": 141,
+      "thread_id": 87,
+      "from_email": "liam.w@email.com",
+      "to_emails": [
+        "support@gauntletairon.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Gloves Running Small?",
+      "body_text": "Hi!\n\nI recently got my TacticalPro gloves (GA-54321), and I feel like they are super tight on my hands. Is this normal? I’ve worn a large size before without issue, but these seem to be a lot smaller! What should I do? \n\nThanks,\nLiam W.\nliam.w@email.com",
+      "body_html": "<html><body>Hi!<br><br>I recently got my TacticalPro gloves (GA-54321), and I feel like they are super tight on my hands. Is this normal? I’ve worn a large size before without issue, but these seem to be a lot smaller! What should I do? <br><br>Thanks,<br>Liam W.<br>liam.w@email.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-06-15T17:54:07.764Z",
+      "created_at": "2025-06-15T17:54:07.764Z",
+      "updated_at": "2025-06-15T17:54:07.764Z"
+    },
+    {
+      "id": 142,
+      "thread_id": 88,
+      "from_email": "rita.j@email.com",
+      "to_emails": [
+        "support@gauntletairon.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Feedback on last order",
+      "body_text": "Hi GauntletAIron Team,\n\nI just received my RoadGuard gloves (GA-11112), and while the quality is impressive, I did notice a few scratches on the metal parts. It’s a bit disappointing as I expected perfection for the price I paid. Could you help me with this?\n\nThank you,\nRita J.\nrita.j@email.com",
+      "body_html": "<html><body>Hi GauntletAIron Team,<br><br>I just received my RoadGuard gloves (GA-11112), and while the quality is impressive, I did notice a few scratches on the metal parts. It’s a bit disappointing as I expected perfection for the price I paid. Could you help me with this?<br><br>Thank you,<br>Rita J.<br>rita.j@email.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-07-10T15:40:40.254Z",
+      "created_at": "2025-07-10T15:40:40.254Z",
+      "updated_at": "2025-07-10T15:40:40.254Z"
+    },
+    {
+      "id": 143,
+      "thread_id": 89,
+      "from_email": "danny.g@email.com",
+      "to_emails": [
+        "support@gauntletairon.com"
+      ],
+      "cc_emails": null,
+      "bcc_emails": null,
+      "subject": "Checking Status of Custom Order",
+      "body_text": "Hi,\n\nI placed a custom order for the DragonScale Gauntlets on August 1st (GA-13579) but haven’t received an update yet. Can I get a status check on that? I’m really excited to see them!\n\nThanks,\nDanny G.\ndanny.g@email.com",
+      "body_html": "<html><body>Hi,<br><br>I placed a custom order for the DragonScale Gauntlets on August 1st (GA-13579) but haven’t received an update yet. Can I get a status check on that? I’m really excited to see them!<br><br>Thanks,<br>Danny G.<br>danny.g@email.com</body></html>",
+      "direction": "inbound",
+      "is_draft": false,
+      "sent_at": "2025-06-13T04:24:06.917Z",
+      "created_at": "2025-06-13T04:24:06.917Z",
+      "updated_at": "2025-06-13T04:24:06.917Z"
+    }
+  ],
+  "draft_responses": [],
+  "agent_actions": [],
+  "email_tags": [],
+  "metadata": {
+    "exported_at": "2025-07-12T16:01:03.272Z",
+    "total_records": 38
+  }
+}

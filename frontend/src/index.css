@@ -1,5 +1,10 @@
 @import "tailwindcss";
 
+/* Global styles */
+html, body {
+  overscroll-behavior: none;
+}
+
 @theme {
   /* Colors - semantic tokens for theming support */
   --color-background: #fafafa;
@@ -73,4 +78,14 @@
   --transition-fast: 150ms;
   --transition-base: 200ms;
   --transition-slow: 300ms;
+}
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
 }

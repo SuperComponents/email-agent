@@ -1,9 +1,10 @@
-import React from 'react';
-import { Avatar } from '../atoms/Avatar';
-import { Badge } from '../atoms/Badge';
-import { cn } from '../../lib/utils';
+import React from "react";
+import { Avatar } from "../atoms/Avatar";
+import { Badge } from "../atoms/Badge";
+import { cn } from "../../lib/utils";
 
-export interface ThreadPreviewProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface ThreadPreviewProps
+  extends React.HTMLAttributes<HTMLDivElement> {
   id?: string;
   title: string;
   snippet: string;
@@ -17,52 +18,56 @@ export interface ThreadPreviewProps extends React.HTMLAttributes<HTMLDivElement>
   isUnread?: boolean;
   badges?: Array<{
     label: string;
-    variant?: 'default' | 'secondary' | 'destructive' | 'outline';
+    variant?: "default" | "secondary" | "destructive" | "outline";
   }>;
 }
 
-export const ThreadPreview = React.forwardRef<HTMLDivElement, ThreadPreviewProps>(
-  ({ 
-    className, 
-    title, 
-    snippet, 
-    author, 
-    timestamp, 
-    isActive, 
-    isUnread,
-    badges = [],
-    ...props 
-  }, ref) => {
+export const ThreadPreview = React.forwardRef<
+  HTMLDivElement,
+  ThreadPreviewProps
+>(
+  (
+    {
+      className,
+      title,
+      snippet,
+      author,
+      timestamp,
+      isActive,
+      isUnread,
+      badges = [],
+      ...props
+    },
+    ref
+  ) => {
     return (
       <div
         ref={ref}
         className={cn(
-          'p-4 border-b border-border cursor-pointer transition-colors',
-          'hover:bg-accent/50',
-          isActive && 'bg-accent',
+          "px-4 py-4 border-b border-border cursor-pointer transition-colors",
+          "hover:bg-accent/50",
+          isActive && "bg-accent",
           className
         )}
         {...props}
       >
         <div className="flex gap-3">
-          <Avatar
-            src={author.avatar}
-            alt={author.name}
-            fallback={author.initials}
-            size="sm"
-          />
           <div className="flex-1 min-w-0">
-            <div className="flex items-start justify-between gap-2 mb-1">
-              <h3 className={cn(
-                'font-semibold truncate',
-                isUnread && 'text-foreground',
-                !isUnread && 'text-secondary-foreground'
-              )}>
+            <div className="flex justify-between gap-2 mb-1 align-center">
+              <h3
+                className={cn(
+                  "text-sm truncate",
+                  isUnread && "text-foreground",
+                  !isUnread && "text-secondary-foreground"
+                )}
+              >
                 {title}
               </h3>
-              <time className="text-xs text-secondary-foreground flex-shrink-0">
-                {timestamp}
-              </time>
+              <div className="flex items-center h-full h-min-full">
+                <time className="text-xs text-secondary-foreground my-auto text-nowrap">
+                  {timestamp}
+                </time>
+              </div>
             </div>
             <p className="text-sm text-secondary-foreground truncate mb-2">
               {snippet}
@@ -70,10 +75,7 @@ export const ThreadPreview = React.forwardRef<HTMLDivElement, ThreadPreviewProps
             {badges.length > 0 && (
               <div className="flex gap-1.5">
                 {badges.map((badge, index) => (
-                  <Badge
-                    key={index}
-                    variant={badge.variant}
-                  >
+                  <Badge key={index} variant={badge.variant}>
                     {badge.label}
                   </Badge>
                 ))}
@@ -86,4 +88,4 @@ export const ThreadPreview = React.forwardRef<HTMLDivElement, ThreadPreviewProps
   }
 );
 
-ThreadPreview.displayName = 'ThreadPreview';
+ThreadPreview.displayName = "ThreadPreview";

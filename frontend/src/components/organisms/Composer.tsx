@@ -1,7 +1,10 @@
-import React from 'react';
-import { Send, Paperclip, Smile, Save, Sparkles, FileText, ExternalLink } from 'lucide-react';
+import React, { useState, useRef } from 'react';
+import { Send, Paperclip, Smile, Sparkles, FileText, ExternalLink } from 'lucide-react';
+import EmojiPicker from 'emoji-picker-react';
 import { Button } from '../atoms/Button';
 import { Icon } from '../atoms/Icon';
+import { Spinner } from '../atoms/Spinner';
+import { EmailHeader } from '../molecules/EmailHeader';
 import { cn } from '../../lib/utils';
 
 export interface Citation {
@@ -17,15 +20,19 @@ export interface ComposerProps {
   value?: string;
   onChange?: (value: string) => void;
   onSend?: () => void;
-  onCancel?: () => void;
-  onSaveDraft?: () => void;
   onRegenerate?: () => void;
   placeholder?: string;
   disabled?: boolean;
   isGenerating?: boolean;
   isSending?: boolean;
-  isSavingDraft?: boolean;
   citations?: Citation[] | Citation;
+  to?: string;
+  from?: string;
+  cc?: string;
+  bcc?: string;
+  onToChange?: (value: string) => void;
+  onCcChange?: (value: string) => void;
+  onBccChange?: (value: string) => void;
 }
 
 export const Composer = React.forwardRef<HTMLDivElement, ComposerProps>(
@@ -34,23 +41,54 @@ export const Composer = React.forwardRef<HTMLDivElement, ComposerProps>(
     value = '', 
     onChange, 
     onSend,
-    onCancel,
-    onSaveDraft,
     onRegenerate, 
     placeholder = 'Type your reply...', 
     disabled = false,
     isGenerating = false,
     isSending = false,
-    isSavingDraft = false,
     citations = [],
+    to = '',
+    from = '',
+    cc = '',
+    bcc = '',
+    onToChange,
+    onCcChange,
+    onBccChange,
     ...props 
   }, ref) => {
+    const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+    const emojiButtonRef = useRef<HTMLButtonElement>(null);
+    
     const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
       if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
         e.preventDefault();
         onSend?.();
       }
     };
+
+    const handleEmojiClick = (emojiData: { emoji: string }) => {
+      if (onChange) {
+        onChange(value + emojiData.emoji);
+      }
+      setShowEmojiPicker(false);
+    };
+
+    // Close emoji picker when clicking outside
+    React.useEffect(() => {
+      const handleClickOutside = (event: MouseEvent) => {
+        if (emojiButtonRef.current && !emojiButtonRef.current.contains(event.target as Node)) {
+          const emojiPicker = document.querySelector('.EmojiPickerReact');
+          if (emojiPicker && !emojiPicker.contains(event.target as Node)) {
+            setShowEmojiPicker(false);
+          }
+        }
+      };
+
+      if (showEmojiPicker) {
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+      }
+    }, [showEmojiPicker]);
 
     return (
       <div
@@ -61,6 +99,16 @@ export const Composer = React.forwardRef<HTMLDivElement, ComposerProps>(
         )}
         {...props}
       >
+        <EmailHeader
+          to={to}
+          from={from}
+          cc={cc}
+          bcc={bcc}
+          onToChange={onToChange}
+          onCcChange={onCcChange}
+          onBccChange={onBccChange}
+          disabled={disabled}
+        />
         <div className="p-4">
           {citations && (Array.isArray(citations) ? citations.length > 0 : citations.text) && (
             <div className="mb-3 p-3 bg-accent/50 rounded-lg border border-accent-foreground/20">
@@ -92,13 +140,21 @@ export const Composer = React.forwardRef<HTMLDivElement, ComposerProps>(
               </div>
             </div>
           )}
-          <div className="rounded-lg border border-border bg-input focus-within:ring-2 focus-within:ring-ring">
+          <div className="rounded-lg border border-border bg-input focus-within:ring-2 focus-within:ring-ring relative">
+            {isGenerating && (
+              <div className="absolute inset-0 bg-background/80 flex items-center justify-center z-10 rounded-lg">
+                <div className="flex items-center gap-2 text-sm text-secondary-foreground">
+                  <Spinner size="sm" />
+                  <span>Generating response...</span>
+                </div>
+              </div>
+            )}
             <textarea
               value={value}
               onChange={(e) => onChange?.(e.target.value)}
               onKeyDown={handleKeyDown}
               placeholder={placeholder}
-              disabled={disabled}
+              disabled={disabled || isGenerating}
               className="w-full px-4 py-3 bg-transparent resize-none focus:outline-none min-h-[200px] max-h-[500px]"
               rows={8}
             />
@@ -117,29 +173,33 @@ export const Composer = React.forwardRef<HTMLDivElement, ComposerProps>(
                 <Button variant="ghost" size="sm" disabled={disabled}>
                   <Icon icon={Paperclip} size="sm" />
                 </Button>
-                <Button variant="ghost" size="sm" disabled={disabled}>
-                  <Icon icon={Smile} size="sm" />
-                </Button>
+                <div className="relative">
+                  <Button 
+                    ref={emojiButtonRef}
+                    variant="ghost" 
+                    size="sm" 
+                    disabled={disabled}
+                    onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+                  >
+                    <Icon icon={Smile} size="sm" />
+                  </Button>
+                  {showEmojiPicker && (
+                    <div className="absolute bottom-full mb-2 left-0 z-50">
+                      <EmojiPicker 
+                        onEmojiClick={handleEmojiClick}
+                        autoFocusSearch={false}
+                        previewConfig={{
+                          showPreview: false
+                        }}
+                      />
+                    </div>
+                  )}
+                </div>
               </div>
-              <div className="flex gap-2">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={onCancel}
-                  disabled={disabled}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={onSaveDraft}
-                  disabled={disabled || isSavingDraft}
-                  className="gap-1"
-                >
-                  <Icon icon={Save} size="sm" />
-                  <span>{isSavingDraft ? 'Saving...' : 'Save Draft'}</span>
-                </Button>
+              <div className="flex items-center gap-3">
+                <p className="text-xs text-secondary-foreground">
+                  Press Cmd+Enter to send
+                </p>
                 <Button
                   size="sm"
                   onClick={onSend}
@@ -152,9 +212,6 @@ export const Composer = React.forwardRef<HTMLDivElement, ComposerProps>(
               </div>
             </div>
           </div>
-          <p className="text-xs text-secondary-foreground mt-2">
-            Press Cmd+Enter to send
-          </p>
         </div>
       </div>
     );

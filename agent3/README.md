@@ -20,7 +20,8 @@ The agent:
 The agent has access to these tools:
 - `read_thread` - Reads the email thread context from the agent's context
 - `explain_next_tool_call` - Explains what the agent plans to do next (for transparency)
-- `search_emails` - Searches for previous emails from a sender
+- `get_customer_history` - Gets complete email history for a customer to understand their interaction context
+- `search_customer_emails` - Searches for specific content within a customer's email history
 - `tag_email` - Tags emails with appropriate categories
 - `search_knowledge_base` - RAG search for relevant documentation
 - `write_draft` - Creates a draft response with optional citations

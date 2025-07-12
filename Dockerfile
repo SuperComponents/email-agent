@@ -68,6 +68,7 @@ FROM node:22-slim
 RUN apt-get update && apt-get install -y \
     tini \
     netcat-openbsd \
+    postgresql-client \
     && rm -rf /var/lib/apt/lists/*
 
 # Create non-root user
@@ -84,9 +85,15 @@ COPY --from=builder --chown=nodejs:nodejs /build/backend/drizzle ./drizzle
 COPY --from=builder --chown=nodejs:nodejs /build/backend/drizzle.config.ts ./
 COPY --from=builder --chown=nodejs:nodejs /build/backend/package.json ./
 
+# Copy database dump files
+COPY --chown=nodejs:nodejs ./backend/src/database/dump-data-only.sql ./src/database/
+
 # Copy and setup entrypoint script
 COPY --chown=nodejs:nodejs docker-entrypoint.sh ./
 RUN chmod +x docker-entrypoint.sh
+
+# Create logs directory with proper permissions
+RUN mkdir -p logs && chown -R nodejs:nodejs logs
 
 # Switch to non-root user
 USER nodejs
