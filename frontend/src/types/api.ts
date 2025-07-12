@@ -31,7 +31,28 @@ export interface AgentAction {
   description: string;
   timestamp: string;
   status: string;
-  result?: unknown;
+  result?: {
+    type?: string;
+    role?: string;
+    name?: string;
+    arguments?: string;
+    callId?: string;
+    content?: Array<{
+      text: string;
+      [key: string]: unknown;
+    }>;
+    output?: {
+      text?: string;
+      type?: string;
+      [key: string]: unknown;
+    };
+    confidence?: number | null;
+    escalation_recommended?: boolean;
+    sentiment?: string | null;
+    suggested_priority?: string | null;
+    rag_sources_used?: number;
+    [key: string]: unknown;
+  };
 }
 
 export interface AgentActivity {
@@ -52,7 +73,11 @@ export interface ThreadDetail {
 
 export interface Draft {
   content: string;
-  citations: any;
+  citations: Array<{
+    source: string;
+    text: string;
+    relevance: number;
+  }> | null;
   last_updated: string;
   is_agent_generated: boolean;
 }

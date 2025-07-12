@@ -3,7 +3,7 @@ import { agent_actions, agentActionEnum } from './schema.js';
 
 export interface LogAgentActionParams {
   threadId: number;
-  action: typeof agentActionEnum.enumValues[number];
+  action: (typeof agentActionEnum.enumValues)[number];
   emailId?: number;
   draftResponseId?: number;
   actorUserId?: number;
@@ -18,15 +18,18 @@ export async function logAgentAction({
   draftResponseId,
   actorUserId,
   metadata,
-  ipAddress
+  ipAddress,
 }: LogAgentActionParams) {
-  return await db.insert(agent_actions).values({
-    thread_id: threadId,
-    action,
-    email_id: emailId,
-    draft_response_id: draftResponseId,
-    actor_user_id: actorUserId,
-    metadata,
-    ip_address: ipAddress
-  }).returning();
+  return await db
+    .insert(agent_actions)
+    .values({
+      thread_id: threadId,
+      action,
+      email_id: emailId,
+      draft_response_id: draftResponseId,
+      actor_user_id: actorUserId,
+      metadata,
+      ip_address: ipAddress,
+    })
+    .returning();
 }

@@ -1,0 +1,9 @@
+dist
+node_modules
+drizzle
+*.sql
+package-lock.json
+coverage
+.env
+.env.*
+*.log

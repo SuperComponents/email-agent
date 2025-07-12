@@ -1,49 +1,49 @@
-import { Hono } from 'hono'
-import { eq, and, or, like, desc, sql } from 'drizzle-orm'
-import { db } from '../database/db.js'
-import { threads, emails, draft_responses, agent_actions } from '../database/schema.js'
-import { successResponse, notFoundResponse, errorResponse } from '../utils/response.js'
-import { threadFilterSchema, updateThreadSchema, validateRequest } from '../utils/validation.js'
-import { authMiddleware } from '../middleware/auth.js'
-const app = new Hono()
-app.use(authMiddleware)
+import { Hono } from 'hono';
+import { eq, and, or, like, desc, sql } from 'drizzle-orm';
+import { db } from '../database/db.js';
+import { threads, emails, draft_responses, agent_actions } from '../database/schema.js';
+import { successResponse, notFoundResponse, errorResponse } from '../utils/response.js';
+import { threadFilterSchema, updateThreadSchema, validateRequest } from '../utils/validation.js';
+import { authMiddleware } from '../middleware/auth.js';
+const app = new Hono();
+app.use(authMiddleware);
 // GET /api/threads - List all threads with filtering
-app.get('/', async (c) => {
+app.get('/', async c => {
   try {
-    const filterParam = c.req.query('filter')
-    const searchParam = c.req.query('search')
-    
+    const filterParam = c.req.query('filter');
+    const searchParam = c.req.query('search');
+
     // Validate filter
-    const filter = threadFilterSchema.parse(filterParam)
-    
+    const filter = threadFilterSchema.parse(filterParam);
+
     // Build where conditions
-    const conditions = []
-    
+    const conditions = [];
+
     if (filter && filter !== 'all') {
       switch (filter) {
         case 'closed':
-          conditions.push(eq(threads.status, 'closed'))
-          break
+          conditions.push(eq(threads.status, 'closed'));
+          break;
         case 'awaiting_customer':
-          conditions.push(eq(threads.status, 'active'))
-          break
+          conditions.push(eq(threads.status, 'active'));
+          break;
         // Note: For MVP, we'll need to handle unread, flagged, urgent differently
         // as they depend on additional fields or email states
       }
     }
-    
+
     if (searchParam) {
       conditions.push(
         or(
           like(threads.subject, `%${searchParam}%`),
           // For full search, we'd need to join with emails table
-        )
-      )
+        ),
+      );
     }
-    
+
     // Query threads with latest email info
-    const whereClause = conditions.length > 0 ? and(...conditions) : undefined
-    
+    const whereClause = conditions.length > 0 ? and(...conditions) : undefined;
+
     const threadList = await db
       .select({
         id: threads.id,
@@ -58,17 +58,18 @@ app.get('/', async (c) => {
           WHERE ${emails.thread_id} = ${threads.id} 
           ORDER BY ${emails.created_at} DESC 
           LIMIT 1
-        )`
+        )`,
       })
       .from(threads)
       .where(whereClause)
-      .orderBy(desc(threads.last_activity_at))
-    
+      .orderBy(desc(threads.last_activity_at));
+
     // Transform to match API format
     const formattedThreads = threadList.map(thread => {
-      const participants = thread.participant_emails as string[]
-      const customerEmail = participants.find(email => !email.includes('@proresponse.ai')) || participants[0]
-      
+      const participants = thread.participant_emails as string[];
+      const customerEmail =
+        participants.find(email => !email.includes('@proresponse.ai')) || participants[0];
+
       return {
         id: thread.id.toString(),
         subject: thread.subject,
@@ -78,37 +79,37 @@ app.get('/', async (c) => {
         timestamp: thread.last_activity_at.toISOString(),
         is_unread: false, // TODO: Implement unread tracking
         status: thread.status,
-        tags: [] // TODO: Implement tags
-      }
-    })
-    
-    return successResponse(c, { threads: formattedThreads })
+        tags: [], // TODO: Implement tags
+      };
+    });
+
+    return successResponse(c, { threads: formattedThreads });
   } catch (error) {
-    console.error('Error fetching threads:', error)
-    return errorResponse(c, error instanceof Error ? error.message : 'Failed to fetch threads', 500)
+    console.error('Error fetching threads:', error);
+    return errorResponse(
+      c,
+      error instanceof Error ? error.message : 'Failed to fetch threads',
+      500,
+    );
   }
-})
+});
 
 // GET /api/threads/:id - Get single thread with details
-app.get('/:id', async (c) => {
+app.get('/:id', async c => {
   try {
-    const threadId = parseInt(c.req.param('id'))
-    
+    const threadId = parseInt(c.req.param('id'));
+
     if (isNaN(threadId)) {
-      return errorResponse(c, 'Invalid thread ID', 400)
+      return errorResponse(c, 'Invalid thread ID', 400);
     }
-    
+
     // Get thread
-    const [thread] = await db
-      .select()
-      .from(threads)
-      .where(eq(threads.id, threadId))
-      .limit(1)
-    
+    const [thread] = await db.select().from(threads).where(eq(threads.id, threadId)).limit(1);
+
     if (!thread) {
-      return notFoundResponse(c, 'Thread')
+      return notFoundResponse(c, 'Thread');
     }
-    
+
     // Get emails for thread
     const threadEmails = await db
       .select({
@@ -121,58 +122,59 @@ app.get('/:id', async (c) => {
         direction: emails.direction,
         is_draft: emails.is_draft,
         sent_at: emails.sent_at,
-        created_at: emails.created_at
+        created_at: emails.created_at,
       })
       .from(emails)
       .where(eq(emails.thread_id, threadId))
-      .orderBy(emails.created_at)
-    
+      .orderBy(emails.created_at);
+
     // Get latest draft
     const [latestDraft] = await db
       .select({
         content: draft_responses.generated_content,
         created_at: draft_responses.created_at,
-        status: draft_responses.status
+        status: draft_responses.status,
       })
       .from(draft_responses)
       .where(eq(draft_responses.thread_id, threadId))
       .orderBy(desc(draft_responses.created_at))
-      .limit(1)
-    
+      .limit(1);
+
     // Get agent actions
     const agentActionsList = await db
       .select({
         id: agent_actions.id,
         action: agent_actions.action,
         metadata: agent_actions.metadata,
-        created_at: agent_actions.created_at
+        created_at: agent_actions.created_at,
       })
       .from(agent_actions)
       .where(eq(agent_actions.thread_id, threadId))
-      .orderBy(desc(agent_actions.created_at))
-    
+      .orderBy(desc(agent_actions.created_at));
+
     // Transform data
-    const participants = thread.participant_emails as string[]
-    const customerEmail = participants.find(email => !email.includes('@proresponse.ai')) || participants[0]
-    
+    const participants = thread.participant_emails as string[];
+    const customerEmail =
+      participants.find(email => !email.includes('@proresponse.ai')) || participants[0];
+
     const formattedEmails = threadEmails.map(email => ({
       id: email.id.toString(),
       from_name: email.from_email.split('@')[0],
       from_email: email.from_email,
       content: email.body_text || email.body_html || '',
       timestamp: (email.sent_at || email.created_at)!.toISOString(),
-      is_support_reply: email.direction === 'outbound'
-    }))
-    
+      is_support_reply: email.direction === 'outbound',
+    }));
+
     const formattedActions = agentActionsList.map(action => ({
       id: action.id.toString(),
       type: action.action,
       title: action.action.replace(/_/g, ' '),
-      description: (action.metadata as Record<string, unknown>)?.description as string || '',
+      description: ((action.metadata as Record<string, unknown>)?.description as string) || '',
       timestamp: action.created_at.toISOString(),
-      status: 'completed'
-    }))
-    
+      status: 'completed',
+    }));
+
     const response = {
       id: thread.id.toString(),
       subject: thread.subject,
@@ -180,70 +182,74 @@ app.get('/:id', async (c) => {
       tags: [], // TODO: Implement tags
       customer: {
         name: customerEmail.split('@')[0],
-        email: customerEmail
+        email: customerEmail,
       },
       emails: formattedEmails,
       agent_activity: {
         analysis: latestDraft ? 'Thread analyzed and draft generated' : 'No analysis yet',
         draft_response: latestDraft?.content || '',
-        actions: formattedActions
-      }
-    }
-    
-    return successResponse(c, response)
+        actions: formattedActions,
+      },
+    };
+
+    return successResponse(c, response);
   } catch (error) {
-    console.error('Error fetching thread:', error)
-    return errorResponse(c, error instanceof Error ? error.message : 'Failed to fetch thread', 500)
+    console.error('Error fetching thread:', error);
+    return errorResponse(c, error instanceof Error ? error.message : 'Failed to fetch thread', 500);
   }
-})
+});
 
 // PATCH /api/threads/:id - Update thread metadata
-app.patch('/:id', async (c) => {
+app.patch('/:id', async c => {
   try {
-    const threadId = parseInt(c.req.param('id'))
-    
+    const threadId = parseInt(c.req.param('id'));
+
     if (isNaN(threadId)) {
-      return errorResponse(c, 'Invalid thread ID', 400)
+      return errorResponse(c, 'Invalid thread ID', 400);
     }
-    
-    const updates = await validateRequest(c, updateThreadSchema)
+
+    const updates = await validateRequest(c, updateThreadSchema);
     if (!updates) {
-      return errorResponse(c, 'Invalid request body', 400)
+      return errorResponse(c, 'Invalid request body', 400);
     }
-    
+
     // Check thread exists
     const [existingThread] = await db
       .select({ id: threads.id })
       .from(threads)
       .where(eq(threads.id, threadId))
-      .limit(1)
-    
+      .limit(1);
+
     if (!existingThread) {
-      return notFoundResponse(c, 'Thread')
+      return notFoundResponse(c, 'Thread');
     }
-    
+
     // Update thread
     if (updates.status) {
       await db
         .update(threads)
-        .set({ 
+        .set({
           status: updates.status,
-          updated_at: new Date()
+          updated_at: new Date(),
         })
-        .where(eq(threads.id, threadId))
+        .where(eq(threads.id, threadId));
     }
-    
+
     // TODO: Implement tags update when tags table is added
-    
+
     return successResponse(c, {
       id: threadId.toString(),
       status: updates.status || existingThread.id,
-      tags: updates.tags || []
-    })
+      tags: updates.tags || [],
+    });
   } catch (error) {
-    console.error('Error updating thread:', error)
-    return errorResponse(c, error instanceof Error ? error.message : 'Failed to update thread', 500)
+    console.error('Error updating thread:', error);
+    return errorResponse(
+      c,
+      error instanceof Error ? error.message : 'Failed to update thread',
+      500,
+    );
   }
-})
+});
 
-export default app
+export default app;

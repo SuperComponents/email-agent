@@ -1,13 +1,22 @@
 import { tool } from '@openai/agents';
-import { db } from '../../db/db.js';
-import { emails, emailTags } from '../../db/schema.js';
-import { eq } from 'drizzle-orm';
+import { z } from 'zod';
+import { getEmailById, insertEmailTags } from '../../db/query.js';
 
-interface EmailTaggerParams {
-  emailId: string;
-  tags: string[];
-  confidence?: number;
-}
+const EmailTaggerParamsSchema = z.object({
+  // toolCallMotivation: z.string().describe('Why are you making this tool call?'),
+  emailId: z.string().describe('ID of the email to tag'),
+  tags: z
+    .array(z.enum(['spam', 'legal', 'sales', 'support', 'billing', 'technical', 'general']))
+    .describe('Categories to tag the email with'),
+  confidence: z
+    .number()
+    .min(0)
+    .max(1)
+    .default(0.8)
+    .describe('Confidence level for the tagging (0-1)'),
+});
+
+type EmailTaggerParams = z.infer<typeof EmailTaggerParamsSchema>;
 
 function failure(error: string) {
   return {
@@ -19,31 +28,10 @@ function failure(error: string) {
 export const emailTaggerTool = tool({
   name: 'tag_email',
   description: 'Tag/categorize an email as spam, legal, sales, support, or other categories',
-  parameters: {
-    type: 'object',
-    properties: {
-      emailId: { type: 'string', description: 'ID of the email to tag' },
-      tags: { 
-        type: 'array', 
-        items: { 
-          type: 'string',
-          enum: ['spam', 'legal', 'sales', 'support', 'billing', 'technical', 'general']
-        },
-        description: 'Categories to tag the email with' 
-      },
-      confidence: { 
-        type: 'number', 
-        description: 'Confidence level for the tagging (0-100)',
-        default: 80,
-        minimum: 0,
-        maximum: 100
-      }
-    },
-    required: ['emailId', 'tags', 'confidence'],
-    additionalProperties: false
-  },
-  execute: async (input: unknown) => {
-    const { emailId, tags, confidence = 80 } = input as EmailTaggerParams;
+  parameters: EmailTaggerParamsSchema,
+  execute: async (input: EmailTaggerParams) => {
+    const { emailId, tags } = input;
+    const confidence = input.confidence?.toFixed(3) || '0.8';
     try {
       // Convert emailId to number (new schema uses integer IDs)
       const email_id = parseInt(emailId);
@@ -52,30 +40,26 @@ export const emailTaggerTool = tool({
       }
 
       // Verify the email exists
-      const email = await db.select().from(emails).where(eq(emails.id, email_id)).limit(1);
-      if (email.length === 0) {
+      const email = await getEmailById(email_id);
+      if (!email) {
         return failure(`Email not found: ${emailId}`);
       }
 
       // Insert tags for the email
-      const tagsToInsert = tags.map(tag => ({
-        email_id,
-        tag,
-        confidence: (confidence / 100).toFixed(3), // Convert to decimal (0-1)
-      }));
-
-      const insertedTags = await db.insert(emailTags).values(tagsToInsert).returning();
+      const tagsToInsert = tags.map(tag => ({ email_id, tag, confidence }));
+      const insertedTagsEntries = await insertEmailTags(tagsToInsert);
+      const insertedTags = insertedTagsEntries.map(entry => entry.tag);
 
       return {
         success: true,
         emailId,
-        tags: insertedTags.map((t: any) => ({
-          tag: t.tag,
-          confidence: parseFloat(t.confidence || '0') * 100, // Convert back to percentage
-        })),
+        confidence,
+        insertedTags,
       };
     } catch (error) {
-      return failure(`Failed to tag email: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      return failure(
+        `Failed to tag email: ${error instanceof Error ? error.message : 'Unknown error'}`,
+      );
     }
   },
 });

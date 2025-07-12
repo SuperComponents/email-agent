@@ -1,25 +1,32 @@
-import { Agent, run, type AgentInputItem, RunItemStreamEvent } from '@openai/agents';
-// import { z } from 'zod';
+import {
+  Agent,
+  run,
+  user,
+  type AgentInputItem,
+  RunItemStreamEvent,
+  type RunStreamEvent,
+} from '@openai/agents';
 import { env } from '../config/environment.js';
+import { logAgentRunResult, logAgentHistory } from '../utils/log-agent-result-to-json.js';
+import { readThreadTool } from './tools/read-thread.js';
 import { emailSearchTool } from './tools/email-search.js';
 import { emailTaggerTool } from './tools/email-tagger.js';
 import { ragSearchTool } from './tools/rag-search.js';
-import { db } from '../db/db.js';
-import { emails, draft_responses, agentActions } from '../db/schema.js';
-import { eq, desc } from 'drizzle-orm';
-import { logStreamingToolCalls } from './log-actions.js';
+import { writeDraftTool } from './tools/write-draft.js';
+import { explainNextToolCallTool } from './tools/explain-next-tool-call.js';
+import { logCall, logStreamingToolCalls } from './log-actions.js';
 import type { EmailMessage, DraftResponse, AgentAction } from '../db/types.js';
+import { isRunItemStreamEvent } from './guards.js';
+import {
+  getThreadActionHistory,
+  getLatestEmailInThreadOrFail,
+  getSortedEmailsByThreadId,
+  getLatestDraftForThread,
+} from '../db/query.js';
 
 export type { EmailMessage };
 
-// Type for knowledge base search result
-interface KnowledgeBaseResult {
-  attributes: Record<string, any>;
-  file_id: string;
-  filename: string;
-  score: number;
-  text: string;
-}
+// Minimum score threshold for attaching citations
 
 // const EmailResponseSchema = z.object({
 //   draft: z.object({
@@ -32,33 +39,40 @@ interface KnowledgeBaseResult {
 // type EmailResponse = z.infer<typeof EmailResponseSchema>;
 
 const SYSTEM_PROMPT = `You are an intelligent customer support email assistant. You help process and respond to customer emails.
+you are in conversation with a customer support agent going over support emails with them.
 
 Your capabilities:
-1. Search through a customer's email history to understand context
-2. Tag emails appropriately (spam, legal, sales, support, billing, technical, general)
-3. Search the company knowledge base for relevant information
-4. Generate helpful responses to customer inquiries
+1. Read the current email thread context using read_thread tool
+2. Explain your next action before using other tools
+3. Search through a customer's email history to understand context
+4. Tag emails appropriately (spam, legal, sales, support, billing, technical, general)
+5. Search the company knowledge base for relevant information
+6. Create draft email responses with proper citations
+
+IMPORTANT: Before using any other tool, use explain_next_tool_call to briefly explain what you're about to do and why, and specify which tool you'll use next. This helps maintain transparency about your decision-making process.
 
 important: tag emails before you search the knowledge base.
 
 When processing emails:
-- You should ALWAYS use the email search tool to see if there is a history with the customer once before you do anything else
+- You should ALWAYS use the read_thread tool FIRST to read the full email thread context
+- After reading the thread, use the email search tool to see if there is additional history with the customer beyond this thread
 - Tag emails based on their content and intent. You should only call the email tag tool once and include all
    the tags you want to apply to the email. If a tag email tool call fails do not repeat it
 - Use the rest of the tools only if they will be helpful to you.
-  (IMPORTANT: use the exact email ID provided in the email metadata)
+  (IMPORTANT: use the exact email ID from the thread context)
 - Search knowledge base if the customer is asking a question
-- Generate a helpful response that answers the customer's questions
+- Create a draft response using the write_draft tool
+- IMPORTANT: If you used file search results to help construct your response, you MUST include the highest scoring citation by providing citationFilename, citationScore, and citationText when calling write_draft
 - Maintain a professional and helpful tone
 - Remember the entire email thread context when analyzing
+- The email thread is available in your context as an array of emails
 
+Process the latest email in the thread and create a draft response using the write_draft tool.
 
-Email metadata will be provided in the format:
-[EMAIL_ID: <id>]
+You MUST use the create draft tool before you output your final response.
 
-process the provided email thread
-
-your final response should be just the email body of your draft response and nothing else
+DO NOT include the draft email in your final response to the customer support agent. They will be able to see it
+from the create draft tool
 `;
 
 // when you are ready to output your final response, output your final response in the following JSON format:
@@ -69,38 +83,41 @@ your final response should be just the email body of your draft response and not
 //   },
 //   "summary": "A brief summary of what happened and what actions were taken for the support agent to review"
 export interface ProcessEmailResult {
-  draft: DraftResponse;
+  draft?: DraftResponse;
   actions: AgentAction[];
-  // summary: string;
   history?: AgentInputItem[];
+  error?: string;
 }
 
-async function loadEmailThread(threadId: number): Promise<EmailMessage[]> {
-  return db
-    .select()
-    .from(emails)
-    .where(eq(emails.thread_id, threadId))
-    .orderBy(emails.created_at) as Promise<EmailMessage[]>
-}
-
-function formatEmailForContext(email: EmailMessage): string {
-  return `[EMAIL_ID: ${email.id}]
+function formatEmailForContext(email: EmailMessage, threadId?: number): string {
+  let context = `[EMAIL_ID: ${email.id}]`;
+  if (threadId) {
+    context += `\n[THREAD_ID: ${threadId}]`;
+  }
+  context += `
 From: ${email.from_email}
 To: ${email.to_emails.join(', ')}
 Subject: ${email.subject}
 
 ${email.body_text || ''}`;
+  return context;
 }
 
-async function buildThreadContext(threadId: number | undefined, currentEmail: EmailMessage): Promise<string> {
+// Keeping for potential future use
+// @ts-expect-error - Preserved for future use
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+async function buildThreadContext(
+  threadId: number | undefined,
+  currentEmail: EmailMessage,
+): Promise<string> {
   if (!threadId) {
-    return formatEmailForContext(currentEmail);
+    return formatEmailForContext(currentEmail, threadId);
   }
 
-  const threadHistory = await loadEmailThread(threadId);
-  
+  const threadHistory = await getSortedEmailsByThreadId(threadId);
+
   if (threadHistory.length === 0) {
-    return formatEmailForContext(currentEmail);
+    return formatEmailForContext(currentEmail, threadId);
   }
 
   let context = 'Previous emails in this thread:\n\n';
@@ -110,178 +127,122 @@ async function buildThreadContext(threadId: number | undefined, currentEmail: Em
     }
   }
   context += '---\nNew email to process:\n';
-  context += formatEmailForContext(currentEmail);
-  
+  context += formatEmailForContext(currentEmail, threadId);
+
   return context;
 }
 
-async function createAgent() {
-  return new Agent({
+function createAgent() {
+  return new Agent<EmailContext>({
     name: 'EmailProcessor',
     instructions: SYSTEM_PROMPT,
-    tools: [emailSearchTool, emailTaggerTool, ragSearchTool],
+    tools: [
+      readThreadTool,
+      explainNextToolCallTool,
+      emailSearchTool,
+      emailTaggerTool,
+      ragSearchTool,
+      writeDraftTool,
+    ],
     model: env.OPENAI_MODEL,
-    // outputType: EmailResponseSchema
   });
 }
 
-async function saveDraftResponse(
-  email_id: number,
-  thread_id: number,
-  generated_content: string,
-  confidence?: number,
-  citations?: any
-): Promise<DraftResponse> {
-  const [draft] = await db
-    .insert(draft_responses)
-    .values({
-      email_id,
-      thread_id,
-      generated_content,
-      status: 'pending',
-      confidence_score: confidence ? confidence.toFixed(3) : null,
-      citations: citations || null,
-    })
-    .returning();
-  
-  return draft;
-}
-
-async function getThreadActions(threadId: number): Promise<AgentAction[]> {
-  return db
-    .select()
-    .from(agentActions)
-    .where(eq(agentActions.thread_id, threadId))
-    .orderBy(agentActions.created_at) as Promise<AgentAction[]>
-}
-
-export async function processEmail(
-  threadId: number, 
-  logger: (message: any) => void = console.log
-): Promise<ProcessEmailResult> {
-  // Fetch the latest email in the thread
-  const [latestEmail] = await db
-    .select()
-    .from(emails)
-    .where(eq(emails.thread_id, threadId))
-    .orderBy(desc(emails.created_at))
-    .limit(1);
-  
-  if (!latestEmail) {
-    throw new Error(`No emails found in thread ${threadId}`);
-  }
-
-  // Convert to EmailMessage format
-  const email: EmailMessage = {
-    id: latestEmail.id,
-    from_email: latestEmail.from_email,
-    to_emails: latestEmail.to_emails as string[],
-    subject: latestEmail.subject,
-    body_text: latestEmail.body_text,
-    created_at: latestEmail.created_at,
-  };
-
-  // Create agent and build context
-  const agent = await createAgent();
-  const fullMessage = await buildThreadContext(threadId, email);
-
-  logger('running agent in streaming mode');
-  // Run the agent in streaming mode
-  const result = await run(agent, fullMessage, { maxTurns: 100, stream: true });
-
-  let actions: AgentAction[] = [];
+async function processStreamingEvents(
+  result: AsyncIterable<RunStreamEvent>,
+  threadId: number,
+  logger: (message: unknown) => void,
+): Promise<AgentAction[]> {
+  const actions: AgentAction[] = [];
   let lastEvent: RunItemStreamEvent | undefined;
+
+  logger('START PROCESSING EVENTS');
   for await (const event of result) {
-//     if (event.type == 'agent_updated_stream_event') {
-//       logger(event);
-//     }
     // Agent SDK specific events
-    if (event.type === 'run_item_stream_event') {
-      const actResult = await logStreamingToolCalls(event, threadId, lastEvent)
+    if (isRunItemStreamEvent(event)) {
+      if (event.item.type === 'reasoning_item') {
+        console.log('🤔  WHY:', event.item.rawItem.content.map(c => c.text).join('\n'));
+      }
+      const actResult = await logStreamingToolCalls(event, threadId, lastEvent);
       if (actResult && actResult.length > 0) {
         actions.push(actResult[0]);
       }
       lastEvent = event;
-      logger(event);
-
-      const item = event.item;
-      if (item && item.type === 'message_output_item') {
-        logger(item.rawItem);
-      }
     }
   }
 
+  return actions;
+}
+
+interface EmailContext {
+  emails: EmailMessage[];
+}
+
+export async function processEmail(
+  threadId: number,
+  logger: (message: unknown) => void = console.log,
+  userMessage: string = 'Process the latest email in this thread and create an appropriate response.',
+): Promise<ProcessEmailResult> {
+  // Fetch the latest email in the thread - kept for validation but not used directly
+  await getLatestEmailInThreadOrFail(threadId);
+
+  // Create agent and build context
+  const agent = createAgent();
+
+  // Get all emails in the thread for context
+  const threadEmails = await getSortedEmailsByThreadId(threadId);
+
+  logger('running agent in streaming mode');
+  logger(threadEmails);
+  // Run the agent in streaming mode
+
+  // Create the context with all emails in the thread
+  const context: EmailContext = {
+    emails: threadEmails,
+  };
+
+  // Get previous agent actions for this thread as history
+  const previousActions = await getThreadActionHistory(threadId);
+  const history: AgentInputItem[] = [...previousActions, user(userMessage)];
+
+  const result = await run(agent, history, {
+    maxTurns: 100,
+    stream: true,
+    context,
+  });
+
+  await logCall(user(userMessage), threadId);
+
+  // Process streaming events and collect actions
+  const actions = await processStreamingEvents(result, threadId, logger);
 
   await result.completed;
 
-  // Tool calls and actions are already logged in the streaming loop above
+  // Log the raw agent result
+  logAgentRunResult(result);
 
-  // Parse the structured output - finalOutput is already typed from the schema
-  // const structuredOutput = result.finalOutput as EmailResponse;
-  const structuredOutput = result.finalOutput
-  
-  let highestScoringResult: KnowledgeBaseResult | null = null;
-  
-  logger('START OUTPUT BLOCK');
-  result.output.forEach((item) => {
-    logger(JSON.stringify(item, null, 2));
-    if (item.type === 'hosted_tool_call') {
-      logger('IN HOSTED TOOL CALL');
-      logger(item?.providerData?.results);
-      
-      // Find the result with the highest score
-      const results = item?.providerData?.results as KnowledgeBaseResult[] | undefined;
-      if (results && Array.isArray(results) && results.length > 0) {
-        const currentHighest = results.reduce<KnowledgeBaseResult>((highest, current) => {
-          return (current.score > highest.score) ? current : highest;
-        }, results[0]);
-        
-        // Update the highest scoring result if this is better than what we've seen
-        if (!highestScoringResult || currentHighest.score > highestScoringResult.score) {
-          highestScoringResult = currentHighest;
-        }
-      }
-    }
-  });
+  // Log the history separately
+  logAgentHistory(result.history);
 
-  
-  // Log the overall highest scoring result
-  if (highestScoringResult !== null) {
-    const result = highestScoringResult as KnowledgeBaseResult;
-    logger('OVERALL HIGHEST SCORING RESULT:');
-    logger({
-      filename: result.filename,
-      score: result.score,
-      text: result.text?.substring(0, 200) + '...' // First 200 chars
-    });
-    
-    if (result.score > 0.6) {
-      logger('✓ Score above 0.6 - will attach as citation');
-    } else {
-      logger('✗ Score below 0.6 - will NOT attach as citation');
-    }
+  // Get the draft that was created by the write_draft tool
+  // TODO: existing draft doesn't necessarily mean we created one
+  const draft = await getLatestDraftForThread(threadId);
+
+  let finalResult: ProcessEmailResult;
+
+  if (!draft) {
+    finalResult = {
+      actions,
+      history: result.history,
+      error: 'No draft was created. Agent may have failed to call write_draft tool.',
+    };
+  } else {
+    finalResult = {
+      draft,
+      actions,
+      history: result.history,
+    };
   }
 
-  // Save the draft response with citations if available and score is high enough
-  const citationsToAttach = highestScoringResult !== null && (highestScoringResult as KnowledgeBaseResult).score > 0.4 
-    ? highestScoringResult 
-    : null;
-    
-  const draft = await saveDraftResponse(
-    email.id,
-    threadId,
-    structuredOutput!,
-    0.85, // Default confidence score, could be calculated based on tool results
-    citationsToAttach
-  );
-
-  return {
-    draft,
-    actions,
-    // summary: structuredOutput.summary,
-    history: result.history,
-  };
+  return finalResult;
 }
-
-// Utility functions for backwards compatibility with tests
-export { getThreadActions };

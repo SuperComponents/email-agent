@@ -1,11 +1,11 @@
 import { Octokit } from '@octokit/rest';
 
 const octokit = new Octokit({
-  auth: import.meta.env.VITE_GITHUB_TOKEN,
+  auth: import.meta.env.VITE_GITHUB_TOKEN as string | undefined,
 });
 
-const REPO_OWNER = import.meta.env.VITE_GITHUB_OWNER || 'your-username';
-const REPO_NAME = import.meta.env.VITE_GITHUB_REPO || 'email-agent';
+const REPO_OWNER = (import.meta.env.VITE_GITHUB_OWNER as string | undefined) || 'your-username';
+const REPO_NAME = (import.meta.env.VITE_GITHUB_REPO as string | undefined) || 'email-agent';
 const BRANCH = 'master';
 
 export interface GitHubFile {
@@ -20,14 +20,15 @@ export class GitHubService {
       // Get the current file (if it exists) to get the SHA
       let sha: string | undefined;
       try {
-        const { data } = await octokit.rest.repos.getContent({
+        const response = await octokit.rest.repos.getContent({
           owner: REPO_OWNER,
           repo: REPO_NAME,
           path: file.path,
           ref: BRANCH,
         });
         
-        if ('sha' in data) {
+        const data = response.data;
+        if (!Array.isArray(data) && 'sha' in data) {
           sha = data.sha;
         }
       } catch {
@@ -56,14 +57,15 @@ export class GitHubService {
   static async deleteFile(path: string, message: string): Promise<void> {
     try {
       // Get the current file to get the SHA
-      const { data } = await octokit.rest.repos.getContent({
+      const response = await octokit.rest.repos.getContent({
         owner: REPO_OWNER,
         repo: REPO_NAME,
         path: path,
         ref: BRANCH,
       });
 
-      if ('sha' in data) {
+      const data = response.data;
+      if (!Array.isArray(data) && 'sha' in data) {
         await octokit.rest.repos.deleteFile({
           owner: REPO_OWNER,
           repo: REPO_NAME,
@@ -83,15 +85,15 @@ export class GitHubService {
 
   static async listFiles(path: string): Promise<string[]> {
     try {
-      const { data } = await octokit.rest.repos.getContent({
+      const response = await octokit.rest.repos.getContent({
         owner: REPO_OWNER,
         repo: REPO_NAME,
         path: path,
         ref: BRANCH,
       });
 
-      if (Array.isArray(data)) {
-        return data
+      if (Array.isArray(response.data)) {
+        return response.data
           .filter(item => item.type === 'file' && item.name.endsWith('.md'))
           .map(item => item.name);
       }
@@ -105,14 +107,15 @@ export class GitHubService {
 
   static async getFileContent(path: string): Promise<string> {
     try {
-      const { data } = await octokit.rest.repos.getContent({
+      const response = await octokit.rest.repos.getContent({
         owner: REPO_OWNER,
         repo: REPO_NAME,
         path: path,
         ref: BRANCH,
       });
 
-      if ('content' in data) {
+      const data = response.data;
+      if (!Array.isArray(data) && 'content' in data) {
         return atob(data.content);
       }
 

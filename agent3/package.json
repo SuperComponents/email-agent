@@ -17,12 +17,20 @@
     "db:generate": "drizzle-kit generate",
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio",
-    "test": "vitest run",
-    "test:watch": "vitest",
-    "test:spam": "vitest run src/tests/integration/agent-spam-detection.test.ts",
-    "test:actions": "vitest run src/tests/integration/agent-action-logging.test.ts",
-    "test:rag": "vitest run src/tests/integration/rag-search.test.ts",
+    "test": "NODE_ENV=test vitest run",
+    "test:watch": "NODE_ENV=test vitest",
+    "test:spam": "NODE_ENV=test vitest run src/tests/integration/agent-spam-detection.test.ts",
+    "test:actions": "NODE_ENV=test vitest run src/tests/integration/agent-action-logging.test.ts",
+    "test:rag": "NODE_ENV=test vitest run src/tests/integration/rag-search.test.ts",
+    "test:draft": "NODE_ENV=test vitest run src/tests/integration/agent-write-draft.test.ts",
+    "test:db:setup": "NODE_ENV=test npx tsx src/scripts/setup-test-db.ts",
+    "test:db:reset": "NODE_ENV=test NODE_OPTIONS='--trace-warnings --stack-trace-limit=50' npx tsx src/scripts/reset-test-db.ts",
+    "test:work": "NODE_ENV=test NODE_OPTIONS='--trace-warnings --stack-trace-limit=50' npx tsx src/scripts/plz-work.ts",
     "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "lint:all": "tsc --noEmit && eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "build": "tsc",
     "clean": "rm -rf dist",
     "build:clean": "npm run clean && npm run build",
@@ -35,7 +43,12 @@
     "db:clear": "npx tsx src/scripts/clear-database.ts",
     "db:clear:threads": "npx tsx src/scripts/clear-threads.ts",
     "actions:view": "npx tsx src/scripts/view-agent-actions.ts",
-    "db:dump": "npx tsx src/scripts/dump-database-to-json.ts"
+    "db:dump": "npx tsx src/scripts/dump-database-to-json.ts",
+    "psql": "psql $DATABASE_URL",
+    "dbb": "psql postgresql://localhost:5432/emailsmart_test",
+    "dbc": "psql postgresql://localhost:5432/emailsmart_merge",
+    "psql:test": "psql $TEST_DATABASE_URL",
+    "check:openai": "npx tsx src/scripts/check-openai.ts"
   },
   "dependencies": {
     "@faker-js/faker": "^9.9.0",
@@ -50,14 +63,21 @@
     "hono": "^4.0.0",
     "openai": "^5.8.3",
     "pg": "^8.16.3",
+    "postgres": "^3.4.7",
     "vitest": "^3.2.4",
     "zod": "^3.25.76"
   },
   "devDependencies": {
+    "@eslint/js": "^9.30.1",
     "@types/bun": "^1.0.0",
     "@types/node": "^20.19.5",
     "drizzle-kit": "^0.31.4",
-    "typescript": "^5.3.3"
+    "eslint": "^9.30.1",
+    "eslint-config-prettier": "^10.1.5",
+    "eslint-plugin-prettier": "^5.5.1",
+    "prettier": "^3.6.2",
+    "typescript": "^5.3.3",
+    "typescript-eslint": "^8.36.0"
   },
   "trustedDependencies": [
     "es5-ext"

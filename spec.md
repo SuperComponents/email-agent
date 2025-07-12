@@ -2,16 +2,15 @@
 
 A support agent assistant LLM. Assist the support person by gathering relevant context and drafting a response.
 
-
-Name: proresponse ai
+Name: OpenSupport
 
 ## Nomenclature:
 - Agent: the llm agent that uses tools to assist the support person
 - Support person: a human that oversees the agent and approves and refines output.
 
 ## user stories
-1. A solo founder connects their support@company.com email to proresponse.ai by authenticating with google oauth
-2. A support person logs in to review the emails from their customers. For each thread the proresponse agent has read the email, gathered related context, and drafted a response.
+1. A solo founder connects their support@company.com email to OpenSupport by authenticating with google oauth
+2. A support person logs in to review the emails from their customers. For each thread the OpenSupport agent has read the email, gathered related context, and drafted a response.
 3. A customer writes an email to support@company.com telling the team they did a good job, the agent drafts a simple response that says thank you
 4. A customer writes an email to support@company.com outlining a bug they are experiencing, the agent flags the case and adds an urgent tag to it and suggests workarounds from the knowledgebase
 5. A customer writes an email to support@company.com asking a question about the product or service. The agent queries the knowledge base to answer the question and draft a response.
@@ -24,24 +23,28 @@ Name: proresponse ai
 ## Future scope
 - If the information does not exist in the knowledge base then the agent will flag missing information in the knowledge base.
 
-
 ## Tables
 
-- inboxes
+### Current Implementation
 - users
 - threads
 - emails
-- drafts
-- contacts
-- customers
+- draft_responses
+- agent_actions
+- email_tags
 
+### Future Expansion (Planned)
+- inboxes - Multi-inbox support for different email addresses
+- contacts - Contact management and customer profiles
+- customers - Enhanced customer relationship tracking
 
 ## Techstack
 
-- Frontend: React, vite, tailwind, shadcn for components, npm for package management
-- Backend: Typescript, drizzle, sqlite
-- Agent: OpenAI
-
+- Frontend: React, Vite, Tailwind CSS v4, TypeScript, npm for package management
+- Backend: TypeScript, Drizzle ORM, PostgreSQL, Hono framework
+- Agent: OpenAI Agents SDK
+- Authentication: StackAuth with JWT tokens
+- Knowledge Base: OpenAI Vector Store with GitHub integration
 
 ## user flows
 - onboarding: user connects their email, the agent then pulls all past emails from their account and indexes and learns from them. 

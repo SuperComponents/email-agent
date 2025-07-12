@@ -17,24 +17,30 @@ export interface AgentPanelProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 export const AgentPanel = React.forwardRef<HTMLDivElement, AgentPanelProps>(
-  ({ className, actions, analysis, onUseAgent, onDemoCustomerResponse, isRegeneratingDraft, isGeneratingDemoResponse, ...props }, ref) => {
+  (
+    {
+      className,
+      actions,
+      analysis,
+      onUseAgent,
+      onDemoCustomerResponse,
+      isRegeneratingDraft,
+      isGeneratingDemoResponse,
+      ...props
+    },
+    ref,
+  ) => {
     return (
-      <div
-        ref={ref}
-        className={cn(
-          'h-full bg-card overflow-y-auto',
-          className
-        )}
-        {...props}
-      >
+      <div ref={ref} className={cn('h-full bg-card overflow-y-auto', className)} {...props}>
         <div className="p-4">
           <div className="flex items-center justify-between mb-4">
             <h3 className="font-semibold">Agent Activity</h3>
           </div>
-          
+
           <div className="space-y-3 mb-6">
             <div className="text-xs text-secondary-foreground leading-relaxed">
-              Use the agent to analyze this conversation and generate a helpful response. The agent will search your knowledge base and provide citations.
+              Use the agent to analyze this conversation and generate a helpful response. The agent
+              will search your knowledge base and provide citations.
             </div>
             <div className="space-y-2">
               <Button
@@ -44,9 +50,9 @@ export const AgentPanel = React.forwardRef<HTMLDivElement, AgentPanelProps>(
                 className="w-full gap-2"
                 disabled={isRegeneratingDraft}
               >
-                <Icon 
-                  icon={Sparkles} 
-                  size="sm" 
+                <Icon
+                  icon={Sparkles}
+                  size="sm"
                   className={isRegeneratingDraft ? 'animate-pulse' : ''}
                 />
                 <span>{isRegeneratingDraft ? 'Generating...' : 'Use Agent'}</span>
@@ -58,21 +64,19 @@ export const AgentPanel = React.forwardRef<HTMLDivElement, AgentPanelProps>(
                 className="w-full gap-2"
                 disabled={isGeneratingDemoResponse}
               >
-                <Icon 
-                  icon={UserPlus} 
-                  size="sm" 
+                <Icon
+                  icon={UserPlus}
+                  size="sm"
                   className={isGeneratingDemoResponse ? 'animate-pulse' : ''}
                 />
                 <span>{isGeneratingDemoResponse ? 'Generating...' : 'Demo Customer Response'}</span>
               </Button>
             </div>
           </div>
-          
+
           {actions.length > 0 ? (
             <div className="space-y-3 mb-6">
-              <h4 className="text-sm font-medium text-secondary-foreground">
-                Tool Calls
-              </h4>
+              <h4 className="text-sm font-medium text-secondary-foreground">Tool Calls</h4>
               {actions.map((action, index) => (
                 <AgentAction key={index} {...action} />
               ))}
@@ -88,20 +92,15 @@ export const AgentPanel = React.forwardRef<HTMLDivElement, AgentPanelProps>(
             <>
               <Separator className="my-4" />
               <div className="space-y-3">
-                <h4 className="text-sm font-medium text-secondary-foreground">
-                  Analysis
-                </h4>
-                <div className="text-sm text-foreground/90 leading-relaxed">
-                  {analysis}
-                </div>
+                <h4 className="text-sm font-medium text-secondary-foreground">Analysis</h4>
+                <div className="text-sm text-foreground/90 leading-relaxed">{analysis}</div>
               </div>
             </>
           )}
-
         </div>
       </div>
     );
-  }
+  },
 );
 
 AgentPanel.displayName = 'AgentPanel';

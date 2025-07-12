@@ -14,20 +14,16 @@ const openai = new OpenAI({
 });
 
 // POST /api/threads/:threadId/demo-customer-response
-app.post('/:threadId/demo-customer-response', async (c) => {
+app.post('/:threadId/demo-customer-response', async c => {
   try {
     const threadId = parseInt(c.req.param('threadId'));
-    
+
     if (isNaN(threadId)) {
       return c.json({ error: 'Invalid thread ID' }, 400);
     }
 
     // Fetch the thread
-    const [thread] = await db
-      .select()
-      .from(threads)
-      .where(eq(threads.id, threadId))
-      .limit(1);
+    const [thread] = await db.select().from(threads).where(eq(threads.id, threadId)).limit(1);
 
     if (!thread) {
       return c.json({ error: 'Thread not found' }, 404);
@@ -49,17 +45,19 @@ app.post('/:threadId/demo-customer-response', async (c) => {
     const customerEmailAddress = originalCustomerEmail.from_email;
 
     // Build conversation context for OpenAI
-    const conversationContext = threadEmails.map(email => {
-      const role = email.direction === 'inbound' ? 'Customer' : 'Support';
-      return `${role} (${email.from_email}): ${email.body_text || ''}`;
-    }).join('\n\n---\n\n');
+    const conversationContext = threadEmails
+      .map(email => {
+        const role = email.direction === 'inbound' ? 'Customer' : 'Support';
+        return `${role} (${email.from_email}): ${email.body_text || ''}`;
+      })
+      .join('\n\n---\n\n');
 
     // Generate a contextual customer response
     const completion = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
+      model: 'gpt-4o-mini',
       messages: [
         {
-          role: "system",
+          role: 'system',
           content: `You are simulating a customer's follow-up email in an ongoing support conversation. 
           The customer originally sent an email about an issue, support responded, and now the customer is following up.
           
@@ -70,23 +68,25 @@ app.post('/:threadId/demo-customer-response', async (c) => {
           - Is brief and realistic (2-4 sentences typical for customer emails)
           - Sometimes includes a thank you or shows frustration if the issue isn't resolved
           
-          Return ONLY the email body text, no subject line or signatures.`
+          Return ONLY the email body text, no subject line or signatures.`,
         },
         {
-          role: "user",
-          content: `Here's the conversation so far:\n\n${conversationContext}\n\nGenerate the customer's next response.`
-        }
+          role: 'user',
+          content: `Here's the conversation so far:\n\n${conversationContext}\n\nGenerate the customer's next response.`,
+        },
       ],
       temperature: 0.8,
       max_tokens: 300,
     });
 
-    const generatedContent = completion.choices[0].message.content || 'Thank you for your response.';
+    const generatedContent =
+      completion.choices[0].message.content || 'Thank you for your response.';
 
     // Find who the customer was emailing (support email)
-    const supportEmailAddress = threadEmails.find(e => e.direction === 'outbound')?.from_email || 
-                               (originalCustomerEmail.to_emails as string[])[0] ||
-                               'support@company.com';
+    const supportEmailAddress =
+      threadEmails.find(e => e.direction === 'outbound')?.from_email ||
+      (originalCustomerEmail.to_emails as string[])[0] ||
+      'support@company.com';
 
     // Create the new customer email
     const [newEmail] = await db
@@ -108,24 +108,26 @@ app.post('/:threadId/demo-customer-response', async (c) => {
     // Update thread's last activity
     await db
       .update(threads)
-      .set({ 
+      .set({
         last_activity_at: new Date(),
-        status: 'needs_attention' as const
+        status: 'needs_attention' as const,
       })
       .where(eq(threads.id, threadId));
 
     return c.json({
       success: true,
       email: newEmail,
-      message: 'Demo customer response generated successfully'
+      message: 'Demo customer response generated successfully',
     });
-
   } catch (error) {
     console.error('Error generating demo customer response:', error);
-    return c.json({ 
-      error: 'Failed to generate demo customer response',
-      details: error instanceof Error ? error.message : 'Unknown error'
-    }, 500);
+    return c.json(
+      {
+        error: 'Failed to generate demo customer response',
+        details: error instanceof Error ? error.message : 'Unknown error',
+      },
+      500,
+    );
   }
 });
 

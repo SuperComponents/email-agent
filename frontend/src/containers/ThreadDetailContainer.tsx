@@ -4,10 +4,10 @@ import { ThreadDetail, type EmailMessage } from '../components/organisms';
 import { ComposerContainer } from './ComposerContainer';
 
 export function ThreadDetailContainer() {
-  const selectedThreadId = useUIStore((state) => state.selectedThreadId);
-  
+  const selectedThreadId = useUIStore(state => state.selectedThreadId);
+
   const { data: thread, isLoading, error } = useThread(selectedThreadId || '');
-  
+
   if (!selectedThreadId) {
     return (
       <div className="flex items-center justify-center h-full text-gray-500">
@@ -15,15 +15,15 @@ export function ThreadDetailContainer() {
       </div>
     );
   }
-  
+
   if (error) {
     return (
       <div className="p-4 text-red-600">
-        Error loading thread: {(error as Error).message}
+        Error loading thread: {error instanceof Error ? error.message : 'Unknown error'}
       </div>
     );
   }
-  
+
   if (isLoading || !thread) {
     return (
       <div className="flex items-center justify-center h-full">
@@ -31,25 +31,28 @@ export function ThreadDetailContainer() {
       </div>
     );
   }
-  
-  // Transform emails to EmailMessage format
+
   const messages: EmailMessage[] = thread.emails.map(email => ({
     id: email.id,
     author: {
       name: email.from_name,
       email: email.from_email,
-      initials: email.from_name.split(' ').map(n => n[0]).join('').toUpperCase()
+      initials: email.from_name
+        .split(' ')
+        .map(n => n[0])
+        .join('')
+        .toUpperCase(),
     },
     content: email.content,
     timestamp: new Date(email.timestamp).toLocaleString([], {
       month: 'short',
       day: 'numeric',
       hour: '2-digit',
-      minute: '2-digit'
+      minute: '2-digit',
     }),
-    isSupport: email.is_support_reply
+    isSupport: email.is_support_reply,
   }));
-  
+
   return (
     <div className="flex flex-col h-full">
       <ThreadDetail
