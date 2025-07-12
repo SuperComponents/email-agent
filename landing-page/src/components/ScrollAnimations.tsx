@@ -1,11 +1,33 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useCallback } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { usePrefersReducedMotion } from '../hooks/usePrefersReducedMotion';
 
 // Register ScrollTrigger plugin
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
 }
+
+// Utility to manage will-change property for performance
+const manageWillChange = (element: Element, enable: boolean) => {
+  if (enable) {
+    (element as HTMLElement).style.willChange = 'transform, opacity';
+  } else {
+    (element as HTMLElement).style.willChange = 'auto';
+  }
+};
+
+// IntersectionObserver for performance optimization
+const createVisibilityObserver = (callback: (isVisible: boolean) => void) => {
+  return new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        callback(entry.isIntersecting);
+      });
+    },
+    { rootMargin: '50px 0px', threshold: 0.1 }
+  );
+};
 
 interface ScrollAnimationProps {
   children: React.ReactNode;
@@ -23,35 +45,58 @@ export function ScrollAnimation({
   stagger = 0.1
 }: ScrollAnimationProps) {
   const ref = useRef<HTMLDivElement>(null);
+  const prefersReducedMotion = usePrefersReducedMotion();
+  const observerRef = useRef<IntersectionObserver | null>(null);
+  const scrollTriggerRef = useRef<ScrollTrigger | null>(null);
 
-  useEffect(() => {
+  const initializeAnimation = useCallback(() => {
     if (!ref.current) return;
 
     const element = ref.current;
-    const childElements = element.children;
+    const childElements = Array.from(element.children);
 
-    // Set initial states
+    // Enable will-change for animation performance
+    childElements.forEach(child => manageWillChange(child, true));
+
+    // Set initial states with translate3d for hardware acceleration
     gsap.set(childElements, {
       opacity: 0,
-      y: animation === 'fadeUp' ? 30 : 0,
-      x: animation === 'slideInLeft' ? -50 : animation === 'slideInRight' ? 50 : 0,
+      transform: animation === 'fadeUp' ? 'translate3d(0, 30px, 0)' : 
+                animation === 'slideInLeft' ? 'translate3d(-50px, 0, 0)' :
+                animation === 'slideInRight' ? 'translate3d(50px, 0, 0)' :
+                'translate3d(0, 0, 0)',
       scale: animation === 'scaleIn' ? 0.9 : 1
     });
 
-    // Create animation
+    // Create animation with performance-optimized callbacks
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: element,
         start: 'top 80%',
         end: 'bottom 20%',
-        toggleActions: 'play none none reverse'
+        toggleActions: 'play none none reverse',
+        onEnter: () => {
+          childElements.forEach(child => manageWillChange(child, true));
+        },
+        onLeave: () => {
+          childElements.forEach(child => manageWillChange(child, false));
+        },
+        onEnterBack: () => {
+          childElements.forEach(child => manageWillChange(child, true));
+        },
+        onLeaveBack: () => {
+          childElements.forEach(child => manageWillChange(child, false));
+        }
+      },
+      onComplete: () => {
+        // Clean up will-change after animation completes
+        childElements.forEach(child => manageWillChange(child, false));
       }
     });
 
     tl.to(childElements, {
       opacity: 1,
-      y: 0,
-      x: 0,
+      transform: 'translate3d(0, 0, 0)',
       scale: 1,
       duration,
       delay,
@@ -59,10 +104,49 @@ export function ScrollAnimation({
       ease: 'power3.out'
     });
 
-    return () => {
-      ScrollTrigger.getAll().forEach(trigger => trigger.kill());
-    };
+    scrollTriggerRef.current = ScrollTrigger.getAll().find(trigger => trigger.trigger === element) || null;
   }, [animation, delay, duration, stagger]);
+
+  useEffect(() => {
+    if (!ref.current) return;
+
+    const element = ref.current;
+    const childElements = element.children;
+
+    if (prefersReducedMotion) {
+      // Set elements to final state immediately when reduced motion is preferred
+      gsap.set(childElements, {
+        opacity: 1,
+        transform: 'translate3d(0, 0, 0)',
+        scale: 1
+      });
+      return;
+    }
+
+    // Use IntersectionObserver to only initialize ScrollTrigger when element is near viewport
+    observerRef.current = createVisibilityObserver((isVisible) => {
+      if (isVisible && !scrollTriggerRef.current) {
+        initializeAnimation();
+        // Disconnect observer after initialization to save resources
+        if (observerRef.current) {
+          observerRef.current.disconnect();
+        }
+      }
+    });
+
+    observerRef.current.observe(element);
+
+    return () => {
+      if (observerRef.current) {
+        observerRef.current.disconnect();
+      }
+      if (scrollTriggerRef.current) {
+        scrollTriggerRef.current.kill();
+      }
+      // Clean up will-change on unmount
+      Array.from(childElements).forEach(child => manageWillChange(child, false));
+    };
+  }, [initializeAnimation, prefersReducedMotion]);
 
   return <div ref={ref}>{children}</div>;
 }
@@ -75,11 +159,16 @@ interface ParallaxProps {
 
 export function Parallax({ children, speed = 0.5, offset = 0 }: ParallaxProps) {
   const ref = useRef<HTMLDivElement>(null);
+  const observerRef = useRef<IntersectionObserver | null>(null);
+  const scrollTriggerRef = useRef<ScrollTrigger | null>(null);
 
-  useEffect(() => {
+  const initializeParallax = useCallback(() => {
     if (!ref.current) return;
 
     const element = ref.current;
+    
+    // Enable will-change for smooth parallax
+    manageWillChange(element, true);
 
     gsap.to(element, {
       y: () => (offset - ScrollTrigger.maxScroll(window)) * speed,
@@ -89,14 +178,43 @@ export function Parallax({ children, speed = 0.5, offset = 0 }: ParallaxProps) {
         start: 'top bottom',
         end: 'bottom top',
         scrub: true,
-        invalidateOnRefresh: true
+        invalidateOnRefresh: true,
+        onLeave: () => manageWillChange(element, false),
+        onEnterBack: () => manageWillChange(element, true),
+        onLeaveBack: () => manageWillChange(element, false),
+        onEnter: () => manageWillChange(element, true)
       }
     });
 
-    return () => {
-      ScrollTrigger.getAll().forEach(trigger => trigger.kill());
-    };
+    scrollTriggerRef.current = ScrollTrigger.getAll().find(trigger => trigger.trigger === element) || null;
   }, [speed, offset]);
+
+  useEffect(() => {
+    if (!ref.current) return;
+
+    const element = ref.current;
+
+    // Use IntersectionObserver to only initialize ScrollTrigger when element is near viewport
+    observerRef.current = createVisibilityObserver((isVisible) => {
+      if (isVisible && !scrollTriggerRef.current) {
+        initializeParallax();
+        // Keep observer active for parallax as it needs to track visibility
+      }
+    });
+
+    observerRef.current.observe(element);
+
+    return () => {
+      if (observerRef.current) {
+        observerRef.current.disconnect();
+      }
+      if (scrollTriggerRef.current) {
+        scrollTriggerRef.current.kill();
+      }
+      // Clean up will-change on unmount
+      manageWillChange(element, false);
+    };
+  }, [initializeParallax]);
 
   return <div ref={ref}>{children}</div>;
 }
@@ -109,8 +227,10 @@ interface TextRevealProps {
 
 export function TextReveal({ text, className = '', delay = 0 }: TextRevealProps) {
   const ref = useRef<HTMLSpanElement>(null);
+  const observerRef = useRef<IntersectionObserver | null>(null);
+  const scrollTriggerRef = useRef<ScrollTrigger | null>(null);
 
-  useEffect(() => {
+  const initializeTextReveal = useCallback(() => {
     if (!ref.current) return;
 
     const element = ref.current;
@@ -123,27 +243,65 @@ export function TextReveal({ text, className = '', delay = 0 }: TextRevealProps)
 
     const innerSpans = element.querySelectorAll('span span');
 
-    gsap.set(innerSpans, { y: '100%' });
+    // Enable will-change for text animation
+    Array.from(innerSpans).forEach(span => manageWillChange(span, true));
 
-    ScrollTrigger.create({
+    // Use translate3d for hardware acceleration
+    gsap.set(innerSpans, { transform: 'translate3d(0, 100%, 0)' });
+
+    scrollTriggerRef.current = ScrollTrigger.create({
       trigger: element,
       start: 'top 80%',
       onEnter: () => {
         gsap.to(innerSpans, {
-          y: 0,
+          transform: 'translate3d(0, 0, 0)',
           duration: 0.8,
           delay,
           stagger: 0.02,
-          ease: 'power3.out'
+          ease: 'power3.out',
+          onComplete: () => {
+            // Clean up will-change after animation
+            Array.from(innerSpans).forEach(span => manageWillChange(span, false));
+          }
         });
       },
       once: true
     });
+  }, [text, delay]);
+
+  useEffect(() => {
+    if (!ref.current) return;
+
+    const element = ref.current;
+
+    // Use IntersectionObserver to only initialize ScrollTrigger when element is near viewport
+    observerRef.current = createVisibilityObserver((isVisible) => {
+      if (isVisible && !scrollTriggerRef.current) {
+        initializeTextReveal();
+        // Disconnect observer after initialization
+        if (observerRef.current) {
+          observerRef.current.disconnect();
+        }
+      }
+    });
+
+    observerRef.current.observe(element);
 
     return () => {
-      ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+      if (observerRef.current) {
+        observerRef.current.disconnect();
+      }
+      if (scrollTriggerRef.current) {
+        scrollTriggerRef.current.kill();
+      }
+      // Clean up will-change on unmount
+      if (element.querySelectorAll) {
+        Array.from(element.querySelectorAll('span span')).forEach(span => 
+          manageWillChange(span, false)
+        );
+      }
     };
-  }, [text, delay]);
+  }, [initializeTextReveal]);
 
   return <span ref={ref} className={className} />;
 }
@@ -158,14 +316,16 @@ interface CountUpProps {
 
 export function CountUp({ end, duration = 2, prefix = '', suffix = '', className = '' }: CountUpProps) {
   const ref = useRef<HTMLSpanElement>(null);
+  const observerRef = useRef<IntersectionObserver | null>(null);
+  const scrollTriggerRef = useRef<ScrollTrigger | null>(null);
 
-  useEffect(() => {
+  const initializeCountUp = useCallback(() => {
     if (!ref.current) return;
 
     const element = ref.current;
     const obj = { value: 0 };
 
-    ScrollTrigger.create({
+    scrollTriggerRef.current = ScrollTrigger.create({
       trigger: element,
       start: 'top 80%',
       onEnter: () => {
@@ -180,11 +340,35 @@ export function CountUp({ end, duration = 2, prefix = '', suffix = '', className
       },
       once: true
     });
+  }, [end, duration, prefix, suffix]);
+
+  useEffect(() => {
+    if (!ref.current) return;
+
+    const element = ref.current;
+
+    // Use IntersectionObserver to only initialize ScrollTrigger when element is near viewport
+    observerRef.current = createVisibilityObserver((isVisible) => {
+      if (isVisible && !scrollTriggerRef.current) {
+        initializeCountUp();
+        // Disconnect observer after initialization
+        if (observerRef.current) {
+          observerRef.current.disconnect();
+        }
+      }
+    });
+
+    observerRef.current.observe(element);
 
     return () => {
-      ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+      if (observerRef.current) {
+        observerRef.current.disconnect();
+      }
+      if (scrollTriggerRef.current) {
+        scrollTriggerRef.current.kill();
+      }
     };
-  }, [end, duration, prefix, suffix]);
+  }, [initializeCountUp]);
 
   return <span ref={ref} className={className}>{prefix}0{suffix}</span>;
 }

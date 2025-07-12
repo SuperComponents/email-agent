@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  TrendingUp, 
-  TrendingDown, 
-  Users, 
-  MessageSquare, 
-  Clock, 
+import {
+  TrendingUp,
+  TrendingDown,
+  Users,
+  MessageSquare,
+  Clock,
   Zap,
   BarChart3,
-  Activity
+  Activity,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -29,7 +29,7 @@ export function MetricsDashboard() {
       value: 47,
       change: -23,
       icon: MessageSquare,
-      color: 'from-purple-primary to-purple-light'
+      color: 'from-purple-primary to-purple-light',
     },
     {
       label: 'Avg Response Time',
@@ -37,7 +37,7 @@ export function MetricsDashboard() {
       change: -47,
       suffix: 's',
       icon: Clock,
-      color: 'from-ai-blue to-ai-purple'
+      color: 'from-ai-blue to-ai-purple',
     },
     {
       label: 'Resolution Rate',
@@ -45,7 +45,7 @@ export function MetricsDashboard() {
       change: 12,
       suffix: '%',
       icon: Zap,
-      color: 'from-success-green to-ai-blue'
+      color: 'from-success-green to-ai-blue',
     },
     {
       label: 'Customer Satisfaction',
@@ -53,8 +53,8 @@ export function MetricsDashboard() {
       change: 5,
       suffix: '/5',
       icon: Users,
-      color: 'from-ai-purple to-purple-primary'
-    }
+      color: 'from-ai-purple to-purple-primary',
+    },
   ]);
 
   const [liveUpdates, setLiveUpdates] = useState<string[]>([]);
@@ -62,11 +62,15 @@ export function MetricsDashboard() {
   // Simulate real-time updates
   useEffect(() => {
     const interval = setInterval(() => {
-      setMetrics(prev => prev.map(metric => ({
-        ...metric,
-        value: metric.value + (Math.random() - 0.5) * (metric.suffix === '%' ? 2 : 0.2),
-        change: metric.change + (Math.random() - 0.5) * 5
-      })));
+      setMetrics((prev) =>
+        prev.map((metric) => ({
+          ...metric,
+          value:
+            metric.value +
+            (Math.random() - 0.5) * (metric.suffix === '%' ? 2 : 0.2),
+          change: metric.change + (Math.random() - 0.5) * 5,
+        }))
+      );
 
       // Add live update
       const updates = [
@@ -74,10 +78,13 @@ export function MetricsDashboard() {
         'New customer inquiry received',
         'AI confidence: 98% on billing question',
         'Escalation avoided - AI handled complex query',
-        '5 tickets auto-tagged and routed'
+        '5 tickets auto-tagged and routed',
       ];
-      
-      setLiveUpdates(prev => [updates[Math.floor(Math.random() * updates.length)], ...prev.slice(0, 4)]);
+
+      setLiveUpdates((prev) => [
+        updates[Math.floor(Math.random() * updates.length)],
+        ...prev.slice(0, 4),
+      ]);
     }, 3000);
 
     return () => clearInterval(interval);
@@ -93,10 +100,16 @@ export function MetricsDashboard() {
           className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-purple-primary/10 to-ai-purple/10 mb-4"
         >
           <Activity className="w-4 h-4 text-purple-primary animate-pulse" />
-          <span className="text-sm font-medium gradient-text">Real-time Performance</span>
+          <span className="text-sm font-medium gradient-text">
+            Real-time Performance
+          </span>
         </motion.div>
-        <h3 className="text-3xl font-bold mb-2">Watch AI Transform Your Support</h3>
-        <p className="text-muted-foreground">Live metrics from teams using OpenSupport</p>
+        <h3 className="text-3xl font-bold mb-2">
+          Watch AI Transform Your Support
+        </h3>
+        <p className="text-muted-foreground">
+          Live metrics from teams using OpenSupport
+        </p>
       </div>
 
       {/* Metrics Grid */}
@@ -109,23 +122,30 @@ export function MetricsDashboard() {
             transition={{ delay: index * 0.1 }}
             className="relative group"
           >
-            <div className={cn(
-              "absolute inset-0 bg-gradient-to-r opacity-0 group-hover:opacity-100 blur-xl transition-opacity duration-500 -z-10",
-              metric.color
-            )} />
+            <div
+              className={cn(
+                'absolute inset-0 bg-gradient-to-r opacity-0 group-hover:opacity-100 blur-xl transition-opacity duration-500 -z-10',
+                metric.color
+              )}
+            />
             <div className="relative bg-card border-2 border-border hover:border-purple-primary/30 rounded-2xl p-6 transition-all duration-300">
               <div className="flex items-start justify-between mb-4">
-                <div className={cn("w-12 h-12 rounded-xl bg-gradient-to-br flex items-center justify-center", metric.color)}>
+                <div
+                  className={cn(
+                    'w-12 h-12 rounded-xl bg-gradient-to-br flex items-center justify-center',
+                    metric.color
+                  )}
+                >
                   <metric.icon className="w-6 h-6 text-white" />
                 </div>
-                <motion.div 
+                <motion.div
                   className={cn(
-                    "flex items-center gap-1 text-sm font-medium",
-                    metric.change > 0 ? "text-success-green" : "text-red-500"
+                    'flex items-center gap-1 text-sm font-medium',
+                    metric.change > 0 ? 'text-success-green' : 'text-red-500'
                   )}
-                  animate={{ 
+                  animate={{
                     y: [0, -2, 0],
-                    transition: { duration: 2, repeat: Infinity }
+                    transition: { duration: 2, repeat: Infinity },
                   }}
                 >
                   {metric.change > 0 ? (
@@ -136,7 +156,7 @@ export function MetricsDashboard() {
                   {Math.abs(metric.change).toFixed(0)}%
                 </motion.div>
               </div>
-              
+
               <div className="space-y-1">
                 <AnimatePresence mode="wait">
                   <motion.div
@@ -146,7 +166,9 @@ export function MetricsDashboard() {
                     exit={{ opacity: 0, y: -10 }}
                     className="text-3xl font-bold"
                   >
-                    {metric.prefix}{metric.value.toFixed(metric.suffix === 's' ? 1 : 0)}{metric.suffix}
+                    {metric.prefix}
+                    {metric.value.toFixed(metric.suffix === 's' ? 1 : 0)}
+                    {metric.suffix}
                   </motion.div>
                 </AnimatePresence>
                 <p className="text-sm text-muted-foreground">{metric.label}</p>
@@ -156,13 +178,15 @@ export function MetricsDashboard() {
               <div className="absolute bottom-0 left-0 right-0 h-16 overflow-hidden rounded-b-2xl opacity-10">
                 <svg className="w-full h-full">
                   <motion.path
-                    initial={{ d: "M 0 32 Q 20 30 40 32 T 80 32 T 120 32 T 160 32 T 200 32 T 240 32" }}
+                    initial={{
+                      d: 'M 0 32 Q 20 30 40 32 T 80 32 T 120 32 T 160 32 T 200 32 T 240 32',
+                    }}
                     animate={{
                       d: [
-                        "M 0 32 Q 20 20 40 32 T 80 32 T 120 32 T 160 32 T 200 32 T 240 32",
-                        "M 0 32 Q 20 40 40 32 T 80 32 T 120 32 T 160 32 T 200 32 T 240 32",
-                        "M 0 32 Q 20 20 40 32 T 80 32 T 120 32 T 160 32 T 200 32 T 240 32"
-                      ]
+                        'M 0 32 Q 20 20 40 32 T 80 32 T 120 32 T 160 32 T 200 32 T 240 32',
+                        'M 0 32 Q 20 40 40 32 T 80 32 T 120 32 T 160 32 T 200 32 T 240 32',
+                        'M 0 32 Q 20 20 40 32 T 80 32 T 120 32 T 160 32 T 200 32 T 240 32',
+                      ],
                     }}
                     fill="none"
                     stroke="currentColor"
@@ -190,7 +214,7 @@ export function MetricsDashboard() {
             <span className="text-sm text-muted-foreground">Live</span>
           </div>
         </div>
-        
+
         <div className="bg-card border-2 border-border rounded-xl p-4 space-y-2 max-h-48 overflow-hidden">
           <AnimatePresence>
             {liveUpdates.map((update, index) => (
@@ -204,7 +228,9 @@ export function MetricsDashboard() {
               >
                 <div className="w-2 h-2 bg-purple-primary rounded-full animate-pulse" />
                 <span className="text-sm text-muted-foreground">{update}</span>
-                <span className="text-xs text-muted-foreground/50 ml-auto">just now</span>
+                <span className="text-xs text-muted-foreground/50 ml-auto">
+                  just now
+                </span>
               </motion.div>
             ))}
           </AnimatePresence>
@@ -219,15 +245,21 @@ export function MetricsDashboard() {
             <h5 className="font-semibold mb-4">Before OpenSupport</h5>
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-sm text-muted-foreground">Response Time</span>
+                <span className="text-sm text-muted-foreground">
+                  Response Time
+                </span>
                 <span className="text-sm font-medium">45 min</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm text-muted-foreground">Resolution Rate</span>
+                <span className="text-sm text-muted-foreground">
+                  Resolution Rate
+                </span>
                 <span className="text-sm font-medium">67%</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm text-muted-foreground">Team Efficiency</span>
+                <span className="text-sm text-muted-foreground">
+                  Team Efficiency
+                </span>
                 <span className="text-sm font-medium">Low</span>
               </div>
             </div>
@@ -240,16 +272,28 @@ export function MetricsDashboard() {
             <h5 className="font-semibold mb-4">With OpenSupport</h5>
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-sm text-muted-foreground">Response Time</span>
-                <span className="text-sm font-medium text-success-green">3.2s</span>
+                <span className="text-sm text-muted-foreground">
+                  Response Time
+                </span>
+                <span className="text-sm font-medium text-success-green">
+                  3.2s
+                </span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm text-muted-foreground">Resolution Rate</span>
-                <span className="text-sm font-medium text-success-green">92%</span>
+                <span className="text-sm text-muted-foreground">
+                  Resolution Rate
+                </span>
+                <span className="text-sm font-medium text-success-green">
+                  92%
+                </span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm text-muted-foreground">Team Efficiency</span>
-                <span className="text-sm font-medium text-success-green">10x</span>
+                <span className="text-sm text-muted-foreground">
+                  Team Efficiency
+                </span>
+                <span className="text-sm font-medium text-success-green">
+                  10x
+                </span>
               </div>
             </div>
           </motion.div>

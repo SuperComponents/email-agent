@@ -1,17 +1,17 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useAnimation } from 'framer-motion';
-import { 
-  Mail, 
-  User, 
-  Bot, 
-  Sparkles, 
-  Clock, 
-  CheckCircle, 
+import {
+  Mail,
+  User,
+  Bot,
+  Sparkles,
+  Clock,
+  CheckCircle,
   AlertCircle,
   Tag,
   Search,
   Zap,
-  Brain
+  Brain,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -38,65 +38,77 @@ const mockEmails: Email[] = [
     id: '1',
     from: 'Sarah Johnson',
     subject: 'Unable to export data',
-    preview: "I've been trying to export my analytics data for the past hour but keep getting an error...",
+    preview:
+      "I've been trying to export my analytics data for the past hour but keep getting an error...",
     timestamp: '2 min ago',
     status: 'unread',
-    urgency: 'high'
+    urgency: 'high',
   },
   {
     id: '2',
     from: 'Michael Chen',
     subject: 'Billing question',
-    preview: 'Hi, I noticed I was charged twice this month. Could you please look into this?',
+    preview:
+      'Hi, I noticed I was charged twice this month. Could you please look into this?',
     timestamp: '5 min ago',
     status: 'unread',
-    urgency: 'urgent'
+    urgency: 'urgent',
   },
   {
     id: '3',
     from: 'Emma Wilson',
     subject: 'Feature request: Dark mode',
-    preview: 'Love your product! Would be amazing if you could add a dark mode option...',
+    preview:
+      'Love your product! Would be amazing if you could add a dark mode option...',
     timestamp: '12 min ago',
     status: 'unread',
-    urgency: 'normal'
+    urgency: 'normal',
   },
   {
     id: '4',
     from: 'David Lee',
     subject: 'Great customer service!',
-    preview: 'Just wanted to say thank you for the quick help yesterday. Your team is amazing!',
+    preview:
+      'Just wanted to say thank you for the quick help yesterday. Your team is amazing!',
     timestamp: '18 min ago',
     status: 'unread',
-    urgency: 'normal'
-  }
+    urgency: 'normal',
+  },
 ];
 
 const aiResponses: Record<string, AIResponse> = {
   '1': {
     text: "I understand you're experiencing issues with data export. This is likely related to our recent API update. Let me provide you with a quick solution:\n\n1. Clear your browser cache\n2. Try using Chrome or Firefox\n3. If the issue persists, I can manually export your data\n\nWould you like me to proceed with the manual export?",
     confidence: 95,
-    context: ['API Update Notice', 'Export Troubleshooting Guide', 'Customer History: Premium Plan'],
-    suggestedTags: ['bug', 'export-issue', 'high-priority']
+    context: [
+      'API Update Notice',
+      'Export Troubleshooting Guide',
+      'Customer History: Premium Plan',
+    ],
+    suggestedTags: ['bug', 'export-issue', 'high-priority'],
   },
   '2': {
     text: "I apologize for the billing error. I've reviewed your account and confirmed the duplicate charge of $29.99 on January 8th.\n\nI've initiated a refund for the duplicate charge, which should appear in your account within 3-5 business days. I've also added a 20% discount to your next invoice as an apology for the inconvenience.\n\nIs there anything else I can help you with?",
     confidence: 98,
     context: ['Billing History', 'Refund Policy', 'Customer Value: High'],
-    suggestedTags: ['billing', 'refund-processed', 'urgent']
+    suggestedTags: ['billing', 'refund-processed', 'urgent'],
   },
   '3': {
     text: "Thank you for the feature suggestion! Dark mode is actually one of our most requested features, and I'm happy to share that it's currently in development.\n\nExpected release: End of Q1 2024\n\nI've added your vote to this feature request. Would you like me to notify you when it's available?",
     confidence: 92,
     context: ['Feature Roadmap', 'Similar Requests: 127', 'Product Team Notes'],
-    suggestedTags: ['feature-request', 'roadmap', 'dark-mode']
+    suggestedTags: ['feature-request', 'roadmap', 'dark-mode'],
   },
   '4': {
     text: "Thank you so much for taking the time to share this wonderful feedback! It truly makes our day to hear that we could help.\n\nI'll make sure to share your kind words with the team member who assisted you. Reviews like yours motivate us to keep delivering exceptional service.\n\nIf you have a moment, we'd love if you could share your experience on our review page. Thank you for being an amazing customer!",
     confidence: 88,
-    context: ['Previous Interaction: Resolved Issue', 'Customer Sentiment: Positive', 'Team Performance Metrics'],
-    suggestedTags: ['positive-feedback', 'testimonial', 'resolved']
-  }
+    context: [
+      'Previous Interaction: Resolved Issue',
+      'Customer Sentiment: Positive',
+      'Team Performance Metrics',
+    ],
+    suggestedTags: ['positive-feedback', 'testimonial', 'resolved'],
+  },
 };
 
 export function InteractiveDemo() {
@@ -113,7 +125,7 @@ export function InteractiveDemo() {
       textRef.current = aiResponse.text;
       setTypedText('');
       setIsProcessing(true);
-      
+
       // Simulate AI processing
       setTimeout(() => {
         setIsProcessing(false);
@@ -127,7 +139,7 @@ export function InteractiveDemo() {
     let index = 0;
     const interval = setInterval(() => {
       if (index < textRef.current.length) {
-        setTypedText(prev => prev + textRef.current[index]);
+        setTypedText((prev) => prev + textRef.current[index]);
         index++;
       } else {
         clearInterval(interval);
@@ -139,19 +151,22 @@ export function InteractiveDemo() {
     setSelectedEmail(email);
     setAiResponse(aiResponses[email.id]);
     setShowContext(false);
-    
+
     // Animate the selection
     controls.start({
       scale: [1, 1.05, 1],
-      transition: { duration: 0.3 }
+      transition: { duration: 0.3 },
     });
   };
 
   const getUrgencyColor = (urgency: string) => {
     switch (urgency) {
-      case 'urgent': return 'text-red-500';
-      case 'high': return 'text-orange-500';
-      default: return 'text-green-500';
+      case 'urgent':
+        return 'text-red-500';
+      case 'high':
+        return 'text-orange-500';
+      default:
+        return 'text-green-500';
     }
   };
 
@@ -165,7 +180,7 @@ export function InteractiveDemo() {
 
       <div className="relative grid lg:grid-cols-2 gap-8 p-8">
         {/* Email Inbox */}
-        <motion.div 
+        <motion.div
           className="space-y-4"
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
@@ -189,19 +204,24 @@ export function InteractiveDemo() {
                 whileHover={{ scale: 1.02 }}
                 onClick={() => handleEmailClick(email)}
                 className={cn(
-                  "relative p-4 rounded-xl cursor-pointer transition-all duration-300",
-                  "border-2 hover:shadow-lg",
-                  selectedEmail?.id === email.id 
-                    ? "border-purple-primary bg-purple-primary/5 shadow-purple-primary/20" 
-                    : "border-border hover:border-purple-primary/50 bg-card"
+                  'relative p-4 rounded-xl cursor-pointer transition-all duration-300',
+                  'border-2 hover:shadow-lg',
+                  selectedEmail?.id === email.id
+                    ? 'border-purple-primary bg-purple-primary/5 shadow-purple-primary/20'
+                    : 'border-border hover:border-purple-primary/50 bg-card'
                 )}
               >
                 {/* Urgency indicator */}
-                <div className={cn(
-                  "absolute top-4 right-4 w-2 h-2 rounded-full animate-pulse",
-                  email.urgency === 'urgent' ? 'bg-red-500' : 
-                  email.urgency === 'high' ? 'bg-orange-500' : 'bg-green-500'
-                )} />
+                <div
+                  className={cn(
+                    'absolute top-4 right-4 w-2 h-2 rounded-full animate-pulse',
+                    email.urgency === 'urgent'
+                      ? 'bg-red-500'
+                      : email.urgency === 'high'
+                        ? 'bg-orange-500'
+                        : 'bg-green-500'
+                  )}
+                />
 
                 <div className="flex items-start gap-3">
                   <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-primary to-ai-purple flex items-center justify-center">
@@ -210,18 +230,27 @@ export function InteractiveDemo() {
                   <div className="flex-1">
                     <div className="flex items-center justify-between">
                       <h4 className="font-semibold">{email.from}</h4>
-                      <span className="text-xs text-muted-foreground">{email.timestamp}</span>
+                      <span className="text-xs text-muted-foreground">
+                        {email.timestamp}
+                      </span>
                     </div>
                     <p className="text-sm font-medium mt-1">{email.subject}</p>
-                    <p className="text-sm text-muted-foreground mt-1 line-clamp-1">{email.preview}</p>
+                    <p className="text-sm text-muted-foreground mt-1 line-clamp-1">
+                      {email.preview}
+                    </p>
                     {selectedEmail?.id === email.id && (
-                      <motion.div 
+                      <motion.div
                         className="flex items-center gap-2 mt-2"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                       >
                         <Tag className="w-3 h-3 text-purple-primary" />
-                        <span className={cn("text-xs font-medium", getUrgencyColor(email.urgency))}>
+                        <span
+                          className={cn(
+                            'text-xs font-medium',
+                            getUrgencyColor(email.urgency)
+                          )}
+                        >
                           {email.urgency}
                         </span>
                       </motion.div>
@@ -234,7 +263,7 @@ export function InteractiveDemo() {
         </motion.div>
 
         {/* AI Response */}
-        <motion.div 
+        <motion.div
           className="space-y-4"
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
@@ -246,14 +275,16 @@ export function InteractiveDemo() {
               <div className="flex items-center gap-2">
                 <div className="text-sm text-muted-foreground">Confidence</div>
                 <div className="relative w-24 h-2 bg-border rounded-full overflow-hidden">
-                  <motion.div 
+                  <motion.div
                     className="absolute inset-y-0 left-0 bg-gradient-to-r from-purple-primary to-ai-purple"
                     initial={{ width: 0 }}
                     animate={{ width: `${aiResponse.confidence}%` }}
                     transition={{ duration: 1, delay: 0.5 }}
                   />
                 </div>
-                <span className="text-sm font-medium">{aiResponse?.confidence}%</span>
+                <span className="text-sm font-medium">
+                  {aiResponse?.confidence}%
+                </span>
               </div>
             )}
           </div>
@@ -272,10 +303,16 @@ export function InteractiveDemo() {
                   <motion.div className="space-y-4">
                     <div className="flex items-center gap-3">
                       <Brain className="w-5 h-5 text-purple-primary animate-pulse" />
-                      <span className="text-sm font-medium">Analyzing context...</span>
+                      <span className="text-sm font-medium">
+                        Analyzing context...
+                      </span>
                     </div>
                     <div className="space-y-2">
-                      {['Checking knowledge base...', 'Analyzing sentiment...', 'Generating response...'].map((text, i) => (
+                      {[
+                        'Checking knowledge base...',
+                        'Analyzing sentiment...',
+                        'Generating response...',
+                      ].map((text, i) => (
                         <motion.div
                           key={i}
                           className="flex items-center gap-2"
@@ -284,7 +321,9 @@ export function InteractiveDemo() {
                           transition={{ delay: i * 0.3 }}
                         >
                           <div className="w-1.5 h-1.5 bg-purple-primary rounded-full animate-pulse" />
-                          <span className="text-xs text-muted-foreground">{text}</span>
+                          <span className="text-xs text-muted-foreground">
+                            {text}
+                          </span>
                         </motion.div>
                       ))}
                     </div>
@@ -304,7 +343,9 @@ export function InteractiveDemo() {
                             <span className="font-semibold">AI Assistant</span>
                             <CheckCircle className="w-4 h-4 text-success-green" />
                           </div>
-                          <p className="text-sm whitespace-pre-wrap">{typedText}</p>
+                          <p className="text-sm whitespace-pre-wrap">
+                            {typedText}
+                          </p>
                         </div>
                       </div>
 
@@ -317,7 +358,7 @@ export function InteractiveDemo() {
 
                     {/* Context and tags */}
                     {showContext && (
-                      <motion.div 
+                      <motion.div
                         className="space-y-4"
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}

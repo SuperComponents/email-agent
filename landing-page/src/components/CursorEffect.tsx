@@ -5,7 +5,7 @@ export function CursorEffect() {
   const [isHovering, setIsHovering] = useState(false);
   const cursorX = useMotionValue(-100);
   const cursorY = useMotionValue(-100);
-  
+
   const springConfig = { damping: 20, stiffness: 300 };
   const cursorXSpring = useSpring(cursorX, springConfig);
   const cursorYSpring = useSpring(cursorY, springConfig);
@@ -21,17 +21,19 @@ export function CursorEffect() {
 
     // Track mouse movement
     window.addEventListener('mousemove', moveCursor);
-    
+
     // Add hover listeners to interactive elements
-    const interactiveElements = document.querySelectorAll('button, a, input, select, textarea, [role="button"]');
-    interactiveElements.forEach(el => {
+    const interactiveElements = document.querySelectorAll(
+      'button, a, input, select, textarea, [role="button"]'
+    );
+    interactiveElements.forEach((el) => {
       el.addEventListener('mouseenter', handleMouseEnter);
       el.addEventListener('mouseleave', handleMouseLeave);
     });
 
     return () => {
       window.removeEventListener('mousemove', moveCursor);
-      interactiveElements.forEach(el => {
+      interactiveElements.forEach((el) => {
         el.removeEventListener('mouseenter', handleMouseEnter);
         el.removeEventListener('mouseleave', handleMouseLeave);
       });

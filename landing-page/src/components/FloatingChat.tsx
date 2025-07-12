@@ -4,33 +4,47 @@ import { MessageSquare, X, Send, Bot, Sparkles } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const quickActions = [
-  "How does the AI work?",
-  "Show me pricing options",
-  "Can I self-host this?",
-  "Integration options?"
+  'How does the AI work?',
+  'Show me pricing options',
+  'Can I self-host this?',
+  'Integration options?',
 ];
 
 const aiResponses: Record<string, string> = {
-  "How does the AI work?": "Our AI uses advanced language models trained on millions of support conversations. It understands context, sentiment, and can draft responses that match your brand voice. The AI learns from your knowledge base and improves over time!",
-  "Show me pricing options": "We offer three plans:\n\n• Open Source (Free): Self-host with all core features\n• Cloud Pro ($29/mo): Managed hosting with 99.9% uptime\n• Enterprise (Custom): Dedicated infrastructure and custom AI training\n\nAll plans include unlimited agents and conversations!",
-  "Can I self-host this?": "Absolutely! OpenSupport is 100% open source. You can deploy it on your own infrastructure with just a few commands. We provide Docker images, Kubernetes configs, and detailed documentation. Your data never leaves your servers!",
-  "Integration options?": "OpenSupport integrates with all major platforms:\n\n• Email providers (Gmail, Outlook, etc.)\n• Chat platforms (Slack, Discord, Teams)\n• CRMs (Salesforce, HubSpot, Pipedrive)\n• APIs for custom integrations\n\nSetup takes less than 5 minutes!"
+  'How does the AI work?':
+    'Our AI uses advanced language models trained on millions of support conversations. It understands context, sentiment, and can draft responses that match your brand voice. The AI learns from your knowledge base and improves over time!',
+  'Show me pricing options':
+    'We offer three plans:\n\n• Open Source (Free): Self-host with all core features\n• Cloud Pro ($29/mo): Managed hosting with 99.9% uptime\n• Enterprise (Custom): Dedicated infrastructure and custom AI training\n\nAll plans include unlimited agents and conversations!',
+  'Can I self-host this?':
+    'Absolutely! OpenSupport is 100% open source. You can deploy it on your own infrastructure with just a few commands. We provide Docker images, Kubernetes configs, and detailed documentation. Your data never leaves your servers!',
+  'Integration options?':
+    'OpenSupport integrates with all major platforms:\n\n• Email providers (Gmail, Outlook, etc.)\n• Chat platforms (Slack, Discord, Teams)\n• CRMs (Salesforce, HubSpot, Pipedrive)\n• APIs for custom integrations\n\nSetup takes less than 5 minutes!',
 };
 
 export function FloatingChat() {
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState<Array<{ text: string; isAi: boolean }>>([]);
+  const [messages, setMessages] = useState<
+    Array<{ text: string; isAi: boolean }>
+  >([]);
   const [isTyping, setIsTyping] = useState(false);
   const [hasInteracted, setHasInteracted] = useState(false);
 
   const handleQuickAction = (question: string) => {
     setHasInteracted(true);
-    setMessages(prev => [...prev, { text: question, isAi: false }]);
+    setMessages((prev) => [...prev, { text: question, isAi: false }]);
     setIsTyping(true);
 
     setTimeout(() => {
       setIsTyping(false);
-      setMessages(prev => [...prev, { text: aiResponses[question] || "I'd be happy to help! Feel free to ask any questions about OpenSupport.", isAi: true }]);
+      setMessages((prev) => [
+        ...prev,
+        {
+          text:
+            aiResponses[question] ||
+            "I'd be happy to help! Feel free to ask any questions about OpenSupport.",
+          isAi: true,
+        },
+      ]);
     }, 1500);
   };
 
@@ -41,14 +55,14 @@ export function FloatingChat() {
         className="fixed bottom-6 right-6 z-50"
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}
-        transition={{ delay: 2, type: "spring", stiffness: 200 }}
+        transition={{ delay: 2, type: 'spring', stiffness: 200 }}
       >
         <motion.button
           onClick={() => setIsOpen(!isOpen)}
           className={cn(
-            "relative w-16 h-16 rounded-full shadow-2xl transition-all duration-300",
-            "bg-gradient-to-br from-purple-primary to-ai-purple hover:from-purple-dark hover:to-purple-primary",
-            "flex items-center justify-center group"
+            'relative w-16 h-16 rounded-full shadow-2xl transition-all duration-300',
+            'bg-gradient-to-br from-purple-primary to-ai-purple hover:from-purple-dark hover:to-purple-primary',
+            'flex items-center justify-center group'
           )}
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
@@ -102,7 +116,7 @@ export function FloatingChat() {
             initial={{ opacity: 0, y: 20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
-            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            transition={{ type: 'spring', stiffness: 300, damping: 30 }}
             className="fixed bottom-24 right-6 w-96 max-w-[calc(100vw-3rem)] z-50"
           >
             <div className="bg-card border-2 border-border rounded-2xl shadow-2xl overflow-hidden">
@@ -132,7 +146,8 @@ export function FloatingChat() {
                   >
                     <Sparkles className="w-12 h-12 text-purple-primary mx-auto mb-4 animate-sparkle" />
                     <p className="text-muted-foreground mb-4">
-                      Hi! I'm your AI assistant. Ask me anything about OpenSupport!
+                      Hi! I'm your AI assistant. Ask me anything about
+                      OpenSupport!
                     </p>
                     <div className="space-y-2">
                       {quickActions.map((action, index) => (
@@ -157,17 +172,21 @@ export function FloatingChat() {
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         className={cn(
-                          "flex",
-                          message.isAi ? "justify-start" : "justify-end"
+                          'flex',
+                          message.isAi ? 'justify-start' : 'justify-end'
                         )}
                       >
-                        <div className={cn(
-                          "max-w-[80%] rounded-2xl px-4 py-2",
-                          message.isAi
-                            ? "bg-muted text-foreground rounded-tl-none"
-                            : "bg-gradient-to-r from-purple-primary to-ai-purple text-white rounded-tr-none"
-                        )}>
-                          <p className="text-sm whitespace-pre-wrap">{message.text}</p>
+                        <div
+                          className={cn(
+                            'max-w-[80%] rounded-2xl px-4 py-2',
+                            message.isAi
+                              ? 'bg-muted text-foreground rounded-tl-none'
+                              : 'bg-gradient-to-r from-purple-primary to-ai-purple text-white rounded-tr-none'
+                          )}
+                        >
+                          <p className="text-sm whitespace-pre-wrap">
+                            {message.text}
+                          </p>
                         </div>
                       </motion.div>
                     ))}
