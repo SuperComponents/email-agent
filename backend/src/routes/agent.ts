@@ -4,13 +4,8 @@ import { db } from '../database/db.js';
 import { threads, agent_actions, draft_responses, emails } from '../database/schema.js';
 import { successResponse, notFoundResponse, errorResponse } from '../utils/response.js';
 import { regenerateDraftSchema, validateRequest } from '../utils/validation.js';
-// import type {
-//   EmailThread,
-//   EmailMessage,
-//   SupportContext,
-//   AgentConfig
-// } from 'proresponse-agent'
-import { processEmail } from 'agent3';
+import { workerManager } from '../services/worker-interface.js';
+import type { Event } from '@proresponse/agent';
 
 const app = new Hono();
 
@@ -24,10 +19,6 @@ interface AgentMetadata {
   suggested_priority?: string;
 }
 
-interface AgentResponse {
-  history?: Array<unknown>;
-  [key: string]: unknown;
-}
 
 // Helper function to convert database thread to agent EmailThread format
 // function convertToAgentEmailThread(thread: DatabaseThread, threadEmails: DatabaseEmail[]): EmailThread {
@@ -75,127 +66,99 @@ interface AgentResponse {
 //   return agentThread
 // }
 
-// Enhanced helper function to generate draft response using proresponse-agent
+// Enhanced helper function to generate draft response using agent4 worker
 async function generateEnhancedDraftResponse(
   threadId: number,
-  userMessage?: string,
-  // customInstructions?: string,
-  // supportContext?: SupportContext
-) {
+  userMessage?: string
+): Promise<{ success: boolean; message: string; threadId: number }> {
   try {
     console.log(`[Agent-Enhanced] Starting enhanced draft generation for thread ${threadId}`);
 
-    // Get thread details
+    // Check if thread exists
     const [thread] = await db.select().from(threads).where(eq(threads.id, threadId)).limit(1);
-
     if (!thread) {
       throw new Error(`Thread ${threadId} not found`);
     }
 
-    // Get all emails in the thread
+    // Check if emails exist in thread
     const threadEmails = await db
-      .select({
-        id: emails.id,
-        thread_id: emails.thread_id,
-        from_email: emails.from_email,
-        to_emails: emails.to_emails,
-        cc_emails: emails.cc_emails,
-        bcc_emails: emails.bcc_emails,
-        subject: emails.subject,
-        body_text: emails.body_text,
-        body_html: emails.body_html,
-        direction: emails.direction,
-        sent_at: emails.sent_at,
-        created_at: emails.created_at,
-      })
+      .select({ id: emails.id })
       .from(emails)
       .where(eq(emails.thread_id, threadId))
-      .orderBy(emails.created_at);
+      .limit(1);
 
     if (threadEmails.length === 0) {
       throw new Error(`No emails found in thread ${threadId}`);
     }
 
-    console.log(`[Agent-Enhanced] Found ${threadEmails.length} emails in thread ${threadId}`);
+    console.log(`[Agent-Enhanced] Starting worker for thread ${threadId}`);
 
-    // Convert to agent format
-    // const agentThread = convertToAgentEmailThread(thread, threadEmails)
+    // Get initial event state for the thread (existing agent actions)
+    const existingActions = await db
+      .select()
+      .from(agent_actions)
+      .where(eq(agent_actions.thread_id, threadId))
+      .orderBy(agent_actions.created_at);
 
-    // Prepare enhanced support context
-    // const enhancedContext: SupportContext = {
-    //   ...supportContext,
-    //   internalNotes: customInstructions ? [customInstructions] : undefined,
-    //   urgencyReason: thread.status === 'needs_attention' ? 'Thread marked as needs attention' : undefined,
-    //   escalationLevel: 'none' // TODO: Implement escalation tracking
-    // }
+    const initialEvents: Event[] = existingActions.map(action => ({
+      id: action.id.toString(),
+      timestamp: action.created_at,
+      type: action.action,
+      actor: 'system',
+      data: action.metadata || {}
+    }));
 
-    // Agent configuration with enhanced features
-    const agentConfig = {
-      model: 'gpt-4o',
-      includeRAG: true,
-      generateThreadName: true,
-      maxRAGResults: 5,
-      enableSentimentAnalysis: true,
-      confidenceThreshold: 0.7,
-      escalationKeywords: [
-        'legal',
-        'lawyer',
-        'attorney',
-        'sue',
-        'lawsuit',
-        'manager',
-        'supervisor',
-        'escalate',
-        'complaint',
-        'unacceptable',
-        'terrible',
-        'horrible',
-        'awful',
-        'cancel',
-        'refund immediately',
-        'switch',
-        'competitor',
-        'frustrated',
-        'angry',
-        'disappointed',
-        'furious',
-      ],
-    };
+    // Add user message as an event if provided
+    if (userMessage) {
+      initialEvents.push({
+        id: `user_message_${Date.now()}`,
+        timestamp: new Date(),
+        type: 'user_message',
+        actor: 'user',
+        data: { message: userMessage }
+      });
+    }
 
-    console.log(`[Agent-Enhanced] Calling enhanced agent with config:`, agentConfig);
+    // Start the worker for this thread
+    const worker = await workerManager.startWorkerForThread(threadId, initialEvents);
 
-    // Call the enhanced agent
-    // const agentResponse = await assistSupportPersonEnhanced(agentThread, enhancedContext, agentConfig)
-    const logger = (message: unknown) => {
-      console.log(message);
-    };
-    const agentResponse = await processEmail(threadId, logger, userMessage);
-    // const agentResponse = {
-    //   success: true,
-    //   message: 'Agent processing temporarily disabled',
-    //   draft: 'This is a placeholder draft response.',
-    //   analysis: 'Agent analysis temporarily disabled.',
-    //   history: []
-    // }
+    // Set up a promise to wait for completion
+    const agentResponse = await new Promise((resolve, reject) => {
+      const timeout = setTimeout(() => {
+        reject(new Error('Agent processing timeout'));
+      }, 120000); // 2 minute timeout
 
-    console.log('agentResponse');
-    console.log(agentResponse);
-    console.log('agentResponse.history');
-    console.log((agentResponse as unknown as AgentResponse)?.history?.forEach(x => console.log(x)));
-    //     console.log('summary');
-    //     console.log(agentResponse.summary);
+      worker.on('stopped', () => {
+        clearTimeout(timeout);
+        resolve({
+          success: true,
+          message: 'Agent processing completed',
+          threadId: threadId
+        });
+      });
 
-    console.log(`[Agent-Enhanced] Enhanced agent response received successfully`);
-    //     console.log(`[Agent-Enhanced] Agent confidence: ${(agentResponse.confidence * 100).toFixed(1)}%`)
-    //     console.log(`[Agent-Enhanced] Agent suggested priority: ${agentResponse.suggestedPriority}`)
-    //     console.log(`[Agent-Enhanced] Agent escalation recommended: ${agentResponse.escalationRecommended}`)
-    //     console.log(`[Agent-Enhanced] Agent thread name: "${agentResponse.threadName}"`)
-    //     console.log(`[Agent-Enhanced] Agent customer sentiment: ${agentResponse.customerSentiment}`)
-    //     console.log(`[Agent-Enhanced] Agent RAG sources: ${agentResponse.ragSources?.length || 0}`)
+      worker.on('failed', (error) => {
+        clearTimeout(timeout);
+        reject(error);
+      });
 
+      worker.on('error', (error) => {
+        clearTimeout(timeout);
+        reject(error);
+      });
+    });
+
+    console.log(`[Agent-Enhanced] Enhanced agent processing completed successfully`);
     return agentResponse;
+
   } catch (error) {
     console.error(`[Agent-Enhanced] Error in enhanced draft generation:`, error);
+    // Clean up worker if it exists
+    try {
+      await workerManager.stopWorkerForThread(threadId, 'Error occurred');
+    } catch (cleanupError) {
+      console.error(`[Agent-Enhanced] Error during cleanup:`, cleanupError);
+    }
     throw error;
   }
 }

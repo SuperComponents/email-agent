@@ -10,6 +10,7 @@ import countRoutes from './routes/counts.js';
 import demoRoutes from './routes/demo.js';
 import authRoutes from './routes/auth.js';
 import internalNotesRoutes from './routes/internal-notes.js';
+import workerManagementRoutes from './routes/worker-management.js';
 import { authMiddleware } from './middleware/auth.js';
 
 const app = new Hono();
@@ -29,6 +30,7 @@ app.get('/', c => {
 // 🔐 Apply auth middleware to protected routes
 app.use('/api/threads/*', authMiddleware);
 app.use('/api/demo/*', authMiddleware);
+app.use('/api/workers/*', authMiddleware);
 
 // Mount routes with specific paths first to avoid conflicts
 app.route('/api/threads', countRoutes);
@@ -40,6 +42,9 @@ app.route('/api/threads', internalNotesRoutes);
 
 // Mount demo routes separately
 app.route('/api/demo', demoRoutes);
+
+// Mount worker management routes
+app.route('/api/workers', workerManagementRoutes);
 
 serve(
   {
