@@ -5,7 +5,7 @@ import { useUIStore } from '../stores/ui-store';
 import { AgentPanel } from '../components/organisms';
 import { FileSearch, Brain, MessageSquare } from 'lucide-react';
 import type { AgentActionProps } from '../components/molecules/AgentAction';
-// removed apiClient as it's no longer used
+import { apiClient } from '../lib/api';
 
 // Types for function call arguments
 interface WriteDraftArgs {
@@ -260,6 +260,21 @@ export function AgentPanelContainer({
     }) || []
   ).filter((action): action is AgentActionProps => action !== null);
 
+  const handleSendMessage = (message: string) => {
+    if (!selectedThreadId) return;
+    
+    void (async () => {
+      try {
+        await apiClient.post(`/api/threads/${selectedThreadId}/regenerate`, {
+          userMessage: message
+        });
+        // The useAgentActivity hook should automatically refresh with new data
+      } catch (error) {
+        console.error('Failed to send message:', error);
+      }
+    })();
+  };
+
   return (
     <AgentPanel
       actions={actions}
@@ -267,6 +282,7 @@ export function AgentPanelContainer({
       draftResponse={agentActivity?.suggested_response}
       onUseAgent={onUseAgent}
       onDemoCustomerResponse={onDemoCustomerResponse}
+      onSendMessage={handleSendMessage}
       isRegeneratingDraft={isRegeneratingDraft}
       isGeneratingDemoResponse={isGeneratingDemoResponse}
     />
