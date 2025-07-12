@@ -1,20 +1,13 @@
-import { useThread, queryKeys } from '../repo/hooks';
+import { useThread } from '../repo/hooks';
 import { useUIStore } from '../stores/ui-store';
 import { ThreadDetail, type EmailMessage } from '../components/organisms';
 import { ComposerContainer } from './ComposerContainer';
-import { regenerateDraft, generateDemoCustomerResponse } from '../repo/api-client';
-import { useState } from 'react';
-import { useQueryClient } from '@tanstack/react-query';
 
 export function ThreadDetailContainer() {
-  const selectedThreadId = useUIStore((state) => state.selectedThreadId);
-  const setComposerOpen = useUIStore((state) => state.setComposerOpen);
-  const [isRegenerating, setIsRegenerating] = useState(false);
-  const [isGeneratingDemo, setIsGeneratingDemo] = useState(false);
-  const queryClient = useQueryClient();
-  
+  const selectedThreadId = useUIStore(state => state.selectedThreadId);
+
   const { data: thread, isLoading, error } = useThread(selectedThreadId || '');
-  
+
   if (!selectedThreadId) {
     return (
       <div className="flex items-center justify-center h-full text-gray-500">
@@ -22,7 +15,7 @@ export function ThreadDetailContainer() {
       </div>
     );
   }
-  
+
   if (error) {
     return (
       <div className="p-4 text-red-600">
@@ -30,7 +23,7 @@ export function ThreadDetailContainer() {
       </div>
     );
   }
-  
+
   if (isLoading || !thread) {
     return (
       <div className="flex items-center justify-center h-full">
@@ -38,71 +31,28 @@ export function ThreadDetailContainer() {
       </div>
     );
   }
-  
-  // Transform emails to EmailMessage format
+
   const messages: EmailMessage[] = thread.emails.map(email => ({
     id: email.id,
     author: {
       name: email.from_name,
       email: email.from_email,
-      initials: email.from_name.split(' ').map(n => n[0]).join('').toUpperCase()
+      initials: email.from_name
+        .split(' ')
+        .map(n => n[0])
+        .join('')
+        .toUpperCase(),
     },
     content: email.content,
     timestamp: new Date(email.timestamp).toLocaleString([], {
       month: 'short',
       day: 'numeric',
       hour: '2-digit',
-      minute: '2-digit'
+      minute: '2-digit',
     }),
-    isSupport: email.is_support_reply
+    isSupport: email.is_support_reply,
   }));
-  
-  const handleReply = () => {
-    setComposerOpen(true, 'reply');
-  };
-  
-  const handleUseAgent = async () => {
-    if (!selectedThreadId) return;
-    
-    setIsRegenerating(true);
-    try {
-      const result = await regenerateDraft(selectedThreadId);
-      console.log('Agent regenerate result:', result);
-      
-      // Refetch the thread data, draft, and agent activity
-      await Promise.all([
-        queryClient.invalidateQueries({ queryKey: queryKeys.thread(selectedThreadId) }),
-        queryClient.invalidateQueries({ queryKey: queryKeys.draft(selectedThreadId) }),
-        queryClient.invalidateQueries({ queryKey: queryKeys.agentActivity(selectedThreadId) })
-      ]);
-      
-      setComposerOpen(true, 'reply');
-    } catch (error) {
-      console.error('Failed to regenerate draft with agent:', error);
-      // You might want to show an error toast here
-    } finally {
-      setIsRegenerating(false);
-    }
-  };
-  
-  const handleDemoCustomerResponse = async () => {
-    if (!selectedThreadId) return;
-    
-    setIsGeneratingDemo(true);
-    try {
-      const result = await generateDemoCustomerResponse(selectedThreadId);
-      console.log('Demo customer response result:', result);
-      
-      // Refetch the thread data to show the new email
-      await queryClient.invalidateQueries({ queryKey: queryKeys.thread(selectedThreadId) });
-    } catch (error) {
-      console.error('Failed to generate demo customer response:', error);
-      // You might want to show an error toast here
-    } finally {
-      setIsGeneratingDemo(false);
-    }
-  };
-  
+
   return (
     <div className="flex flex-col h-full">
       <ThreadDetail
@@ -110,11 +60,6 @@ export function ThreadDetailContainer() {
         messages={messages}
         status={thread.status as 'open' | 'closed' | 'pending'}
         tags={thread.tags}
-        onReply={handleReply}
-        onUseAgent={() => void handleUseAgent()}
-        onDemoCustomerResponse={() => void handleDemoCustomerResponse()}
-        isRegeneratingDraft={isRegenerating}
-        isGeneratingDemoResponse={isGeneratingDemo}
       />
       <ComposerContainer />
     </div>
