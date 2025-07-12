@@ -8,7 +8,7 @@ import { cn } from '../lib/utils';
 
 export function LoginPage() {
   const navigate = useNavigate();
-  const { login, isAuthenticated } = useAuth();
+  const { login, signup, isAuthenticated } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
@@ -42,10 +42,14 @@ export function LoginPage() {
     setIsLoading(true);
 
     try {
-      await login({ email: 'demo@user.com', password: 'Password1!' });
+      await signup({ 
+        name: 'Demo User',
+        email: 'demo@treslingo.com', 
+        password: 'Password1!' 
+      });
       void navigate('/');
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Demo login failed. Please try again.');
+      setError(err instanceof Error ? err.message : 'Demo signup failed. Please try again.');
     } finally {
       setIsLoading(false);
     }
@@ -149,7 +153,7 @@ export function LoginPage() {
               disabled={isLoading}
               onClick={() => void handleDemoLogin()}
             >
-              Demo Login
+              {isLoading ? 'Creating demo account...' : 'Demo Login'}
             </Button>
           </div>
 

@@ -5,10 +5,10 @@
 # RUN npm install
 # RUN npm run build
 
-# Build stage for agent3
-FROM node:22-slim AS build-agent3
-COPY ./agent3 /agent3
-WORKDIR /agent3
+# Build stage for agent4
+FROM node:22-slim AS build-agent4
+COPY ./agent4 /agent4
+WORKDIR /agent4
 RUN npm install
 RUN npm run build
 
@@ -30,11 +30,11 @@ WORKDIR /build
 # COPY --from=build-agent /agent/dist ./agent/dist
 # COPY --from=build-agent /agent/node_modules ./agent/node_modules
 
-# Copy agent3 to the expected relative location
-COPY ./agent3 ./agent3
-# Copy the pre-built agent3 files from the build stage
-COPY --from=build-agent3 /agent3/dist ./agent3/dist
-COPY --from=build-agent3 /agent3/node_modules ./agent3/node_modules
+# Copy agent4 to the expected relative location
+COPY ./agent4 ./agent4
+# Copy the pre-built agent4 files from the build stage
+COPY --from=build-agent4 /agent4/dist ./agent4/dist
+COPY --from=build-agent4 /agent4/node_modules ./agent4/node_modules
 
 # Set working directory for backend
 WORKDIR /build/backend
@@ -57,9 +57,10 @@ RUN npm run build
 # Create production dependencies
 RUN npm prune --production
 
-# Replace the symlink with actual files for proresponse-agent and agent3
-RUN rm -rf node_modules/agent3 && \
-    cp -r ../agent3 node_modules/agent3
+# Replace the symlink with actual files for proresponse-agent 
+RUN rm -rf node_modules/@proresponse/agent && \
+    mkdir -p node_modules/@proresponse && \
+    cp -r ../agent4 node_modules/@proresponse/agent
 
 # Runtime stage
 FROM node:22-slim

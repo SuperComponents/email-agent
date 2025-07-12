@@ -9,6 +9,7 @@ export { Separator } from './Separator';
 export { Icon } from './Icon';
 export { Logo } from './Logo';
 export { Spinner } from './Spinner';
+export { DotsLoader } from './DotsLoader';
 
 export type { ButtonProps } from './Button';
 export type InputProps = React.InputHTMLAttributes<HTMLInputElement>;
@@ -19,3 +20,4 @@ export type { SeparatorProps } from './Separator';
 export type { IconProps } from './Icon';
 export type { LogoProps } from './Logo';
 export type { SpinnerProps } from './Spinner';
+export type { DotsLoaderProps } from './DotsLoader';

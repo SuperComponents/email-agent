@@ -69,6 +69,9 @@ export class MockAPI {
       throw new Error('Thread not found');
     }
     
+    // Mark thread as read when it's accessed
+    await this.markThreadAsRead(id);
+    
     return thread;
   }
 
@@ -98,6 +101,46 @@ export class MockAPI {
       id: thread.id,
       status: thread.status,
       tags: thread.tags
+    };
+  }
+
+  static async markThreadAsRead(id: string): Promise<{ id: string; is_unread: boolean }> {
+    await delay(100);
+    
+    const thread = threadStore.get(id);
+    if (!thread) {
+      throw new Error('Thread not found');
+    }
+    
+    // Update the mock thread as well
+    const mockThread = mockThreads.find(t => t.id === id);
+    if (mockThread) {
+      mockThread.is_unread = false;
+    }
+    
+    return {
+      id,
+      is_unread: false
+    };
+  }
+
+  static async markThreadAsUnread(id: string): Promise<{ id: string; is_unread: boolean }> {
+    await delay(100);
+    
+    const thread = threadStore.get(id);
+    if (!thread) {
+      throw new Error('Thread not found');
+    }
+    
+    // Update the mock thread as well
+    const mockThread = mockThreads.find(t => t.id === id);
+    if (mockThread) {
+      mockThread.is_unread = true;
+    }
+    
+    return {
+      id,
+      is_unread: true
     };
   }
 
@@ -207,5 +250,44 @@ export class MockAPI {
   static async getThreadCounts(): Promise<ThreadCounts> {
     await delay(100);
     return generateMockThreadCounts(mockThreads);
+  }
+
+  // Simulate customer response (for demo purposes)
+  static async simulateCustomerResponse(threadId: string): Promise<{ status: string; message: string }> {
+    await delay(1000);
+    
+    const thread = threadStore.get(threadId);
+    if (!thread) {
+      throw new Error('Thread not found');
+    }
+
+    // Add a customer response
+    const customerResponses = [
+      "Thanks for your help! That solved my issue.",
+      "Could you provide more details about this?",
+      "I'm still having trouble with this feature.",
+      "This worked perfectly, thank you!",
+      "I need additional assistance with this matter."
+    ];
+
+    const newMessage = {
+      id: Math.random().toString(36).substring(2, 11),
+      thread_id: threadId,
+      from_name: thread.customer.name,
+      from_email: thread.customer.email,
+      content: customerResponses[Math.floor(Math.random() * customerResponses.length)],
+      timestamp: new Date().toISOString(),
+      is_support_reply: false
+    };
+
+    thread.emails.push(newMessage);
+
+    // Mark thread as unread when customer responds
+    await this.markThreadAsUnread(threadId);
+
+    return {
+      status: 'success',
+      message: 'Customer response simulated'
+    };
   }
 }

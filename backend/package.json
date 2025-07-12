@@ -11,8 +11,8 @@
     "format": "prettier --write \"src/**/*.{ts,tsx}\"",
     "format:check": "prettier --check \"src/**/*.{ts,tsx}\"",
     "db:generate": "drizzle-kit generate --dialect=postgresql --schema=src/database/schema.ts --out=./drizzle",
-    "generate:emails": "tsx src/scripts/generate-emails.ts",
     "db:migrate": "tsx ./src/database/migrate.ts",
+    "db:reset": "node ./dist/src/database/reset.js",
     "db": "psql postgresql://localhost:5432/emailsmart_merge"
   },
   "dependencies": {
@@ -20,7 +20,7 @@
     "@neondatabase/serverless": "^1.0.1",
     "@types/bcrypt": "^5.0.2",
     "@types/bcryptjs": "^2.4.6",
-    "agent3": "file:../agent3",
+    "@proresponse/agent": "file:../agent4",
     "bcrypt": "^6.0.0",
     "bcryptjs": "^3.0.2",
     "dotenv": "^17.1.0",

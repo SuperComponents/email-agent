@@ -3,14 +3,21 @@ import { cn } from '../../lib/utils';
 import { Logo } from '../atoms';
 import { UserMenu } from '../molecules';
 import { useAuth } from '../../hooks/useAuth';
+import { useQueryClient } from '@tanstack/react-query';
 
 export type HeaderProps = React.HTMLAttributes<HTMLElement>;
 
 export const Header = React.forwardRef<HTMLElement, HeaderProps>(({ className, ...props }, ref) => {
   const { user, logout } = useAuth();
+  const queryClient = useQueryClient();
 
   const handleLogout = async () => {
     await logout();
+  };
+
+  const handleEmailGenerated = () => {
+    // Refresh threads when emails are generated
+    void queryClient.invalidateQueries({ queryKey: ['threads'] });
   };
 
   return (
@@ -31,6 +38,7 @@ export const Header = React.forwardRef<HTMLElement, HeaderProps>(({ className, .
         userName={user?.name || 'Support Agent'}
         userEmail={user?.email || 'agent@company.com'}
         onLogout={() => void handleLogout()}
+        onEmailGenerated={handleEmailGenerated}
       />
     </header>
   );

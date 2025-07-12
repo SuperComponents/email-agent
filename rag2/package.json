@@ -1,0 +1,30 @@
+{
+  "name": "rag2",
+  "version": "1.0.0",
+  "description": "RAG system using OpenAI Vector Store for knowledge base search",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "tsx src/index.ts",
+    "upload": "tsx src/upload.ts",
+    "search": "tsx src/search.ts",
+    "wipe": "tsx src/wipe.ts",
+    "test": "tsx src/test.ts"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.1",
+    "fs-extra": "^11.2.0",
+    "gray-matter": "^4.0.3",
+    "markdown-it": "^14.0.0",
+    "openai": "^5.9.0"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^11.0.4",
+    "@types/markdown-it": "^13.0.7",
+    "@types/node": "^20.10.6",
+    "tsx": "^4.6.2",
+    "typescript": "^5.3.3"
+  }
+}

@@ -63,6 +63,18 @@ export async function updateThread(id: string, updates: { status?: string; tags?
   });
 }
 
+export async function markThreadAsRead(id: string): Promise<{ id: string; is_unread: boolean }> {
+  return fetchAPI<{ id: string; is_unread: boolean }>(`/api/threads/${id}/read`, {
+    method: 'PATCH',
+  });
+}
+
+export async function markThreadAsUnread(id: string): Promise<{ id: string; is_unread: boolean }> {
+  return fetchAPI<{ id: string; is_unread: boolean }>(`/api/threads/${id}/unread`, {
+    method: 'PATCH',
+  });
+}
+
 // Message endpoints
 export async function sendMessage(threadId: string, content: string): Promise<unknown> {
   return fetchAPI(`/api/threads/${threadId}/messages`, {
@@ -97,8 +109,15 @@ export async function regenerateDraft(threadId: string, instructions?: string): 
 }
 
 export async function generateDemoCustomerResponse(threadId: string): Promise<{ status: string; message: string }> {
-  return fetchAPI<{ status: string; message: string }>(`/api/threads/${threadId}/demo-customer-response`, {
+  return fetchAPI<{ status: string; message: string }>(`/api/demo/${threadId}/demo-customer-response`, {
     method: 'POST',
+  });
+}
+
+export async function createInternalNote(threadId: string, content: string, isPinned: boolean = false): Promise<{ status: string; message: string }> {
+  return fetchAPI<{ status: string; message: string }>(`/api/threads/${threadId}/internal-notes`, {
+    method: 'POST',
+    body: JSON.stringify({ content, is_pinned: isPinned }),
   });
 }
 
@@ -107,15 +126,72 @@ export async function getThreadCounts(): Promise<ThreadCounts> {
   return fetchAPI<ThreadCounts>('/api/threads/counts');
 }
 
+// Email simulation endpoints
+export async function startEmailSimulation(intervalMs?: number): Promise<{ success: boolean; message: string; intervalMs?: number; scenariosCount?: number }> {
+  return fetchAPI<{ success: boolean; message: string; intervalMs?: number; scenariosCount?: number }>('/api/demo/start-email-simulation', {
+    method: 'POST',
+    body: JSON.stringify({ intervalMs }),
+  });
+}
+
+export async function stopEmailSimulation(): Promise<{ success: boolean; message: string; totalEmailsGenerated?: number }> {
+  return fetchAPI<{ success: boolean; message: string; totalEmailsGenerated?: number }>('/api/demo/stop-email-simulation', {
+    method: 'POST',
+  });
+}
+
+export async function getSimulationStatus(): Promise<{ 
+  success: boolean; 
+  status: { 
+    isRunning: boolean; 
+    emailsGenerated: number; 
+    startTime: string | null 
+  } 
+}> {
+  return fetchAPI<{ 
+    success: boolean; 
+    status: { 
+      isRunning: boolean; 
+      emailsGenerated: number; 
+      startTime: string | null 
+    } 
+  }>('/api/demo/simulation-status');
+}
+
+export async function generateSingleEmail(): Promise<{ 
+  success: boolean; 
+  message: string; 
+  thread?: { id: string; subject: string }; 
+  email?: { id: string; from_email: string; subject: string; body_text: string }; 
+  scenario?: { id: string; title: string; category: string; severity: string } 
+}> {
+  return fetchAPI<{ 
+    success: boolean; 
+    message: string; 
+    thread?: { id: string; subject: string }; 
+    email?: { id: string; from_email: string; subject: string; body_text: string }; 
+    scenario?: { id: string; title: string; category: string; severity: string } 
+  }>('/api/demo/generate-scenario-email', {
+    method: 'POST',
+  });
+}
+
 export const APIClient = {
   getThreads,
   getThread,
   updateThread,
+  markThreadAsRead,
+  markThreadAsUnread,
   sendMessage,
   getDraft,
   updateDraft,
   getAgentActivity,
   regenerateDraft,
   generateDemoCustomerResponse,
+  createInternalNote,
   getThreadCounts,
+  startEmailSimulation,
+  stopEmailSimulation,
+  getSimulationStatus,
+  generateSingleEmail,
 };

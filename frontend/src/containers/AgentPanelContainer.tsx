@@ -1,11 +1,46 @@
 import { useEffect, useRef } from 'react';
-import { useAgentActivity, queryKeys } from '../repo/hooks';
+import { useAgentActivity, useWorkerStatus, useStartWorker, queryKeys } from '../repo/hooks';
 import { useQueryClient } from '@tanstack/react-query';
 import { useUIStore } from '../stores/ui-store';
 import { AgentPanel } from '../components/organisms';
-import { FileSearch, Brain, MessageSquare } from 'lucide-react';
+import {
+  FileSearch,
+  Brain,
+  MessageSquare,
+  AlertTriangle,
+  Zap,
+  FileText,
+  Users,
+} from 'lucide-react';
 import type { AgentActionProps } from '../components/molecules/AgentAction';
 import { apiClient } from '../lib/api';
+
+// Helper function to get appropriate icon for action types
+function getIconForAction(actionType: string, toolName?: string) {
+  // Tool-specific icons
+  if (toolName === 'update_thread_urgency') return Zap;
+  if (toolName === 'update_thread_category') return FileText;
+  if (toolName === 'user_action_needed') return AlertTriangle;
+  if (toolName === 'compose-draft' || toolName === 'compose_draft') return FileText;
+  if (toolName === 'summarize_useful_context') return Brain;
+  if (toolName === 'search-knowledge-base') return FileSearch;
+
+  // Database action type icons
+  switch (actionType) {
+    case 'thread_status_changed':
+      return Zap;
+    case 'draft_created':
+      return FileText;
+    case 'email_read':
+      return MessageSquare;
+    case 'thread_assigned':
+      return Users;
+    case 'internal_note_created':
+      return MessageSquare;
+    default:
+      return Brain;
+  }
+}
 
 // Types for function call arguments
 interface WriteDraftArgs {
@@ -61,6 +96,8 @@ export function AgentPanelContainer({
   const seenWriteDraftIds = useRef<Set<string>>(new Set());
 
   const { data: agentActivity } = useAgentActivity(selectedThreadId || '');
+  const { data: workerStatus } = useWorkerStatus(selectedThreadId ? parseInt(selectedThreadId) : 0);
+  const startWorkerMutation = useStartWorker();
 
   // Check for NEW write_draft function call results and refetch draft
   useEffect(() => {
@@ -124,18 +161,22 @@ export function AgentPanelContainer({
   // Note: we used to correlate function_call results with their follow-ups.
   // If needed in future this logic can be re-added, but it's currently unused.
 
+  console.log('actionsReversed', actionsReversed);
   const actions: AgentActionProps[] = (
     actionsReversed?.map((action): AgentActionProps | null => {
-      // Skip function_call_result items
+      // Skip function_call_result items (legacy check)
       if (action.result?.type === 'function_call_result') {
         return null;
       }
-      // Check if this is a message type
+
+      console.log('action', action);
+
+      // Check if this is a message type (legacy check)
       const isMessage = action.result?.type === 'message';
       const isExplainToolCall = action.result?.name === 'explain_next_tool_call';
 
+      // Handle legacy message types (for backwards compatibility)
       if (isMessage) {
-        // For messages, extract content from result
         const messageContent = action.result?.content?.[0]?.text || '';
         const messageRole = action.result?.role as 'user' | 'assistant' | undefined;
 
@@ -143,20 +184,14 @@ export function AgentPanelContainer({
           icon: MessageSquare,
           title: action.title,
           description: messageContent,
-          timestamp: new Date(action.timestamp).toLocaleTimeString(),
-          status:
-            action.status === 'completed'
-              ? 'completed'
-              : action.status === 'failed'
-              ? 'failed'
-              : 'pending',
+          timestamp: action.timestamp,
+          status: action.status as 'completed' | 'pending' | 'failed',
           isMessage: true,
           messageRole: messageRole || 'assistant',
         };
       }
 
       if (isExplainToolCall) {
-        // For explain_next_tool_call, parse the JSON arguments
         let messageContent = '';
         try {
           const argumentsText = action.result?.arguments;
@@ -168,105 +203,37 @@ export function AgentPanelContainer({
           console.error('Failed to parse explain_next_tool_call arguments:', e);
           messageContent = action.result?.arguments || '';
         }
-
         return {
           icon: MessageSquare,
           title: action.title,
           description: messageContent,
-          timestamp: new Date(action.timestamp).toLocaleTimeString(),
-          status:
-            action.status === 'completed'
-              ? 'completed'
-              : action.status === 'failed'
-              ? 'failed'
-              : 'pending',
+          timestamp: action.timestamp,
+          status: action.status as 'completed' | 'pending' | 'failed',
           isMessage: true,
           messageRole: 'assistant',
         };
       }
 
-      // For non-message actions, generate display based on function name and parameters
-      const displayTitle = action.result?.name || action.title;
-      let displayDescription = action.description;
-
-      // Generate better descriptions for function calls
-      if (action.result?.type === 'function_call' && action.result?.name) {
-        try {
-          switch (action.result.name) {
-            case 'search_emails': {
-              const args = action.result.arguments
-                ? (JSON.parse(action.result.arguments) as SearchEmailsArgs)
-                : {};
-              displayDescription = `Searched for emails from ${args.senderEmail || 'all senders'}`;
-              break;
-            }
-            case 'tag_email': {
-              const args = action.result.arguments
-                ? (JSON.parse(action.result.arguments) as TagEmailArgs)
-                : { emailId: '', tags: [] };
-              displayDescription = `Tagged email ${args.emailId} as ${
-                args.tags.join(', ') || 'unknown'
-              }`;
-              break;
-            }
-            case 'search_knowledge_base': {
-              const args = action.result.arguments
-                ? (JSON.parse(action.result.arguments) as SearchKnowledgeBaseArgs)
-                : { query: '' };
-              displayDescription = `Searched knowledge base for: "${
-                args.query || 'unknown query'
-              }"`;
-              break;
-            }
-            case 'write_draft': {
-              const args = action.result.arguments
-                ? (JSON.parse(action.result.arguments) as WriteDraftArgs)
-                : { emailId: 0 };
-              displayDescription = `Created draft response for email ${args.emailId}`;
-              break;
-            }
-            case 'read_thread':
-              displayDescription = 'Read email thread';
-              break;
-          }
-        } catch (e) {
-          console.error('Failed to parse function call arguments:', e);
-        }
-      }
-
-      // Handle hosted_tool_call types (like file_search_call)
-      if (
-        action.result?.type === 'hosted_tool_call' &&
-        action.result?.name === 'file_search_call'
-      ) {
-        const providerData = action.result.providerData as FileSearchProviderData;
-        const queries = providerData?.queries || [];
-        displayDescription = `Searched knowledge base with queries: ${queries.join(', ')}`;
-      }
-
+      // Use the new enhanced backend API data structure
       return {
-        icon:
-          action.type === 'analyze' ? Brain : action.type === 'search' ? FileSearch : MessageSquare,
-        title: displayTitle,
-        description: displayDescription,
-        timestamp: new Date(action.timestamp).toLocaleTimeString(),
-        status:
-          action.status === 'completed'
-            ? 'completed'
-            : action.status === 'failed'
-            ? 'failed'
-            : 'pending',
+        icon: getIconForAction(action.type, action.result?.tool_name),
+        title: action.title,
+        description: action.description,
+        timestamp: action.timestamp,
+        status: action.status as 'completed' | 'pending' | 'failed',
+        result: action.result,
+        type: action.type,
       };
     }) || []
   ).filter((action): action is AgentActionProps => action !== null);
 
   const handleSendMessage = (message: string) => {
     if (!selectedThreadId) return;
-    
+
     void (async () => {
       try {
         await apiClient.post(`/api/threads/${selectedThreadId}/regenerate`, {
-          userMessage: message
+          userMessage: message,
         });
         // The useAgentActivity hook should automatically refresh with new data
       } catch (error) {
@@ -275,16 +242,22 @@ export function AgentPanelContainer({
     })();
   };
 
+  const handleStartWorker = () => {
+    if (!selectedThreadId) return;
+    startWorkerMutation.mutate(parseInt(selectedThreadId));
+  };
+
+  console.log('actions22', actions);
+
   return (
     <AgentPanel
       actions={actions}
-      analysis={agentActivity?.analysis}
       draftResponse={agentActivity?.suggested_response}
-      onUseAgent={onUseAgent}
-      onDemoCustomerResponse={onDemoCustomerResponse}
       onSendMessage={handleSendMessage}
-      isRegeneratingDraft={isRegeneratingDraft}
-      isGeneratingDemoResponse={isGeneratingDemoResponse}
+      currentThreadId={selectedThreadId ? parseInt(selectedThreadId) : undefined}
+      workerStatus={workerStatus}
+      onStartWorker={handleStartWorker}
+      isStartingWorker={startWorkerMutation.isPending}
     />
   );
 }
