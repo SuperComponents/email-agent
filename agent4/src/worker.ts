@@ -214,8 +214,8 @@ class AgentWorker {
         
         await this.updateEventState(toolEvent);
 
-        // Check if we should stop after finalize_draft
-        if (tool.name === 'finalize_draft') {
+        // Check if we should stop after finalize_draft or user_action_needed
+        if (tool.name === 'finalize_draft' || tool.name === 'user_action_needed') {
           break;
         }
       } catch (error) {

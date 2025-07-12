@@ -45,7 +45,7 @@ export default async function runAgentLoop(
         },
       });
 
-      if (tool.name === "finalize_draft") {
+      if (tool.name === "finalize_draft" || tool.name === "user_action_needed") {
         break;
       }
     } catch (error) {
@@ -62,6 +62,11 @@ export default async function runAgentLoop(
 
     if (tool.name === "finalize_draft") {
       console.log("finalizing draft");
+      break;
+    }
+
+    if (tool.name === "user_action_needed") {
+      console.log("user action needed - stopping agent loop");
       break;
     }
   }
