@@ -154,6 +154,11 @@
   --animate-accordion-up: accordion-up 0.2s ease-out;
   
   /* Custom brand colors for Tailwind */
+  --color-purple-primary: var(--purple-primary);
+  --color-purple-light: var(--purple-light);
+  --color-purple-dark: var(--purple-dark);
+  --color-purple-accent: var(--purple-accent);
+  --color-purple-glow: var(--purple-glow);
   --color-mocha: var(--mocha);
   --color-mocha-light: var(--mocha-light);
   --color-mocha-dark: var(--mocha-dark);
