@@ -17,7 +17,7 @@ export const Header = React.forwardRef<HTMLElement, HeaderProps>(({ className, .
     <header
       ref={ref}
       className={cn(
-        'h-16 bg-card border-b border-border px-4 flex items-center justify-between',
+        'min-h-[60px] max-h-[60px] bg-card border-b border-border px-4 flex items-center justify-between',
         className,
       )}
       {...props}
