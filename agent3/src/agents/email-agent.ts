@@ -6,7 +6,6 @@ import {
   RunItemStreamEvent,
   type RunStreamEvent,
 } from '@openai/agents';
-// import { z } from 'zod';
 import { env } from '../config/environment.js';
 import { logAgentRunResult, logAgentHistory } from '../utils/log-agent-result-to-json.js';
 import { readThreadTool } from './tools/read-thread.js';
@@ -15,11 +14,10 @@ import { emailTaggerTool } from './tools/email-tagger.js';
 import { ragSearchTool } from './tools/rag-search.js';
 import { writeDraftTool } from './tools/write-draft.js';
 import { explainNextToolCallTool } from './tools/explain-next-tool-call.js';
-import { logCall2, logStreamingToolCalls } from './log-actions.js';
+import { logCall, logStreamingToolCalls } from './log-actions.js';
 import type { EmailMessage, DraftResponse, AgentAction } from '../db/types.js';
 import { isRunItemStreamEvent } from './guards.js';
 import {
-  getThreadActions,
   getThreadActionHistory,
   getLatestEmailInThreadOrFail,
   getSortedEmailsByThreadId,
@@ -147,22 +145,6 @@ function createAgent() {
       writeDraftTool,
     ],
     model: env.OPENAI_MODEL,
-    //     toolUseBehavior: {
-    //       stopAtToolNames: ['write_draft']
-    //     }
-    //     model: new OpenAIResponsesModel({
-    //
-    //        model: 'o3-mini',
-    //        modelSettings: {
-    //         providerData: {
-    //           reasoning: {
-    //             effort: 'high',
-    //             summary: 'auto',
-    //           },
-    //         },
-    //       },
-    //     })
-    // model:  'o3-mini'
   });
 }
 
@@ -186,13 +168,6 @@ async function processStreamingEvents(
         actions.push(actResult[0]);
       }
       lastEvent = event;
-      //       logger(event);
-      //       logger('is message output: ' + isMessage(event.item.rawItem))
-
-      // const item = event.item;
-      // if (isMessageOutputItem(item)) {
-      //   logger(item.rawItem);
-      // }
     }
   }
 
@@ -236,25 +211,12 @@ export async function processEmail(
     context,
   });
 
-  await logCall2(user(userMessage), threadId);
+  await logCall(user(userMessage), threadId);
 
   // Process streaming events and collect actions
   const actions = await processStreamingEvents(result, threadId, logger);
 
   await result.completed;
-
-  logger('🤔  WHY:');
-  logger('🤔  WHY:');
-  logger('🤔  WHY:');
-  logger('🤔  WHY:');
-  logger('🤔  WHY:');
-  logger('🤔  WHY:');
-  //   for (const item of result.newItems) {
-  //     if (item.type === 'reasoning_item') {
-  //       // item.rawItem.content is an array of text chunks
-  //       logger(item.rawItem.content.map(c => c.text).join('\n'));
-  //     }
-  //   }
 
   // Log the raw agent result
   logAgentRunResult(result);
@@ -262,24 +224,8 @@ export async function processEmail(
   // Log the history separately
   logAgentHistory(result.history);
 
-  // Tool calls and actions are already logged in the streaming loop above
-  for (const item of result.newItems) {
-    if (item.type === 'reasoning_item') {
-      for (const entry of item.rawItem.content) {
-        if (entry.type === 'input_text') {
-          logger(`: ${entry.text}`);
-        }
-      }
-    }
-  }
-
-  // Log all output for debugging
-  //   logger('START OUTPUT BLOCK');
-  //   result.output.forEach(item => {
-  //     logger(JSON.stringify(item, null, 2));
-  //   });
-
   // Get the draft that was created by the write_draft tool
+  // TODO: existing draft doesn't necessarily mean we created one
   const draft = await getLatestDraftForThread(threadId);
 
   let finalResult: ProcessEmailResult;
@@ -300,6 +246,3 @@ export async function processEmail(
 
   return finalResult;
 }
-
-// Utility functions for backwards compatibility with tests
-export { getThreadActions };
