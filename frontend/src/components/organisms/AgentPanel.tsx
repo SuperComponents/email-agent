@@ -22,7 +22,7 @@ export interface AgentPanelProps extends React.HTMLAttributes<HTMLDivElement> {
   };
   onStartWorker?: () => void;
   isStartingWorker?: boolean;
-  onDraftClick?: (draft: { subject?: string; body: string }) => void;
+  onDraftClick?: (draft: { body: string }) => void;
 }
 
 export const AgentPanel = React.forwardRef<HTMLDivElement, AgentPanelProps>(

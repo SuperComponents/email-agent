@@ -20,7 +20,7 @@ export function InboxPage() {
   const queryClient = useQueryClient();
   const threadDetailRef = useRef<ThreadDetailContainerRef>(null);
 
-  const handleDraftClick = (draft: { subject?: string; body: string }) => {
+  const handleDraftClick = (draft: { body: string }) => {
     threadDetailRef.current?.setDraftContent(draft);
   };
   
