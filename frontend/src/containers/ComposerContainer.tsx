@@ -5,7 +5,7 @@ import { useDraft, useSendMessage, useRegenerateDraft, useThread, useCreateInter
 import { Composer, type ComposerMode } from '../components/organisms';
 
 export interface ComposerContainerRef {
-  setDraftContent: (draft: { subject?: string; body: string }) => void;
+  setDraftContent: (draft: { body: string }) => void;
 }
 
 export const ComposerContainer = forwardRef<ComposerContainerRef>((_, ref) => {
@@ -112,12 +112,11 @@ export const ComposerContainer = forwardRef<ComposerContainerRef>((_, ref) => {
 
   // Expose method to set draft content from outside
   useImperativeHandle(ref, () => ({
-    setDraftContent: (draft: { subject?: string; body: string }) => {
+    setDraftContent: (draft: { body: string }) => {
       if (selectedThreadId) {
         setLocalContent(draft.body);
         setDraft(selectedThreadId, draft.body);
         setComposerOpen(true, 'reply');
-        // TODO: Handle subject setting if composer supports it
       }
     }
   }), [selectedThreadId, setDraft, setComposerOpen]);

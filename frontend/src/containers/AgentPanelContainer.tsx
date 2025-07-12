@@ -48,7 +48,7 @@ export interface AgentPanelContainerProps {
   onDemoCustomerResponse?: () => void;
   isRegeneratingDraft?: boolean;
   isGeneratingDemoResponse?: boolean;
-  onDraftClick?: (draft: { subject?: string; body: string }) => void;
+  onDraftClick?: (draft: { body: string }) => void;
 }
 
 export function AgentPanelContainer({

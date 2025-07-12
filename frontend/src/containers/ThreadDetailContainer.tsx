@@ -5,7 +5,7 @@ import { ThreadDetail, type ThreadMessage } from '../components/organisms';
 import { ComposerContainer, type ComposerContainerRef } from './ComposerContainer';
 
 export interface ThreadDetailContainerRef {
-  setDraftContent: (draft: { subject?: string; body: string }) => void;
+  setDraftContent: (draft: { body: string }) => void;
 }
 
 export const ThreadDetailContainer = forwardRef<ThreadDetailContainerRef>((_, ref) => {
@@ -16,7 +16,7 @@ export const ThreadDetailContainer = forwardRef<ThreadDetailContainerRef>((_, re
 
   // Expose method to set draft content from outside
   useImperativeHandle(ref, () => ({
-    setDraftContent: (draft: { subject?: string; body: string }) => {
+    setDraftContent: (draft: { body: string }) => {
       composerRef.current?.setDraftContent(draft);
     }
   }), []);

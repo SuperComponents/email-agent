@@ -61,7 +61,7 @@ export interface AgentActionProps extends React.HTMLAttributes<HTMLDivElement> {
     [key: string]: unknown;
   };
   type?: string; // Database action type like 'thread_status_changed'
-  onDraftClick?: (draft: { subject?: string; body: string }) => void;
+  onDraftClick?: (draft: { body: string }) => void;
 }
 
 export const AgentAction = React.forwardRef<HTMLDivElement, AgentActionProps>(
@@ -81,16 +81,17 @@ export const AgentAction = React.forwardRef<HTMLDivElement, AgentActionProps>(
     },
     ref,
   ) => {
-    // Check if this is a draft action
-    const isDraftAction = result?.tool_name === 'compose-draft' || 
-                         (result?.draft_subject && result?.draft_body_preview);
-    
+    // Check if this is a finalized draft action (not just any draft action)
+    const isFinalizedDraft = type === 'draft_created' && result?.tool_name === 'compose-draft';
+
     const handleDraftClick = () => {
-      if (isDraftAction && onDraftClick && result) {
-        const toolOutput = result.tool_output as { result?: { body?: string; subject?: string } };
+      if (isFinalizedDraft && onDraftClick && result) {
+        const toolOutput = result.tool_output as { result?: { body?: string } };
+        console.log('Draft click - result:', result);
+        console.log('Draft click - toolOutput:', toolOutput);
+        console.log('Draft click - body:', toolOutput?.result?.body);
         onDraftClick({
-          subject: toolOutput?.result?.subject || result.draft_subject,
-          body: toolOutput?.result?.body || (result.draft_body_preview as string) || ''
+          body: toolOutput?.result?.body || (result.draft_body_preview as string) || '',
         });
       }
     };
@@ -142,10 +143,10 @@ export const AgentAction = React.forwardRef<HTMLDivElement, AgentActionProps>(
           status === 'completed' && 'border-l-primary/50',
           status === 'pending' && 'border-l-secondary',
           status === 'failed' && 'border-l-destructive/50',
-          isDraftAction && onDraftClick && 'cursor-pointer hover:bg-accent/50 transition-colors',
+          isFinalizedDraft && onDraftClick && 'cursor-pointer hover:bg-accent/50 transition-colors',
           className,
         )}
-        onClick={isDraftAction ? handleDraftClick : undefined}
+        onClick={isFinalizedDraft ? handleDraftClick : undefined}
         {...props}
       >
         <Icon
@@ -172,7 +173,8 @@ export const AgentAction = React.forwardRef<HTMLDivElement, AgentActionProps>(
             <div className="mt-1">
               <span className="text-sm font-medium text-foreground">
                 Urgency:{' '}
-                {(result?.tool_output as { args?: { urgency?: string }; new_urgency?: string })?.args?.urgency ||
+                {(result?.tool_output as { args?: { urgency?: string }; new_urgency?: string })
+                  ?.args?.urgency ||
                   result?.suggested_priority ||
                   (result?.tool_output as { new_urgency?: string })?.new_urgency ||
                   'unknown'}
@@ -185,7 +187,8 @@ export const AgentAction = React.forwardRef<HTMLDivElement, AgentActionProps>(
             <div className="mt-1">
               <span className="text-sm font-medium text-foreground">
                 {result?.action_reason ||
-                  (result?.tool_output as { reason?: string; args?: { reason?: string } })?.reason ||
+                  (result?.tool_output as { reason?: string; args?: { reason?: string } })
+                    ?.reason ||
                   (result?.tool_output as { args?: { reason?: string } })?.args?.reason ||
                   'User action required'}
               </span>
@@ -197,7 +200,8 @@ export const AgentAction = React.forwardRef<HTMLDivElement, AgentActionProps>(
             <div className="mt-1">
               <span className="text-sm font-medium text-foreground">
                 Category:{' '}
-                {(result?.tool_output as { args?: { category?: string }; new_category?: string })?.args?.category ||
+                {(result?.tool_output as { args?: { category?: string }; new_category?: string })
+                  ?.args?.category ||
                   (result?.tool_output as { new_category?: string })?.new_category ||
                   'unknown'}
               </span>
@@ -209,7 +213,8 @@ export const AgentAction = React.forwardRef<HTMLDivElement, AgentActionProps>(
             <div className="mt-1">
               <span className="text-sm font-medium text-foreground">
                 {result?.context_summary ||
-                  (result?.tool_output as { summary?: string; args?: { summary?: string } })?.summary ||
+                  (result?.tool_output as { summary?: string; args?: { summary?: string } })
+                    ?.summary ||
                   (result?.tool_output as { args?: { summary?: string } })?.args?.summary ||
                   'Context analyzed'}
               </span>
@@ -222,7 +227,8 @@ export const AgentAction = React.forwardRef<HTMLDivElement, AgentActionProps>(
               <span className="text-sm font-medium text-foreground">
                 Searched and found{' '}
                 {result?.rag_sources_used ||
-                  (result?.tool_output as { results_count?: number; length?: number })?.results_count ||
+                  (result?.tool_output as { results_count?: number; length?: number })
+                    ?.results_count ||
                   (result?.tool_output as { length?: number })?.length ||
                   0}{' '}
                 related documents in the knowledge base
@@ -230,30 +236,20 @@ export const AgentAction = React.forwardRef<HTMLDivElement, AgentActionProps>(
             </div>
           )}
 
-          {/* Special handling for draft actions */}
-          {isDraftAction && (
+          {/* Special handling for finalized draft actions */}
+          {isFinalizedDraft && (
             <div className="mt-1">
-              <span className="text-sm font-medium text-foreground">
-                Draft response generated
-              </span>
+              <span className="text-sm font-medium text-foreground">Draft response generated</span>
               {(() => {
-                const toolOutput = result?.tool_output as { result?: { subject?: string; body?: string } };
-                const subject = toolOutput?.result?.subject || result?.draft_subject;
+                const toolOutput = result?.tool_output as { result?: { body?: string } };
                 const body = toolOutput?.result?.body || result?.draft_body_preview;
-                
+
                 return (
-                  <>
-                    {subject && (
-                      <div className="text-xs text-secondary-foreground mt-1">
-                        Subject: {subject}
-                      </div>
-                    )}
-                    {body && (
-                      <div className="text-xs text-secondary-foreground mt-1 line-clamp-2">
-                        {body}
-                      </div>
-                    )}
-                  </>
+                  body && (
+                    <div className="text-xs text-secondary-foreground mt-1 line-clamp-2">
+                      {body}
+                    </div>
+                  )
                 );
               })()}
               <div className="text-xs text-primary mt-2 flex items-center gap-1">
@@ -268,7 +264,7 @@ export const AgentAction = React.forwardRef<HTMLDivElement, AgentActionProps>(
             !(type === 'thread_status_changed' && result?.tool_name === 'update_thread_category') &&
             !(type === 'email_read' && result?.tool_name === 'summarize_useful_context') &&
             !(result?.tool_name === 'search-knowledge-base') &&
-            !isDraftAction &&
+            !isFinalizedDraft &&
             description && (
               <p className="text-xs text-secondary-foreground leading-tight mt-1">{description}</p>
             )}
