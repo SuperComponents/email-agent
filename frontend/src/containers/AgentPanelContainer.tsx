@@ -189,6 +189,11 @@ export function AgentPanelContainer({
       const displayTitle = action.result?.name || action.title;
       let displayDescription = action.description;
 
+      // Handle database actions (like email_read) that don't have function_call results
+      if (action.type === 'email_read') {
+        displayDescription = 'Email received';
+      }
+
       // Generate better descriptions for function calls
       if (action.result?.type === 'function_call' && action.result?.name) {
         try {
@@ -227,6 +232,9 @@ export function AgentPanelContainer({
             }
             case 'read_thread':
               displayDescription = 'Read email thread';
+              break;
+            case 'email_read':
+              displayDescription = 'Email received';
               break;
           }
         } catch (e) {

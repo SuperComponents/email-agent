@@ -90,7 +90,6 @@ export const AgentPanel = React.forwardRef<HTMLDivElement, AgentPanelProps>(
 
           {actions.length > 0 ? (
             <div className="space-y-3 mb-6">
-              <h4 className="text-sm font-medium text-secondary-foreground">Tool Calls</h4>
               {actions.map((action, index) => (
                 <AgentAction key={index} {...action} />
               ))}
