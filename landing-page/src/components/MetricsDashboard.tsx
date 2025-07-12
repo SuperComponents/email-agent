@@ -156,17 +156,17 @@ export function MetricsDashboard() {
               <div className="absolute bottom-0 left-0 right-0 h-16 overflow-hidden rounded-b-2xl opacity-10">
                 <svg className="w-full h-full">
                   <motion.path
-                    d={`M 0 32 Q 20 ${20 + Math.random() * 20} 40 32 T 80 32 T 120 32 T 160 32 T 200 32 T 240 32`}
+                    initial={{ d: "M 0 32 Q 20 30 40 32 T 80 32 T 120 32 T 160 32 T 200 32 T 240 32" }}
+                    animate={{
+                      d: [
+                        "M 0 32 Q 20 20 40 32 T 80 32 T 120 32 T 160 32 T 200 32 T 240 32",
+                        "M 0 32 Q 20 40 40 32 T 80 32 T 120 32 T 160 32 T 200 32 T 240 32",
+                        "M 0 32 Q 20 20 40 32 T 80 32 T 120 32 T 160 32 T 200 32 T 240 32"
+                      ]
+                    }}
                     fill="none"
                     stroke="currentColor"
                     strokeWidth="2"
-                    animate={{
-                      d: [
-                        `M 0 32 Q 20 20 40 32 T 80 32 T 120 32 T 160 32 T 200 32 T 240 32`,
-                        `M 0 32 Q 20 40 40 32 T 80 32 T 120 32 T 160 32 T 200 32 T 240 32`,
-                        `M 0 32 Q 20 20 40 32 T 80 32 T 120 32 T 160 32 T 200 32 T 240 32`
-                      ]
-                    }}
                     transition={{ duration: 3, repeat: Infinity }}
                   />
                 </svg>
