@@ -10,8 +10,10 @@ import type {
 } from '@proresponse/agent';
 import { createMessage } from '@proresponse/agent';
 import { db } from '../database/db.js';
-import { agent_actions } from '../database/schema.js';
-import { eq } from 'drizzle-orm';
+import { agent_actions, draft_responses, emails } from '../database/schema.js';
+import { eq, desc } from 'drizzle-orm';
+import { mapAgentToolToDbAction } from './event-type-mapping.js';
+import { convertToEnhancedMetadata } from './agent-metadata-types.js';
 
 // Get the current file's directory
 const __filename = fileURLToPath(import.meta.url);
@@ -238,14 +240,113 @@ export class AgentWorkerService extends EventEmitter {
       throw new Error('No thread ID set');
     }
 
-    // Save event as agent_action in database
+    // Map agent tool name to proper database action enum
+    const dbAction = mapAgentToolToDbAction(event.type);
+    
+    // Convert raw event data to enhanced metadata format
+    const enhancedMetadata = convertToEnhancedMetadata(event.type, event.data || {});
+    
+    console.log(`[AgentWorker] Mapping event type '${event.type}' to db action '${dbAction}'`);
+
+    // Save tool outputs to related tables based on event type
+    let draftResponseId: number | null = null;
+    
+    if ((event.type === 'compose_draft' || event.type === 'compose-draft') && event.data) {
+      // Save draft content to draft_responses table
+      draftResponseId = await this.saveDraftResponse(event.data);
+    }
+
+    // Save event as agent_action in database with proper typing
     await db.insert(agent_actions).values({
       thread_id: this.threadId,
-      action: event.type as any, // Cast to enum type
+      email_id: null, // TODO: Could be derived from context
+      draft_response_id: draftResponseId,
+      action: dbAction,
       description: `Agent action: ${event.type}`,
-      metadata: event.data,
+      metadata: enhancedMetadata,
       created_at: event.timestamp || new Date()
     });
+  }
+
+  private async saveDraftResponse(draftData: any): Promise<number | null> {
+    try {
+      if (!this.threadId) {
+        throw new Error('No thread ID set');
+      }
+
+      // Get the latest email in the thread to associate the draft with
+      const [latestEmail] = await db
+        .select({ id: emails.id })
+        .from(emails)
+        .where(eq(emails.thread_id, this.threadId))
+        .orderBy(desc(emails.created_at))
+        .limit(1);
+
+      if (!latestEmail) {
+        console.warn(`[AgentWorker] No emails found for thread ${this.threadId}, cannot save draft`);
+        return null;
+      }
+
+      // Extract draft content from tool output
+      const draftContent = this.extractDraftContent(draftData);
+      if (!draftContent) {
+        console.warn(`[AgentWorker] No draft content found in tool output`);
+        return null;
+      }
+
+      // Save draft to database
+      const [savedDraft] = await db
+        .insert(draft_responses)
+        .values({
+          thread_id: this.threadId,
+          email_id: latestEmail.id,
+          generated_content: draftContent,
+          status: 'pending',
+          created_by_user_id: null, // AI generated
+          confidence_score: draftData.confidence_score || draftData.confidence || null,
+          citations: draftData.rag_sources || null,
+        })
+        .returning({ id: draft_responses.id });
+
+      console.log(`[AgentWorker] Saved draft response ${savedDraft.id} for thread ${this.threadId}`);
+      return savedDraft.id;
+    } catch (error) {
+      console.error(`[AgentWorker] Error saving draft response:`, error);
+      return null;
+    }
+  }
+
+  private extractDraftContent(draftData: any): string | null {
+    // Handle different draft formats from various tools
+    if (typeof draftData === 'string') {
+      return draftData;
+    }
+    
+    if (draftData.body) {
+      // Standard compose-draft format with subject + body
+      const subject = draftData.subject ? `Subject: ${draftData.subject}\n\n` : '';
+      return subject + draftData.body;
+    }
+    
+    if (draftData.draft) {
+      // Legacy format from mock tools
+      return draftData.draft;
+    }
+    
+    if (draftData.final_draft) {
+      // Finalized draft format
+      return draftData.final_draft;
+    }
+    
+    // Try to extract any text-like content
+    const textFields = ['content', 'message', 'text', 'response'];
+    for (const field of textFields) {
+      if (draftData[field] && typeof draftData[field] === 'string') {
+        return draftData[field];
+      }
+    }
+    
+    return null;
   }
 
   private async attemptRestart(): Promise<void> {

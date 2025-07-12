@@ -126,6 +126,7 @@ export function AgentPanelContainer({
   // Note: we used to correlate function_call results with their follow-ups.
   // If needed in future this logic can be re-added, but it's currently unused.
 
+  console.log('actionsReversed', actionsReversed);
   const actions: AgentActionProps[] = (
     actionsReversed?.map((action): AgentActionProps | null => {
       // Skip function_call_result items
