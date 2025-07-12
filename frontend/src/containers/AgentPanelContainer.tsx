@@ -278,7 +278,6 @@ export function AgentPanelContainer({
   return (
     <AgentPanel
       actions={actions}
-      analysis={agentActivity?.analysis}
       draftResponse={agentActivity?.suggested_response}
       onUseAgent={onUseAgent}
       onDemoCustomerResponse={onDemoCustomerResponse}

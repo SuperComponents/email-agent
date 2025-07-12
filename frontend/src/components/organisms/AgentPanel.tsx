@@ -1,14 +1,12 @@
 import React, { useState } from 'react';
 import { Sparkles, UserPlus, Send } from 'lucide-react';
 import { AgentAction, type AgentActionProps } from '../molecules/AgentAction';
-import { Separator } from '../atoms/Separator';
 import { Button } from '../atoms/Button';
 import { Icon } from '../atoms/Icon';
 import { cn } from '../../lib/utils';
 
 export interface AgentPanelProps extends React.HTMLAttributes<HTMLDivElement> {
   actions: AgentActionProps[];
-  analysis?: string;
   draftResponse?: string;
   onUseAgent?: () => void;
   onDemoCustomerResponse?: () => void;
@@ -22,7 +20,6 @@ export const AgentPanel = React.forwardRef<HTMLDivElement, AgentPanelProps>(
     {
       className,
       actions,
-      analysis,
       onUseAgent,
       onDemoCustomerResponse,
       onSendMessage,
@@ -105,15 +102,6 @@ export const AgentPanel = React.forwardRef<HTMLDivElement, AgentPanelProps>(
             </div>
           )}
 
-          {analysis && (
-            <>
-              <Separator className="my-4" />
-              <div className="space-y-3">
-                <h4 className="text-sm font-medium text-secondary-foreground">Analysis</h4>
-                <div className="text-sm text-foreground/90 leading-relaxed">{analysis}</div>
-              </div>
-            </>
-          )}
         </div>
 
         <div className="border-t border-border p-4">
