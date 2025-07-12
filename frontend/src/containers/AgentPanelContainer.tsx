@@ -42,53 +42,17 @@ function getIconForAction(actionType: string, toolName?: string) {
   }
 }
 
-// Types for function call arguments
-interface WriteDraftArgs {
-  emailId: number;
-  threadId: number;
-  messageBody: string;
-  citationFilename?: string;
-  citationScore?: number;
-  citationText?: string;
-  confidence?: number;
-}
-
-interface TagEmailArgs {
-  emailId: string;
-  tags: string[];
-  confidence?: number;
-}
-
-interface SearchEmailsArgs {
-  senderEmail?: string;
-}
-
-interface SearchKnowledgeBaseArgs {
-  query: string;
-}
-
-interface ExplainNextToolCallArgs {
-  explanation: string;
-  nextToolName: string;
-}
-
-interface FileSearchProviderData {
-  queries: string[];
-  [key: string]: unknown;
-}
 
 export interface AgentPanelContainerProps {
   onUseAgent?: () => void;
   onDemoCustomerResponse?: () => void;
   isRegeneratingDraft?: boolean;
   isGeneratingDemoResponse?: boolean;
+  onDraftClick?: (draft: { subject?: string; body: string }) => void;
 }
 
 export function AgentPanelContainer({
-  onUseAgent,
-  onDemoCustomerResponse,
-  isRegeneratingDraft,
-  isGeneratingDemoResponse,
+  onDraftClick,
 }: AgentPanelContainerProps) {
   const selectedThreadId = useUIStore(state => state.selectedThreadId);
   const isAgentPanelOpen = useUIStore(state => state.isAgentPanelOpen);
@@ -196,12 +160,12 @@ export function AgentPanelContainer({
         try {
           const argumentsText = action.result?.arguments;
           if (argumentsText) {
-            const parsed = JSON.parse(argumentsText) as ExplainNextToolCallArgs;
+            const parsed = JSON.parse(argumentsText) as { explanation?: string };
             messageContent = parsed.explanation || '';
           }
         } catch (e) {
           console.error('Failed to parse explain_next_tool_call arguments:', e);
-          messageContent = action.result?.arguments || '';
+          messageContent = (action.result?.arguments as string) || '';
         }
         return {
           icon: MessageSquare,
@@ -258,6 +222,7 @@ export function AgentPanelContainer({
       workerStatus={workerStatus}
       onStartWorker={handleStartWorker}
       isStartingWorker={startWorkerMutation.isPending}
+      onDraftClick={onDraftClick}
     />
   );
 }

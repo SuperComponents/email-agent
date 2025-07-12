@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { Send, Play } from 'lucide-react';
+import { Send } from 'lucide-react';
 import { AgentAction, type AgentActionProps } from '../molecules/AgentAction';
 import { Button } from '../atoms/Button';
 import { Icon } from '../atoms/Icon';
-import { Badge } from '../atoms/Badge';
 import { DotsLoader } from '../atoms/DotsLoader';
 import { cn } from '../../lib/utils';
 
@@ -19,6 +18,7 @@ export interface AgentPanelProps extends React.HTMLAttributes<HTMLDivElement> {
   };
   onStartWorker?: () => void;
   isStartingWorker?: boolean;
+  onDraftClick?: (draft: { subject?: string; body: string }) => void;
 }
 
 export const AgentPanel = React.forwardRef<HTMLDivElement, AgentPanelProps>(
@@ -27,10 +27,7 @@ export const AgentPanel = React.forwardRef<HTMLDivElement, AgentPanelProps>(
       className,
       actions,
       onSendMessage,
-      currentThreadId,
-      workerStatus,
-      onStartWorker,
-      isStartingWorker,
+      onDraftClick,
       ...props
     },
     ref,
@@ -38,27 +35,8 @@ export const AgentPanel = React.forwardRef<HTMLDivElement, AgentPanelProps>(
     const [message, setMessage] = useState('');
     console.log('actions', actions);
 
-    // Check if agent is currently working (has any pending actions OR worker is running)
-    const isAgentWorking =
-      actions.some(action => action.status === 'pending') || workerStatus?.status === 'running';
-
-    // Get status color based on worker status
-    const getStatusColor = (status: string) => {
-      switch (status) {
-        case 'running':
-          return 'bg-green-500';
-        case 'stopped':
-          return 'bg-gray-500';
-        case 'starting':
-          return 'bg-yellow-500';
-        case 'stopping':
-          return 'bg-orange-500';
-        case 'not_found':
-          return 'bg-red-500';
-        default:
-          return 'bg-gray-400';
-      }
-    };
+    // Check if agent is currently working (has any pending actions)
+    const isAgentWorking = actions.some(action => action.status === 'pending');
 
     const handleSend = () => {
       if (message.trim() && onSendMessage) {
@@ -84,7 +62,7 @@ export const AgentPanel = React.forwardRef<HTMLDivElement, AgentPanelProps>(
           {actions.length > 0 ? (
             <div className="space-y-3">
               {actions.map((action, index) => (
-                <AgentAction key={index} {...action} />
+                <AgentAction key={index} {...action} onDraftClick={onDraftClick} />
               ))}
               {/* Show loader when agent is working */}
               {isAgentWorking && (
