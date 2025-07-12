@@ -21,7 +21,7 @@ describe('ScrollAnimation Component', () => {
         <div data-testid="test-child">Test content</div>
       </ScrollAnimation>
     );
-    
+
     expect(screen.getByTestId('test-child')).toBeInTheDocument();
     expect(screen.getByText('Test content')).toBeInTheDocument();
   });
@@ -32,7 +32,7 @@ describe('ScrollAnimation Component', () => {
         <div>Content</div>
       </ScrollAnimation>
     );
-    
+
     expect(container.firstChild).toBeInTheDocument();
   });
 
@@ -44,14 +44,16 @@ describe('ScrollAnimation Component', () => {
         <div data-testid="child-3">Child 3</div>
       </ScrollAnimation>
     );
-    
+
     expect(screen.getByTestId('child-1')).toBeInTheDocument();
     expect(screen.getByTestId('child-2')).toBeInTheDocument();
     expect(screen.getByTestId('child-3')).toBeInTheDocument();
   });
 
   it('respects reduced motion preference', () => {
-    const { usePrefersReducedMotion } = require('../src/hooks/usePrefersReducedMotion');
+    const {
+      usePrefersReducedMotion,
+    } = require('../src/hooks/usePrefersReducedMotion');
     usePrefersReducedMotion.mockReturnValue(true);
 
     render(
@@ -59,7 +61,7 @@ describe('ScrollAnimation Component', () => {
         <div data-testid="test-child">Test content</div>
       </ScrollAnimation>
     );
-    
+
     expect(screen.getByTestId('test-child')).toBeInTheDocument();
   });
 
@@ -70,22 +72,18 @@ describe('ScrollAnimation Component', () => {
         <button>Interactive element</button>
       </ScrollAnimation>
     );
-    
+
     const results = await axe(container);
     expect(results).toHaveNoViolations();
   });
 
   it('accepts custom timing props', () => {
     const { container } = render(
-      <ScrollAnimation 
-        delay={0.5} 
-        duration={2} 
-        stagger={0.2}
-      >
+      <ScrollAnimation delay={0.5} duration={2} stagger={0.2}>
         <div>Content with custom timing</div>
       </ScrollAnimation>
     );
-    
+
     expect(container.firstChild).toBeInTheDocument();
   });
 });

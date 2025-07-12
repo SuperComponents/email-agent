@@ -108,7 +108,7 @@ export function MetricsDashboard() {
           Watch AI Transform Your Support
         </h3>
         <p className="text-muted-foreground">
-          Live metrics from teams using OpenSupport
+          Live metrics from teams using ProResponse AI
         </p>
       </div>
 
@@ -242,7 +242,7 @@ export function MetricsDashboard() {
             whileHover={{ scale: 1.02 }}
             className="bg-gradient-to-br from-purple-primary/5 to-ai-purple/5 border-2 border-purple-primary/20 rounded-2xl p-6"
           >
-            <h5 className="font-semibold mb-4">Before OpenSupport</h5>
+            <h5 className="font-semibold mb-4">Before ProResponse AI</h5>
             <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <span className="text-sm text-muted-foreground">
@@ -269,7 +269,7 @@ export function MetricsDashboard() {
             whileHover={{ scale: 1.02 }}
             className="bg-gradient-to-br from-success-green/5 to-ai-blue/5 border-2 border-success-green/20 rounded-2xl p-6"
           >
-            <h5 className="font-semibold mb-4">With OpenSupport</h5>
+            <h5 className="font-semibold mb-4">With ProResponse AI</h5>
             <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <span className="text-sm text-muted-foreground">

@@ -22,7 +22,9 @@ describe('TextReveal Component', () => {
   });
 
   it('splits text into individual words', () => {
-    const { container } = render(<TextReveal text="Test multiple words here" />);
+    const { container } = render(
+      <TextReveal text="Test multiple words here" />
+    );
     const words = container.querySelectorAll('span span');
     expect(words).toHaveLength(4);
   });
@@ -35,19 +37,19 @@ describe('TextReveal Component', () => {
   });
 
   it('applies gradient when gradient prop is true', () => {
-    const { container } = render(
-      <TextReveal text="Test" gradient={true} />
-    );
+    const { container } = render(<TextReveal text="Test" gradient={true} />);
     const wordSpan = container.querySelector('span span span');
     expect(wordSpan).toHaveClass('bg-gradient-to-r');
   });
 
   it('handles reduced motion preference', async () => {
-    const { usePrefersReducedMotion } = require('../src/hooks/usePrefersReducedMotion');
+    const {
+      usePrefersReducedMotion,
+    } = require('../src/hooks/usePrefersReducedMotion');
     usePrefersReducedMotion.mockReturnValue(true);
 
     const { container } = render(<TextReveal text="Test" />);
-    
+
     await waitFor(() => {
       const wordSpan = container.querySelector('span span span') as HTMLElement;
       expect(wordSpan.style.transform).toBe('translateY(0px)');

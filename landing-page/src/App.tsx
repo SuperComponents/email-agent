@@ -71,7 +71,7 @@ export function App() {
               <MessageSquare className="w-6 h-6 text-white" />
             </div>
             <span className="text-2xl font-bold gradient-text">
-              OpenSupport
+              ProResponse AI
             </span>
           </div>
 
@@ -142,7 +142,7 @@ export function App() {
         <div className="max-w-7xl mx-auto">
           <div className="text-center space-y-8">
             {/* Viral-worthy badge with enhanced animation */}
-            <div className="inline-flex items-center gap-2 px-4 py-2 gradient-border glass sparkle-container animate-slide-up">
+            <div className="inline-flex items-center gap-2 px-4 py-2 gradient-border glass sparkle-container">
               <Sparkles className="w-4 h-4 text-purple-primary animate-sparkle" />
               <span className="text-sm font-medium bg-gradient-to-r from-purple-primary to-ai-purple bg-clip-text text-transparent">
                 Open-source AI-powered support
@@ -150,7 +150,7 @@ export function App() {
             </div>
 
             {/* Bold Typography - Main Headline with stunning effects */}
-            <h1 className="text-6xl md:text-8xl lg:text-9xl font-black leading-none tracking-tighter animate-slide-up delay-300">
+            <h1 className="text-6xl md:text-8xl lg:text-9xl font-black leading-none tracking-tighter">
               <span className="block">
                 {/* SEO-friendly screen reader content */}
                 <span className="sr-only">Customer Support</span>
@@ -163,12 +163,12 @@ export function App() {
                 <TextReveal
                   text="Customer Support"
                   className="bg-gradient-to-r from-purple-dark via-purple-primary to-ai-purple bg-clip-text text-transparent"
-                  aria-hidden="true"
+                  aria-hidden={true}
                 />
               </span>
               <span className="block mt-2 text-4xl md:text-6xl lg:text-7xl text-muted-foreground font-light">
                 That Actually{' '}
-                <span className="text-purple-primary font-bold neon-glow">
+                <span className="text-purple-primary font-bold drop-shadow-sm">
                   Cares
                 </span>
               </span>
@@ -182,7 +182,7 @@ export function App() {
             </p>
 
             {/* CTA Buttons with premium effects */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-8 animate-slide-up delay-700">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-8">
               <Button
                 size="lg"
                 className="bg-gradient-to-r from-purple-primary to-purple-light hover:from-purple-dark hover:to-purple-primary text-white border-0 text-lg px-8 py-6 rounded-full group shadow-2xl hover:shadow-purple-primary/40 transition-all duration-300 hover:scale-105 hover-lift button-ripple button-3d"
@@ -210,7 +210,7 @@ export function App() {
             </div>
 
             {/* Social Proof Stats with animations */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 pt-16 max-w-4xl mx-auto animate-slide-up delay-1000">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 pt-16 max-w-4xl mx-auto">
               <div className="text-center group hover:scale-110 transition-transform duration-300">
                 <div className="text-4xl font-bold gradient-text animate-shimmer">
                   <CountUp end={92} suffix="%" />
@@ -271,7 +271,7 @@ export function App() {
                 Why teams are switching to
               </span>
               <span className="block animate-gradient bg-gradient-to-r from-purple-dark via-purple-primary to-ai-purple bg-clip-text text-transparent text-5xl md:text-6xl lg:text-7xl">
-                OpenSupport
+                ProResponse AI
               </span>
             </h2>
 
@@ -334,7 +334,7 @@ export function App() {
             <div className="text-center mb-12">
               <h2 className="text-4xl md:text-5xl font-bold mb-4">
                 <span className="animate-gradient bg-gradient-to-r from-purple-dark via-purple-primary to-ai-purple bg-clip-text text-transparent">
-                  See OpenSupport in Action
+                  See ProResponse AI in Action
                 </span>
               </h2>
               <p className="text-xl text-muted-foreground">
@@ -360,12 +360,12 @@ export function App() {
       <section id="features" className="relative z-10 px-6 pb-32 lg:px-12">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-5xl md:text-6xl font-bold mb-4 animate-slide-up">
+            <h2 className="text-5xl md:text-6xl font-bold mb-4">
               <span className="animate-gradient bg-gradient-to-r from-purple-dark via-purple-primary to-ai-purple bg-clip-text text-transparent">
                 Everything You Need
               </span>
             </h2>
-            <p className="text-xl text-muted-foreground animate-slide-up delay-300">
+            <p className="text-xl text-muted-foreground">
               Built by developers, for developers. Open-source and extensible.
             </p>
           </div>
@@ -478,20 +478,20 @@ export function App() {
       </section>
 
       {/* Pricing Section */}
-      <section id="pricing" className="relative z-10 px-6 pb-32 lg:px-12">
+      <section id="pricing" className="relative z-10 px-6 pt-32 pb-32 lg:px-12">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-5xl md:text-6xl font-bold mb-4 animate-slide-up">
+            <h2 className="text-5xl md:text-6xl font-bold mb-4">
               <span className="animate-gradient bg-gradient-to-r from-purple-dark via-purple-primary to-ai-purple bg-clip-text text-transparent">
                 Pricing That Makes Sense
               </span>
             </h2>
-            <p className="text-xl text-muted-foreground animate-slide-up delay-300">
+            <p className="text-xl text-muted-foreground">
               Start free, scale as you grow. No surprises.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto pt-6">
             <Card className="relative overflow-hidden">
               <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-ai-blue to-ai-purple" />
               <CardContent className="p-8">
@@ -524,7 +524,7 @@ export function App() {
               </CardContent>
             </Card>
 
-            <Card className="relative overflow-hidden gradient-border premium-card shadow-2xl scale-105 animate-slide-up delay-300">
+            <Card className="relative gradient-border premium-card shadow-2xl scale-105">
               <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-purple-primary to-purple-light animate-gradient" />
               <div className="absolute -top-4 -right-4 px-4 py-1 bg-gradient-to-r from-purple-primary to-purple-light text-white text-sm font-medium rounded-full sparkle-container shadow-lg">
                 Popular
@@ -608,18 +608,18 @@ export function App() {
       <section id="testimonials" className="relative z-10 px-6 pb-32 lg:px-12">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-5xl md:text-6xl font-bold mb-4 animate-slide-up">
+            <h2 className="text-5xl md:text-6xl font-bold mb-4">
               <span className="animate-gradient bg-gradient-to-r from-purple-dark via-purple-primary to-ai-purple bg-clip-text text-transparent">
                 Loved by Teams Worldwide
               </span>
             </h2>
-            <p className="text-xl text-muted-foreground animate-slide-up delay-300">
+            <p className="text-xl text-muted-foreground">
               Join hundreds of companies delivering exceptional support
             </p>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <Card className="border-2 border-purple-primary/10 hover:border-purple-primary/30 transition-all duration-300 hover-lift animate-slide-up">
+            <Card className="border-2 border-purple-primary/10 hover:border-purple-primary/30 transition-all duration-300 hover-lift">
               <CardContent className="p-8">
                 <div className="flex items-center gap-1 mb-4">
                   {[...Array(5)].map((_, i) => (
@@ -630,7 +630,7 @@ export function App() {
                   ))}
                 </div>
                 <p className="text-lg mb-6">
-                  "Switching to OpenSupport reduced our response time by 85%.
+                  "Switching to ProResponse AI reduced our response time by 85%.
                   Our customers love the instant, accurate responses."
                 </p>
                 <div className="flex items-center gap-4">
@@ -645,7 +645,7 @@ export function App() {
               </CardContent>
             </Card>
 
-            <Card className="border-2 border-purple-primary/10 hover:border-purple-primary/30 transition-all duration-300 hover-lift animate-slide-up delay-300">
+            <Card className="border-2 border-purple-primary/10 hover:border-purple-primary/30 transition-all duration-300 hover-lift">
               <CardContent className="p-8">
                 <div className="flex items-center gap-1 mb-4">
                   {[...Array(5)].map((_, i) => (
@@ -671,7 +671,7 @@ export function App() {
               </CardContent>
             </Card>
 
-            <Card className="border-2 border-purple-primary/10 hover:border-purple-primary/30 transition-all duration-300 hover-lift animate-slide-up delay-700">
+            <Card className="border-2 border-purple-primary/10 hover:border-purple-primary/30 transition-all duration-300 hover-lift">
               <CardContent className="p-8">
                 <div className="flex items-center gap-1 mb-4">
                   {[...Array(5)].map((_, i) => (
@@ -763,7 +763,7 @@ export function App() {
                   <MessageSquare className="w-5 h-5 text-white" />
                 </div>
                 <span className="text-xl font-bold gradient-text">
-                  OpenSupport
+                  ProResponse AI
                 </span>
               </div>
               <p className="text-sm text-muted-foreground">
@@ -867,7 +867,7 @@ export function App() {
           </div>
 
           <div className="border-t pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
-            <div>© 2025 OpenSupport. All rights reserved.</div>
+            <div>© 2025 ProResponse AI. All rights reserved.</div>
             <div className="flex gap-6">
               <a href="#" className="hover:text-foreground transition-colors">
                 Privacy

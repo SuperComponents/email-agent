@@ -17,7 +17,7 @@ describe('App Integration Tests', () => {
 
   it('has proper document structure', async () => {
     const { container } = render(<App />);
-    
+
     await waitFor(() => {
       // Check for semantic HTML structure
       const main = container.querySelector('main');
@@ -27,11 +27,14 @@ describe('App Integration Tests', () => {
 
   it('meets accessibility standards', async () => {
     const { container } = render(<App />);
-    
-    await waitFor(async () => {
-      const results = await axe(container);
-      expect(results).toHaveNoViolations();
-    }, { timeout: 10000 });
+
+    await waitFor(
+      async () => {
+        const results = await axe(container);
+        expect(results).toHaveNoViolations();
+      },
+      { timeout: 10000 }
+    );
   });
 
   it('handles reduced motion correctly', async () => {
@@ -51,19 +54,21 @@ describe('App Integration Tests', () => {
     });
 
     render(<App />);
-    
+
     await waitFor(() => {
       expect(document.body).toBeInTheDocument();
     });
   });
 
   it('loads without console errors', () => {
-    const consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
-    
+    const consoleSpy = jest
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
+
     render(<App />);
-    
+
     expect(consoleSpy).not.toHaveBeenCalled();
-    
+
     consoleSpy.mockRestore();
   });
 });

@@ -7,8 +7,8 @@ test.describe('Landing Page', () => {
   });
 
   test('has correct title and basic structure', async ({ page }) => {
-    await expect(page).toHaveTitle(/OpenSupport/);
-    
+    await expect(page).toHaveTitle(/ProResponse AI/);
+
     // Check main navigation elements
     await expect(page.locator('nav')).toBeVisible();
     await expect(page.locator('main')).toBeVisible();
@@ -18,7 +18,7 @@ test.describe('Landing Page', () => {
   test('homepage visual regression - desktop', async ({ page }) => {
     // Wait for animations to complete
     await page.waitForTimeout(2000);
-    
+
     // Full page screenshot
     await expect(page).toHaveScreenshot('homepage-desktop.png', {
       fullPage: true,
@@ -29,7 +29,7 @@ test.describe('Landing Page', () => {
   test('homepage visual regression - mobile', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.waitForTimeout(2000);
-    
+
     await expect(page).toHaveScreenshot('homepage-mobile.png', {
       fullPage: true,
       animations: 'disabled',
@@ -39,7 +39,7 @@ test.describe('Landing Page', () => {
   test('hero section visual test', async ({ page }) => {
     const heroSection = page.locator('section').first();
     await expect(heroSection).toBeVisible();
-    
+
     await expect(heroSection).toHaveScreenshot('hero-section.png', {
       animations: 'disabled',
     });
@@ -49,12 +49,12 @@ test.describe('Landing Page', () => {
     // Test navigation links if they exist
     const navLinks = page.locator('nav a');
     const linkCount = await navLinks.count();
-    
+
     if (linkCount > 0) {
       for (let i = 0; i < Math.min(linkCount, 3); i++) {
         const link = navLinks.nth(i);
         const href = await link.getAttribute('href');
-        
+
         if (href && href.startsWith('#')) {
           await link.click();
           await page.waitForTimeout(500);
@@ -68,7 +68,7 @@ test.describe('Landing Page', () => {
     // Test any buttons or interactive elements
     const buttons = page.locator('button');
     const buttonCount = await buttons.count();
-    
+
     if (buttonCount > 0) {
       const firstButton = buttons.first();
       await expect(firstButton).toBeVisible();
@@ -86,16 +86,16 @@ test.describe('Landing Page', () => {
     ];
 
     for (const breakpoint of breakpoints) {
-      await page.setViewportSize({ 
-        width: breakpoint.width, 
-        height: breakpoint.height 
+      await page.setViewportSize({
+        width: breakpoint.width,
+        height: breakpoint.height,
       });
-      
+
       await page.waitForTimeout(1000);
-      
+
       // Verify layout doesn't break
       await expect(page.locator('main')).toBeVisible();
-      
+
       // Take screenshot for visual regression
       await expect(page).toHaveScreenshot(`layout-${breakpoint.name}.png`, {
         animations: 'disabled',
@@ -109,10 +109,10 @@ test.describe('Landing Page', () => {
     await page.goto('/');
     await page.waitForLoadState('networkidle');
     const loadTime = Date.now() - startTime;
-    
+
     // Should load within 5 seconds
     expect(loadTime).toBeLessThan(5000);
-    
+
     // Check for performance-critical elements
     await expect(page.locator('main')).toBeVisible();
   });
@@ -122,21 +122,21 @@ test.describe('Accessibility Tests', () => {
   test('homepage meets WCAG standards', async ({ page }) => {
     await page.goto('/');
     await page.waitForLoadState('networkidle');
-    
+
     const accessibilityScanResults = await new AxeBuilder({ page })
       .withTags(['wcag2a', 'wcag2aa', 'wcag21aa'])
       .analyze();
-    
+
     expect(accessibilityScanResults.violations).toEqual([]);
   });
 
   test('keyboard navigation works', async ({ page }) => {
     await page.goto('/');
-    
+
     // Test tab navigation
     await page.keyboard.press('Tab');
     await page.waitForTimeout(100);
-    
+
     // Check if focus is visible
     const focusedElement = page.locator(':focus');
     await expect(focusedElement).toBeVisible();
@@ -146,24 +146,24 @@ test.describe('Accessibility Tests', () => {
     // Set reduced motion preference
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.goto('/');
-    
+
     // Verify animations are disabled/reduced
     await page.waitForTimeout(1000);
-    
+
     const accessibilityScanResults = await new AxeBuilder({ page })
       .withTags(['wcag2a', 'wcag2aa'])
       .analyze();
-    
+
     expect(accessibilityScanResults.violations).toEqual([]);
   });
 
   test('color contrast meets standards', async ({ page }) => {
     await page.goto('/');
-    
+
     const accessibilityScanResults = await new AxeBuilder({ page })
       .withTags(['color-contrast'])
       .analyze();
-    
+
     expect(accessibilityScanResults.violations).toEqual([]);
   });
 });
