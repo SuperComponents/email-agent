@@ -48,8 +48,6 @@ const sampleActions = [
 export const Default: Story = {
   args: {
     actions: sampleActions,
-    analysis: 'The customer cannot proceed past the payment step. This appears to be related to a known issue that was fixed in v2.4. The customer might be using an older cached version of the checkout page.',
-    draftResponse: 'Hi Jane, thanks for reaching out! I understand you\'re having trouble with the checkout process. As a quick fix, try clearing your browser cache and cookies. This should resolve the issue immediately.',
   },
 };
 
@@ -71,6 +69,5 @@ export const WithFailedAction: Story = {
         status: 'failed' as const,
       },
     ],
-    analysis: 'Unable to complete full analysis due to database connection issues.',
   },
 };

@@ -43,9 +43,11 @@ function App() {
           </Router>
         </AuthProvider>
       </ErrorBoundary>
-      <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   );
 }
+//       </ErrorBoundary>
+//       <ReactQueryDevtools initialIsOpen={false} />
+//     </QueryClientProvider>
 
 export default App

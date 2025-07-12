@@ -78,6 +78,7 @@ interface AgentResponse {
 // Enhanced helper function to generate draft response using proresponse-agent
 async function generateEnhancedDraftResponse(
   threadId: number,
+  userMessage?: string,
   // customInstructions?: string,
   // supportContext?: SupportContext
 ) {
@@ -168,7 +169,7 @@ async function generateEnhancedDraftResponse(
     const logger = (message: unknown) => {
       console.log(message);
     };
-    const agentResponse = await processEmail(threadId, logger);
+    const agentResponse = await processEmail(threadId, logger, userMessage);
     // const agentResponse = {
     //   success: true,
     //   message: 'Agent processing temporarily disabled',
@@ -324,7 +325,7 @@ app.post('/:id/regenerate', async c => {
 
     console.log(`[Agent-Regenerate] Starting enhanced draft regeneration for thread ${threadId}`);
 
-    await validateRequest(c, regenerateDraftSchema);
+    const body = await validateRequest(c, regenerateDraftSchema);
 
     // Check thread exists
     const [thread] = await db.select().from(threads).where(eq(threads.id, threadId)).limit(1);
@@ -346,7 +347,7 @@ app.post('/:id/regenerate', async c => {
     }
 
     // Generate enhanced draft response
-    const enhancedResponse = await generateEnhancedDraftResponse(threadId);
+    const enhancedResponse = await generateEnhancedDraftResponse(threadId, body?.userMessage);
 
     // Create new draft with enhanced metadata
     //     const [newDraft] = await db
@@ -412,7 +413,7 @@ app.post('/:id/regenerate', async c => {
     return successResponse(c, {
       status: 'success',
       message: 'Enhanced draft regenerated successfully',
-      draft_id: enhancedResponse.draft.id.toString(),
+      draft_id: enhancedResponse.draft?.id.toString(),
       //       enhanced_features: {
       //         thread_name: enhancedResponse.threadName,
       //         confidence: enhancedResponse.confidence,

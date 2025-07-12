@@ -46,7 +46,9 @@
     "db:dump": "npx tsx src/scripts/dump-database-to-json.ts",
     "psql": "psql $DATABASE_URL",
     "dbb": "psql postgresql://localhost:5432/emailsmart_test",
-    "psql:test": "psql $TEST_DATABASE_URL"
+    "dbc": "psql postgresql://localhost:5432/emailsmart_merge",
+    "psql:test": "psql $TEST_DATABASE_URL",
+    "check:openai": "npx tsx src/scripts/check-openai.ts"
   },
   "dependencies": {
     "@faker-js/faker": "^9.9.0",

@@ -9,10 +9,48 @@ export interface AgentActionProps extends React.HTMLAttributes<HTMLDivElement> {
   description?: string;
   timestamp?: string;
   status?: 'pending' | 'completed' | 'failed';
+  isMessage?: boolean;
+  messageRole?: 'user' | 'assistant';
+  functionCallResultData?: any; // Attached result data for function_call items
 }
 
 export const AgentAction = React.forwardRef<HTMLDivElement, AgentActionProps>(
-  ({ className, icon, title, description, timestamp, status = 'completed', ...props }, ref) => {
+  ({ className, icon, title, description, timestamp, status = 'completed', isMessage, messageRole, functionCallResultData, ...props }, ref) => {
+    // Message-style display for chat messages
+    if (isMessage) {
+      return (
+        <div
+          ref={ref}
+          className={cn(
+            'flex gap-2 mb-3',
+            messageRole === 'user' ? 'justify-end' : 'justify-start',
+            className
+          )}
+          {...props}
+        >
+          <div
+            className={cn(
+              'max-w-[80%] rounded-lg px-4 py-2',
+              messageRole === 'user' 
+                ? 'bg-primary text-primary-foreground ml-8' 
+                : 'bg-accent/50 border border-accent-foreground/20 mr-8'
+            )}
+          >
+            <p className="text-sm whitespace-pre-wrap">{description}</p>
+            {timestamp && (
+              <time className={cn(
+                "text-xs mt-1 block",
+                messageRole === 'user' ? 'text-primary-foreground/70' : 'text-secondary-foreground'
+              )}>
+                {timestamp}
+              </time>
+            )}
+          </div>
+        </div>
+      );
+    }
+
+    // Default display for non-message actions
     return (
       <div
         ref={ref}

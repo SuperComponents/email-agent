@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { getEmailById, insertEmailTags } from '../../db/query.js';
 
 const EmailTaggerParamsSchema = z.object({
+  // toolCallMotivation: z.string().describe('Why are you making this tool call?'),
   emailId: z.string().describe('ID of the email to tag'),
   tags: z
     .array(z.enum(['spam', 'legal', 'sales', 'support', 'billing', 'technical', 'general']))

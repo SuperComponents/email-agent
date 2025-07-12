@@ -1,21 +1,26 @@
 import {
   Agent,
   run,
+  user,
   type AgentInputItem,
   RunItemStreamEvent,
   type RunStreamEvent,
 } from '@openai/agents';
 // import { z } from 'zod';
 import { env } from '../config/environment.js';
+import { logAgentRunResult, logAgentHistory } from '../utils/log-agent-result-to-json.js';
+import { readThreadTool } from './tools/read-thread.js';
 import { emailSearchTool } from './tools/email-search.js';
 import { emailTaggerTool } from './tools/email-tagger.js';
 import { ragSearchTool } from './tools/rag-search.js';
 import { writeDraftTool } from './tools/write-draft.js';
-import { logStreamingToolCalls } from './log-actions.js';
+import { explainNextToolCallTool } from './tools/explain-next-tool-call.js';
+import { logCall2, logStreamingToolCalls } from './log-actions.js';
 import type { EmailMessage, DraftResponse, AgentAction } from '../db/types.js';
-import { isRunItemStreamEvent, isMessageOutputItem } from './guards.js';
+import { isMessage, isRunItemStreamEvent } from './guards.js';
 import {
   getThreadActions,
+  getThreadActionHistory,
   getLatestEmailInThreadOrFail,
   getSortedEmailsByThreadId,
   getLatestDraftForThread,
@@ -36,32 +41,40 @@ export type { EmailMessage };
 // type EmailResponse = z.infer<typeof EmailResponseSchema>;
 
 const SYSTEM_PROMPT = `You are an intelligent customer support email assistant. You help process and respond to customer emails.
+you are in conversation with a customer support agent going over support emails with them.
 
 Your capabilities:
-1. Search through a customer's email history to understand context
-2. Tag emails appropriately (spam, legal, sales, support, billing, technical, general)
-3. Search the company knowledge base for relevant information
-4. Create draft email responses with proper citations
+1. Read the current email thread context using read_thread tool
+2. Explain your next action before using other tools
+3. Search through a customer's email history to understand context
+4. Tag emails appropriately (spam, legal, sales, support, billing, technical, general)
+5. Search the company knowledge base for relevant information
+6. Create draft email responses with proper citations
+
+IMPORTANT: Before using any other tool, use explain_next_tool_call to briefly explain what you're about to do and why, and specify which tool you'll use next. This helps maintain transparency about your decision-making process.
 
 important: tag emails before you search the knowledge base.
 
 When processing emails:
-- You should ALWAYS use the email search tool to see if there is a history with the customer once before you do anything else
+- You should ALWAYS use the read_thread tool FIRST to read the full email thread context
+- After reading the thread, use the email search tool to see if there is additional history with the customer beyond this thread
 - Tag emails based on their content and intent. You should only call the email tag tool once and include all
    the tags you want to apply to the email. If a tag email tool call fails do not repeat it
 - Use the rest of the tools only if they will be helpful to you.
-  (IMPORTANT: use the exact email ID provided in the email metadata)
+  (IMPORTANT: use the exact email ID from the thread context)
 - Search knowledge base if the customer is asking a question
 - Create a draft response using the write_draft tool
 - IMPORTANT: If you used file search results to help construct your response, you MUST include the highest scoring citation by providing citationFilename, citationScore, and citationText when calling write_draft
 - Maintain a professional and helpful tone
 - Remember the entire email thread context when analyzing
+- The email thread is available in your context as an array of emails
 
-Email metadata will be provided in the format:
-[EMAIL_ID: <id>]
-[THREAD_ID: <id>]
+Process the latest email in the thread and create a draft response using the write_draft tool.
 
-Process the provided email thread and create a draft response using the write_draft tool.
+You MUST use the create draft tool before you output your final response.
+
+DO NOT include the draft email in your final response to the customer support agent. They will be able to see it
+from the create draft tool
 `;
 
 // when you are ready to output your final response, output your final response in the following JSON format:
@@ -119,11 +132,27 @@ async function buildThreadContext(
 }
 
 function createAgent() {
-  return new Agent({
+  return new Agent<EmailContext>({
     name: 'EmailProcessor',
     instructions: SYSTEM_PROMPT,
-    tools: [emailSearchTool, emailTaggerTool, ragSearchTool, writeDraftTool],
+    tools: [readThreadTool, explainNextToolCallTool, emailSearchTool, emailTaggerTool, ragSearchTool, writeDraftTool],
     model: env.OPENAI_MODEL,
+//     toolUseBehavior: {
+//       stopAtToolNames: ['write_draft']
+//     }
+//     model: new OpenAIResponsesModel({
+// 
+//        model: 'o3-mini',
+//        modelSettings: {
+//         providerData: {
+//           reasoning: {
+//             effort: 'high',
+//             summary: 'auto',
+//           },
+//         },
+//       },
+//     })
+    // model:  'o3-mini'
   });
 }
 
@@ -135,70 +164,132 @@ async function processStreamingEvents(
   const actions: AgentAction[] = [];
   let lastEvent: RunItemStreamEvent | undefined;
 
+  logger('START PROCESSING EVENTS');
   for await (const event of result) {
     // Agent SDK specific events
     if (isRunItemStreamEvent(event)) {
+      if (event.item.type === 'reasoning_item') {
+        console.log('🤔  WHY:', event.item.rawItem.content.map(c => c.text).join('\n'));
+      }
       const actResult = await logStreamingToolCalls(event, threadId, lastEvent);
       if (actResult && actResult.length > 0) {
         actions.push(actResult[0]);
       }
       lastEvent = event;
-      logger(event);
+//       logger(event);
+//       logger('is message output: ' + isMessage(event.item.rawItem))
 
-      const item = event.item;
-      if (isMessageOutputItem(item)) {
-        logger(item.rawItem);
-      }
+      // const item = event.item;
+      // if (isMessageOutputItem(item)) {
+      //   logger(item.rawItem);
+      // }
     }
   }
 
   return actions;
 }
 
+interface EmailContext {
+  emails: EmailMessage[];
+}
+
 export async function processEmail(
   threadId: number,
   logger: (message: unknown) => void = console.log,
+  userMessage: string = 'Process the latest email in this thread and create an appropriate response.',
 ): Promise<ProcessEmailResult> {
   // Fetch the latest email in the thread
   const email = (await getLatestEmailInThreadOrFail(threadId)) as EmailMessage;
 
   // Create agent and build context
   const agent = createAgent();
-  const fullMessage = await buildThreadContext(threadId, email);
+  
+  // Get all emails in the thread for context
+  const threadEmails = await getSortedEmailsByThreadId(threadId);
 
   logger('running agent in streaming mode');
+  logger(threadEmails);
   // Run the agent in streaming mode
-  const result = await run(agent, fullMessage, { maxTurns: 100, stream: true });
+
+  // Create the context with all emails in the thread
+  const context: EmailContext = {
+    emails: threadEmails
+  };
+
+  // Get previous agent actions for this thread as history
+  const previousActions = await getThreadActionHistory(threadId);
+  let history: AgentInputItem[] = [...previousActions];
+  history.push(user(userMessage));
+
+  const result = await run(agent, history, { 
+    maxTurns: 100, 
+    stream: true, 
+    context 
+  })
+
+  await logCall2(user(userMessage), threadId)
 
   // Process streaming events and collect actions
   const actions = await processStreamingEvents(result, threadId, logger);
 
   await result.completed;
 
+  logger('🤔  WHY:');
+  logger('🤔  WHY:');
+  logger('🤔  WHY:');
+  logger('🤔  WHY:');
+  logger('🤔  WHY:');
+  logger('🤔  WHY:');
+//   for (const item of result.newItems) {
+//     if (item.type === 'reasoning_item') {
+//       // item.rawItem.content is an array of text chunks
+//       logger(item.rawItem.content.map(c => c.text).join('\n'));
+//     }
+//   }
+
+  // Log the raw agent result
+  logAgentRunResult(result);
+  
+  // Log the history separately
+  logAgentHistory(result.history);
+
   // Tool calls and actions are already logged in the streaming loop above
+  for (const item of result.newItems) {
+    if (item.type === 'reasoning_item') {
+      for (const entry of item.rawItem.content) {
+        if (entry.type === 'input_text') {
+          logger(`: ${entry.text}`);
+        }
+      }
+    }
+  }
 
   // Log all output for debugging
-  logger('START OUTPUT BLOCK');
-  result.output.forEach(item => {
-    logger(JSON.stringify(item, null, 2));
-  });
+//   logger('START OUTPUT BLOCK');
+//   result.output.forEach(item => {
+//     logger(JSON.stringify(item, null, 2));
+//   });
 
   // Get the draft that was created by the write_draft tool
   const draft = await getLatestDraftForThread(threadId);
 
+  let finalResult: ProcessEmailResult;
+
   if (!draft) {
-    return {
+    finalResult = {
       actions,
       history: result.history,
       error: 'No draft was created. Agent may have failed to call write_draft tool.',
     };
+  } else {
+    finalResult = {
+      draft,
+      actions,
+      history: result.history,
+    };
   }
 
-  return {
-    draft,
-    actions,
-    history: result.history,
-  };
+  return finalResult;
 }
 
 // Utility functions for backwards compatibility with tests

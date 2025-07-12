@@ -32,7 +32,7 @@ export const AppLayout = React.forwardRef<HTMLDivElement, AppLayoutProps>(
           )}
           
           {panel && (
-            <aside className="w-80 flex-shrink-0 border-l border-border overflow-hidden">
+            <aside className="w-96 flex-shrink-0 border-l border-border overflow-hidden">
               {panel}
             </aside>
           )}
