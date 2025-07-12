@@ -168,8 +168,11 @@
 
 /* Gradient text utilities */
 .gradient-text {
-  @apply bg-gradient-to-r from-purple-primary via-purple-light to-ai-purple bg-clip-text text-transparent;
+  background: linear-gradient(to right, var(--purple-primary), var(--purple-light), var(--ai-purple));
   background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
   animation: text-shimmer 3s linear infinite;
 }
 
@@ -198,7 +201,7 @@
   -webkit-mask: 
     linear-gradient(#fff 0 0) content-box, 
     linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
+  -webkit-mask-composite: exclude;
   mask-composite: exclude;
 }
 
