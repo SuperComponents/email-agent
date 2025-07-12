@@ -152,9 +152,18 @@ export function App() {
             {/* Bold Typography - Main Headline with stunning effects */}
             <h1 className="text-6xl md:text-8xl lg:text-9xl font-black leading-none tracking-tighter animate-slide-up delay-300">
               <span className="block">
+                {/* SEO-friendly screen reader content */}
+                <span className="sr-only">Customer Support</span>
+                {/* No-JS fallback */}
+                <noscript>
+                  <span className="animate-gradient bg-gradient-to-r from-purple-dark via-purple-primary to-ai-purple bg-clip-text text-transparent">
+                    Customer Support
+                  </span>
+                </noscript>
                 <TextReveal
                   text="Customer Support"
-                  className="animate-gradient bg-gradient-to-r from-purple-dark via-purple-primary to-ai-purple bg-clip-text text-transparent"
+                  className="bg-gradient-to-r from-purple-dark via-purple-primary to-ai-purple bg-clip-text text-transparent"
+                  aria-hidden="true"
                 />
               </span>
               <span className="block mt-2 text-4xl md:text-6xl lg:text-7xl text-muted-foreground font-light">

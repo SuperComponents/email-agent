@@ -13,7 +13,20 @@
     "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "prepare": "husky"
+    "prepare": "husky",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:headed": "playwright test --headed",
+    "test:visual": "playwright test --grep=\"visual regression\"",
+    "test:a11y": "playwright test --grep=\"Accessibility\"",
+    "test:performance": "playwright test e2e/performance.spec.ts",
+    "test:lighthouse": "lhci autorun",
+    "test:all": "npm run test && npm run test:e2e && npm run test:lighthouse",
+    "playwright:install": "playwright install",
+    "playwright:update-snapshots": "playwright test --update-snapshots"
   },
   "dependencies": {
     "@hookform/resolvers": "^4.1.0",
@@ -38,7 +51,13 @@
     "zod": "^3.24.2"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.10.2",
+    "@playwright/test": "^1.54.1",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^14.6.1",
     "@types/bun": "latest",
+    "@types/jest": "^30.0.0",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@typescript-eslint/eslint-plugin": "^8.36.0",
@@ -50,8 +69,14 @@
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^5.2.0",
     "husky": "^9.1.7",
+    "jest": "^30.0.4",
+    "jest-axe": "^10.0.0",
+    "jest-environment-jsdom": "^30.0.4",
+    "lhci": "^4.1.1",
+    "lighthouse": "^12.8.0",
     "lint-staged": "^16.1.2",
-    "prettier": "^3.6.2"
+    "prettier": "^3.6.2",
+    "ts-jest": "^29.4.0"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
