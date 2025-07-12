@@ -12,6 +12,7 @@ import { ErrorBoundary } from './components/ErrorBoundary';
 import { AuthProvider } from './contexts/AuthContext';
 import { stackClientApp } from './lib/stack';
 import { StackHandler } from '@stackframe/react';
+import { OnboardingTour } from './components/OnboardingTour';
 
 
 function HandlerRoutes() {
@@ -27,6 +28,7 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <ErrorBoundary>
         <AuthProvider>
+          <OnboardingTour />
           <Router>
             <Routes>
               <Route path="/handler/*" element={<HandlerRoutes />} />
