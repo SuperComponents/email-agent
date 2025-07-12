@@ -41,7 +41,8 @@ Use this tool when you need to find specific information rather than general con
     if (!searchQuery.trim()) {
       return {
         success: false,
-        error: 'Search query cannot be empty. Use get_customer_history tool for general context instead.',
+        error:
+          'Search query cannot be empty. Use get_customer_history tool for general context instead.',
       };
     }
 
