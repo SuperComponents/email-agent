@@ -33,6 +33,10 @@ export const AgentPanel = React.forwardRef<HTMLDivElement, AgentPanelProps>(
     ref,
   ) => {
     const [message, setMessage] = useState('');
+    console.log('actions', actions);
+
+    // Check if agent is currently working (has any pending actions)
+    const isAgentWorking = actions.some(action => action.status === 'pending');
 
     const handleSend = () => {
       if (message.trim() && onSendMessage) {
@@ -53,44 +57,8 @@ export const AgentPanel = React.forwardRef<HTMLDivElement, AgentPanelProps>(
         <div className="border-b border-border p-4 h-[60px]">
           <h3 className="font-semibold">Activity</h3>
         </div>
-        <div className="flex-1 overflow-y-auto p-4">
-          <div className="space-y-3 mb-6">
-            <div className="text-xs text-secondary-foreground leading-relaxed">
-              Use the agent to analyze this conversation and generate a helpful response. The agent
-              will search your knowledge base and provide citations.
-            </div>
-            <div className="space-y-2">
-              <Button
-                onClick={onUseAgent}
-                size="sm"
-                variant="secondary"
-                className="w-full gap-2"
-                disabled={isRegeneratingDraft}
-              >
-                <Icon
-                  icon={Sparkles}
-                  size="sm"
-                  className={isRegeneratingDraft ? 'animate-pulse' : ''}
-                />
-                <span>{isRegeneratingDraft ? 'Generating...' : 'Use Agent'}</span>
-              </Button>
-              <Button
-                onClick={onDemoCustomerResponse}
-                size="sm"
-                variant="ghost"
-                className="w-full gap-2"
-                disabled={isGeneratingDemoResponse}
-              >
-                <Icon
-                  icon={UserPlus}
-                  size="sm"
-                  className={isGeneratingDemoResponse ? 'animate-pulse' : ''}
-                />
-                <span>{isGeneratingDemoResponse ? 'Generating...' : 'Demo Customer Response'}</span>
-              </Button>
-            </div>
-          </div>
-
+        <div className="flex-1 overflow-y-auto p-4 space-y-4">
+          {/* Agent Actions */}
           {actions.length > 0 ? (
             <div className="space-y-3 mb-6">
               <h4 className="text-sm font-medium text-secondary-foreground">Tool Calls</h4>
