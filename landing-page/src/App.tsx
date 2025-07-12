@@ -20,15 +20,33 @@ import {
   Sun
 } from "lucide-react";
 import { useDarkMode } from "./hooks/useDarkMode";
+import { useScrollPerformance } from "./hooks/useScrollPerformance";
+import { InteractiveDemo } from "./components/InteractiveDemo";
+import { ParticleBackground } from "./components/ParticleBackground";
+import { ScrollAnimation, Parallax, TextReveal, CountUp } from "./components/ScrollAnimations";
+import { MetricsDashboard } from "./components/MetricsDashboard";
+import { CursorEffect } from "./components/CursorEffect";
+import { FloatingChat } from "./components/FloatingChat";
 import "./index.css";
 
 const APP_URL = process.env.BUN_PUBLIC_APP_URL ?? "http://localhost:5173";
 
 export function App() {
   const { isDarkMode, toggleDarkMode } = useDarkMode();
+  useScrollPerformance();
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background via-purple-accent/30 to-background dark:from-background dark:via-purple-accent/10 dark:to-background overflow-hidden transition-all duration-500">
+      {/* Custom Cursor Effect */}
+      <CursorEffect />
+      
+      {/* Floating Chat Widget */}
+      <FloatingChat />
+      
+      {/* Particle Background */}
+      <div className="fixed inset-0 pointer-events-none z-0">
+        <ParticleBackground />
+      </div>
       {/* Premium animated background elements */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-40 -right-40 w-96 h-96 bg-gradient-to-br from-purple-primary/20 to-ai-purple/20 rounded-full blur-3xl animate-glow" />
@@ -78,12 +96,12 @@ export function App() {
               <Moon className="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
             </Button>
             
-            <Button asChild variant="ghost" size="sm" className="hover:text-purple-primary transition-colors">
+            <Button asChild variant="ghost" size="sm" className="hover:text-purple-primary transition-colors underline-hover">
               <a href={`${APP_URL}/login`}>Sign In</a>
             </Button>
             <Button 
               size="sm"
-              className="bg-gradient-to-r from-purple-primary to-purple-light hover:from-purple-dark hover:to-purple-primary text-white border-0 shadow-lg hover:shadow-purple-primary/25 transition-all duration-300 hover:scale-105"
+              className="bg-gradient-to-r from-purple-primary to-purple-light hover:from-purple-dark hover:to-purple-primary text-white border-0 shadow-lg hover:shadow-purple-primary/25 transition-all duration-300 hover:scale-105 button-ripple glow-hover"
               asChild
             >
               <a href={`${APP_URL}/signup`}>Get Started Free</a>
@@ -107,7 +125,7 @@ export function App() {
             {/* Bold Typography - Main Headline with stunning effects */}
             <h1 className="text-6xl md:text-8xl lg:text-9xl font-black leading-none tracking-tighter animate-slide-up delay-300">
               <span className="block animate-gradient bg-gradient-to-r from-purple-dark via-purple-primary to-ai-purple bg-clip-text text-transparent">
-                Customer Support
+                <TextReveal text="Customer Support" />
               </span>
               <span className="block mt-2 text-4xl md:text-6xl lg:text-7xl text-muted-foreground font-light">
                 That Actually <span className="text-purple-primary font-bold neon-glow">Cares</span>
@@ -124,7 +142,7 @@ export function App() {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-8 animate-slide-up delay-700">
               <Button 
                 size="lg"
-                className="bg-gradient-to-r from-purple-primary to-purple-light hover:from-purple-dark hover:to-purple-primary text-white border-0 text-lg px-8 py-6 rounded-full group shadow-2xl hover:shadow-purple-primary/40 transition-all duration-300 hover:scale-105 hover-lift"
+                className="bg-gradient-to-r from-purple-primary to-purple-light hover:from-purple-dark hover:to-purple-primary text-white border-0 text-lg px-8 py-6 rounded-full group shadow-2xl hover:shadow-purple-primary/40 transition-all duration-300 hover:scale-105 hover-lift button-ripple button-3d"
                 asChild
               >
                 <a href={`${APP_URL}/signup`}>
@@ -137,11 +155,11 @@ export function App() {
               <Button 
                 size="lg"
                 variant="outline"
-                className="text-lg px-8 py-6 rounded-full border-2 border-purple-primary/30 hover:border-purple-primary hover:bg-purple-primary/5 transition-all duration-300 group"
+                className="text-lg px-8 py-6 rounded-full border-2 border-purple-primary/30 hover:border-purple-primary hover:bg-purple-primary/5 transition-all duration-300 group magnetic-hover"
                 asChild
               >
                 <a href={`${APP_URL}/login`}>
-                  <span className="bg-gradient-to-r from-purple-primary to-ai-purple bg-clip-text text-transparent group-hover:from-purple-dark group-hover:to-purple-primary">
+                  <span className="bg-gradient-to-r from-purple-primary to-ai-purple bg-clip-text text-transparent group-hover:from-purple-dark group-hover:to-purple-primary text-gradient-hover">
                     View Live Demo
                   </span>
                 </a>
@@ -151,15 +169,21 @@ export function App() {
             {/* Social Proof Stats with animations */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 pt-16 max-w-4xl mx-auto animate-slide-up delay-1000">
               <div className="text-center group hover:scale-110 transition-transform duration-300">
-                <div className="text-4xl font-bold gradient-text animate-shimmer">92%</div>
+                <div className="text-4xl font-bold gradient-text animate-shimmer">
+                  <CountUp end={92} suffix="%" />
+                </div>
                 <div className="text-sm text-muted-foreground mt-1 group-hover:text-foreground transition-colors">Query Resolution</div>
               </div>
               <div className="text-center group hover:scale-110 transition-transform duration-300">
-                <div className="text-4xl font-bold text-ai-blue">3.2s</div>
+                <div className="text-4xl font-bold text-ai-blue">
+                  <CountUp end={3.2} suffix="s" duration={1.5} />
+                </div>
                 <div className="text-sm text-muted-foreground mt-1 group-hover:text-foreground transition-colors">Avg Response Time</div>
               </div>
               <div className="text-center group hover:scale-110 transition-transform duration-300">
-                <div className="text-4xl font-bold text-ai-purple">500+</div>
+                <div className="text-4xl font-bold text-ai-purple">
+                  <CountUp end={500} suffix="+" />
+                </div>
                 <div className="text-sm text-muted-foreground mt-1 group-hover:text-foreground transition-colors">Active Teams</div>
               </div>
               <div className="text-center group hover:scale-110 transition-transform duration-300">
@@ -239,61 +263,30 @@ export function App() {
       {/* Interactive Product Preview */}
       <section className="relative z-10 px-6 pb-32 lg:px-12">
         <div className="max-w-7xl mx-auto">
-          <div className="relative">
-            {/* Premium decorative elements */}
-            <div className="absolute inset-0 bg-gradient-to-r from-purple-primary/20 via-ai-purple/20 to-purple-light/20 blur-3xl animate-glow" />
-            
-            <Card className="relative overflow-hidden gradient-border premium-card glass">
-              <CardContent className="p-0">
-                {/* Fake browser window */}
-                <div className="bg-muted/50 px-4 py-3 border-b flex items-center gap-2">
-                  <div className="flex gap-2">
-                    <div className="w-3 h-3 rounded-full bg-red-500" />
-                    <div className="w-3 h-3 rounded-full bg-yellow-500" />
-                    <div className="w-3 h-3 rounded-full bg-green-500" />
-                  </div>
-                  <div className="flex-1 text-center">
-                    <div className="inline-flex items-center gap-2 px-3 py-1 bg-background dark:bg-card rounded-md text-sm">
-                      <Shield className="w-3 h-3 text-success-green dark:text-success-green" />
-                      app.opensupport.ai
-                    </div>
-                  </div>
-                </div>
-                
-                {/* Chat interface preview */}
-                <div className="p-8 space-y-6">
-                  <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-ai-blue to-ai-purple flex items-center justify-center">
-                      <Bot className="w-6 h-6 text-white" />
-                    </div>
-                    <div className="flex-1 space-y-2">
-                      <div className="bg-muted dark:bg-muted/80 rounded-2xl rounded-tl-none p-4 max-w-md">
-                        <p className="text-sm">Hi! I'm your AI support assistant. I've already analyzed your account and I see you're asking about billing. I can help you with that right away!</p>
-                      </div>
-                      <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                        <Clock className="w-3 h-3" />
-                        Responded in 0.8s
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-start gap-4 justify-end">
-                    <div className="bg-primary text-primary-foreground rounded-2xl rounded-tr-none p-4 max-w-md">
-                      <p className="text-sm">How do I update my payment method?</p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-center justify-center py-4">
-                    <div className="flex items-center gap-2 px-4 py-2 bg-success-green/10 dark:bg-success-green/20 rounded-full">
-                      <CheckCircle className="w-4 h-4 text-success-green dark:text-success-green" />
-                      <span className="text-sm font-medium text-success-green dark:text-success-green">AI Agent is typing...</span>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
+          <ScrollAnimation animation="fadeUp">
+            <div className="text-center mb-12">
+              <h2 className="text-4xl md:text-5xl font-bold mb-4">
+                <span className="animate-gradient bg-gradient-to-r from-purple-dark via-purple-primary to-ai-purple bg-clip-text text-transparent">
+                  See OpenSupport in Action
+                </span>
+              </h2>
+              <p className="text-xl text-muted-foreground">
+                Click on any email to watch our AI instantly analyze and respond
+              </p>
+            </div>
+          </ScrollAnimation>
+          
+          <ScrollAnimation animation="scaleIn" delay={0.2}>
+            <InteractiveDemo />
+          </ScrollAnimation>
         </div>
+      </section>
+      
+      {/* Real-time Metrics Dashboard */}
+      <section className="relative z-10 px-6 pb-32 lg:px-12">
+        <ScrollAnimation animation="fadeUp">
+          <MetricsDashboard />
+        </ScrollAnimation>
       </section>
 
       {/* Features Section */}
@@ -310,9 +303,10 @@ export function App() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <Card className="group hover-lift premium-card border-2 border-purple-primary/10 hover:border-purple-primary/30 transition-all duration-300 animate-slide-up">
-              <CardContent className="p-8">
+          <ScrollAnimation animation="fadeUp" stagger={0.1}>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <Card className="group hover-lift premium-card border-2 border-purple-primary/10 hover:border-purple-primary/30 transition-all duration-300">
+                <CardContent className="p-8">
                 <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-ai-blue to-ai-purple flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 shadow-lg">
                   <Bot className="w-7 h-7 text-white" />
                 </div>
@@ -326,12 +320,12 @@ export function App() {
               </CardContent>
             </Card>
 
-            <Card className="group hover-lift premium-card border-2 border-purple-primary/10 hover:border-purple-primary/30 transition-all duration-300 animate-slide-up delay-300">
-              <CardContent className="p-8">
-                <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-purple-primary to-purple-light flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 shadow-lg">
-                  <Globe className="w-7 h-7 text-white" />
-                </div>
-                <h3 className="text-2xl font-bold mb-3">100% Open Source</h3>
+              <Card className="group hover-lift premium-card border-2 border-purple-primary/10 hover:border-purple-primary/30 transition-all duration-300">
+                <CardContent className="p-8">
+                  <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-purple-primary to-purple-light flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 shadow-lg">
+                    <Globe className="w-7 h-7 text-white" />
+                  </div>
+                  <h3 className="text-2xl font-bold mb-3">100% Open Source</h3>
                 <p className="text-muted-foreground mb-4">
                   Full transparency, no vendor lock-in. Deploy on your infrastructure, customize everything, own your data.
                 </p>
@@ -341,12 +335,12 @@ export function App() {
               </CardContent>
             </Card>
 
-            <Card className="group hover-lift premium-card border-2 border-purple-primary/10 hover:border-purple-primary/30 transition-all duration-300 animate-slide-up delay-700">
-              <CardContent className="p-8">
-                <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-ai-purple to-purple-primary flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 shadow-lg">
-                  <Zap className="w-7 h-7 text-white" />
-                </div>
-                <h3 className="text-2xl font-bold mb-3">Lightning Fast</h3>
+              <Card className="group hover-lift premium-card border-2 border-purple-primary/10 hover:border-purple-primary/30 transition-all duration-300">
+                <CardContent className="p-8">
+                  <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-ai-purple to-purple-primary flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 shadow-lg">
+                    <Zap className="w-7 h-7 text-white" />
+                  </div>
+                  <h3 className="text-2xl font-bold mb-3">Lightning Fast</h3>
                 <p className="text-muted-foreground mb-4">
                   Sub-second response times with intelligent caching and edge deployment. Your customers won't wait.
                 </p>
@@ -356,12 +350,12 @@ export function App() {
               </CardContent>
             </Card>
 
-            <Card className="group hover-lift premium-card border-2 border-purple-primary/10 hover:border-purple-primary/30 transition-all duration-300 animate-slide-up">
-              <CardContent className="p-8">
-                <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-success-green to-ai-blue flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 shadow-lg">
-                  <BarChart3 className="w-7 h-7 text-white" />
-                </div>
-                <h3 className="text-2xl font-bold mb-3">Rich Analytics</h3>
+              <Card className="group hover-lift premium-card border-2 border-purple-primary/10 hover:border-purple-primary/30 transition-all duration-300">
+                <CardContent className="p-8">
+                  <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-success-green to-ai-blue flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 shadow-lg">
+                    <BarChart3 className="w-7 h-7 text-white" />
+                  </div>
+                  <h3 className="text-2xl font-bold mb-3">Rich Analytics</h3>
                 <p className="text-muted-foreground mb-4">
                   Deep insights into customer behavior, agent performance, and conversation patterns. Make data-driven decisions.
                 </p>
@@ -371,12 +365,12 @@ export function App() {
               </CardContent>
             </Card>
 
-            <Card className="group hover-lift premium-card border-2 border-purple-primary/10 hover:border-purple-primary/30 transition-all duration-300 animate-slide-up delay-300">
-              <CardContent className="p-8">
-                <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-purple-dark to-ai-purple flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 shadow-lg">
-                  <Users className="w-7 h-7 text-white" />
-                </div>
-                <h3 className="text-2xl font-bold mb-3">Team Collaboration</h3>
+              <Card className="group hover-lift premium-card border-2 border-purple-primary/10 hover:border-purple-primary/30 transition-all duration-300">
+                <CardContent className="p-8">
+                  <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-purple-dark to-ai-purple flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 shadow-lg">
+                    <Users className="w-7 h-7 text-white" />
+                  </div>
+                  <h3 className="text-2xl font-bold mb-3">Team Collaboration</h3>
                 <p className="text-muted-foreground mb-4">
                   Seamless handoff between AI and human agents. Internal notes, collision detection, and smart routing.
                 </p>
@@ -386,21 +380,22 @@ export function App() {
               </CardContent>
             </Card>
 
-            <Card className="group hover-lift premium-card border-2 border-purple-primary/10 hover:border-purple-primary/30 transition-all duration-300 animate-slide-up delay-700">
-              <CardContent className="p-8">
-                <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-ai-blue to-success-green flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 shadow-lg">
-                  <Shield className="w-7 h-7 text-white" />
-                </div>
-                <h3 className="text-2xl font-bold mb-3">Enterprise Security</h3>
+              <Card className="group hover-lift premium-card border-2 border-purple-primary/10 hover:border-purple-primary/30 transition-all duration-300">
+                <CardContent className="p-8">
+                  <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-ai-blue to-success-green flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 shadow-lg">
+                    <Shield className="w-7 h-7 text-white" />
+                  </div>
+                  <h3 className="text-2xl font-bold mb-3">Enterprise Security</h3>
                 <p className="text-muted-foreground mb-4">
                   SOC2 compliant, end-to-end encryption, SSO support, and audit logs. Your data stays yours.
                 </p>
-                <div className="flex items-center text-sm font-medium gradient-text group-hover:translate-x-2 transition-transform">
-                  Security details <ArrowRight className="w-4 h-4 ml-1" />
-                </div>
-              </CardContent>
-            </Card>
-          </div>
+                  <div className="flex items-center text-sm font-medium gradient-text group-hover:translate-x-2 transition-transform">
+                    Security details <ArrowRight className="w-4 h-4 ml-1" />
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </ScrollAnimation>
         </div>
       </section>
 

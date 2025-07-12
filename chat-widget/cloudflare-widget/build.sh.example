@@ -1,0 +1,26 @@
+#!/bin/bash
+
+# Build the project
+npm ci
+npm run build
+
+# Create deploy directory
+mkdir -p deploy
+
+# Copy public files
+cp -r public/* deploy/
+
+# Copy built assets
+cp dist/widget.js deploy/
+cp dist/widget.css deploy/
+
+# Get the current URL from environment variable (Render sets this)
+CURRENT_URL=${RENDER_EXTERNAL_URL:-"https://your-domain.com"}
+
+echo "Build complete! Widget will be available at: ${CURRENT_URL}"
+echo "Assets:"
+echo "  - Widget JS: ${CURRENT_URL}/widget.js"
+echo "  - Widget CSS: ${CURRENT_URL}/widget.css"
+echo "  - Loader: ${CURRENT_URL}/loader.js"
+echo "  - Demo: ${CURRENT_URL}/demo.html"
+echo "  - Index: ${CURRENT_URL}/index.html"

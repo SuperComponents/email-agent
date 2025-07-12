@@ -30,6 +30,7 @@ storybook-static
 # ESLint cache
 .eslintcache
 
-# Repomix output files
+
+.dev.vars
 repomix-output.*
 
