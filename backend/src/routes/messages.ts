@@ -73,8 +73,7 @@ async function generateDemoCustomerResponse(threadId: number) {
     max_tokens: 300,
   });
 
-  const generatedContent =
-    completion.choices[0].message.content || 'Thank you for your response.';
+  const generatedContent = completion.choices[0].message.content || 'Thank you for your response.';
 
   // Find who the customer was emailing (support email)
   const supportEmailAddress =
@@ -117,7 +116,7 @@ async function generateDemoCustomerResponse(threadId: number) {
       source: 'demo_customer_response',
       auto_generated: true,
       original_customer_email: customerEmailAddress,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     },
   });
 
@@ -182,7 +181,7 @@ app.post('/:id/messages', async c => {
     });
 
     // Schedule automatic demo customer response after 10-30 seconds
-    const delayMs = Math.floor(Math.random() * 20000) + 10000; // Random between 10-30 seconds
+    const delayMs = Math.floor(Math.random() * 4000) + 3000; // Random between 10-30 seconds
     setTimeout(async () => {
       try {
         await generateDemoCustomerResponse(threadId);
