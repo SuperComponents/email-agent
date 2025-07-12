@@ -89,6 +89,19 @@ export function useSendMessage() {
       // Invalidate thread to refetch with new message
       void queryClient.invalidateQueries({ queryKey: queryKeys.thread(variables.threadId) });
       void queryClient.invalidateQueries({ queryKey: queryKeys.threads() });
+      
+      // Schedule automatic demo customer response after 10-30 seconds
+      const delayMs = Math.floor(Math.random() * 20000) + 10000; // Random between 10-30 seconds
+      setTimeout(async () => {
+        try {
+          await APIClient.generateDemoCustomerResponse(variables.threadId);
+          // Invalidate queries to show the new customer response
+          void queryClient.invalidateQueries({ queryKey: queryKeys.thread(variables.threadId) });
+          void queryClient.invalidateQueries({ queryKey: queryKeys.threads() });
+        } catch (error) {
+          console.error('Failed to generate automatic demo customer response:', error);
+        }
+      }, delayMs);
     },
   });
 }
@@ -178,6 +191,20 @@ export function useGenerateSingleEmail() {
       // Invalidate threads to show new email
       void queryClient.invalidateQueries({ queryKey: queryKeys.threads() });
       void queryClient.invalidateQueries({ queryKey: ['simulation-status'] });
+    },
+  });
+}
+
+export function useGenerateDemoCustomerResponse() {
+  const queryClient = useQueryClient();
+  
+  return useMutation({
+    mutationFn: ({ threadId }: { threadId: string }) =>
+      APIClient.generateDemoCustomerResponse(threadId),
+    onSuccess: (_, variables) => {
+      // Invalidate thread to show new customer response
+      void queryClient.invalidateQueries({ queryKey: queryKeys.thread(variables.threadId) });
+      void queryClient.invalidateQueries({ queryKey: queryKeys.threads() });
     },
   });
 }

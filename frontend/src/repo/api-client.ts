@@ -97,7 +97,7 @@ export async function regenerateDraft(threadId: string, instructions?: string): 
 }
 
 export async function generateDemoCustomerResponse(threadId: string): Promise<{ status: string; message: string }> {
-  return fetchAPI<{ status: string; message: string }>(`/api/threads/${threadId}/demo-customer-response`, {
+  return fetchAPI<{ status: string; message: string }>(`/api/demo/${threadId}/demo-customer-response`, {
     method: 'POST',
   });
 }
