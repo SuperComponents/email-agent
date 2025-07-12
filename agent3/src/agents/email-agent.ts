@@ -104,7 +104,6 @@ ${email.body_text || ''}`;
 }
 
 // Keeping for potential future use
-// @ts-expect-error - Preserved for future use
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 async function buildThreadContext(
   threadId: number | undefined,
@@ -219,10 +218,10 @@ export async function processEmail(
   await result.completed;
 
   // Log the raw agent result
-  logAgentRunResult(result);
+  // logAgentRunResult(result);
 
   // Log the history separately
-  logAgentHistory(result.history);
+  // logAgentHistory(result.history);
 
   // Get the draft that was created by the write_draft tool
   // TODO: existing draft doesn't necessarily mean we created one
