@@ -1,10 +1,10 @@
-# OpenSupport Backend
+# ProResponse AI Backend
 
-The backend API server for OpenSupport - an AI-powered customer support platform that provides intelligent email thread management and automated response generation.
+The backend API server for ProResponse AI - an AI-powered customer support platform that provides intelligent email thread management and automated response generation.
 
 ## Overview
 
-This backend serves as the API layer for OpenSupport, handling email thread management, AI agent integration, and database operations. It's fully integrated with the `agent3/` AI system to provide real-time email processing and draft generation.
+This backend serves as the API layer for ProResponse AI, handling email thread management, AI agent integration, and database operations. It's fully integrated with the `agent3/` AI system to provide real-time email processing and draft generation.
 
 ## Features
 
@@ -143,7 +143,7 @@ Create a `.env` file in the backend directory:
 
 ```env
 # Database
-DATABASE_URL=postgresql://user:password@localhost:5432/opensupport
+DATABASE_URL=postgresql://user:password@localhost:5432/proresponse
 
 # OpenAI Integration
 OPENAI_API_KEY=sk-your-openai-key-here
@@ -223,7 +223,7 @@ The backend includes complete StackAuth integration:
 
 ## API Integration
 
-The backend is designed to work seamlessly with the OpenSupport frontend:
+The backend is designed to work seamlessly with the ProResponse AI frontend:
 
 - **CORS**: Configured for frontend domain
 - **Type Safety**: Shared types with frontend
@@ -238,8 +238,8 @@ The backend is designed to work seamlessly with the OpenSupport frontend:
 docker compose up --build
 
 # Or build individual image
-docker build -t opensupport-backend .
-docker run -p 3000:3000 opensupport-backend
+docker build -t proresponse-backend .
+docker run -p 3000:3000 proresponse-backend
 ```
 
 ### Production Checklist
