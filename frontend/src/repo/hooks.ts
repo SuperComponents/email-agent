@@ -120,3 +120,17 @@ export function useRegenerateDraft() {
     },
   });
 }
+
+export function useCreateInternalNote() {
+  const queryClient = useQueryClient();
+  
+  return useMutation({
+    mutationFn: ({ threadId, content, isPinned }: { threadId: string; content: string; isPinned?: boolean }) =>
+      APIClient.createInternalNote(threadId, content, isPinned),
+    onSuccess: (_, variables) => {
+      // Invalidate thread to refetch with new internal note
+      void queryClient.invalidateQueries({ queryKey: queryKeys.thread(variables.threadId) });
+      void queryClient.invalidateQueries({ queryKey: queryKeys.threads() });
+    },
+  });
+}

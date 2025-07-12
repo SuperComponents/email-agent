@@ -77,8 +77,8 @@ export function InboxPage() {
       main={<ThreadDetailContainer />}
       panel={isAgentPanelOpen ? 
         <AgentPanelContainer 
-          onUseAgent={handleUseAgent}
-          onDemoCustomerResponse={handleDemoCustomerResponse}
+          onUseAgent={() => void handleUseAgent()}
+          onDemoCustomerResponse={() => void handleDemoCustomerResponse()}
           isRegeneratingDraft={isRegenerating}
           isGeneratingDemoResponse={isGeneratingDemo}
         /> : null}

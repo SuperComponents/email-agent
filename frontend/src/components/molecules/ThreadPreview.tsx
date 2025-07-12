@@ -1,5 +1,4 @@
 import React from "react";
-import { Avatar } from "../atoms/Avatar";
 import { Badge } from "../atoms/Badge";
 import { cn } from "../../lib/utils";
 
@@ -31,7 +30,6 @@ export const ThreadPreview = React.forwardRef<
       className,
       title,
       snippet,
-      author,
       timestamp,
       isActive,
       isUnread,

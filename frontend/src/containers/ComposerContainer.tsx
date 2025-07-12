@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useUIStore } from '../stores/ui-store';
 import { useComposerStore } from '../stores/composer-store';
-import { useDraft, useSendMessage, useRegenerateDraft, useThread } from '../repo/hooks';
-import { Composer } from '../components/organisms';
+import { useDraft, useSendMessage, useRegenerateDraft, useThread, useCreateInternalNote } from '../repo/hooks';
+import { Composer, type ComposerMode } from '../components/organisms';
 
 export function ComposerContainer() {
   const selectedThreadId = useUIStore(state => state.selectedThreadId);
@@ -19,11 +19,13 @@ export function ComposerContainer() {
   const { data: thread } = useThread(selectedThreadId || '');
   const sendMessageMutation = useSendMessage();
   const regenerateDraftMutation = useRegenerateDraft();
+  const createInternalNoteMutation = useCreateInternalNote();
 
   const [localContent, setLocalContent] = useState('');
   const [to, setTo] = useState('');
   const [cc, setCc] = useState('');
   const [bcc, setBcc] = useState('');
+  const [mode, setMode] = useState<ComposerMode>('reply');
 
   // Initialize content
   useEffect(() => {
@@ -89,6 +91,21 @@ export function ComposerContainer() {
     }
   };
 
+  const handleSendInternalNote = async () => {
+    if (!selectedThreadId || !localContent.trim()) return;
+
+    try {
+      await createInternalNoteMutation.mutateAsync({
+        threadId: selectedThreadId,
+        content: localContent,
+      });
+      setLocalContent('');
+      setMode('reply'); // Switch back to reply mode after sending note
+    } catch (error) {
+      console.error('Failed to create internal note:', error);
+    }
+  };
+
   if (!selectedThreadId) {
     return null;
   }
@@ -97,11 +114,12 @@ export function ComposerContainer() {
     <Composer
       value={localContent}
       onChange={handleContentChange}
-      onSend={handleSend}
-      onRegenerate={handleRegenerate}
+      onSend={() => void handleSend()}
+      onSendInternalNote={() => void handleSendInternalNote()}
+      onRegenerate={() => void handleRegenerate()}
       isGenerating={regenerateDraftMutation.isPending}
-      isSending={sendMessageMutation.isPending}
-      citations={(serverDraft?.citations ?? undefined) as any}
+      isSending={sendMessageMutation.isPending || createInternalNoteMutation.isPending}
+      citations={serverDraft?.citations as never}
       to={to}
       from="support@company.com"
       cc={cc}
@@ -109,6 +127,8 @@ export function ComposerContainer() {
       onToChange={setTo}
       onCcChange={setCc}
       onBccChange={setBcc}
+      mode={mode}
+      onModeChange={setMode}
     />
   );
 }

@@ -102,6 +102,13 @@ export async function generateDemoCustomerResponse(threadId: string): Promise<{ 
   });
 }
 
+export async function createInternalNote(threadId: string, content: string, isPinned: boolean = false): Promise<{ status: string; message: string }> {
+  return fetchAPI<{ status: string; message: string }>(`/api/threads/${threadId}/internal-notes`, {
+    method: 'POST',
+    body: JSON.stringify({ content, is_pinned: isPinned }),
+  });
+}
+
 // Filter counts
 export async function getThreadCounts(): Promise<ThreadCounts> {
   return fetchAPI<ThreadCounts>('/api/threads/counts');
@@ -117,5 +124,6 @@ export const APIClient = {
   getAgentActivity,
   regenerateDraft,
   generateDemoCustomerResponse,
+  createInternalNote,
   getThreadCounts,
 };

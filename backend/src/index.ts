@@ -9,6 +9,7 @@ import agentRoutes from './routes/agent.js';
 import countRoutes from './routes/counts.js';
 import demoRoutes from './routes/demo.js';
 import authRoutes from './routes/auth.js';
+import internalNotesRoutes from './routes/internal-notes.js';
 import { authMiddleware } from './middleware/auth.js';
 
 const app = new Hono();
@@ -35,6 +36,7 @@ app.route('/api/threads', messageRoutes);
 app.route('/api/threads', draftRoutes);
 app.route('/api/threads', agentRoutes);
 app.route('/api/threads', demoRoutes);
+app.route('/api/threads', internalNotesRoutes);
 
 serve(
   {
