@@ -46,6 +46,21 @@ export interface AgentActionProps extends React.HTMLAttributes<HTMLDivElement> {
   status?: 'pending' | 'completed' | 'failed';
   isMessage?: boolean;
   messageRole?: 'user' | 'assistant';
+  result?: {
+    tool_name?: string;
+    urgency_change?: string;
+    confidence?: number;
+    sentiment?: string;
+    escalation_recommended?: boolean;
+    suggested_priority?: string;
+    rag_sources_used?: number;
+    draft_subject?: string;
+    draft_body_preview?: string;
+    category_change?: string;
+    action_reason?: string;
+    [key: string]: any;
+  };
+  type?: string; // Database action type like 'thread_status_changed'
 }
 
 export const AgentAction = React.forwardRef<HTMLDivElement, AgentActionProps>(
@@ -53,11 +68,14 @@ export const AgentAction = React.forwardRef<HTMLDivElement, AgentActionProps>(
     {
       className,
       icon,
+      title,
       description,
       timestamp,
       status = 'completed',
       isMessage,
       messageRole,
+      result,
+      type,
       ...props
     },
     ref,
@@ -132,9 +150,79 @@ export const AgentAction = React.forwardRef<HTMLDivElement, AgentActionProps>(
               </time>
             )}
           </div>
-          {description && (
-            <p className="text-xs text-secondary-foreground leading-tight">{description}</p>
+
+          {/* Special handling for urgency update events */}
+          {type === 'thread_status_changed' && result?.tool_name === 'update_thread_urgency' && (
+            <div className="mt-1">
+              <span className="text-sm font-medium text-foreground">
+                Urgency:{' '}
+                {result?.tool_output?.args?.urgency ||
+                  result?.suggested_priority ||
+                  result?.tool_output?.new_urgency ||
+                  'unknown'}
+              </span>
+            </div>
           )}
+
+          {/* Special handling for user action needed events */}
+          {type === 'thread_assigned' && result?.tool_name === 'user_action_needed' && (
+            <div className="mt-1">
+              <span className="text-sm font-medium text-foreground">
+                {result?.action_reason ||
+                  result?.tool_output?.reason ||
+                  result?.tool_output?.args?.reason ||
+                  'User action required'}
+              </span>
+            </div>
+          )}
+
+          {/* Special handling for category update events */}
+          {type === 'thread_status_changed' && result?.tool_name === 'update_thread_category' && (
+            <div className="mt-1">
+              <span className="text-sm font-medium text-foreground">
+                Category:{' '}
+                {result?.tool_output?.args?.category ||
+                  result?.tool_output?.new_category ||
+                  'unknown'}
+              </span>
+            </div>
+          )}
+
+          {/* Special handling for summarize context events */}
+          {type === 'email_read' && result?.tool_name === 'summarize_useful_context' && (
+            <div className="mt-1">
+              <span className="text-sm font-medium text-foreground">
+                {result?.context_summary ||
+                  result?.tool_output?.summary ||
+                  result?.tool_output?.args?.summary ||
+                  'Context analyzed'}
+              </span>
+            </div>
+          )}
+
+          {/* Special handling for knowledge base search events */}
+          {result?.tool_name === 'search-knowledge-base' && (
+            <div className="mt-1">
+              <span className="text-sm font-medium text-foreground">
+                Searched and found{' '}
+                {result?.rag_sources_used ||
+                  result?.tool_output?.results_count ||
+                  result?.tool_output?.length ||
+                  0}{' '}
+                related documents in the knowledge base
+              </span>
+            </div>
+          )}
+
+          {/* Fallback to description for other events */}
+          {!(type === 'thread_status_changed' && result?.tool_name === 'update_thread_urgency') &&
+            !(type === 'thread_assigned' && result?.tool_name === 'user_action_needed') &&
+            !(type === 'thread_status_changed' && result?.tool_name === 'update_thread_category') &&
+            !(type === 'email_read' && result?.tool_name === 'summarize_useful_context') &&
+            !(result?.tool_name === 'search-knowledge-base') &&
+            description && (
+              <p className="text-xs text-secondary-foreground leading-tight mt-1">{description}</p>
+            )}
         </div>
       </div>
     );
