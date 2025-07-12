@@ -130,6 +130,8 @@ export function AgentPanelContainer({
       if (action.result?.type === 'function_call_result') {
         return null;
       }
+
+      console.log('action', action);
       // Check if this is a message type
       const isMessage = action.result?.type === 'message';
       const isExplainToolCall = action.result?.name === 'explain_next_tool_call';
@@ -143,7 +145,7 @@ export function AgentPanelContainer({
           icon: MessageSquare,
           title: action.title,
           description: messageContent,
-          timestamp: new Date(action.timestamp).toLocaleTimeString(),
+          timestamp: action.timestamp,
           status:
             action.status === 'completed'
               ? 'completed'
@@ -168,12 +170,12 @@ export function AgentPanelContainer({
           console.error('Failed to parse explain_next_tool_call arguments:', e);
           messageContent = action.result?.arguments || '';
         }
-
+        console.log(action.timestamp);
         return {
           icon: MessageSquare,
           title: action.title,
           description: messageContent,
-          timestamp: new Date(action.timestamp).toLocaleTimeString(),
+          timestamp: action.timestamp,
           status:
             action.status === 'completed'
               ? 'completed'
@@ -257,7 +259,7 @@ export function AgentPanelContainer({
           action.type === 'analyze' ? Brain : action.type === 'search' ? FileSearch : MessageSquare,
         title: displayTitle,
         description: displayDescription,
-        timestamp: new Date(action.timestamp).toLocaleTimeString(),
+        timestamp: action.timestamp,
         status:
           action.status === 'completed'
             ? 'completed'
@@ -270,11 +272,11 @@ export function AgentPanelContainer({
 
   const handleSendMessage = (message: string) => {
     if (!selectedThreadId) return;
-    
+
     void (async () => {
       try {
         await apiClient.post(`/api/threads/${selectedThreadId}/regenerate`, {
-          userMessage: message
+          userMessage: message,
         });
         // The useAgentActivity hook should automatically refresh with new data
       } catch (error) {
@@ -282,6 +284,8 @@ export function AgentPanelContainer({
       }
     })();
   };
+
+  console.log('actions22', actions);
 
   return (
     <AgentPanel

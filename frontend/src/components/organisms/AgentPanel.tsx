@@ -30,7 +30,7 @@ export const AgentPanel = React.forwardRef<HTMLDivElement, AgentPanelProps>(
     ref,
   ) => {
     const [message, setMessage] = useState('');
-
+    console.log('actions', actions);
     const handleSend = () => {
       if (message.trim() && onSendMessage) {
         onSendMessage(message.trim());
@@ -100,7 +100,6 @@ export const AgentPanel = React.forwardRef<HTMLDivElement, AgentPanelProps>(
               <p className="mt-1">Click "Use Agent" to start analyzing this conversation.</p>
             </div>
           )}
-
         </div>
 
         <div className="border-t border-border p-4">
