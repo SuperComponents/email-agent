@@ -49,14 +49,14 @@ async function loadScenarios(): Promise<Scenario[]> {
     // Try Docker mount path first, fallback to relative path for local development
     const dockerPath = '/demo-data/scenarios.json';
     const localPath = path.join(process.cwd(), '../demo-data/scenarios.json');
-    
+
     let scenariosPath = dockerPath;
     try {
       await fs.access(dockerPath);
     } catch {
       scenariosPath = localPath;
     }
-    
+
     const data = await fs.readFile(scenariosPath, 'utf-8');
     const scenarios = JSON.parse(data) as ScenariosData;
     return scenarios.scenarios;
@@ -69,10 +69,10 @@ async function loadScenarios(): Promise<Scenario[]> {
 // Generate a realistic customer email based on scenario
 async function generateEmailFromScenario(scenario: Scenario) {
   const persona = customerPersonas[Math.floor(Math.random() * customerPersonas.length)];
-  
+
   // Note: Urgency mapping available for future enhancement
   // severity levels: low, medium, high
-  
+
   const completion = await openai.chat.completions.create({
     model: 'gpt-4o-mini',
     messages: [
@@ -87,7 +87,7 @@ async function generateEmailFromScenario(scenario: Scenario) {
         - Matches the customer's communication tone (${persona.tone})
         - Uses appropriate urgency level for ${scenario.severity} severity
         - Includes relevant details about their device (${scenario.device}) and user type (${scenario.user_type})
-        - Is 2-4 paragraphs typical for customer emails
+        - Is 1-2 paragraphs typical for customer emails
         - Sounds natural and authentic
         - Include specific details that make the email feel real
         
@@ -120,9 +120,11 @@ async function generateEmailFromScenario(scenario: Scenario) {
   });
 
   return {
-    content: completion.choices[0].message.content || `Hi, I'm having an issue with ${scenario.title.toLowerCase()}. ${scenario.description}`,
+    content:
+      completion.choices[0].message.content ||
+      `Hi, I'm having an issue with ${scenario.title.toLowerCase()}. ${scenario.description}`,
     persona,
-    scenario
+    scenario,
   };
 }
 
@@ -130,7 +132,7 @@ async function generateEmailFromScenario(scenario: Scenario) {
 async function createEmailFromScenario(scenario: Scenario) {
   try {
     const emailData = await generateEmailFromScenario(scenario);
-    
+
     // Create thread (new threads are unread by default due to schema default)
     const [thread] = await db
       .insert(threads)
@@ -179,13 +181,13 @@ async function createEmailFromScenario(scenario: Scenario) {
         customer_tone: emailData.persona.tone,
         tags: scenario.tags,
         auto_generated: true,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       },
     });
 
     emailCount++;
     console.log(`✉️  Generated email from scenario: ${scenario.title} (Total: ${emailCount})`);
-    
+
     return { thread, email, scenario };
   } catch (error) {
     console.error('Error creating email from scenario:', error);
@@ -194,7 +196,8 @@ async function createEmailFromScenario(scenario: Scenario) {
 }
 
 // Start email simulation
-export async function startEmailSimulation(intervalMs: number = 90000) { // Default 1.5 minutes
+export async function startEmailSimulation(intervalMs: number = 90000) {
+  // Default 1.5 minutes
   if (isSimulationRunning) {
     return { success: false, message: 'Simulation already running' };
   }
@@ -225,18 +228,18 @@ export async function startEmailSimulation(intervalMs: number = 90000) { // Defa
     }, intervalMs);
 
     console.log(`🚀 Email simulation started (interval: ${intervalMs}ms)`);
-    return { 
-      success: true, 
-      message: 'Email simulation started', 
+    return {
+      success: true,
+      message: 'Email simulation started',
       intervalMs,
-      scenariosCount: scenarios.length 
+      scenariosCount: scenarios.length,
     };
   } catch (error) {
     isSimulationRunning = false;
     console.error('Error starting email simulation:', error);
-    return { 
-      success: false, 
-      message: error instanceof Error ? error.message : 'Failed to start simulation' 
+    return {
+      success: false,
+      message: error instanceof Error ? error.message : 'Failed to start simulation',
     };
   }
 }
@@ -253,12 +256,12 @@ export function stopEmailSimulation() {
   }
 
   isSimulationRunning = false;
-  
+
   console.log(`🛑 Email simulation stopped (Generated ${emailCount} emails)`);
-  return { 
-    success: true, 
-    message: 'Email simulation stopped', 
-    totalEmailsGenerated: emailCount 
+  return {
+    success: true,
+    message: 'Email simulation stopped',
+    totalEmailsGenerated: emailCount,
   };
 }
 
@@ -281,19 +284,19 @@ export async function generateSingleEmail() {
 
     const randomScenario = scenarios[Math.floor(Math.random() * scenarios.length)];
     const result = await createEmailFromScenario(randomScenario);
-    
-    return { 
-      success: true, 
+
+    return {
+      success: true,
       message: 'Email generated successfully',
       thread: result.thread,
       email: result.email,
-      scenario: result.scenario 
+      scenario: result.scenario,
     };
   } catch (error) {
     console.error('Error generating single email:', error);
-    return { 
-      success: false, 
-      message: error instanceof Error ? error.message : 'Failed to generate email' 
+    return {
+      success: false,
+      message: error instanceof Error ? error.message : 'Failed to generate email',
     };
   }
 }
