@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { QueryClientProvider } from '@tanstack/react-query';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+// import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { queryClient } from './repo/query-client';
 import { InboxPage } from './pages/InboxPage';
 import { KnowledgeBasePage } from './pages/KnowledgeBasePage';

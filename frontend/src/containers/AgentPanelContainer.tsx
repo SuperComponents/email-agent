@@ -1,4 +1,6 @@
-import { useAgentActivity } from '../repo/hooks';
+import { useEffect, useRef } from 'react';
+import { useAgentActivity, queryKeys } from '../repo/hooks';
+import { useQueryClient } from '@tanstack/react-query';
 import { useUIStore } from '../stores/ui-store';
 import { AgentPanel } from '../components/organisms';
 import { FileSearch, Brain, MessageSquare } from 'lucide-react';
@@ -8,8 +10,39 @@ import { apiClient } from '../lib/api';
 export function AgentPanelContainer() {
   const selectedThreadId = useUIStore((state) => state.selectedThreadId);
   const isAgentPanelOpen = useUIStore((state) => state.isAgentPanelOpen);
+  const queryClient = useQueryClient();
+  const seenWriteDraftIds = useRef<Set<string>>(new Set());
   
   const { data: agentActivity } = useAgentActivity(selectedThreadId || '');
+  
+  // Check for NEW write_draft function call results and refetch draft
+  useEffect(() => {
+    if (agentActivity && agentActivity.actions && selectedThreadId) {
+      // Find write_draft results we haven't seen before
+      const newWriteDraftResults = agentActivity.actions.filter(
+        action => action.result?.type === 'function_call_result' && 
+                  action.result?.name === 'write_draft' &&
+                  !seenWriteDraftIds.current.has(action.id)
+      );
+      
+      if (newWriteDraftResults.length > 0) {
+        // Mark these as seen
+        newWriteDraftResults.forEach(action => {
+          seenWriteDraftIds.current.add(action.id);
+        });
+        
+        // Refetch the draft when we see a new write_draft result
+        void queryClient.invalidateQueries({ 
+          queryKey: queryKeys.draft(selectedThreadId) 
+        });
+      }
+    }
+  }, [agentActivity, selectedThreadId, queryClient]);
+  
+  // Clear seen IDs when thread changes
+  useEffect(() => {
+    seenWriteDraftIds.current.clear();
+  }, [selectedThreadId]);
   
   // Log agent activity when it comes in
   if (agentActivity && agentActivity.actions) {
