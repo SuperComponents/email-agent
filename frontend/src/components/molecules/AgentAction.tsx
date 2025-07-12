@@ -11,10 +11,55 @@ export interface AgentActionProps extends React.HTMLAttributes<HTMLDivElement> {
   status?: 'pending' | 'completed' | 'failed';
   isMessage?: boolean;
   messageRole?: 'user' | 'assistant';
+  result?: {
+    tool_name?: string;
+    urgency_change?: string;
+    confidence?: number;
+    sentiment?: string;
+    escalation_recommended?: boolean;
+    suggested_priority?: string;
+    rag_sources_used?: number;
+    draft_subject?: string;
+    draft_body_preview?: string;
+    category_change?: string;
+    action_reason?: string;
+    [key: string]: unknown;
+  };
+  type?: string; // Database action type like 'thread_status_changed'
+  onDraftClick?: (draft: { subject?: string; body: string }) => void;
 }
 
 export const AgentAction = React.forwardRef<HTMLDivElement, AgentActionProps>(
-  ({ className, icon, title, description, timestamp, status = 'completed', isMessage, messageRole, ...props }, ref) => {
+  (
+    {
+      className,
+      icon,
+      title,
+      description,
+      timestamp,
+      status = 'completed',
+      isMessage,
+      messageRole,
+      result,
+      type,
+      onDraftClick,
+      ...props
+    },
+    ref,
+  ) => {
+    // Check if this is a draft action
+    const isDraftAction = result?.tool_name === 'compose-draft' || 
+                         (result?.draft_subject && result?.draft_body_preview);
+    
+    const handleDraftClick = () => {
+      if (isDraftAction && onDraftClick && result) {
+        const toolOutput = result.tool_output as { result?: { body?: string; subject?: string } };
+        onDraftClick({
+          subject: toolOutput?.result?.subject || result.draft_subject,
+          body: toolOutput?.result?.body || (result.draft_body_preview as string) || ''
+        });
+      }
+    };
     // Message-style display for chat messages
     if (isMessage) {
       return (
@@ -58,8 +103,10 @@ export const AgentAction = React.forwardRef<HTMLDivElement, AgentActionProps>(
           status === 'completed' && 'border-l-primary/50',
           status === 'pending' && 'border-l-secondary',
           status === 'failed' && 'border-l-destructive/50',
-          className
+          isDraftAction && onDraftClick && 'cursor-pointer hover:bg-accent/50 transition-colors',
+          className,
         )}
+        onClick={isDraftAction ? handleDraftClick : undefined}
         {...props}
       >
         <Icon
@@ -81,11 +128,112 @@ export const AgentAction = React.forwardRef<HTMLDivElement, AgentActionProps>(
               </time>
             )}
           </div>
-          {description && (
-            <p className="text-xs text-secondary-foreground mt-0.5 leading-tight">
-              {description}
-            </p>
+
+          {/* Special handling for urgency update events */}
+          {type === 'thread_status_changed' && result?.tool_name === 'update_thread_urgency' && (
+            <div className="mt-1">
+              <span className="text-sm font-medium text-foreground">
+                Urgency:{' '}
+                {(result?.tool_output as { args?: { urgency?: string }; new_urgency?: string })?.args?.urgency ||
+                  result?.suggested_priority ||
+                  (result?.tool_output as { new_urgency?: string })?.new_urgency ||
+                  'unknown'}
+              </span>
+            </div>
           )}
+
+          {/* Special handling for user action needed events */}
+          {type === 'thread_assigned' && result?.tool_name === 'user_action_needed' && (
+            <div className="mt-1">
+              <span className="text-sm font-medium text-foreground">
+                {result?.action_reason ||
+                  (result?.tool_output as { reason?: string; args?: { reason?: string } })?.reason ||
+                  (result?.tool_output as { args?: { reason?: string } })?.args?.reason ||
+                  'User action required'}
+              </span>
+            </div>
+          )}
+
+          {/* Special handling for category update events */}
+          {type === 'thread_status_changed' && result?.tool_name === 'update_thread_category' && (
+            <div className="mt-1">
+              <span className="text-sm font-medium text-foreground">
+                Category:{' '}
+                {(result?.tool_output as { args?: { category?: string }; new_category?: string })?.args?.category ||
+                  (result?.tool_output as { new_category?: string })?.new_category ||
+                  'unknown'}
+              </span>
+            </div>
+          )}
+
+          {/* Special handling for summarize context events */}
+          {type === 'email_read' && result?.tool_name === 'summarize_useful_context' && (
+            <div className="mt-1">
+              <span className="text-sm font-medium text-foreground">
+                {result?.context_summary ||
+                  (result?.tool_output as { summary?: string; args?: { summary?: string } })?.summary ||
+                  (result?.tool_output as { args?: { summary?: string } })?.args?.summary ||
+                  'Context analyzed'}
+              </span>
+            </div>
+          )}
+
+          {/* Special handling for knowledge base search events */}
+          {result?.tool_name === 'search-knowledge-base' && (
+            <div className="mt-1">
+              <span className="text-sm font-medium text-foreground">
+                Searched and found{' '}
+                {result?.rag_sources_used ||
+                  (result?.tool_output as { results_count?: number; length?: number })?.results_count ||
+                  (result?.tool_output as { length?: number })?.length ||
+                  0}{' '}
+                related documents in the knowledge base
+              </span>
+            </div>
+          )}
+
+          {/* Special handling for draft actions */}
+          {isDraftAction && (
+            <div className="mt-1">
+              <span className="text-sm font-medium text-foreground">
+                Draft response generated
+              </span>
+              {(() => {
+                const toolOutput = result?.tool_output as { result?: { subject?: string; body?: string } };
+                const subject = toolOutput?.result?.subject || result?.draft_subject;
+                const body = toolOutput?.result?.body || result?.draft_body_preview;
+                
+                return (
+                  <>
+                    {subject && (
+                      <div className="text-xs text-secondary-foreground mt-1">
+                        Subject: {subject}
+                      </div>
+                    )}
+                    {body && (
+                      <div className="text-xs text-secondary-foreground mt-1 line-clamp-2">
+                        {body}
+                      </div>
+                    )}
+                  </>
+                );
+              })()}
+              <div className="text-xs text-primary mt-2 flex items-center gap-1">
+                <span>Click to use this draft →</span>
+              </div>
+            </div>
+          )}
+
+          {/* Fallback to description for other events */}
+          {!(type === 'thread_status_changed' && result?.tool_name === 'update_thread_urgency') &&
+            !(type === 'thread_assigned' && result?.tool_name === 'user_action_needed') &&
+            !(type === 'thread_status_changed' && result?.tool_name === 'update_thread_category') &&
+            !(type === 'email_read' && result?.tool_name === 'summarize_useful_context') &&
+            !(result?.tool_name === 'search-knowledge-base') &&
+            !isDraftAction &&
+            description && (
+              <p className="text-xs text-secondary-foreground leading-tight mt-1">{description}</p>
+            )}
         </div>
       </div>
     );

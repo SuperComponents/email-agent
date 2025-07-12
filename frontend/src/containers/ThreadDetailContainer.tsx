@@ -1,12 +1,25 @@
+import { useRef, forwardRef, useImperativeHandle } from 'react';
 import { useThread } from '../repo/hooks';
 import { useUIStore } from '../stores/ui-store';
 import { ThreadDetail, type EmailMessage } from '../components/organisms';
-import { ComposerContainer } from './ComposerContainer';
+import { ComposerContainer, type ComposerContainerRef } from './ComposerContainer';
 
-export function ThreadDetailContainer() {
+export interface ThreadDetailContainerRef {
+  setDraftContent: (draft: { subject?: string; body: string }) => void;
+}
+
+export const ThreadDetailContainer = forwardRef<ThreadDetailContainerRef>((_, ref) => {
   const selectedThreadId = useUIStore(state => state.selectedThreadId);
+  const composerRef = useRef<ComposerContainerRef>(null);
 
   const { data: thread, isLoading, error } = useThread(selectedThreadId || '');
+
+  // Expose method to set draft content from outside
+  useImperativeHandle(ref, () => ({
+    setDraftContent: (draft: { subject?: string; body: string }) => {
+      composerRef.current?.setDraftContent(draft);
+    }
+  }), []);
 
   if (!selectedThreadId) {
     return (
@@ -55,13 +68,17 @@ export function ThreadDetailContainer() {
 
   return (
     <div className="flex flex-col h-full">
-      <ThreadDetail
-        subject={thread.subject}
-        messages={messages}
-        status={thread.status as 'open' | 'closed' | 'pending'}
-        tags={thread.tags}
-      />
-      <ComposerContainer />
+      <div className="flex-1 min-h-0">
+        <ThreadDetail
+          subject={thread.subject}
+          messages={messages}
+          status={thread.status as 'open' | 'closed' | 'pending'}
+          tags={thread.tags}
+        />
+      </div>
+      <div className="flex-shrink-0">
+        <ComposerContainer ref={composerRef} />
+      </div>
     </div>
   );
-}
+});

@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { Sparkles, UserPlus, Send } from 'lucide-react';
+import { Send } from 'lucide-react';
 import { AgentAction, type AgentActionProps } from '../molecules/AgentAction';
 import { Separator } from '../atoms/Separator';
 import { Button } from '../atoms/Button';
 import { Icon } from '../atoms/Icon';
+import { DotsLoader } from '../atoms/DotsLoader';
 import { cn } from '../../lib/utils';
 
 export interface AgentPanelProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -13,8 +14,15 @@ export interface AgentPanelProps extends React.HTMLAttributes<HTMLDivElement> {
   onUseAgent?: () => void;
   onDemoCustomerResponse?: () => void;
   onSendMessage?: (message: string) => void;
-  isRegeneratingDraft?: boolean;
-  isGeneratingDemoResponse?: boolean;
+  currentThreadId?: number;
+  workerStatus?: {
+    threadId: number;
+    status: string;
+    isActive: boolean;
+  };
+  onStartWorker?: () => void;
+  isStartingWorker?: boolean;
+  onDraftClick?: (draft: { subject?: string; body: string }) => void;
 }
 
 export const AgentPanel = React.forwardRef<HTMLDivElement, AgentPanelProps>(
@@ -26,8 +34,7 @@ export const AgentPanel = React.forwardRef<HTMLDivElement, AgentPanelProps>(
       onUseAgent,
       onDemoCustomerResponse,
       onSendMessage,
-      isRegeneratingDraft,
-      isGeneratingDemoResponse,
+      onDraftClick,
       ...props
     },
     ref,
@@ -63,7 +70,7 @@ export const AgentPanel = React.forwardRef<HTMLDivElement, AgentPanelProps>(
             <div className="space-y-3 mb-6">
               <h4 className="text-sm font-medium text-secondary-foreground">Tool Calls</h4>
               {actions.map((action, index) => (
-                <AgentAction key={index} {...action} />
+                <AgentAction key={index} {...action} onDraftClick={onDraftClick} />
               ))}
             </div>
           ) : (
