@@ -25,6 +25,7 @@ export function useThread(id: string) {
     queryKey: queryKeys.thread(id),
     queryFn: () => APIClient.getThread(id),
     enabled: !!id,
+    refetchInterval: 1000, // Poll every 1 second
   });
 }
 
@@ -89,19 +90,6 @@ export function useSendMessage() {
       // Invalidate thread to refetch with new message
       void queryClient.invalidateQueries({ queryKey: queryKeys.thread(variables.threadId) });
       void queryClient.invalidateQueries({ queryKey: queryKeys.threads() });
-      
-      // Schedule automatic demo customer response after 10-30 seconds
-      const delayMs = Math.floor(Math.random() * 20000) + 10000; // Random between 10-30 seconds
-      setTimeout(async () => {
-        try {
-          await APIClient.generateDemoCustomerResponse(variables.threadId);
-          // Invalidate queries to show the new customer response
-          void queryClient.invalidateQueries({ queryKey: queryKeys.thread(variables.threadId) });
-          void queryClient.invalidateQueries({ queryKey: queryKeys.threads() });
-        } catch (error) {
-          console.error('Failed to generate automatic demo customer response:', error);
-        }
-      }, delayMs);
     },
   });
 }

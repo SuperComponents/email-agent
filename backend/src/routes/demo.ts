@@ -5,6 +5,7 @@ import { eq } from 'drizzle-orm';
 import { authMiddleware } from '../middleware/auth.js';
 import OpenAI from 'openai';
 import { OPENAI_API_KEY } from '../config/env.js';
+import { logAgentAction } from '../database/logAgentAction.js';
 import { 
   startEmailSimulation, 
   stopEmailSimulation, 
@@ -119,6 +120,19 @@ app.post('/:threadId/demo-customer-response', async c => {
         status: 'needs_attention' as const,
       })
       .where(eq(threads.id, threadId));
+
+    // Log agent action for customer response received
+    await logAgentAction({
+      threadId: threadId,
+      action: 'email_read',
+      emailId: newEmail.id,
+      metadata: {
+        source: 'demo_customer_response',
+        auto_generated: true,
+        original_customer_email: customerEmailAddress,
+        timestamp: new Date().toISOString()
+      },
+    });
 
     return c.json({
       success: true,
