@@ -1,0 +1,167 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+/* Markdown Table Styling */
+.markdown-body table {
+  @apply w-full border-collapse my-4 text-sm;
+}
+.markdown-body th,
+.markdown-body td {
+  @apply border border-neutral-300 dark:border-neutral-700 px-3 py-2 text-left;
+}
+.markdown-body th {
+  @apply bg-neutral-100 dark:bg-neutral-800 font-semibold dark:text-neutral-200;
+}
+.markdown-body tr {
+  @apply dark:text-neutral-300;
+}
+.markdown-body tr:nth-child(even) {
+  @apply bg-neutral-50 dark:bg-neutral-800/50;
+}
+
+/* Button styles */
+.btn {
+  @apply border transition-colors;
+}
+
+.btn.btn-primary {
+  @apply border-neutral-500 bg-neutral-750 text-white shadow-sm;
+}
+
+.btn.btn-primary:hover:not(:disabled) {
+  @apply border-neutral-600 bg-neutral-850;
+}
+
+.btn.btn-secondary {
+  @apply border-neutral-200 bg-white text-neutral-900 shadow-sm dark:border-neutral-800 dark:bg-neutral-900 dark:text-white;
+}
+
+.btn.btn-secondary:hover:not(:disabled) {
+  @apply border-neutral-300 bg-neutral-50 dark:border-neutral-750 dark:bg-neutral-850;
+}
+
+.btn.btn-ghost {
+  @apply text-neutral-900 border-transparent bg-transparent dark:text-white;
+}
+
+.btn.btn-ghost:hover:not(:disabled) {
+  @apply bg-neutral-150 dark:bg-neutral-850;
+}
+
+.btn.btn-destructive {
+  @apply border-red-400 bg-red-600 text-white;
+}
+
+.btn.btn-destructive:hover:not(:disabled) {
+  @apply bg-red-700 border-red-500;
+}
+
+/* Interactive elements */
+.interactive {
+  @apply cursor-pointer transition-colors;
+}
+
+.toggle {
+  @apply bg-neutral-100 dark:bg-neutral-800;
+}
+
+/* Focus states */
+.add-focus {
+  @apply focus-visible:ring-1 focus-visible:ring-ring outline-none focus:opacity-100;
+}
+
+/* Disabled states */
+.add-disable {
+  @apply disabled:text-neutral-500 disabled:cursor-not-allowed;
+}
+
+/* Size variants */
+.add-size-sm {
+  @apply h-6 rounded px-2 text-sm;
+}
+
+.add-size-sm.square {
+  @apply flex size-6 items-center justify-center px-0;
+}
+
+.add-size-sm.circular {
+  @apply flex size-6 items-center justify-center rounded-full px-0;
+}
+
+.add-size-md {
+  @apply h-8 rounded-md px-2.5 text-base;
+}
+
+.add-size-md.square {
+  @apply flex size-8 items-center justify-center px-0;
+}
+
+.add-size-md.circular {
+  @apply flex size-8 items-center justify-center rounded-full px-0;
+}
+
+.add-size-base {
+  @apply h-9 rounded-md px-3 text-base;
+}
+
+.add-size-base.square {
+  @apply flex size-9 items-center justify-center px-0;
+}
+
+.add-size-base.circular {
+  @apply flex size-9 items-center justify-center rounded-full px-0;
+}
+
+/* Animations */
+@keyframes refresh {
+  to {
+    transform: rotate(360deg) scale(0.9);
+  }
+}
+
+/* Custom utility classes */
+.z-modal {
+  z-index: 9999;
+}
+
+.reveal {
+  animation: fade 0.3s ease-in-out;
+}
+
+.reveal-sm {
+  animation: scaleFadeInSm 0.2s ease-in-out;
+}
+
+.fade {
+  animation: fade 0.3s ease-in-out;
+}
+
+/* Radix UI specific classes */
+.radix-state-open\:animate-scaleFadeInSm[data-state="open"] {
+  animation: scaleFadeInSm 0.2s ease-in-out;
+}
+
+.radix-state-closed\:animate-scaleFadeOutSm[data-state="closed"] {
+  animation: scaleFadeOutSm 0.2s ease-in-out;
+}
+
+.radix-highlighted\:bg-neutral-100:hover,
+.radix-highlighted\:bg-neutral-100:focus {
+  @apply bg-neutral-100;
+}
+
+.radix-highlighted\:text-neutral-950:hover,
+.radix-highlighted\:text-neutral-950:focus {
+  @apply text-neutral-950;
+}
+
+.dark .radix-highlighted\:bg-neutral-800:hover,
+.dark .radix-highlighted\:bg-neutral-800:focus {
+  @apply bg-neutral-800;
+}
+
+.dark .radix-highlighted\:text-white:hover,
+.dark .radix-highlighted\:text-white:focus {
+  @apply text-white;
+}

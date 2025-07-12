@@ -30,3 +30,4 @@ storybook-static
 # ESLint cache
 .eslintcache
 
+.dev.vars
