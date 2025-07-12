@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { APIClient } from './api-client';
+import { apiClient } from '../lib/api';
 import type { ThreadFilter } from '../types/api';
 
 // Query keys
@@ -64,6 +65,15 @@ export function useAgentActivity(threadId: string) {
   });
 }
 
+export function useWorkerStatus(threadId: number) {
+  return useQuery({
+    queryKey: ['workerStatus', threadId],
+    queryFn: () => apiClient.getWorkerStatus(threadId),
+    enabled: !!threadId,
+    refetchInterval: 2000, // Poll every 2 seconds
+  });
+}
+
 // Mutations
 export function useUpdateThread() {
   const queryClient = useQueryClient();
@@ -90,6 +100,31 @@ export function useSendMessage() {
       // Invalidate thread to refetch with new message
       void queryClient.invalidateQueries({ queryKey: queryKeys.thread(variables.threadId) });
       void queryClient.invalidateQueries({ queryKey: queryKeys.threads() });
+    },
+  });
+}
+
+export function useStartWorker() {
+  const queryClient = useQueryClient();
+  
+  return useMutation({
+    mutationFn: (threadId: number) => apiClient.startWorker(threadId),
+    onSuccess: (_, threadId) => {
+      // Invalidate worker status to get updated state
+      void queryClient.invalidateQueries({ queryKey: ['workerStatus', threadId] });
+    },
+  });
+}
+
+export function useStopWorker() {
+  const queryClient = useQueryClient();
+  
+  return useMutation({
+    mutationFn: ({ threadId, reason }: { threadId: number; reason?: string }) => 
+      apiClient.stopWorker(threadId, reason),
+    onSuccess: (_, { threadId }) => {
+      // Invalidate worker status to get updated state
+      void queryClient.invalidateQueries({ queryKey: ['workerStatus', threadId] });
     },
   });
 }

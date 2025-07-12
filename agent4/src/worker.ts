@@ -141,8 +141,13 @@ class AgentWorker {
       }
 
       this.sendStatus(WorkerStatusEnum.STOPPED, 'Agent loop completed successfully');
+      
+      // Exit the worker thread to trigger cleanup
+      process.exit(0);
     } catch (error) {
       this.sendError(`Agent loop failed: ${error}`);
+      // Exit on error too
+      process.exit(1);
     } finally {
       this.isRunning = false;
     }

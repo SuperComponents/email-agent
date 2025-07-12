@@ -1,20 +1,24 @@
 import React, { useState } from 'react';
-import { Sparkles, UserPlus, Send } from 'lucide-react';
+import { Send, Play } from 'lucide-react';
 import { AgentAction, type AgentActionProps } from '../molecules/AgentAction';
 import { Button } from '../atoms/Button';
 import { Icon } from '../atoms/Icon';
-import { WorkerTesting } from './WorkerTesting';
+import { Badge } from '../atoms/Badge';
+import { DotsLoader } from '../atoms/DotsLoader';
 import { cn } from '../../lib/utils';
 
 export interface AgentPanelProps extends React.HTMLAttributes<HTMLDivElement> {
   actions: AgentActionProps[];
   draftResponse?: string;
-  onUseAgent?: () => void;
-  onDemoCustomerResponse?: () => void;
   onSendMessage?: (message: string) => void;
-  isRegeneratingDraft?: boolean;
-  isGeneratingDemoResponse?: boolean;
   currentThreadId?: number;
+  workerStatus?: {
+    threadId: number;
+    status: string;
+    isActive: boolean;
+  };
+  onStartWorker?: () => void;
+  isStartingWorker?: boolean;
 }
 
 export const AgentPanel = React.forwardRef<HTMLDivElement, AgentPanelProps>(
@@ -22,18 +26,33 @@ export const AgentPanel = React.forwardRef<HTMLDivElement, AgentPanelProps>(
     {
       className,
       actions,
-      onUseAgent,
-      onDemoCustomerResponse,
       onSendMessage,
-      isRegeneratingDraft,
-      isGeneratingDemoResponse,
       currentThreadId,
+      workerStatus,
+      onStartWorker,
+      isStartingWorker,
       ...props
     },
     ref,
   ) => {
     const [message, setMessage] = useState('');
     console.log('actions', actions);
+    
+    // Check if agent is currently working (has any pending actions)
+    const isAgentWorking = actions.some(action => action.status === 'pending');
+    
+    // Get status color based on worker status
+    const getStatusColor = (status: string) => {
+      switch (status) {
+        case 'running': return 'bg-green-500';
+        case 'stopped': return 'bg-gray-500';
+        case 'starting': return 'bg-yellow-500';
+        case 'stopping': return 'bg-orange-500';
+        case 'not_found': return 'bg-red-500';
+        default: return 'bg-gray-400';
+      }
+    };
+    
     const handleSend = () => {
       if (message.trim() && onSendMessage) {
         onSendMessage(message.trim());
@@ -54,8 +73,48 @@ export const AgentPanel = React.forwardRef<HTMLDivElement, AgentPanelProps>(
           <h3 className="font-semibold">Activity</h3>
         </div>
         <div className="flex-1 overflow-y-auto p-4 space-y-4">
-          {/* Worker Testing Controls */}
-          <WorkerTesting threadId={currentThreadId} />
+          {/* Agent Status and Controls */}
+          {currentThreadId && (
+            <div className="bg-card rounded-lg border border-border p-4 space-y-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <span className="text-sm font-medium">Agent Status:</span>
+                  {workerStatus ? (
+                    <Badge className={`${getStatusColor(workerStatus.status)} text-white text-xs`}>
+                      {workerStatus.status}
+                    </Badge>
+                  ) : (
+                    <Badge className="bg-gray-400 text-white text-xs">Unknown</Badge>
+                  )}
+                </div>
+                
+                <div className="flex gap-2">
+                  {workerStatus?.status === 'running' ? (
+                    <div className="flex items-center gap-2 text-sm text-secondary-foreground">
+                      <DotsLoader text="Agent working" />
+                      <span className="text-xs">(auto-stops when complete)</span>
+                    </div>
+                  ) : (
+                    <Button
+                      onClick={onStartWorker}
+                      disabled={isStartingWorker}
+                      variant="primary"
+                      size="sm"
+                    >
+                      {isStartingWorker ? (
+                        <DotsLoader text="Starting" />
+                      ) : (
+                        <>
+                          <Icon icon={Play} size="sm" className="mr-1" />
+                          Start Agent
+                        </>
+                      )}
+                    </Button>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
           
           {/* Agent Actions */}
           {actions.length > 0 ? (
@@ -63,6 +122,12 @@ export const AgentPanel = React.forwardRef<HTMLDivElement, AgentPanelProps>(
               {actions.map((action, index) => (
                 <AgentAction key={index} {...action} />
               ))}
+              {/* Show loader when agent is working */}
+              {isAgentWorking && (
+                <div className="flex justify-center py-3">
+                  <DotsLoader text="Working" />
+                </div>
+              )}
             </div>
           ) : (
             <div className="text-center py-6 text-xs text-secondary-foreground">

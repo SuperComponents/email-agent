@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { useAgentActivity, queryKeys } from '../repo/hooks';
+import { useAgentActivity, useWorkerStatus, useStartWorker, queryKeys } from '../repo/hooks';
 import { useQueryClient } from '@tanstack/react-query';
 import { useUIStore } from '../stores/ui-store';
 import { AgentPanel } from '../components/organisms';
@@ -61,6 +61,8 @@ export function AgentPanelContainer({
   const seenWriteDraftIds = useRef<Set<string>>(new Set());
 
   const { data: agentActivity } = useAgentActivity(selectedThreadId || '');
+  const { data: workerStatus } = useWorkerStatus(selectedThreadId ? parseInt(selectedThreadId) : 0);
+  const startWorkerMutation = useStartWorker();
 
   // Check for NEW write_draft function call results and refetch draft
   useEffect(() => {
@@ -285,18 +287,22 @@ export function AgentPanelContainer({
     })();
   };
 
+  const handleStartWorker = () => {
+    if (!selectedThreadId) return;
+    startWorkerMutation.mutate(parseInt(selectedThreadId));
+  };
+
   console.log('actions22', actions);
 
   return (
     <AgentPanel
       actions={actions}
       draftResponse={agentActivity?.suggested_response}
-      onUseAgent={onUseAgent}
-      onDemoCustomerResponse={onDemoCustomerResponse}
       onSendMessage={handleSendMessage}
-      isRegeneratingDraft={isRegeneratingDraft}
-      isGeneratingDemoResponse={isGeneratingDemoResponse}
       currentThreadId={selectedThreadId ? parseInt(selectedThreadId) : undefined}
+      workerStatus={workerStatus}
+      onStartWorker={handleStartWorker}
+      isStartingWorker={startWorkerMutation.isPending}
     />
   );
 }

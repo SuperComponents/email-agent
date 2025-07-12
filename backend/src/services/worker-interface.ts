@@ -67,7 +67,11 @@ class WorkerManager {
 
   getWorkerStatus(threadId: number): 'running' | 'stopped' | 'not_found' {
     const worker = this.workers.get(threadId);
-    return worker ? (worker.status === 'error' ? 'stopped' : worker.status) : 'not_found';
+    if (!worker) {
+      // If worker is not in map, it's stopped (either completed or never started)
+      return 'stopped';
+    }
+    return worker.status === 'error' ? 'stopped' : worker.status;
   }
 
   async forceStopWorkerForThread(threadId: number): Promise<void> {
