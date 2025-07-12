@@ -54,7 +54,7 @@ export const ThreadDetail = React.forwardRef<HTMLDivElement, ThreadDetailProps>(
         className={cn("flex flex-col h-full", className)}
         {...props}
       >
-        <div className="px-6 py-4 border-b border-border h-[60px]">
+        <div className="flex-shrink-0 px-6 py-4 border-b border-border">
           <div className="flex items-start justify-between gap-4">
             <h2 className="text-xl font-semibold mb-2">{subject}</h2>
             <div className="flex gap-2">
@@ -72,7 +72,7 @@ export const ThreadDetail = React.forwardRef<HTMLDivElement, ThreadDetailProps>(
           </div>
         </div>
 
-        <div className="flex-1 overflow-y-auto px-6 py-4 space-y-6">
+        <div className="flex-1 overflow-y-auto px-6 py-4 space-y-6 min-h-0">
           {messages.map((message) => {
             const isInternalNote = 'type' in message && message.type === 'internal_note';
             const emailMessage = message as EmailMessage;

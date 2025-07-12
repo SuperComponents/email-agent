@@ -102,13 +102,17 @@ export function ThreadDetailContainer() {
 
   return (
     <div className="flex flex-col h-full">
-      <ThreadDetail
-        subject={thread.subject}
-        messages={sortedMessages}
-        status={thread.status as 'open' | 'closed' | 'pending'}
-        tags={thread.tags}
-      />
-      <ComposerContainer />
+      <div className="flex-1 min-h-0">
+        <ThreadDetail
+          subject={thread.subject}
+          messages={sortedMessages}
+          status={thread.status as 'open' | 'closed' | 'pending'}
+          tags={thread.tags}
+        />
+      </div>
+      <div className="flex-shrink-0">
+        <ComposerContainer />
+      </div>
     </div>
   );
 }
