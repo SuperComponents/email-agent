@@ -174,15 +174,10 @@ async function createEmailFromScenario(scenario: Scenario) {
       action: 'email_read',
       emailId: email.id,
       metadata: {
-        source: 'simulation',
-        scenario_id: scenario.id,
-        scenario_category: scenario.category,
-        scenario_severity: scenario.severity,
-        customer_name: emailData.persona.name,
-        customer_tone: emailData.persona.tone,
-        tags: scenario.tags,
-        auto_generated: true,
-        timestamp: new Date().toISOString(),
+        subject: email.subject,
+        body: email.body_text,
+        from: email.from_email,
+        to: email.to_emails,
       },
     });
 

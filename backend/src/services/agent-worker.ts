@@ -229,8 +229,8 @@ export class AgentWorkerService extends EventEmitter {
     return actions.map(action => ({
       id: action.id.toString(),
       timestamp: action.created_at,
-      type: action.action,
-      actor: 'system',
+      type: action.action === 'email_read' ? 'email_received' : action.action,
+      actor: action.action === 'email_read' ? 'customer' : 'system',
       data: action.metadata || {}
     }));
   }

@@ -144,15 +144,21 @@ This represents a single tool call. This will be executed then the result of tha
 `;
   }
 
-  getMessage(eventLog: Event[]): string {
-    return eventLog
-      .map((event) => {
+  private messageFormat(event: Event): string {
+    console.log("event", event);
+    switch (event.type) {
+      default:
         return `
 ${event.timestamp} - ${event.type} - ${event.actor} - ${JSON.stringify(
           event.data
         )}
 `;
-      })
-      .join("\n");
+    }
+  }
+  getMessage(eventLog: Event[]): string {
+    let temp = eventLog.map((event) => this.messageFormat(event)).join("\n");
+
+    console.log(temp);
+    return temp;
   }
 }
