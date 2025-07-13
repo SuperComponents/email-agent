@@ -123,17 +123,17 @@ app.post('/:threadId/internal-notes', async (c) => {
       .returning();
 
     // Log the action
-    await db.insert(agent_actions).values({
-      thread_id: threadId,
-      internal_note_id: newNote.id,
-      actor_user_id: currentUser.dbUser!.id,
-      action: 'internal_note_created',
-      description: `Created internal note: ${content.substring(0, 50)}${content.length > 50 ? '...' : ''}`,
-      metadata: {
-        note_id: newNote.id,
-        is_pinned,
-      },
-    });
+//     await db.insert(agent_actions).values({
+//       thread_id: threadId,
+//       internal_note_id: newNote.id,
+//       actor_user_id: currentUser.dbUser!.id,
+//       action: 'internal_note_created',
+//       description: `Created internal note: ${content.substring(0, 50)}${content.length > 50 ? '...' : ''}`,
+//       metadata: {
+//         note_id: newNote.id,
+//         is_pinned,
+//       },
+//     });
 
     // Get the note with author info
     const [noteWithAuthor] = await db

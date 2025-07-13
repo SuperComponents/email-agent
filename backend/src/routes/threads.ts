@@ -1,7 +1,7 @@
 import { Hono } from 'hono';
 import { eq, and, or, like, desc, sql } from 'drizzle-orm';
 import { db } from '../database/db.js';
-import { threads, emails, draft_responses, agent_actions } from '../database/schema.js';
+import { threads, emails, draft_responses, agent_actions, internal_notes, users } from '../database/schema.js';
 import { successResponse, notFoundResponse, errorResponse } from '../utils/response.js';
 import { threadFilterSchema, updateThreadSchema, validateRequest } from '../utils/validation.js';
 import { authMiddleware } from '../middleware/auth.js';
@@ -98,6 +98,7 @@ app.get('/', async c => {
 app.get('/:id', async c => {
   try {
     const threadId = parseInt(c.req.param('id'));
+    const currentUser = c.get('user');
 
     if (isNaN(threadId)) {
       return errorResponse(c, 'Invalid thread ID', 400);
@@ -152,6 +153,25 @@ app.get('/:id', async c => {
       .where(eq(agent_actions.thread_id, threadId))
       .orderBy(desc(agent_actions.created_at));
 
+    // Get internal notes
+    const internalNotesList = await db
+      .select({
+        id: internal_notes.id,
+        content: internal_notes.content,
+        is_pinned: internal_notes.is_pinned,
+        created_at: internal_notes.created_at,
+        updated_at: internal_notes.updated_at,
+        author: {
+          id: users.id,
+          name: users.name,
+          email: users.email,
+        },
+      })
+      .from(internal_notes)
+      .leftJoin(users, eq(internal_notes.author_user_id, users.id))
+      .where(eq(internal_notes.thread_id, threadId))
+      .orderBy(desc(internal_notes.is_pinned), desc(internal_notes.created_at));
+
     // Transform data
     const participants = thread.participant_emails as string[];
     const customerEmail =
@@ -175,6 +195,20 @@ app.get('/:id', async c => {
       status: 'completed',
     }));
 
+    const formattedNotes = internalNotesList.map(note => ({
+      id: note.id.toString(),
+      content: note.content,
+      is_pinned: note.is_pinned,
+      created_at: note.created_at.toISOString(),
+      updated_at: note.updated_at.toISOString(),
+      author: {
+        id: note.author?.id?.toString() || '',
+        name: note.author?.name || 'Unknown User',
+        email: note.author?.email || '',
+      },
+      can_edit: note.author?.id === currentUser.dbUser?.id,
+    }));
+
     const response = {
       id: thread.id.toString(),
       subject: thread.subject,
@@ -185,6 +219,7 @@ app.get('/:id', async c => {
         email: customerEmail,
       },
       emails: formattedEmails,
+      internal_notes: formattedNotes,
       agent_activity: {
         analysis: latestDraft ? 'Thread analyzed and draft generated' : 'No analysis yet',
         draft_response: latestDraft?.content || '',

@@ -6,6 +6,6 @@ export { Composer } from './Composer';
 
 export type { HeaderProps } from './Header';
 export type { ThreadListProps } from './ThreadList';
-export type { ThreadDetailProps, EmailMessage } from './ThreadDetail';
+export type { ThreadDetailProps, EmailMessage, InternalNoteMessage, ThreadMessage } from './ThreadDetail';
 export type { AgentPanelProps } from './AgentPanel';
-export type { ComposerProps } from './Composer';
+export type { ComposerProps, ComposerMode } from './Composer';
