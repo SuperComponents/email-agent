@@ -54,13 +54,15 @@ export default class RAGTool extends ToolDefinition {
   async execute(args: z.infer<typeof this.args>) {
     const results = await runRAGTool(args.query);
 
-    console.log(results);
+    // filter out low scores
     let data = results[0].providerData?.results;
-    console.log(results[0].providerData);
-    console.log(data);
-    if (!data) {
+    if (data.length === 0) return [];
+
+    const filteredResults = data.filter((val: any) => val.score > 0.3);
+    if (filteredResults.length === 0) return [];
+    if (!filteredResults) {
       throw new Error("no results");
     }
-    return data;
+    return filteredResults;
   }
 }

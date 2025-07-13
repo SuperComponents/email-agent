@@ -204,6 +204,40 @@ export const AgentAction = React.forwardRef<HTMLDivElement, AgentActionProps>(
                   (result?.tool_output as { args?: { reason?: string } })?.args?.reason ||
                   'User action required'}
               </span>
+
+              {(() => {
+                console.log('result', result);
+                const toolOutput = result?.tool_output as {
+                  args?: { suggested_actions?: string[] };
+                };
+                const suggestedActions = toolOutput?.args?.suggested_actions;
+
+                if (
+                  suggestedActions &&
+                  Array.isArray(suggestedActions) &&
+                  suggestedActions.length > 0
+                ) {
+                  return (
+                    <div className="mt-2">
+                      <div className="text-xs text-secondary-foreground mb-1 font-medium">
+                        Suggested actions:
+                      </div>
+                      <ul className="space-y-1">
+                        {suggestedActions.slice(0, 4).map((action, index) => (
+                          <li
+                            key={index}
+                            className="text-xs text-foreground/80 flex items-start gap-1"
+                          >
+                            <span className="text-primary font-bold text-[10px] mt-0.5">▸</span>
+                            <span className="break-words leading-tight">{action}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  );
+                }
+                return null;
+              })()}
             </div>
           )}
 
@@ -240,25 +274,34 @@ export const AgentAction = React.forwardRef<HTMLDivElement, AgentActionProps>(
                 <span className="text-sm font-medium text-foreground break-words">
                   Searched and found{' '}
                   {result?.rag_sources_used ||
-                    (result?.tool_output as { result?: Array<{ text?: string; score?: number; filename?: string }> })?.result?.length ||
+                    (
+                      result?.tool_output as {
+                        result?: Array<{ text?: string; score?: number; filename?: string }>;
+                      }
+                    )?.result?.length ||
                     (result?.tool_output as { length?: number })?.length ||
                     0}{' '}
                   related documents in the knowledge base
                 </span>
                 {(() => {
-                  const toolOutput = result?.tool_output as { result?: Array<{ text?: string; score?: number; filename?: string }> };
+                  const toolOutput = result?.tool_output as {
+                    result?: Array<{ text?: string; score?: number; filename?: string }>;
+                  };
                   const topResult = toolOutput?.result?.[0];
-                  
+
                   if (topResult && topResult.text) {
                     // Format filename as a clean path without extension
-                    const cleanFilename = topResult.filename 
-                      ? topResult.filename.replace(/\.[^/.]+$/, '').replace(/[_-]/g, '/').toLowerCase()
+                    const cleanFilename = topResult.filename
+                      ? topResult.filename
+                          .replace(/\.[^/.]+$/, '')
+                          .replace(/[_-]/g, '/')
+                          .toLowerCase()
                       : 'knowledge-base';
-                    
+
                     const tooltipContent = `[📄 ${cleanFilename}](javascript:void(0))
 
 ${topResult.text}`;
-                    
+
                     return (
                       <Tooltip content={tooltipContent} side="left" markdown={true}>
                         <Icon
