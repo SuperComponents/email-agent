@@ -44,9 +44,6 @@ export const EmailHeader = React.forwardRef<HTMLDivElement, EmailHeaderProps>(
             {!isExpanded && <span>To: {to || "recipient@example.com"}</span>}
             {isExpanded && <span></span>}
           </div>
-          <span className="text-xs">
-            {isExpanded ? "Click to collapse" : "Click to expand"}
-          </span>
         </button>
 
         {isExpanded && (

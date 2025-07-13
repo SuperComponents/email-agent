@@ -119,38 +119,10 @@ export const Composer = React.forwardRef<HTMLDivElement, ComposerProps>(
         ref={ref}
         className={cn(
           'border-t border-border bg-card',
-          isInternalNote && 'bg-accent/10 border-accent/50',
           className
         )}
         {...props}
       >
-        <div className={cn(
-          "px-4 py-3 border-b border-border",
-          isInternalNote ? "bg-accent/20" : "bg-card"
-        )}>
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              {isInternalNote ? (
-                <>
-                  <Icon icon={Lock} size="sm" className="text-accent-foreground" />
-                  <span className="font-medium text-accent-foreground">Internal Note</span>
-                  <span className="text-xs text-accent-foreground/75">Only visible to support team</span>
-                </>
-              ) : (
-                <span className="font-medium">Reply</span>
-              )}
-            </div>
-            
-            {onModeChange && (
-              <Dropdown
-                options={modeOptions}
-                value={mode}
-                onChange={(newMode) => onModeChange(newMode as ComposerMode)}
-                disabled={disabled}
-              />
-            )}
-          </div>
-        </div>
 
         {!isInternalNote && (
           <EmailHeader
@@ -196,8 +168,7 @@ export const Composer = React.forwardRef<HTMLDivElement, ComposerProps>(
             </div>
           )}
           <div className={cn(
-            "rounded-lg border border-border bg-input focus-within:ring-2 focus-within:ring-ring relative",
-            isInternalNote && "border-accent/60 bg-accent/5"
+            "bg-input relative"
           )}>
             {isGenerating && (
               <div className="absolute inset-0 bg-background/80 flex items-center justify-center z-10 rounded-lg">
@@ -213,7 +184,7 @@ export const Composer = React.forwardRef<HTMLDivElement, ComposerProps>(
               onKeyDown={handleKeyDown}
               placeholder={actualPlaceholder}
               disabled={disabled || isGenerating}
-              className="w-full px-4 py-3 bg-transparent resize-none focus:outline-none min-h-[200px] max-h-[500px]"
+              className="w-full bg-transparent resize-none focus:outline-none min-h-[200px] max-h-[500px]"
               rows={8}
             />
             <div className="flex items-center justify-between px-3 py-2 border-t border-border">
@@ -245,6 +216,14 @@ export const Composer = React.forwardRef<HTMLDivElement, ComposerProps>(
                 </div>
               </div>
               <div className="flex items-center gap-3">
+                {onModeChange && (
+                  <Dropdown
+                    options={modeOptions}
+                    value={mode}
+                    onChange={(newMode) => onModeChange(newMode as ComposerMode)}
+                    disabled={disabled}
+                  />
+                )}
                 <p className="text-xs text-secondary-foreground">
                   Press Cmd+Enter to {isInternalNote ? 'add note' : 'send'}
                 </p>

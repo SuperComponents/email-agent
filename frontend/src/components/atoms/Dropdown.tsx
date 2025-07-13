@@ -51,38 +51,31 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
             size="sm"
             onClick={() => setIsOpen(!isOpen)}
             disabled={disabled}
-            className="gap-1 pr-1"
+            className="gap-1 pr-1 w-36"
           >
-            {selectedOption.icon && (
-              <Icon icon={selectedOption.icon} size="sm" />
-            )}
-            <span>{selectedOption.label}</span>
-            <Icon 
-              icon={ChevronDown} 
-              size="sm" 
-              className={cn(
-                'transition-transform duration-200',
-                isOpen && 'rotate-180'
-              )}
+            {selectedOption.icon && <Icon icon={selectedOption.icon} size="sm" />}
+            <span className="text-nowrap">{selectedOption.label}</span>
+            <Icon
+              icon={ChevronDown}
+              size="sm"
+              className={cn('transition-transform duration-200', isOpen && 'rotate-180')}
             />
           </Button>
 
           {isOpen && (
-            <div className="absolute top-full left-0 mt-1 min-w-full bg-card border border-border rounded-md shadow-lg z-50">
-              {options.map((option) => (
+            <div className="absolute bottom-full left-0 mb-1 w-36 bg-card border border-border rounded-md shadow-lg z-50">
+              {options.map(option => (
                 <button
                   key={option.value}
                   onClick={() => handleOptionClick(option.value)}
                   className={cn(
                     'w-full px-3 py-2 text-left text-sm flex items-center gap-2 hover:bg-accent transition-colors',
                     'first:rounded-t-md last:rounded-b-md',
-                    value === option.value && 'bg-accent'
+                    value === option.value && 'bg-accent',
                   )}
                 >
-                  {option.icon && (
-                    <Icon icon={option.icon} size="sm" />
-                  )}
-                  <span>{option.label}</span>
+                  {option.icon && <Icon icon={option.icon} size="sm" />}
+                  <span className="text-nowrap">{option.label}</span>
                 </button>
               ))}
             </div>
@@ -90,7 +83,7 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
         </div>
       </div>
     );
-  }
+  },
 );
 
 Dropdown.displayName = 'Dropdown';
