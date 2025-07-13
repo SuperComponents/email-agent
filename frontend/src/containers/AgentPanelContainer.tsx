@@ -9,15 +9,15 @@ import type { AgentAction } from '../types/api';
 import { apiClient } from '../lib/api';
 
 // Types for function call arguments
-interface WriteDraftArgs {
-  emailId: number;
-  threadId: number;
-  messageBody: string;
-  citationFilename?: string;
-  citationScore?: number;
-  citationText?: string;
-  confidence?: number;
-}
+// interface WriteDraftArgs {
+//   emailId: number;
+//   threadId: number;
+//   messageBody: string;
+//   citationFilename?: string;
+//   citationScore?: number;
+//   citationText?: string;
+//   confidence?: number;
+// }
 
 interface TagEmailArgs {
   emailId: string;
@@ -25,10 +25,10 @@ interface TagEmailArgs {
   confidence?: number;
 }
 
-interface GetCustomerHistoryArgs {
-  senderEmail: string;
-  limit?: number;
-}
+// interface GetCustomerHistoryArgs {
+//   senderEmail: string;
+//   limit?: number;
+// }
 
 interface SearchCustomerEmailsArgs {
   senderEmail: string;
@@ -92,6 +92,10 @@ function getIconForAction(action: AgentAction) {
     default:
       return Brain;
   }
+}
+
+interface ExtendedAgentActionProps extends AgentActionProps {
+  tooltip?: string;
 }
 
 export interface AgentPanelContainerProps {
@@ -178,8 +182,8 @@ export function AgentPanelContainer({
   // Note: we used to correlate function_call results with their follow-ups.
   // If needed in future this logic can be re-added, but it's currently unused.
 
-  const actions: AgentActionProps[] = (
-    actionsReversed?.map((action): AgentActionProps | null => {
+  const actions: ExtendedAgentActionProps[] = (
+    actionsReversed?.map((action): ExtendedAgentActionProps | null => {
       // Skip function_call_result items
       if (action.result?.type === 'function_call_result') {
         return null;
@@ -243,30 +247,28 @@ export function AgentPanelContainer({
       // For non-message actions, generate display based on function name and parameters
       const displayTitle = action.result?.name || action.title;
       let displayDescription = action.description;
+      let tooltip: string | undefined;
 
       // Generate better descriptions for function calls
       if (action.result?.type === 'function_call' && action.result?.name) {
         try {
           switch (action.result.name) {
             case 'get_customer_history': {
-              const args = action.result.arguments
-                ? (JSON.parse(action.result.arguments) as GetCustomerHistoryArgs)
-                : { senderEmail: '' };
-              displayDescription = `Got customer history for ${args.senderEmail}`;
+              displayDescription = `Got customer email history`;
               break;
             }
             case 'search_customer_emails': {
               const args = action.result.arguments
                 ? (JSON.parse(action.result.arguments) as SearchCustomerEmailsArgs)
                 : { senderEmail: '', searchQuery: '' };
-              displayDescription = `Searched emails from ${args.senderEmail} for "${args.searchQuery}"`;
+              displayDescription = `Searched customer emails for "${args.searchQuery}"`;
               break;
             }
             case 'tag_email': {
               const args = action.result.arguments
                 ? (JSON.parse(action.result.arguments) as TagEmailArgs)
                 : { emailId: '', tags: [] };
-              displayDescription = `Tagged email ${args.emailId} as ${
+              displayDescription = `Tagged email: ${
                 args.tags.join(', ') || 'unknown'
               }`;
               break;
@@ -275,16 +277,12 @@ export function AgentPanelContainer({
               const args = action.result.arguments
                 ? (JSON.parse(action.result.arguments) as SearchKnowledgeBaseArgs)
                 : { query: '' };
-              displayDescription = `Searched knowledge base for: "${
-                args.query || 'unknown query'
-              }"`;
+              displayDescription = `Searched knowledge base for "${args.query}"`;
+              tooltip = args.query ? `Query: "${args.query}"` : undefined;
               break;
             }
             case 'write_draft': {
-              const args = action.result.arguments
-                ? (JSON.parse(action.result.arguments) as WriteDraftArgs)
-                : { emailId: 0 };
-              displayDescription = `Created draft response for email ${args.emailId}`;
+              displayDescription = `Created draft response`;
               break;
             }
             case 'read_thread':
@@ -303,7 +301,14 @@ export function AgentPanelContainer({
       ) {
         const providerData = action.result.providerData as FileSearchProviderData;
         const queries = providerData?.queries || [];
-        displayDescription = `Searched knowledge base with queries: ${queries.join(', ')}`;
+        if (queries.length > 0) {
+          const firstQuery = queries[0];
+          const additionalCount = queries.length - 1;
+          displayDescription = `Searched knowledge base for "${firstQuery}"${additionalCount > 0 ? ` [+${additionalCount}]` : ''}`;
+          tooltip = `Queries: ${queries.map(q => `"${q}"`).join(', ')}`;
+        } else {
+          displayDescription = `Searched knowledge base`;
+        }
       }
 
       return {
@@ -319,9 +324,10 @@ export function AgentPanelContainer({
             : 'pending',
         type: action.type,
         result: action.result,
+        ...(tooltip && { tooltip }),
       };
     }) || []
-  ).filter((action): action is AgentActionProps => action !== null);
+  ).filter((action): action is ExtendedAgentActionProps => action !== null);
 
   const handleSendMessage = (message: string) => {
     if (!selectedThreadId) return;

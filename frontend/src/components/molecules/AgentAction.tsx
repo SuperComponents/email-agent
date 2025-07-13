@@ -41,6 +41,7 @@ export interface AgentActionProps extends React.HTMLAttributes<HTMLDivElement> {
   icon: LucideIcon;
   title: string;
   description?: string;
+  tooltip?: string;
   timestamp?: string;
   status?: 'pending' | 'completed' | 'failed';
   isMessage?: boolean;
@@ -72,6 +73,7 @@ export const AgentAction = React.forwardRef<HTMLDivElement, AgentActionProps>(
       className,
       icon,
       description,
+      tooltip,
       timestamp,
       status = 'completed',
       isMessage,
@@ -174,7 +176,10 @@ export const AgentAction = React.forwardRef<HTMLDivElement, AgentActionProps>(
           </div>
 
           <div className="mt-1 overflow-hidden">
-            <span className="text-sm font-medium text-foreground break-words">
+            <span 
+              className="text-sm font-medium text-foreground break-words"
+              title={tooltip}
+            >
               {description}
             </span>
           </div>
