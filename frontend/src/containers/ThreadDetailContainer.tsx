@@ -8,7 +8,12 @@ export interface ThreadDetailContainerRef {
   setDraftContent: (draft: { body: string }) => void;
 }
 
-export const ThreadDetailContainer = forwardRef<ThreadDetailContainerRef>((_, ref) => {
+interface ThreadDetailContainerProps {
+  onDemoCustomerResponse?: () => void;
+  isGeneratingDemoResponse?: boolean;
+}
+
+export const ThreadDetailContainer = forwardRef<ThreadDetailContainerRef, ThreadDetailContainerProps>(({ onDemoCustomerResponse, isGeneratingDemoResponse }, ref) => {
   const selectedThreadId = useUIStore(state => state.selectedThreadId);
   const composerRef = useRef<ComposerContainerRef>(null);
 
@@ -74,6 +79,8 @@ export const ThreadDetailContainer = forwardRef<ThreadDetailContainerRef>((_, re
           messages={messages}
           status={thread.status as 'open' | 'closed' | 'pending'}
           tags={thread.tags}
+          onDemoCustomerResponse={onDemoCustomerResponse}
+          isGeneratingDemoResponse={isGeneratingDemoResponse}
         />
       </div>
       <div className="flex-shrink-0">

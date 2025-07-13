@@ -4,7 +4,7 @@ import { db } from '../database/db.js';
 import { threads, emails } from '../database/schema.js';
 import { successResponse, notFoundResponse, errorResponse } from '../utils/response.js';
 import { sendMessageSchema, validateRequest } from '../utils/validation.js';
-import { logAgentAction } from '../database/logAgentAction.js';
+// import { logAgentAction } from '../database/logAgentAction.js';
 
 const app = new Hono();
 
@@ -58,12 +58,12 @@ app.post('/:id/messages', async c => {
       .where(eq(threads.id, threadId));
 
     // Log action
-    await logAgentAction({
-      threadId: threadId,
-      emailId: newEmail.id,
-      action: 'draft_sent',
-      metadata: { content_length: body.content.length },
-    });
+    // await logAgentAction({
+    //   threadId: threadId,
+    //   emailId: newEmail.id,
+    //   action: 'draft_sent',
+    //   metadata: { content_length: body.content.length },
+    // });
 
     return successResponse(c, {
       id: newEmail.id.toString(),

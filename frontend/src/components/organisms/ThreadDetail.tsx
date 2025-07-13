@@ -1,8 +1,9 @@
 import React from 'react';
 import { Avatar } from '../atoms/Avatar';
 import { Badge } from '../atoms/Badge';
-import { Lock } from 'lucide-react';
+import { Lock, UserPlus } from 'lucide-react';
 import { Icon } from '../atoms/Icon';
+import { Button } from '../atoms/Button';
 import { cn } from '../../lib/utils';
 
 export interface EmailMessage {
@@ -40,10 +41,12 @@ export interface ThreadDetailProps extends React.HTMLAttributes<HTMLDivElement> 
   messages: ThreadMessage[];
   status?: 'open' | 'closed' | 'pending';
   tags?: string[];
+  onDemoCustomerResponse?: () => void;
+  isGeneratingDemoResponse?: boolean;
 }
 
 export const ThreadDetail = React.forwardRef<HTMLDivElement, ThreadDetailProps>(
-  ({ className, subject, messages, status = 'open', tags = [], ...props }, ref) => {
+  ({ className, subject, messages, status = 'open', tags = [], onDemoCustomerResponse, isGeneratingDemoResponse, ...props }, ref) => {
     return (
       <div ref={ref} className={cn('flex flex-col h-full', className)} {...props}>
         <div className="px-6 py-2 border-b border-border h-[60px] flex items-center">
@@ -117,6 +120,25 @@ export const ThreadDetail = React.forwardRef<HTMLDivElement, ThreadDetailProps>(
               </article>
             );
           })}
+          
+          {onDemoCustomerResponse && (
+            <div className="mt-4 flex justify-center">
+              <Button
+                onClick={onDemoCustomerResponse}
+                size="sm"
+                variant="secondary"
+                className="gap-2"
+                disabled={isGeneratingDemoResponse}
+              >
+                <Icon
+                  icon={UserPlus}
+                  size="sm"
+                  className={isGeneratingDemoResponse ? 'animate-pulse' : ''}
+                />
+                <span>{isGeneratingDemoResponse ? 'Generating...' : 'Demo Customer Response'}</span>
+              </Button>
+            </div>
+          )}
         </div>
       </div>
     );

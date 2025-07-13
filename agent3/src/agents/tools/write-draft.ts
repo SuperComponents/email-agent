@@ -51,12 +51,30 @@ export const writeDraftTool = tool({
 
     try {
       // Reconstruct citations object if citation data is provided
+      // Validate filename and extract actual filename from emailsmart-knowledge-base pattern
+      let processedFilename: string | null = null;
+      
+      if (citationFilename && citationFilename.includes('emailsmart-knowledge-base')) {
+        const parts = citationFilename.split('/');
+        // Find the part after 'emailsmart-knowledge-base-*/'
+        const knowledgeBaseIndex = parts.findIndex(part => part.startsWith('emailsmart-knowledge-base'));
+        if (knowledgeBaseIndex !== -1 && knowledgeBaseIndex < parts.length - 1) {
+          // Get everything after the emailsmart-knowledge-base-* part
+          processedFilename = parts.slice(knowledgeBaseIndex + 1).join('/');
+        }
+      }
+      
+      // Only create citations if we have a valid processed filename
       const citations: KnowledgeBaseResult | null =
-        citationFilename && citationScore !== undefined && citationScore !== null && citationText
+        processedFilename && 
+        processedFilename.length >= 4 && 
+        citationScore !== undefined && 
+        citationScore !== null && 
+        citationText
           ? {
               attributes: {},
               file_id: '',
-              filename: citationFilename,
+              filename: processedFilename,
               score: citationScore,
               text: citationText,
             }

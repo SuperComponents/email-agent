@@ -122,13 +122,13 @@ export const Composer = React.forwardRef<HTMLDivElement, ComposerProps>(
                     <span className="text-xs text-secondary-foreground mt-0.5">{index + 1}.</span>
                     <div className="flex-1">
                       <a 
-                        href={`http://localhost:3005/#/${citation.filename.split('/').slice(1).join('/')}`}
+                        href={`http://localhost:3005/#/${citation.filename}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-sm text-primary hover:underline inline-flex items-center gap-1"
                         title={citation.text}
                       >
-                        {citation.filename.split('/').pop()?.replace('.md', '') || citation.filename}
+                        {citation.filename}
                         <Icon icon={ExternalLink} size="sm" />
                       </a>
                       <span className="text-xs text-secondary-foreground ml-2">

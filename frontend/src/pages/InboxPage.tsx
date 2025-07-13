@@ -79,7 +79,11 @@ export function InboxPage() {
           <ThreadListContainer />
         </div>
       }
-      main={<ThreadDetailContainer ref={threadDetailRef} />}
+      main={<ThreadDetailContainer 
+        ref={threadDetailRef} 
+        onDemoCustomerResponse={handleDemoCustomerResponse}
+        isGeneratingDemoResponse={isGeneratingDemo}
+      />}
       panel={isAgentPanelOpen ? 
         <AgentPanelContainer 
           onUseAgent={handleUseAgent}
