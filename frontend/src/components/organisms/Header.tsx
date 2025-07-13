@@ -31,7 +31,7 @@ export const Header = React.forwardRef<HTMLElement, HeaderProps>(({ className, .
     >
       <div className="flex items-center gap-3">
         <Logo size="md" />
-        <span className="text-foreground text-xl italic">ProResponse AI</span>
+        <span className="text-foreground text-xl italic">OpenSupport</span>
       </div>
 
       <UserMenu

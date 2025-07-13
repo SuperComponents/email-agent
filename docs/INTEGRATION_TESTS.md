@@ -105,7 +105,7 @@ curl -I http://localhost:5174
 ```bash
 # Test basic connectivity
 curl http://localhost:3000/
-# Expected: "ProResponse AI Backend API"
+# Expected: "OpenSupport Backend API"
 ```
 
 #### Test 4.2: Database Connection

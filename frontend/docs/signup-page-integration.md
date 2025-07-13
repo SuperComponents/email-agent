@@ -1,7 +1,7 @@
 # Signup Page Integration Guide
 
 ## Overview
-This document details the implementation of the signup page and how it integrates with the ProResponse AI application.
+This document details the implementation of the signup page and how it integrates with the OpenSupport application.
 
 ## Component Location
 - **File**: `frontend/src/pages/SignupPage.tsx`

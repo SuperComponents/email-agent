@@ -56,7 +56,7 @@ export default function Chat() {
 
   return (
     <div className="h-[100vh] w-full p-2 sm:p-4 flex justify-center items-center gradient-bg overflow-hidden">
-      <div className="widget-container h-[calc(100vh-1rem)] sm:h-[calc(100vh-2rem)] w-full mx-auto max-w-lg flex flex-col rounded-2xl overflow-hidden relative backdrop-blur-xl" role="main" aria-label="ProResponse AI Chat Widget">
+      <div className="widget-container h-[calc(100vh-1rem)] sm:h-[calc(100vh-2rem)] w-full mx-auto max-w-lg flex flex-col rounded-2xl overflow-hidden relative backdrop-blur-xl" role="main" aria-label="OpenSupport Chat Widget">
         <WidgetHeader
           theme={theme}
           onToggleTheme={toggleTheme}

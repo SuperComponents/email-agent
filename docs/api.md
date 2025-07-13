@@ -1,8 +1,8 @@
-# ProResponse AI REST API Specification
+# OpenSupport REST API Specification
 
 ## Overview
 
-Simple REST API for ProResponse AI MVP. All endpoints return JSON. No authentication required for MVP.
+Simple REST API for OpenSupport MVP. All endpoints return JSON. No authentication required for MVP.
 
 ## Thread Endpoints
 

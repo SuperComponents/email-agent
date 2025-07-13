@@ -29,7 +29,7 @@ export function WidgetHeader({
       >
         <img
           src="/favicon-32x32.png"
-          alt="ProResponse AI"
+          alt="OpenSupport"
           width="28"
           height="28"
           className="rounded-sm"
@@ -41,7 +41,7 @@ export function WidgetHeader({
       </motion.div>
 
       <div className="flex-1">
-        <h2 className="font-semibold text-sm sm:text-base gradient-text">ProResponse AI</h2>
+        <h2 className="font-semibold text-sm sm:text-base gradient-text">OpenSupport</h2>
       </div>
 
 

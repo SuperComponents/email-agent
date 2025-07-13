@@ -23,7 +23,7 @@ app.use('*', errorHandler);
 app.route('/api/auth', authRoutes);
 
 app.get('/', c => {
-  return c.text('ProResponse AI Backend API');
+  return c.text('OpenSupport Backend API');
 });
 
 // Mount API routes with auth protection

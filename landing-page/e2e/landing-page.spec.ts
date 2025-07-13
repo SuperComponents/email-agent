@@ -7,7 +7,7 @@ test.describe('Landing Page', () => {
   });
 
   test('has correct title and basic structure', async ({ page }) => {
-    await expect(page).toHaveTitle(/ProResponse AI/);
+    await expect(page).toHaveTitle(/OpenSupport/);
 
     // Check main navigation elements
     await expect(page.locator('nav')).toBeVisible();

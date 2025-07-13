@@ -1,10 +1,10 @@
-# ProResponse AI Backend
+# OpenSupport Backend
 
-The backend API server for ProResponse AI - an AI-powered customer support platform that provides intelligent email thread management and automated response generation.
+The backend API server for OpenSupport - an AI-powered customer support platform that provides intelligent email thread management and automated response generation.
 
 ## Overview
 
-This backend serves as the API layer for ProResponse AI, handling email thread management, AI agent integration, and database operations. It's fully integrated with the `agent3/` AI system to provide real-time email processing and draft generation.
+This backend serves as the API layer for OpenSupport, handling email thread management, AI agent integration, and database operations. It's fully integrated with the `agent3/` AI system to provide real-time email processing and draft generation.
 
 ## Features
 
@@ -223,7 +223,7 @@ The backend includes complete StackAuth integration:
 
 ## API Integration
 
-The backend is designed to work seamlessly with the ProResponse AI frontend:
+The backend is designed to work seamlessly with the OpenSupport frontend:
 
 - **CORS**: Configured for frontend domain
 - **Type Safety**: Shared types with frontend
