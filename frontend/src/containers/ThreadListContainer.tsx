@@ -28,8 +28,7 @@ export function ThreadListContainer() {
     return () => clearTimeout(timeoutId);
   }, [localSearchValue, setSearchQuery]);
 
-  const { data: threadsData } = useThreads(threadFilter, searchQuery);
-  const { data: counts } = useThreadCounts();
+  const { data: allThreadsData } = useThreads('all', ''); // Get all threads for filtering and counts
   const queryClient = useQueryClient();
   const markAsRead = useMarkThreadAsRead();
 
@@ -40,7 +39,7 @@ export function ThreadListContainer() {
   const handleThreadClick = useCallback(
     (threadId: string) => {
       // Find the current thread to check if it's unread
-      const currentThread = threadsData?.threads.find(t => t.id === threadId);
+      const currentThread = allThreadsData?.threads.find(t => t.id === threadId);
 
       // Optimistically update the thread as read in the cache
       if (currentThread?.is_unread) {
@@ -70,17 +69,49 @@ export function ThreadListContainer() {
 
       void navigate(`/thread/${threadId}`);
     },
-    [navigate, threadsData, threadFilter, searchQuery, queryClient, markAsRead],
+    [navigate, allThreadsData, threadFilter, searchQuery, queryClient, markAsRead],
   );
+
+  // Filter threads based on current filter and search
+  const filteredThreads = allThreadsData?.threads.filter(thread => {
+    // Apply search filter
+    if (searchQuery) {
+      const searchLower = searchQuery.toLowerCase();
+      const matchesSubject = thread.subject.toLowerCase().includes(searchLower);
+      const matchesCustomer = thread.customer_name.toLowerCase().includes(searchLower);
+      const matchesSnippet = thread.snippet.toLowerCase().includes(searchLower);
+      if (!matchesSubject && !matchesCustomer && !matchesSnippet) {
+        return false;
+      }
+    }
+    
+    // Apply filter
+    switch (threadFilter) {
+      case 'unread':
+        return thread.is_unread;
+      case 'urgent':
+        return thread.userActionRequired; // Assuming urgent means action required
+      default:
+        return true;
+    }
+  }) || [];
+
+  // Calculate counts from all threads
+  const counts = allThreadsData?.threads.reduce((acc, thread) => {
+    acc.all = (acc.all || 0) + 1;
+    if (thread.is_unread) acc.unread = (acc.unread || 0) + 1;
+    if (thread.userActionRequired) acc.urgent = (acc.urgent || 0) + 1;
+    return acc;
+  }, {} as Record<string, number>) || {};
 
   console.log(
     'threads',
-    threadsData?.threads.filter(t => t.userActionRequired),
+    allThreadsData?.threads.filter(t => t.userActionRequired),
   );
 
   // Transform API threads to ThreadPreviewProps
   const threadPreviews: ThreadPreviewProps[] =
-    threadsData?.threads.map(thread => ({
+    filteredThreads.map(thread => ({
       id: thread.id,
       title: thread.subject,
       snippet: thread.snippet,
@@ -112,9 +143,9 @@ export function ThreadListContainer() {
     })) || [];
 
   const filterOptions = [
-    { id: 'all', label: 'All', count: counts?.all },
-    { id: 'unread', label: 'Unread', count: counts?.unread },
-    { id: 'urgent', label: 'Urgent', count: counts?.urgent },
+    { id: 'all', label: 'All', count: counts.all },
+    { id: 'unread', label: 'Unread', count: counts.unread },
+    { id: 'urgent', label: 'Urgent', count: counts.urgent },
   ];
 
   return (
