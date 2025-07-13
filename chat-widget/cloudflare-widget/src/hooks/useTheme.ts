@@ -1,14 +1,32 @@
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 
-const useTheme = (theme?: "dark" | "light") => {
+export type Theme = "dark" | "light";
+
+export function useTheme() {
+  const [theme, setTheme] = useState<Theme>(() => {
+    // Check localStorage first, default to dark if not found
+    const savedTheme = localStorage.getItem("theme");
+    return (savedTheme as Theme) || "dark";
+  });
+
   useEffect(() => {
-    const html = document.querySelector("html");
-
+    // Apply theme class on mount and when theme changes
     if (theme === "dark") {
-      html?.classList.add("dark");
-    } else if (theme === "light" && html?.classList.contains("dark"))
-      html.classList.remove("dark");
-  }, [theme]);
-};
+      document.documentElement.classList.add("dark");
+      document.documentElement.classList.remove("light");
+    } else {
+      document.documentElement.classList.remove("dark");
+      document.documentElement.classList.add("light");
+    }
 
-export default useTheme;
+    // Save theme preference to localStorage
+    localStorage.setItem("theme", theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    const newTheme = theme === "dark" ? "light" : "dark";
+    setTheme(newTheme);
+  };
+
+  return { theme, toggleTheme };
+}
