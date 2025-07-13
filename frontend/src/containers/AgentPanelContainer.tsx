@@ -3,8 +3,9 @@ import { useAgentActivity, queryKeys } from '../repo/hooks';
 import { useQueryClient } from '@tanstack/react-query';
 import { useUIStore } from '../stores/ui-store';
 import { AgentPanel } from '../components/organisms';
-import { FileSearch, Brain, MessageSquare, Zap, FileText, AlertTriangle, Users } from 'lucide-react';
+import { FileSearch, Brain, MessageSquare, Zap, FileText, AlertTriangle, Users, Search, Tag } from 'lucide-react';
 import type { AgentActionProps } from '../components/molecules/AgentAction';
+import type { AgentAction } from '../types/api';
 import { apiClient } from '../lib/api';
 
 // Types for function call arguments
@@ -50,17 +51,34 @@ interface FileSearchProviderData {
 }
 
 // Helper function to get appropriate icon for action types
-function getIconForAction(actionType: string, toolName?: string) {
-  // Tool-specific icons
-  if (toolName === 'update_thread_urgency') return Zap;
-  if (toolName === 'update_thread_category') return FileText;
-  if (toolName === 'user_action_needed') return AlertTriangle;
-  if (toolName === 'compose-draft' || toolName === 'compose_draft') return FileText;
-  if (toolName === 'summarize_useful_context') return Brain;
-  if (toolName === 'search-knowledge-base') return FileSearch;
+function getIconForAction(action: AgentAction) {
+  // Check function_call names first
+  if (action.result?.type === 'function_call' && action.result?.name) {
+    switch (action.result.name) {
+      case 'get_customer_history':
+        return Users;
+      case 'search_customer_emails':
+        return Search;
+      case 'tag_email':
+        return Tag;
+      case 'search_knowledge_base':
+        return FileSearch;
+      case 'write_draft':
+        return FileText;
+      case 'read_thread':
+        return MessageSquare;
+      default:
+        return Brain;
+    }
+  }
 
-  // Database action type icons
-  switch (actionType) {
+  // Check hosted tool calls
+  if (action.result?.type === 'hosted_tool_call' && action.result?.name === 'file_search_call') {
+    return FileSearch;
+  }
+
+  // Database action type icons (fallback)
+  switch (action.type) {
     case 'thread_status_changed':
       return Zap;
     case 'draft_created':
@@ -129,23 +147,23 @@ export function AgentPanelContainer({
   }, [selectedThreadId]);
 
   // Log agent activity when it comes in
-//   if (agentActivity && agentActivity.actions) {
-//     const resultsLog = agentActivity.actions
-//       .map((action, index) => {
-//         return (
-//           `\n========== Action ${index} ==========\n` +
-//           `ID: ${action.id}\n` +
-//           `Type: ${action.type}\n` +
-//           `Title: ${action.title}\n` +
-//           `Status: ${action.status}\n` +
-//           `Timestamp: ${action.timestamp}\n` +
-//           `Result: ${action.result ? JSON.stringify(action.result, null, 2) : 'null'}\n`
-//         );
-//       })
-//       .join('\n');
-// 
-//     console.log('=== AGENT ACTIVITY RESULTS ===\n' + resultsLog + '\n=== END AGENT ACTIVITY ===');
-//   }
+   if (agentActivity && agentActivity.actions) {
+     const resultsLog = agentActivity.actions
+       .map((action, index) => {
+         return (
+           `\n========== Action ${index} ==========\n` +
+           `ID: ${action.id}\n` +
+           `Type: ${action.type}\n` +
+           `Title: ${action.title}\n` +
+           `Status: ${action.status}\n` +
+           `Timestamp: ${action.timestamp}\n` +
+           `Result: ${action.result ? JSON.stringify(action.result, null, 2) : 'null'}\n`
+         );
+       })
+       .join('\n');
+ 
+     console.log('=== AGENT ACTIVITY RESULTS ===\n' + resultsLog + '\n=== END AGENT ACTIVITY ===');
+   }
 
   if (!isAgentPanelOpen || !selectedThreadId) {
     return null;
@@ -288,7 +306,7 @@ export function AgentPanelContainer({
       }
 
       return {
-        icon: getIconForAction(action.type, action.result?.tool_name as string | undefined),
+        icon: getIconForAction(action),
         title: displayTitle,
         description: displayDescription,
         timestamp: new Date(action.timestamp).toLocaleTimeString(),
@@ -299,6 +317,7 @@ export function AgentPanelContainer({
             ? 'failed'
             : 'pending',
         type: action.type,
+        result: action.result,
       };
     }) || []
   ).filter((action): action is AgentActionProps => action !== null);

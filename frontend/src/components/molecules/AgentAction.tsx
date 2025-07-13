@@ -3,6 +3,40 @@ import type { LucideIcon } from 'lucide-react';
 import { Icon } from '../atoms/Icon';
 import { cn } from '../../lib/utils';
 
+function formatTimeAgo(timestamp: string): string {
+  const now = new Date();
+  const time = new Date(timestamp);
+
+  // If timestamp is invalid, return the original timestamp
+  if (isNaN(time.getTime())) {
+    return timestamp;
+  }
+
+  const diffInSeconds = Math.floor((now.getTime() - time.getTime()) / 1000);
+
+  // Handle negative differences (future timestamps)
+  if (diffInSeconds < 0) {
+    return 'just now';
+  }
+
+  if (diffInSeconds < 60) {
+    return `${diffInSeconds}s ago`;
+  }
+
+  const diffInMinutes = Math.floor(diffInSeconds / 60);
+  if (diffInMinutes < 60) {
+    return `${diffInMinutes}m ago`;
+  }
+
+  const diffInHours = Math.floor(diffInMinutes / 60);
+  if (diffInHours < 24) {
+    return `${diffInHours}h ago`;
+  }
+
+  const diffInDays = Math.floor(diffInHours / 24);
+  return `${diffInDays}d ago`;
+}
+
 export interface AgentActionProps extends React.HTMLAttributes<HTMLDivElement> {
   icon: LucideIcon;
   title: string;
@@ -11,20 +45,22 @@ export interface AgentActionProps extends React.HTMLAttributes<HTMLDivElement> {
   status?: 'pending' | 'completed' | 'failed';
   isMessage?: boolean;
   messageRole?: 'user' | 'assistant';
-//   result?: {
-//     tool_name?: string;
-//     urgency_change?: string;
-//     confidence?: number;
-//     sentiment?: string;
-//     escalation_recommended?: boolean;
-//     suggested_priority?: string;
-//     rag_sources_used?: number;
-//     draft_subject?: string;
-//     draft_body_preview?: string;
-//     category_change?: string;
-//     action_reason?: string;
-//     [key: string]: unknown;
-//   };
+  result?: {
+    tool_name?: string;
+    urgency_change?: string;
+    confidence?: number;
+    sentiment?: string;
+    escalation_recommended?: boolean;
+    suggested_priority?: string;
+    rag_sources_used?: number;
+    draft_subject?: string;
+    draft_body_preview?: string;
+    category_change?: string;
+    action_reason?: string;
+    context_summary?: string;
+    tool_output?: unknown;
+    [key: string]: unknown;
+  };
   type?: string; // Database action type like 'thread_status_changed'
   onDraftClick?: (draft: { body: string }) => void;
 }
@@ -40,7 +76,7 @@ export const AgentAction = React.forwardRef<HTMLDivElement, AgentActionProps>(
       status = 'completed',
       isMessage,
       messageRole,
-      //result,
+      result,
       type,
       onDraftClick,
       ...props
@@ -131,20 +167,61 @@ export const AgentAction = React.forwardRef<HTMLDivElement, AgentActionProps>(
         />
         <div className="flex-1 min-w-0 overflow-hidden">
           <div className="flex items-start justify-between gap-2">
-            <h4 className="text-xs font-medium leading-tight">{title}</h4>
             {timestamp && (
               <time className="text-xs text-secondary-foreground flex-shrink-0">
-                {timestamp}
+                {formatTimeAgo(timestamp)}
               </time>
             )}
           </div>
 
+          <div className="mt-1 overflow-hidden">
+            <span className="text-sm font-medium text-foreground break-words">
+              {description}
+            </span>
+          </div>
+
+          {/* Special handling for category update events */}
+          {type === 'thread_status_changed' && result?.tool_name === 'update_thread_category' && (
             <div className="mt-1 overflow-hidden">
               <span className="text-sm font-medium text-foreground break-words">
-                {description}
+                Category: {(result?.tool_output as { args?: { category?: string }; new_category?: string })?.args?.category || 'unknown'}
               </span>
             </div>
+          )}
 
+          {/* Special handling for urgency changes */}
+          {result?.urgency_change && (
+            <div className="mt-2">
+              <span className="text-xs font-medium text-destructive">
+                Urgency: {result.urgency_change}
+              </span>
+            </div>
+          )}
+
+          {/* User action needed indicator */}
+          {type === 'user_action_needed' && (
+            <div className="mt-2 flex items-center gap-2">
+              <div className="h-2 w-2 rounded-full bg-orange-500 animate-pulse" />
+              <span className="text-xs font-medium text-orange-600">
+                Requires manual action
+              </span>
+            </div>
+          )}
+
+
+          {/* Draft preview for composed drafts */}
+          {result?.draft_body_preview && (
+            <div className="mt-2 p-2 bg-accent/50 rounded text-xs text-secondary-foreground line-clamp-2">
+              {result.draft_body_preview}
+            </div>
+          )}
+
+          {/* Sources used indicator */}
+          {result?.rag_sources_used !== undefined && result.rag_sources_used > 0 && (
+            <div className="mt-2 text-xs text-secondary-foreground">
+              Used {result.rag_sources_used} knowledge base sources
+            </div>
+          )}
         </div>
       </div>
     );
