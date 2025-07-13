@@ -37,7 +37,7 @@ export const JWT_ACCESS_SECRET = jwtAccessSecret;
 export const JWT_REFRESH_SECRET = jwtRefreshSecret;
 
 // JWT configuration
-export const JWT_ACCESS_EXPIRES_IN = process.env.JWT_ACCESS_EXPIRES_IN || '15m';
+export const JWT_ACCESS_EXPIRES_IN = process.env.JWT_ACCESS_EXPIRES_IN || '24h';
 export const JWT_REFRESH_EXPIRES_IN = process.env.JWT_REFRESH_EXPIRES_IN || '7d';
 
 export const NODE_ENV = process.env.NODE_ENV || 'development';

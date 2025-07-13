@@ -45,7 +45,7 @@ const setTokenCookies = (c: Context, accessToken: string, refreshToken: string) 
     path: '/',
   };
 
-  setCookie(c, 'accessToken', accessToken, { ...cookieOptions, maxAge: 900 }); // 15 minutes
+  setCookie(c, 'accessToken', accessToken, { ...cookieOptions, maxAge: 86400 }); // 24 hours
   setCookie(c, 'refreshToken', refreshToken, { ...cookieOptions, maxAge: 604800 }); // 7 days
 };
 
