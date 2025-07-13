@@ -118,6 +118,7 @@ async function generateDemoCustomerResponse(threadId: number) {
       auto_generated: true,
       original_customer_email: customerEmailAddress,
       timestamp: new Date().toISOString(),
+      body: generatedContent,
     },
   });
 
@@ -188,7 +189,7 @@ app.post('/:id/messages', async c => {
       threadId: threadId,
       emailId: newEmail.id,
       action: 'draft_sent',
-      metadata: { content_length: body.content.length },
+      metadata: { content_length: body.content.length, body: body.content },
     });
 
     // Schedule automatic demo customer response after 10-30 seconds

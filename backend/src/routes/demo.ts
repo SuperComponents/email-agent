@@ -127,10 +127,10 @@ app.post('/:threadId/demo-customer-response', async c => {
       action: 'email_read',
       emailId: newEmail.id,
       metadata: {
-        source: 'demo_customer_response',
-        auto_generated: true,
-        original_customer_email: customerEmailAddress,
-        timestamp: new Date().toISOString(),
+        subject: newEmail.subject,
+        body: newEmail.body_text,
+        from: newEmail.from_email,
+        to: newEmail.to_emails,
       },
     });
 
