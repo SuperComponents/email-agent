@@ -2,7 +2,7 @@
 
 ## Overview
 
-The CyberKnight Collection represents the fusion of traditional armor craftsmanship with cutting-edge technology. These collector pieces feature LED accent lighting, smart materials, and futuristic aesthetics that make them perfect for collectors, cosplayers, and enthusiasts.
+The  CyberKnight Collection represents the fusion of traditional armor craftsmanship with cutting-edge technology. These collector pieces feature LED accent lighting, smart materials, and futuristic aesthetics that make them perfect for collectors, cosplayers, and enthusiasts.
 
 ## Key Features
 

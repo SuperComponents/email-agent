@@ -2,7 +2,7 @@
 
 ## Overview
 
-RoadGuard Series gauntlets are specifically engineered for motorcycle riders who demand maximum protection without sacrificing control and feel. Featuring advanced impact absorption technology and road-tested durability.
+RoadGuard Series gauntlets are specifically engineered for motorcycle riders who demand maximum protection without sacrificing control and feel. Featuring advanced impact absorption technology and  road-tested durability.
 
 ## Key Features
 

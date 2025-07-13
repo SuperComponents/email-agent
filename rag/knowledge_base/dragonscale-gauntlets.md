@@ -2,7 +2,7 @@
 
 ## Overview
 
-The DragonScale Gauntlets represent the pinnacle of armored glove craftsmanship, combining traditional techniques with modern materials. Each pair is handcrafted by master artisans and features premium leather with titanium plating.
+The DragonScale  Gauntlets represent the pinnacle of armored glove craftsmanship, combining traditional techniques with modern materials. Each pair is handcrafted by master artisans and features premium leather with titanium plating.
 
 ## Key Features
 

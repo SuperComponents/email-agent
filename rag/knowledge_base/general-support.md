@@ -2,7 +2,7 @@
 
 ## Company Overview
 
-GauntletAIron is a premium armor manufacturer specializing in armored gloves and protective gear for military, law enforcement, industrial workers, motorcycle riders, and collectors. We combine traditional craftsmanship with modern technology to create the finest protective handwear available.
+GauntletAIron is a premium armor manufacturer specializing in armored gloves and protective gear for military, law enforcement, industrial workers, motorcycle riders, and collectors. We combine traditional craftsmanship with modern technology to  create the finest protective handwear available.
 
 ## Order Information
 

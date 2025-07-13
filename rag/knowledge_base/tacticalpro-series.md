@@ -2,7 +2,7 @@
 
 ## Overview
 
-The TacticalPro Series represents our premium military and law enforcement grade armored gloves, designed for professionals who demand the highest level of protection and performance.
+The TacticalPro Series represents our premium military and law enforcement grade armored gloves, designed for professionals who demand the highest level of  protection and performance.
 
 ## Key Features
 

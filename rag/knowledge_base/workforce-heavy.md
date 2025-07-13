@@ -2,7 +2,7 @@
 
 ## Overview
 
-WorkForce Heavy gauntlets are engineered for demanding industrial environments where heat resistance, chemical protection, and durability are paramount. Built for professionals who work with heavy machinery, welding, and hazardous materials.
+WorkForce Heavy gauntlets are engineered for demanding industrial environments where heat resistance, chemical  protection, and durability are paramount. Built for professionals who work with heavy machinery, welding, and hazardous materials.
 
 ## Key Features
 
