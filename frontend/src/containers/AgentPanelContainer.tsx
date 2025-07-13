@@ -129,23 +129,23 @@ export function AgentPanelContainer({
   }, [selectedThreadId]);
 
   // Log agent activity when it comes in
-  if (agentActivity && agentActivity.actions) {
-    const resultsLog = agentActivity.actions
-      .map((action, index) => {
-        return (
-          `\n========== Action ${index} ==========\n` +
-          `ID: ${action.id}\n` +
-          `Type: ${action.type}\n` +
-          `Title: ${action.title}\n` +
-          `Status: ${action.status}\n` +
-          `Timestamp: ${action.timestamp}\n` +
-          `Result: ${action.result ? JSON.stringify(action.result, null, 2) : 'null'}\n`
-        );
-      })
-      .join('\n');
-
-    console.log('=== AGENT ACTIVITY RESULTS ===\n' + resultsLog + '\n=== END AGENT ACTIVITY ===');
-  }
+//   if (agentActivity && agentActivity.actions) {
+//     const resultsLog = agentActivity.actions
+//       .map((action, index) => {
+//         return (
+//           `\n========== Action ${index} ==========\n` +
+//           `ID: ${action.id}\n` +
+//           `Type: ${action.type}\n` +
+//           `Title: ${action.title}\n` +
+//           `Status: ${action.status}\n` +
+//           `Timestamp: ${action.timestamp}\n` +
+//           `Result: ${action.result ? JSON.stringify(action.result, null, 2) : 'null'}\n`
+//         );
+//       })
+//       .join('\n');
+// 
+//     console.log('=== AGENT ACTIVITY RESULTS ===\n' + resultsLog + '\n=== END AGENT ACTIVITY ===');
+//   }
 
   if (!isAgentPanelOpen || !selectedThreadId) {
     return null;

@@ -27,6 +27,7 @@ app.get('/', c => {
 // Mount API routes with auth protection
 // 🔐 Apply auth middleware to protected routes
 app.use('/api/threads/*', authMiddleware);
+app.use('/api/demo/*', authMiddleware);
 
 // Mount routes with specific paths first to avoid conflicts
 app.route('/api/threads', countRoutes);
@@ -34,7 +35,7 @@ app.route('/api/threads', threadRoutes);
 app.route('/api/threads', messageRoutes);
 app.route('/api/threads', draftRoutes);
 app.route('/api/threads', agentRoutes);
-app.route('/api/threads', demoRoutes);
+app.route('/api/demo', demoRoutes);
 
 serve(
   {

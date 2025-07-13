@@ -35,7 +35,8 @@ type WriteDraftParams = z.infer<typeof WriteDraftParamsSchema>;
 export const writeDraftTool = tool({
   name: 'write_draft',
   description:
-    'Create a draft email response. IMPORTANT: If you used file search results to construct the draft, you MUST include the highest scoring citation.',
+    'Create a draft email response. IMPORTANT: If you used file search results to construct the draft, you MUST include the highest scoring citation.'
+    + '. DO NOT add citations to the draft if you did not use file search results.',
   parameters: WriteDraftParamsSchema,
   execute: async (input: WriteDraftParams) => {
     const {

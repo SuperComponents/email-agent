@@ -1,6 +1,7 @@
 import { db } from '../database/db.js';
 import { emails, threads } from '../database/schema.js';
 import { logAgentAction } from '../database/logAgentAction.js';
+import { processEmail } from 'agent3';
 import OpenAI from 'openai';
 import { OPENAI_API_KEY } from '../config/env.js';
 import fs from 'fs/promises';
@@ -164,23 +165,9 @@ async function createEmailFromScenario(scenario: Scenario) {
       })
       .returning();
 
-    // Log agent action for email received
-    await logAgentAction({
-      threadId: thread.id,
-      action: 'email_read',
-      emailId: email.id,
-      metadata: {
-        source: 'simulation',
-        scenario_id: scenario.id,
-        scenario_category: scenario.category,
-        scenario_severity: scenario.severity,
-        customer_name: emailData.persona.name,
-        customer_tone: emailData.persona.tone,
-        tags: scenario.tags,
-        auto_generated: true,
-        timestamp: new Date().toISOString()
-      },
-    });
+
+    const logger = (message: unknown) => console.log(message);
+    await processEmail(thread.id, logger);
 
     emailCount++;
     console.log(`✉️  Generated email from scenario: ${scenario.title} (Total: ${emailCount})`);

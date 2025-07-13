@@ -47,8 +47,6 @@ export async function getThreads(filter?: ThreadFilter, search?: string): Promis
   
   const query = params.toString() ? `?${params.toString()}` : '';
   const res = await fetchAPI<{ threads: Thread[] }>(`/api/threads${query}`);
-  console.log('getThreads');
-  console.log(res);
   return res;
 }
 

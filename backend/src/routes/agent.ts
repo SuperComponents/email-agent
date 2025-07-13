@@ -167,7 +167,7 @@ async function generateEnhancedDraftResponse(
     // Call the enhanced agent
     // const agentResponse = await assistSupportPersonEnhanced(agentThread, enhancedContext, agentConfig)
     const logger = (message: unknown) => {
-      console.log(message);
+      // Suppress verbose agent logs
     };
     const agentResponse = await processEmail(threadId, logger, userMessage);
     // const agentResponse = {
@@ -178,10 +178,6 @@ async function generateEnhancedDraftResponse(
     //   history: []
     // }
 
-    console.log('agentResponse');
-    console.log(agentResponse);
-    console.log('agentResponse.history');
-    console.log((agentResponse as unknown as AgentResponse)?.history?.forEach(x => console.log(x)));
     //     console.log('summary');
     //     console.log(agentResponse.summary);
 
