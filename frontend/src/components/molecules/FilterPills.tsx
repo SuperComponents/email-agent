@@ -1,6 +1,6 @@
-import React from "react";
-import { Button } from "../atoms/Button";
-import { cn } from "../../lib/utils";
+import React from 'react';
+import { Button } from '../atoms/Button';
+import { cn } from '../../lib/utils';
 
 export interface FilterOption {
   id: string;
@@ -19,23 +19,20 @@ export const FilterPills = React.forwardRef<HTMLDivElement, FilterPillsProps>(
     return (
       <div
         ref={ref}
-        className={cn(
-          "flex no-wrap overflow-x-auto gap-2 no-scrollbar",
-          className
-        )}
+        className={cn('flex no-wrap overflow-x-auto gap-3 no-scrollbar', className)}
         {...props}
       >
-        {options.map((option) => (
+        {options.map(option => (
           <Button
             key={option.id}
-            variant={value === option.id ? "secondary" : "ghost"}
+            variant={value === option.id ? 'secondary' : 'ghost'}
             size="sm"
             onClick={() => onValueChange?.(option.id)}
             className={cn(
-              "rounded-full h-7 px-3 text-xs",
+              'rounded-full h-7 px-3 text-xs',
               value === option.id
-                ? "bg-primary/10 text-primary border-primary/20"
-                : "hover:bg-secondary/50"
+                ? 'bg-primary/10 text-primary border-primary/20'
+                : 'hover:bg-secondary/50',
             )}
           >
             {option.label}
@@ -46,7 +43,7 @@ export const FilterPills = React.forwardRef<HTMLDivElement, FilterPillsProps>(
         ))}
       </div>
     );
-  }
+  },
 );
 
-FilterPills.displayName = "FilterPills";
+FilterPills.displayName = 'FilterPills';

@@ -115,7 +115,6 @@ export function ThreadListContainer() {
     { id: 'all', label: 'All', count: counts?.all },
     { id: 'unread', label: 'Unread', count: counts?.unread },
     { id: 'urgent', label: 'Urgent', count: counts?.urgent },
-    { id: 'awaiting_customer', label: 'Pending', count: counts?.awaiting_customer },
   ];
 
   return (
