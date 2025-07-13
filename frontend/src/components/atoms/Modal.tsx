@@ -54,7 +54,7 @@ export const Modal: React.FC<ModalProps> = ({
         )}
 
         {/* Content */}
-        <div className="flex-1 overflow-auto">{children}</div>
+        <div className="flex-1 overflow-y-auto overflow-x-hidden">{children}</div>
       </div>
     </div>
   );

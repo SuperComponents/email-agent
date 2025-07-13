@@ -126,7 +126,7 @@ export const AgentAction = React.forwardRef<HTMLDivElement, AgentActionProps>(
                 : 'bg-accent/50 border border-accent-foreground/20 mr-8',
             )}
           >
-            <p className="text-sm whitespace-pre-wrap">{description}</p>
+            <p className="text-sm whitespace-pre-wrap break-words">{description}</p>
             {timestamp && (
               <time
                 className={cn(
@@ -149,7 +149,7 @@ export const AgentAction = React.forwardRef<HTMLDivElement, AgentActionProps>(
       <div
         ref={ref}
         className={cn(
-          'flex gap-2 p-2 rounded-md bg-accent/30 border-l-2',
+          'flex gap-2 p-2 rounded-md bg-accent/30 border-l-2 w-full overflow-hidden',
           status === 'completed' && 'border-l-primary/50',
           status === 'pending' && 'border-l-secondary',
           status === 'failed' && 'border-l-destructive/50',
@@ -169,7 +169,7 @@ export const AgentAction = React.forwardRef<HTMLDivElement, AgentActionProps>(
             status === 'failed' && 'text-destructive',
           )}
         />
-        <div className="flex-1 min-w-0">
+        <div className="flex-1 min-w-0 overflow-hidden">
           <div className="flex items-start justify-between gap-2">
             {timestamp && (
               <time className="text-xs text-secondary-foreground flex-shrink-0">
@@ -180,8 +180,8 @@ export const AgentAction = React.forwardRef<HTMLDivElement, AgentActionProps>(
 
           {/* Special handling for urgency update events */}
           {type === 'thread_status_changed' && result?.tool_name === 'update_thread_urgency' && (
-            <div className="mt-1">
-              <span className="text-sm font-medium text-foreground">
+            <div className="mt-1 overflow-hidden">
+              <span className="text-sm font-medium text-foreground break-words">
                 Urgency:{' '}
                 {(result?.tool_output as { args?: { urgency?: string }; new_urgency?: string })
                   ?.args?.urgency ||
@@ -194,8 +194,8 @@ export const AgentAction = React.forwardRef<HTMLDivElement, AgentActionProps>(
 
           {/* Special handling for user action needed events */}
           {type === 'thread_assigned' && result?.tool_name === 'user_action_needed' && (
-            <div className="mt-1">
-              <span className="text-sm font-medium text-foreground">
+            <div className="mt-1 overflow-hidden">
+              <span className="text-sm font-medium text-foreground break-words">
                 {result?.action_reason ||
                   (result?.tool_output as { reason?: string; args?: { reason?: string } })
                     ?.reason ||
@@ -207,8 +207,8 @@ export const AgentAction = React.forwardRef<HTMLDivElement, AgentActionProps>(
 
           {/* Special handling for category update events */}
           {type === 'thread_status_changed' && result?.tool_name === 'update_thread_category' && (
-            <div className="mt-1">
-              <span className="text-sm font-medium text-foreground">
+            <div className="mt-1 overflow-hidden">
+              <span className="text-sm font-medium text-foreground break-words">
                 Category:{' '}
                 {(result?.tool_output as { args?: { category?: string }; new_category?: string })
                   ?.args?.category ||
@@ -220,8 +220,8 @@ export const AgentAction = React.forwardRef<HTMLDivElement, AgentActionProps>(
 
           {/* Special handling for summarize context events */}
           {type === 'email_read' && result?.tool_name === 'summarize_useful_context' && (
-            <div className="mt-1">
-              <span className="text-sm font-medium text-foreground">
+            <div className="mt-1 overflow-hidden">
+              <span className="text-sm font-medium text-foreground break-words">
                 {result?.context_summary ||
                   (result?.tool_output as { summary?: string; args?: { summary?: string } })
                     ?.summary ||
@@ -233,8 +233,8 @@ export const AgentAction = React.forwardRef<HTMLDivElement, AgentActionProps>(
 
           {/* Special handling for knowledge base search events */}
           {result?.tool_name === 'search-knowledge-base' && (
-            <div className="mt-1">
-              <span className="text-sm font-medium text-foreground">
+            <div className="mt-1 overflow-hidden">
+              <span className="text-sm font-medium text-foreground break-words">
                 Searched and found{' '}
                 {result?.rag_sources_used ||
                   (result?.tool_output as { result?: string[] })?.result.length ||
@@ -247,15 +247,15 @@ export const AgentAction = React.forwardRef<HTMLDivElement, AgentActionProps>(
 
           {/* Special handling for finalized draft actions */}
           {isFinalizedDraft && (
-            <div className="mt-1">
-              <span className="text-sm font-medium text-foreground">Draft response generated</span>
+            <div className="mt-1 overflow-hidden">
+              <span className="text-sm font-medium text-foreground break-words">Draft response generated</span>
               {(() => {
                 const toolOutput = result?.tool_output as { result?: { body?: string } };
                 const body = toolOutput?.result?.body || result?.draft_body_preview;
 
                 return (
                   body && (
-                    <div className="text-xs text-secondary-foreground mt-1 line-clamp-2">
+                    <div className="text-xs text-secondary-foreground mt-1 line-clamp-2 break-words">
                       {body}
                     </div>
                   )
@@ -275,7 +275,7 @@ export const AgentAction = React.forwardRef<HTMLDivElement, AgentActionProps>(
             !(result?.tool_name === 'search-knowledge-base') &&
             !isFinalizedDraft &&
             description && (
-              <p className="text-sm text-foreground leading-tight mt-1">{description}</p>
+              <p className="text-sm text-foreground leading-tight mt-1 break-words">{description}</p>
             )}
         </div>
       </div>

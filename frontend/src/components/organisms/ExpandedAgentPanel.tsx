@@ -9,15 +9,7 @@ export interface ExpandedAgentPanelProps extends React.HTMLAttributes<HTMLDivEle
 }
 
 export const ExpandedAgentPanel = React.forwardRef<HTMLDivElement, ExpandedAgentPanelProps>(
-  (
-    {
-      className,
-      actions,
-      onDraftClick,
-      ...props
-    },
-    ref,
-  ) => {
+  ({ className, actions, onDraftClick, ...props }, ref) => {
     // Check if agent is currently working (has any pending actions)
     const isAgentWorking = actions.some(action => action.status === 'pending');
 
@@ -25,9 +17,9 @@ export const ExpandedAgentPanel = React.forwardRef<HTMLDivElement, ExpandedAgent
       <div ref={ref} className={cn('p-8', className)} {...props}>
         {/* Agent Actions */}
         {actions.length > 0 ? (
-          <div className="space-y-8">
+          <div className="space-y-4">
             {actions.map((action, index) => (
-              <div key={index} className="transform scale-110 origin-left">
+              <div key={index} className="transform origin-left">
                 <AgentAction {...action} onDraftClick={onDraftClick} />
               </div>
             ))}
