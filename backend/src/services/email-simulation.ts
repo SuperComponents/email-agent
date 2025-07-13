@@ -1,6 +1,5 @@
 import { db } from '../database/db.js';
 import { emails, threads } from '../database/schema.js';
-import { logAgentAction } from '../database/logAgentAction.js';
 import { processEmail } from 'agent3';
 import OpenAI from 'openai';
 import { OPENAI_API_KEY } from '../config/env.js';

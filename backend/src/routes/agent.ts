@@ -24,10 +24,10 @@ interface AgentMetadata {
   suggested_priority?: string;
 }
 
-interface AgentResponse {
-  history?: Array<unknown>;
-  [key: string]: unknown;
-}
+// interface AgentResponse {
+//   history?: Array<unknown>;
+//   [key: string]: unknown;
+// }
 
 // Helper function to convert database thread to agent EmailThread format
 // function convertToAgentEmailThread(thread: DatabaseThread, threadEmails: DatabaseEmail[]): EmailThread {
@@ -167,7 +167,7 @@ async function generateEnhancedDraftResponse(
     // Call the enhanced agent
     // const agentResponse = await assistSupportPersonEnhanced(agentThread, enhancedContext, agentConfig)
     const logger = (message: unknown) => {
-      // Suppress verbose agent logs
+      console.log(message);
     };
     const agentResponse = await processEmail(threadId, logger, userMessage);
     // const agentResponse = {
