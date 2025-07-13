@@ -49,10 +49,10 @@ export interface AgentActionProps extends React.HTMLAttributes<HTMLDivElement> {
   result?: {
     tool_name?: string;
     urgency_change?: string;
-    confidence?: number;
-    sentiment?: string;
+    confidence?: number | null;
+    sentiment?: string | null;
     escalation_recommended?: boolean;
-    suggested_priority?: string;
+    suggested_priority?: string | null;
     rag_sources_used?: number;
     draft_subject?: string;
     draft_body_preview?: string;

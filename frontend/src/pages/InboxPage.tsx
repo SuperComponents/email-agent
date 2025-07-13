@@ -59,8 +59,7 @@ export function InboxPage() {
     
     setIsGeneratingDemo(true);
     try {
-      const result = await generateDemoCustomerResponse(selectedThreadId);
-      console.log('Demo customer response result:', result);
+      await generateDemoCustomerResponse(selectedThreadId);
       
       // Refetch the thread data to show the new email
       await queryClient.invalidateQueries({ queryKey: queryKeys.thread(selectedThreadId) });
@@ -81,13 +80,13 @@ export function InboxPage() {
       }
       main={<ThreadDetailContainer 
         ref={threadDetailRef} 
-        onDemoCustomerResponse={handleDemoCustomerResponse}
+        onDemoCustomerResponse={() => { void handleDemoCustomerResponse(); }}
         isGeneratingDemoResponse={isGeneratingDemo}
       />}
       panel={isAgentPanelOpen ? 
         <AgentPanelContainer 
-          onUseAgent={handleUseAgent}
-          onDemoCustomerResponse={handleDemoCustomerResponse}
+          onUseAgent={() => { void handleUseAgent(); }}
+          onDemoCustomerResponse={() => { void handleDemoCustomerResponse(); }}
           isRegeneratingDraft={isRegenerating}
           isGeneratingDemoResponse={isGeneratingDemo}
           onDraftClick={handleDraftClick}

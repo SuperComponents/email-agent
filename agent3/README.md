@@ -5,6 +5,7 @@ This agent processes customer support emails and generates draft responses using
 ## Core Functionality
 
 The agent:
+
 1. Reads email threads from the database
 2. Tags emails (spam, legal, sales, support, billing, technical, general)
 3. Searches for relevant information in the knowledge base
@@ -14,10 +15,13 @@ The agent:
 ## Architecture
 
 ### Main Entry Point
+
 - `src/agents/email-agent.ts` - `processEmail(threadId)` function
 
 ### Tools
+
 The agent has access to these tools:
+
 - `read_thread` - Reads the email thread context from the agent's context
 - `explain_next_tool_call` - Explains what the agent plans to do next (for transparency)
 - `get_customer_history` - Gets complete email history for a customer to understand their interaction context
@@ -51,6 +55,7 @@ const result = await processEmail(threadId);
 ## Configuration
 
 Set these environment variables:
+
 - `OPENAI_API_KEY` - Your OpenAI API key
 - `OPENAI_MODEL` - Model to use (default: gpt-4)
 - `DATABASE_URL` - PostgreSQL connection string
@@ -58,6 +63,7 @@ Set these environment variables:
 ## Database Requirements
 
 The agent expects these tables:
+
 - `threads` - Email threads
 - `emails` - Individual emails
 - `draft_responses` - Generated drafts

@@ -14,7 +14,6 @@ export interface ThreadPreviewProps extends React.HTMLAttributes<HTMLDivElement>
   timestamp: string;
   isActive?: boolean;
   isUnread?: boolean;
-  workerActive?: boolean;
   badges?: Array<{
     label: string;
     variant: 'default' | 'secondary' | 'destructive' | 'outline';
@@ -30,7 +29,6 @@ export const ThreadPreview = React.forwardRef<HTMLDivElement, ThreadPreviewProps
       timestamp,
       isActive,
       isUnread,
-      workerActive = false,
       badges = [],
 
       ...props

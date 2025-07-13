@@ -35,8 +35,8 @@ type WriteDraftParams = z.infer<typeof WriteDraftParamsSchema>;
 export const writeDraftTool = tool({
   name: 'write_draft',
   description:
-    'Create a draft email response. IMPORTANT: If you used file search results to construct the draft, you MUST include the highest scoring citation.'
-    + '. DO NOT add citations to the draft if you did not use file search results.',
+    'Create a draft email response. IMPORTANT: If you used file search results to construct the draft, you MUST include the highest scoring citation.' +
+    '. DO NOT add citations to the draft if you did not use file search results.',
   parameters: WriteDraftParamsSchema,
   execute: async (input: WriteDraftParams) => {
     const {
@@ -53,23 +53,25 @@ export const writeDraftTool = tool({
       // Reconstruct citations object if citation data is provided
       // Validate filename and extract actual filename from emailsmart-knowledge-base pattern
       let processedFilename: string | null = null;
-      
+
       if (citationFilename && citationFilename.includes('emailsmart-knowledge-base')) {
         const parts = citationFilename.split('/');
         // Find the part after 'emailsmart-knowledge-base-*/'
-        const knowledgeBaseIndex = parts.findIndex(part => part.startsWith('emailsmart-knowledge-base'));
+        const knowledgeBaseIndex = parts.findIndex(part =>
+          part.startsWith('emailsmart-knowledge-base'),
+        );
         if (knowledgeBaseIndex !== -1 && knowledgeBaseIndex < parts.length - 1) {
           // Get everything after the emailsmart-knowledge-base-* part
           processedFilename = parts.slice(knowledgeBaseIndex + 1).join('/');
         }
       }
-      
+
       // Only create citations if we have a valid processed filename
       const citations: KnowledgeBaseResult | null =
-        processedFilename && 
-        processedFilename.length >= 4 && 
-        citationScore !== undefined && 
-        citationScore !== null && 
+        processedFilename &&
+        processedFilename.length >= 4 &&
+        citationScore !== undefined &&
+        citationScore !== null &&
         citationText
           ? {
               attributes: {},

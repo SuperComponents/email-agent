@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useThreads, useThreadCounts, useMarkThreadAsRead } from '../repo/hooks';
 import { useUIStore } from '../stores/ui-store';
 import { ThreadList } from '../components/organisms';
-import type { ThreadFilter } from '../types/api';
+import type { ThreadFilter, Thread, ThreadCounts } from '../types/api';
 import type { ThreadPreviewProps } from '../components/molecules/ThreadPreview';
 import { useQueryClient } from '@tanstack/react-query';
 import { queryKeys } from '../repo/hooks';
@@ -44,11 +44,11 @@ export function ThreadListContainer() {
     // Optimistically update the thread as read in the cache
     if (currentThread?.is_unread) {
       // Update threads list cache
-      queryClient.setQueryData(queryKeys.threads(threadFilter, searchQuery), (oldData: any) => {
+      queryClient.setQueryData<{ threads: Thread[] }>(queryKeys.threads(threadFilter, searchQuery), (oldData) => {
         if (!oldData?.threads) return oldData;
         return {
           ...oldData,
-          threads: oldData.threads.map((thread: any) => 
+          threads: oldData.threads.map((thread) => 
             thread.id === threadId 
               ? { ...thread, is_unread: false }
               : thread
@@ -57,7 +57,7 @@ export function ThreadListContainer() {
       });
       
       // Update thread counts cache optimistically
-      queryClient.setQueryData(queryKeys.threadCounts, (oldData: any) => {
+      queryClient.setQueryData<ThreadCounts>(queryKeys.threadCounts, (oldData) => {
         if (!oldData) return oldData;
         return {
           ...oldData,

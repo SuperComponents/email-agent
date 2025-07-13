@@ -7,28 +7,34 @@ This directory contains the tools that the email agent uses to process customer 
 ## Tools
 
 ### 1. `read-thread.ts` - Read Thread Context
+
 **Purpose**: Reads the full email thread context from the agent's runtime context.
 **When to use**: Always called first to establish the conversation context.
 **Required**: Yes, always first
 
 ### 2. `explain-next-tool-call.ts` - Explain Next Action
+
 **Purpose**: Explains what the agent plans to do next for transparency.
 **When to use**: Before using any other tool (except read-thread).
 **Required**: Yes, for transparency
 
 ### 3. `get-customer-history.ts` - Get Customer History
+
 **Purpose**: Retrieves all email history for a specific customer to understand their complete interaction history.
 **When to use**: After reading the thread, to understand broader customer context.
 **Use cases**:
+
 - Understanding customer's overall relationship with the company
 - Identifying communication patterns and preferences
 - Reviewing previous issues and resolutions
 - Assessing customer satisfaction history
 
 ### 4. `search-customer-emails.ts` - Search Customer Emails
+
 **Purpose**: Searches for specific content within a customer's email history.
 **When to use**: HIGH PRIORITY - Use whenever ANY historical context indicators are present.
 **Use cases**:
+
 - Customer mentions "last time", "before", "previously", "again", "still", "another", "also"
 - Customer references any past interaction, issue, or conversation
 - Customer mentions any product, feature, or service name (search for previous interactions)
@@ -42,23 +48,27 @@ This directory contains the tools that the email agent uses to process customer 
 - **Default assumption**: If unsure, search customer emails - customer context is often relevant
 
 ### 5. `email-tagger.ts` - Tag Emails
+
 **Purpose**: Categorizes emails with appropriate tags.
 **When to use**: After understanding the email context.
 **Tags**: spam, legal, sales, support, billing, technical, general
 
 ### 6. `rag-search.ts` - Knowledge Base Search
+
 **Purpose**: Searches the company knowledge base for relevant information.
 **When to use**: CONDITIONAL - Only when customer needs policy information, product specifications, or technical documentation.
 **Use cases**:
+
 - Company policies (refund policy, privacy policy, terms of service)
 - Product specifications, features, or technical documentation
 - How-to guides or troubleshooting steps
 - Warranty information or coverage details
 - Service offerings or product comparisons
 - Compliance or regulatory requirements
-**DO NOT use for**: General customer service responses, account-specific issues, simple acknowledgments, personal customer situations
+  **DO NOT use for**: General customer service responses, account-specific issues, simple acknowledgments, personal customer situations
 
 ### 7. `write-draft.ts` - Write Draft Response
+
 **Purpose**: Creates a draft email response.
 **When to use**: Always last, after gathering all necessary context and information.
 **Required**: Yes, always last
@@ -78,19 +88,23 @@ This directory contains the tools that the email agent uses to process customer 
 ## Key Changes (v2.0)
 
 ### Previous Issue
+
 The old `email-search.ts` tool was overloaded with two distinct responsibilities:
+
 - Getting all customer emails (context gathering)
 - Searching for specific content within emails
 
 This caused confusion and the agent rarely used the search functionality.
 
 ### Solution
+
 Split into two separate, well-documented tools:
 
 1. **`get-customer-history.ts`** - Clearly for context gathering
 2. **`search-customer-emails.ts`** - Clearly for content-specific searches
 
 ### Benefits
+
 - **Clear purpose**: Each tool has a single, well-defined responsibility
 - **Better documentation**: Extensive descriptions and examples for when to use each tool
 - **Improved agent behavior**: The agent now understands when to search for specific content
@@ -123,4 +137,4 @@ To test the tools:
 - Use `search_customer_emails` when you need specific information
 - Tag emails before searching the knowledge base
 - Always create a draft response with `write_draft`
-- Include citations when using knowledge base results 
+- Include citations when using knowledge base results

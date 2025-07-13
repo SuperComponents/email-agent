@@ -3,7 +3,7 @@ import { useAgentActivity, queryKeys } from '../repo/hooks';
 import { useQueryClient } from '@tanstack/react-query';
 import { useUIStore } from '../stores/ui-store';
 import { AgentPanel } from '../components/organisms';
-import { FileSearch, Brain, MessageSquare, Zap, FileText, AlertTriangle, Users, Search, Tag } from 'lucide-react';
+import { FileSearch, Brain, MessageSquare, Zap, FileText, Users, Search, Tag } from 'lucide-react';
 import type { AgentActionProps } from '../components/molecules/AgentAction';
 import type { AgentAction } from '../types/api';
 import { apiClient } from '../lib/api';

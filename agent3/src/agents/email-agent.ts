@@ -308,7 +308,7 @@ function createAgent() {
     model: env.OPENAI_MODEL,
     modelSettings: {
       temperature: 0.5,
-    }
+    },
   });
 }
 
