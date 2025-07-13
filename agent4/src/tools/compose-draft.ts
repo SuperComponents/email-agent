@@ -70,10 +70,11 @@ ${context}`
 }
 
 Please provide:
-1. An appropriate subject line
-2. A complete email body
-3. A priority level (low/medium/high/urgent)
-4. Relevant tags for categorization`;
+- A complete email body, no other text or formatting.
+
+Don't include markdown formatting. Just use plain text and whitespace.
+
+Don't include any empty fields for the user to fill in. the draft must be ready to send without edit.`;
 
     try {
       const response = await openai.chat.completions.create({

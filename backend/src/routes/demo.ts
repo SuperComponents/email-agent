@@ -6,11 +6,11 @@ import { authMiddleware } from '../middleware/auth.js';
 import OpenAI from 'openai';
 import { OPENAI_API_KEY } from '../config/env.js';
 import { logAgentAction } from '../database/logAgentAction.js';
-import { 
-  startEmailSimulation, 
-  stopEmailSimulation, 
-  getSimulationStatus, 
-  generateSingleEmail 
+import {
+  startEmailSimulation,
+  stopEmailSimulation,
+  getSimulationStatus,
+  generateSingleEmail,
 } from '../services/email-simulation.js';
 
 const app = new Hono();
@@ -130,7 +130,7 @@ app.post('/:threadId/demo-customer-response', async c => {
         source: 'demo_customer_response',
         auto_generated: true,
         original_customer_email: customerEmailAddress,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       },
     });
 
@@ -154,27 +154,29 @@ app.post('/:threadId/demo-customer-response', async c => {
 // POST /api/demo/start-email-simulation - Start scenario-based email generation
 app.post('/start-email-simulation', async c => {
   try {
-    const body = await c.req.json().catch(() => ({})) as { intervalMs?: number };
-    const intervalMs = body.intervalMs || 90000; // Default 1.5 minutes
-    
+    const intervalMs = 5000; // Default 1.5 minutes
+
     const result = await startEmailSimulation(intervalMs);
-    
+
     if (result.success) {
       return c.json({
         success: true,
         message: result.message,
         intervalMs: result.intervalMs,
-        scenariosCount: result.scenariosCount
+        scenariosCount: result.scenariosCount,
       });
     } else {
       return c.json({ success: false, error: result.message }, 400);
     }
   } catch (error) {
     console.error('Error starting email simulation:', error);
-    return c.json({
-      success: false,
-      error: error instanceof Error ? error.message : 'Failed to start simulation'
-    }, 500);
+    return c.json(
+      {
+        success: false,
+        error: error instanceof Error ? error.message : 'Failed to start simulation',
+      },
+      500,
+    );
   }
 });
 
@@ -182,22 +184,25 @@ app.post('/start-email-simulation', async c => {
 app.post('/stop-email-simulation', c => {
   try {
     const result = stopEmailSimulation();
-    
+
     if (result.success) {
       return c.json({
         success: true,
         message: result.message,
-        totalEmailsGenerated: result.totalEmailsGenerated
+        totalEmailsGenerated: result.totalEmailsGenerated,
       });
     } else {
       return c.json({ success: false, error: result.message }, 400);
     }
   } catch (error) {
     console.error('Error stopping email simulation:', error);
-    return c.json({
-      success: false,
-      error: error instanceof Error ? error.message : 'Failed to stop simulation'
-    }, 500);
+    return c.json(
+      {
+        success: false,
+        error: error instanceof Error ? error.message : 'Failed to stop simulation',
+      },
+      500,
+    );
   }
 });
 
@@ -205,21 +210,24 @@ app.post('/stop-email-simulation', c => {
 app.get('/simulation-status', c => {
   try {
     const status = getSimulationStatus();
-    
+
     return c.json({
       success: true,
       status: {
         isRunning: status.isRunning,
         emailsGenerated: status.emailsGenerated,
-        startTime: status.startTime
-      }
+        startTime: status.startTime,
+      },
     });
   } catch (error) {
     console.error('Error getting simulation status:', error);
-    return c.json({
-      success: false,
-      error: error instanceof Error ? error.message : 'Failed to get status'
-    }, 500);
+    return c.json(
+      {
+        success: false,
+        error: error instanceof Error ? error.message : 'Failed to get status',
+      },
+      500,
+    );
   }
 });
 
@@ -227,7 +235,7 @@ app.get('/simulation-status', c => {
 app.post('/generate-scenario-email', async c => {
   try {
     const result = await generateSingleEmail();
-    
+
     if (result.success) {
       return c.json({
         success: true,
@@ -240,24 +248,27 @@ app.post('/generate-scenario-email', async c => {
           id: result.email!.id.toString(),
           from_email: result.email!.from_email,
           subject: result.email!.subject,
-          body_text: result.email!.body_text
+          body_text: result.email!.body_text,
         },
         scenario: {
           id: result.scenario!.id,
           title: result.scenario!.title,
           category: result.scenario!.category,
-          severity: result.scenario!.severity
-        }
+          severity: result.scenario!.severity,
+        },
       });
     } else {
       return c.json({ success: false, error: result.message }, 400);
     }
   } catch (error) {
     console.error('Error generating scenario email:', error);
-    return c.json({
-      success: false,
-      error: error instanceof Error ? error.message : 'Failed to generate email'
-    }, 500);
+    return c.json(
+      {
+        success: false,
+        error: error instanceof Error ? error.message : 'Failed to generate email',
+      },
+      500,
+    );
   }
 });
 

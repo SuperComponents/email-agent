@@ -1,10 +1,14 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, forwardRef, useImperativeHandle } from 'react';
 import { useUIStore } from '../stores/ui-store';
 import { useComposerStore } from '../stores/composer-store';
 import { useDraft, useSendMessage, useRegenerateDraft, useThread, useCreateInternalNote } from '../repo/hooks';
 import { Composer, type ComposerMode } from '../components/organisms';
 
-export function ComposerContainer() {
+export interface ComposerContainerRef {
+  setDraftContent: (draft: { body: string }) => void;
+}
+
+export const ComposerContainer = forwardRef<ComposerContainerRef>((_, ref) => {
   const selectedThreadId = useUIStore(state => state.selectedThreadId);
   const setComposerOpen = useUIStore(state => state.setComposerOpen);
 
@@ -106,6 +110,17 @@ export function ComposerContainer() {
     }
   };
 
+  // Expose method to set draft content from outside
+  useImperativeHandle(ref, () => ({
+    setDraftContent: (draft: { body: string }) => {
+      if (selectedThreadId) {
+        setLocalContent(draft.body);
+        setDraft(selectedThreadId, draft.body);
+        setComposerOpen(true, 'reply');
+      }
+    }
+  }), [selectedThreadId, setDraft, setComposerOpen]);
+
   if (!selectedThreadId) {
     return null;
   }
@@ -131,4 +146,4 @@ export function ComposerContainer() {
       onModeChange={setMode}
     />
   );
-}
+});

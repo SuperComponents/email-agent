@@ -48,7 +48,6 @@ export const Composer = React.forwardRef<HTMLDivElement, ComposerProps>(
     onChange, 
     onSend,
     onSendInternalNote,
-    onRegenerate, 
     placeholder, 
     disabled = false,
     isGenerating = false,

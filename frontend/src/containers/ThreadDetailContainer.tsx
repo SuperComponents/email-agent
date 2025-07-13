@@ -1,12 +1,25 @@
+import { useRef, forwardRef, useImperativeHandle } from 'react';
 import { useThread } from '../repo/hooks';
 import { useUIStore } from '../stores/ui-store';
 import { ThreadDetail, type ThreadMessage } from '../components/organisms';
-import { ComposerContainer } from './ComposerContainer';
+import { ComposerContainer, type ComposerContainerRef } from './ComposerContainer';
 
-export function ThreadDetailContainer() {
+export interface ThreadDetailContainerRef {
+  setDraftContent: (draft: { body: string }) => void;
+}
+
+export const ThreadDetailContainer = forwardRef<ThreadDetailContainerRef>((_, ref) => {
   const selectedThreadId = useUIStore(state => state.selectedThreadId);
+  const composerRef = useRef<ComposerContainerRef>(null);
 
   const { data: thread, isLoading, error } = useThread(selectedThreadId || '');
+
+  // Expose method to set draft content from outside
+  useImperativeHandle(ref, () => ({
+    setDraftContent: (draft: { body: string }) => {
+      composerRef.current?.setDraftContent(draft);
+    }
+  }), []);
 
   if (!selectedThreadId) {
     return (
@@ -111,8 +124,8 @@ export function ThreadDetailContainer() {
         />
       </div>
       <div className="flex-shrink-0">
-        <ComposerContainer />
+        <ComposerContainer ref={composerRef} />
       </div>
     </div>
   );
-}
+});

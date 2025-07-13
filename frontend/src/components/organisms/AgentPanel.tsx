@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { Send, Play } from 'lucide-react';
+import { Send, Maximize2 } from 'lucide-react';
 import { AgentAction, type AgentActionProps } from '../molecules/AgentAction';
 import { Button } from '../atoms/Button';
 import { Icon } from '../atoms/Icon';
-import { Badge } from '../atoms/Badge';
 import { DotsLoader } from '../atoms/DotsLoader';
+import { Modal } from '../atoms/Modal';
+import { ExpandedAgentPanel } from './ExpandedAgentPanel';
 import { cn } from '../../lib/utils';
 
 export interface AgentPanelProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -19,6 +20,7 @@ export interface AgentPanelProps extends React.HTMLAttributes<HTMLDivElement> {
   };
   onStartWorker?: () => void;
   isStartingWorker?: boolean;
+  onDraftClick?: (draft: { body: string }) => void;
 }
 
 export const AgentPanel = React.forwardRef<HTMLDivElement, AgentPanelProps>(
@@ -27,38 +29,17 @@ export const AgentPanel = React.forwardRef<HTMLDivElement, AgentPanelProps>(
       className,
       actions,
       onSendMessage,
-      currentThreadId,
-      workerStatus,
-      onStartWorker,
-      isStartingWorker,
+      onDraftClick,
       ...props
     },
     ref,
   ) => {
     const [message, setMessage] = useState('');
+    const [isExpanded, setIsExpanded] = useState(false);
     console.log('actions', actions);
 
-    // Check if agent is currently working (has any pending actions OR worker is running)
-    const isAgentWorking =
-      actions.some(action => action.status === 'pending') || workerStatus?.status === 'running';
-
-    // Get status color based on worker status
-    const getStatusColor = (status: string) => {
-      switch (status) {
-        case 'running':
-          return 'bg-green-500';
-        case 'stopped':
-          return 'bg-gray-500';
-        case 'starting':
-          return 'bg-yellow-500';
-        case 'stopping':
-          return 'bg-orange-500';
-        case 'not_found':
-          return 'bg-red-500';
-        default:
-          return 'bg-gray-400';
-      }
-    };
+    // Check if agent is currently working using worker status
+    const isAgentWorking = props.workerStatus?.isActive || false;
 
     const handleSend = () => {
       if (message.trim() && onSendMessage) {
@@ -76,15 +57,24 @@ export const AgentPanel = React.forwardRef<HTMLDivElement, AgentPanelProps>(
 
     return (
       <div ref={ref} className={cn('h-full bg-card flex flex-col', className)} {...props}>
-        <div className="border-b border-border p-4 h-[60px]">
+        <div className="border-b border-border p-4 h-[60px] flex items-center justify-between">
           <h3 className="font-semibold">Activity</h3>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setIsExpanded(true)}
+            className="p-2"
+            title="Expand activity"
+          >
+            <Icon icon={Maximize2} size="sm" />
+          </Button>
         </div>
         <div className="flex-1 overflow-y-auto p-4 space-y-4">
           {/* Agent Actions */}
           {actions.length > 0 ? (
             <div className="space-y-3">
               {actions.map((action, index) => (
-                <AgentAction key={index} {...action} />
+                <AgentAction key={index} {...action} onDraftClick={onDraftClick} />
               ))}
               {/* Show loader when agent is working */}
               {isAgentWorking && (
@@ -117,6 +107,16 @@ export const AgentPanel = React.forwardRef<HTMLDivElement, AgentPanelProps>(
             </Button>
           </div>
         </div>
+
+        {/* Expanded Modal */}
+        <Modal
+          isOpen={isExpanded}
+          onClose={() => setIsExpanded(false)}
+          title="Agent Activity"
+          size="xl"
+        >
+          <ExpandedAgentPanel actions={actions} onDraftClick={onDraftClick} />
+        </Modal>
       </div>
     );
   },

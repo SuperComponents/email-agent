@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { AppLayout } from '../components/templates';
 import { Header } from '../components/organisms';
 import { ThreadListContainer } from '../containers/ThreadListContainer';
-import { ThreadDetailContainer } from '../containers/ThreadDetailContainer';
+import { ThreadDetailContainer, type ThreadDetailContainerRef } from '../containers/ThreadDetailContainer';
 import { AgentPanelContainer } from '../containers/AgentPanelContainer';
 import { useUIStore } from '../stores/ui-store';
 import { regenerateDraft, generateDemoCustomerResponse } from '../repo/api-client';
@@ -18,6 +18,11 @@ export function InboxPage() {
   const [isRegenerating, setIsRegenerating] = useState(false);
   const [isGeneratingDemo, setIsGeneratingDemo] = useState(false);
   const queryClient = useQueryClient();
+  const threadDetailRef = useRef<ThreadDetailContainerRef>(null);
+
+  const handleDraftClick = (draft: { body: string }) => {
+    threadDetailRef.current?.setDraftContent(draft);
+  };
   
   // Sync URL to store - single source of truth is the URL
   useEffect(() => {
@@ -74,13 +79,14 @@ export function InboxPage() {
           <ThreadListContainer />
         </div>
       }
-      main={<ThreadDetailContainer />}
+      main={<ThreadDetailContainer ref={threadDetailRef} />}
       panel={isAgentPanelOpen ? 
         <AgentPanelContainer 
           onUseAgent={() => void handleUseAgent()}
           onDemoCustomerResponse={() => void handleDemoCustomerResponse()}
           isRegeneratingDraft={isRegenerating}
           isGeneratingDemoResponse={isGeneratingDemo}
+          onDraftClick={handleDraftClick}
         /> : null}
     />
   );

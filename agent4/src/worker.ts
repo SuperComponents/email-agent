@@ -134,11 +134,6 @@ class AgentWorker {
       
       // Run the agent loop with callback-based event management
       const result = await this.runAgentLoopWithCallbacks(initialEvents, toolManager);
-      
-      // Final event state update
-      for (const event of result.slice(initialEvents.length)) {
-        await this.updateEventState(event);
-      }
 
       this.sendStatus(WorkerStatusEnum.STOPPED, 'Agent loop completed successfully');
       
