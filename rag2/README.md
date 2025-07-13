@@ -204,6 +204,10 @@ make test
 make info
 ```
 
+## Web Scraping
+
+The system includes a web scraping tool that crawls websites and automatically syncs their content to OpenAI vector stores. It uses Firecrawl to crawl entire websites, generates content hashes to detect changes, and maintains separate files for each page. The scraper supports incremental updates - it only uploads new pages or pages whose content has changed. Configure the scraper using these environment variables: `WEB_CRAWL_URL` (the website to crawl), `WEB_CRAWL_VECTOR_STORE_KEY` (unique identifier for the vector store), and `FIRECRAWL_API_KEY` (your Firecrawl API key). Set `WEB_CRAWL_VECTOR_STORE_KEY` to match your RAG system's vector store key to integrate scraped content with your existing knowledge base. Run with `npx tsx src/web-scrape/test-scrape.ts` to crawl the configured URL and sync all pages to the vector store.
+
 ## API Usage
 
 You can also use the system programmatically:
