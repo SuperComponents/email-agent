@@ -189,8 +189,7 @@ export const AgentAction = React.forwardRef<HTMLDivElement, AgentActionProps>(
               <span className="text-sm font-medium text-foreground">
                 Searched and found{' '}
                 {result?.rag_sources_used ||
-                  (result?.tool_output as { results_count?: number; length?: number })
-                    ?.results_count ||
+                  (result?.tool_output as { result?: string[] })?.result.length ||
                   (result?.tool_output as { length?: number })?.length ||
                   0}{' '}
                 related documents in the knowledge base
