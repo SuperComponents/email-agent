@@ -124,7 +124,17 @@ export const Composer = React.forwardRef<HTMLDivElement, ComposerProps>(
         {...props}
       >
 
-        {!isInternalNote && (
+        {isInternalNote ? (
+          <div className="border-b border-border/50">
+            <div className="w-full flex items-center py-2 px-3 text-sm">
+              <div className="flex items-center gap-2">
+                <Icon icon={Lock} size="sm" className="text-accent-foreground" />
+                <span className="font-medium text-accent-foreground">Internal Note</span>
+                <span className="text-xs text-accent-foreground/75">Only visible to support team</span>
+              </div>
+            </div>
+          </div>
+        ) : (
           <EmailHeader
             to={to}
             from={from}
