@@ -8,6 +8,7 @@ export interface Thread {
   is_unread: boolean;
   status: string;
   tags: string[];
+  worker_active: boolean;
 }
 
 export interface Customer {
@@ -55,6 +56,20 @@ export interface AgentAction {
   };
 }
 
+export interface InternalNote {
+  id: string;
+  content: string;
+  is_pinned: boolean;
+  created_at: string;
+  updated_at: string;
+  author: {
+    id: string;
+    name: string;
+    email: string;
+  };
+  can_edit: boolean;
+}
+
 export interface AgentActivity {
   analysis: string;
   draft_response: string;
@@ -68,6 +83,7 @@ export interface ThreadDetail {
   tags: string[];
   customer: Customer;
   emails: Email[];
+  internal_notes: InternalNote[];
   agent_activity: AgentActivity;
 }
 
