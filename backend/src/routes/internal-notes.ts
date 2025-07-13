@@ -132,6 +132,7 @@ app.post('/:threadId/internal-notes', async (c) => {
       metadata: {
         note_id: newNote.id,
         is_pinned,
+        content,
       },
     });
 
@@ -218,7 +219,7 @@ app.put('/:threadId/internal-notes/:noteId', async (c) => {
     }
 
     // Update the note
-    await db
+    const [updatedNote] = await db
       .update(internal_notes)
       .set({
         ...updates,
@@ -237,6 +238,8 @@ app.put('/:threadId/internal-notes/:noteId', async (c) => {
       metadata: {
         note_id: noteId,
         changes: updates,
+        content: updatedNote.content,
+        is_pinned: updatedNote.is_pinned,
       },
     });
 
