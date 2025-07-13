@@ -102,7 +102,7 @@ async function generateEmailFromScenario(scenario: Scenario) {
         - enthusiastic: positive, eager, appreciative
         - confused: asks clarifying questions, uncertain
         
-        Return ONLY the email body text, no subject line, signatures, or greetings beyond "Hi" or "Hello".`,
+        Return ONLY the email body text and a simple signature from the user. You can use some variations of "hello support" or "Hi," for the greeting.`,
       },
       {
         role: 'user',
