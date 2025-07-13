@@ -1,6 +1,6 @@
 import { db } from './db.js';
 import { emails, agentActions, draft_responses, emailTags } from './schema.js';
-import { eq, desc, and, like } from 'drizzle-orm';
+import { eq, desc, and, like, inArray } from 'drizzle-orm';
 import type { Email, AgentAction, EmailMessage, DraftResponse } from './types.js';
 import type { KnowledgeBaseResult } from '../agents/guards.js';
 import type { AgentInputItem } from '@openai/agents';
@@ -71,6 +71,47 @@ export async function getSortedEmailsByThreadId(threadId: number): Promise<Email
     .from(emails)
     .where(eq(emails.thread_id, threadId))
     .orderBy(emails.created_at) as Promise<EmailMessage[]>;
+}
+
+export async function getSortedEmailsWithTagsByThreadId(threadId: number): Promise<EmailMessage[]> {
+  // First, get all emails for the thread
+  const emailsList = await db
+    .select()
+    .from(emails)
+    .where(eq(emails.thread_id, threadId))
+    .orderBy(emails.created_at);
+
+  // Get all email tags for these emails
+  const emailIds = emailsList.map(email => email.id);
+  
+  let allTags: typeof emailTags.$inferSelect[] = [];
+  if (emailIds.length > 0) {
+    // Query email tags for all emails in the thread
+    allTags = await db
+      .select()
+      .from(emailTags)
+      .where(inArray(emailTags.email_id, emailIds));
+  }
+
+  // Group tags by email_id
+  const tagsByEmailId = allTags.reduce((acc, tag) => {
+    if (!acc[tag.email_id]) {
+      acc[tag.email_id] = [];
+    }
+    acc[tag.email_id].push(tag);
+    return acc;
+  }, {} as Record<number, typeof emailTags.$inferSelect[]>);
+
+  // Transform the result to match EmailMessage interface
+  return emailsList.map(email => ({
+    id: email.id,
+    from_email: email.from_email,
+    to_emails: email.to_emails as string[],
+    subject: email.subject,
+    body_text: email.body_text,
+    created_at: email.created_at,
+    tags: tagsByEmailId[email.id] || [],
+  }));
 }
 
 interface SaveDraftResponseParams {

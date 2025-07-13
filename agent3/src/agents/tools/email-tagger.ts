@@ -13,7 +13,7 @@ const EmailTaggerParamsSchema = z.object({
     .min(0)
     .max(1)
     .default(0.8)
-    .describe('Confidence level for the tagging (0-1)'),
+    .describe('How confident you are in the accuracy of these tags (0-1)'),
 });
 
 type EmailTaggerParams = z.infer<typeof EmailTaggerParamsSchema>;

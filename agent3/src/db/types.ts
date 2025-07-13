@@ -100,4 +100,5 @@ export interface EmailMessage {
   subject: string;
   body_text: string | null;
   created_at: Date | null;
+  tags?: EmailTag[];
 }

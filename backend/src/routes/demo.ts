@@ -118,6 +118,7 @@ app.post('/:threadId/demo-customer-response', async c => {
       .update(threads)
       .set({
         last_activity_at: new Date(),
+        is_unread: true,
         status: 'needs_attention' as const,
       })
       .where(eq(threads.id, threadId));

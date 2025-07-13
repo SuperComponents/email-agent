@@ -22,6 +22,7 @@ import {
   getThreadActionHistory,
   getLatestEmailInThreadOrFail,
   getSortedEmailsByThreadId,
+  getSortedEmailsWithTagsByThreadId,
   getLatestDraftForThread,
 } from '../db/query.js';
 import { SYSTEM_PROMPT } from './system-prompt.js';
@@ -145,8 +146,8 @@ export async function processEmail(
   // Create agent and build context
   const agent = createAgent();
 
-  // Get all emails in the thread for context
-  const threadEmails = await getSortedEmailsByThreadId(threadId);
+  // Get all emails in the thread for context (including tags)
+  const threadEmails = await getSortedEmailsWithTagsByThreadId(threadId);
 
   logger('running agent in streaming mode');
   logger(threadEmails);
