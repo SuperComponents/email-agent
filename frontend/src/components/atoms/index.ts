@@ -11,6 +11,7 @@ export { Logo } from './Logo';
 export { Spinner } from './Spinner';
 export { DotsLoader } from './DotsLoader';
 export { Modal } from './Modal';
+export { Tooltip } from './Tooltip';
 
 export type { ButtonProps } from './Button';
 export type InputProps = React.InputHTMLAttributes<HTMLInputElement>;
@@ -23,3 +24,4 @@ export type { LogoProps } from './Logo';
 export type { SpinnerProps } from './Spinner';
 export type { DotsLoaderProps } from './DotsLoader';
 export type { ModalProps } from './Modal';
+export type { TooltipProps } from './Tooltip';

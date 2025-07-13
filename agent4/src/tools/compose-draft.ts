@@ -4,8 +4,13 @@ import openai from "../openai";
 
 export default class ComposeDraftTool extends ToolDefinition {
   name = "compose-draft";
-  description =
-    "Compose a draft email response based on the customer's email and relevant context. Use this to generate professional, helpful responses that address the customer's needs.";
+  description = `Compose a draft email response based on the customer's email and relevant context. 
+    
+    Use this to generate professional, helpful responses that address the customer's needs.
+
+    Provide really high quality context including raw text and references from the knowledge base
+    and the received emails from the customer. 
+    `;
 
   args = z.object({
     customerEmail: z.string().describe("The original customer email content"),

@@ -1,6 +1,8 @@
 import React from 'react';
 import type { LucideIcon } from 'lucide-react';
+import { Search } from 'lucide-react';
 import { Icon } from '../atoms/Icon';
+import { Tooltip } from '../atoms/Tooltip';
 import { cn } from '../../lib/utils';
 
 function formatTimeAgo(timestamp: string): string {
@@ -234,14 +236,42 @@ export const AgentAction = React.forwardRef<HTMLDivElement, AgentActionProps>(
           {/* Special handling for knowledge base search events */}
           {result?.tool_name === 'search-knowledge-base' && (
             <div className="mt-1 overflow-hidden">
-              <span className="text-sm font-medium text-foreground break-words">
-                Searched and found{' '}
-                {result?.rag_sources_used ||
-                  (result?.tool_output as { result?: string[] })?.result.length ||
-                  (result?.tool_output as { length?: number })?.length ||
-                  0}{' '}
-                related documents in the knowledge base
-              </span>
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-medium text-foreground break-words">
+                  Searched and found{' '}
+                  {result?.rag_sources_used ||
+                    (result?.tool_output as { result?: Array<{ text?: string; score?: number; filename?: string }> })?.result?.length ||
+                    (result?.tool_output as { length?: number })?.length ||
+                    0}{' '}
+                  related documents in the knowledge base
+                </span>
+                {(() => {
+                  const toolOutput = result?.tool_output as { result?: Array<{ text?: string; score?: number; filename?: string }> };
+                  const topResult = toolOutput?.result?.[0];
+                  
+                  if (topResult && topResult.text) {
+                    // Format filename as a clean path without extension
+                    const cleanFilename = topResult.filename 
+                      ? topResult.filename.replace(/\.[^/.]+$/, '').replace(/[_-]/g, '/').toLowerCase()
+                      : 'knowledge-base';
+                    
+                    const tooltipContent = `[📄 ${cleanFilename}](javascript:void(0))
+
+${topResult.text}`;
+                    
+                    return (
+                      <Tooltip content={tooltipContent} side="left" markdown={true}>
+                        <Icon
+                          icon={Search}
+                          size="sm"
+                          className="text-primary hover:text-primary/80 cursor-help flex-shrink-0"
+                        />
+                      </Tooltip>
+                    );
+                  }
+                  return null;
+                })()}
+              </div>
             </div>
           )}
 
