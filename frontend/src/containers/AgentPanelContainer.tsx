@@ -11,17 +11,26 @@ import {
   Zap,
   FileText,
   Users,
+  Send,
+  Sparkle,
+  Folder,
+  Notebook,
+  Pen,
 } from 'lucide-react';
 import type { AgentActionProps } from '../components/molecules/AgentAction';
 
 // Helper function to get appropriate icon for action types
-function getIconForAction(actionType: string, toolName?: string) {
+function getIconForAction(actionType: string, toolName?: string, description?: string) {
+  // Special handling for response sent to customer
+  if (description?.includes('Response sent to customer')) return Send;
+  if (description?.includes('Draft response generated')) return Sparkle;
+
   // Tool-specific icons
   if (toolName === 'update_thread_urgency') return Zap;
-  if (toolName === 'update_thread_category') return FileText;
+  if (toolName === 'update_thread_category') return Folder;
   if (toolName === 'user_action_needed') return AlertTriangle;
-  if (toolName === 'compose-draft' || toolName === 'compose_draft') return FileText;
-  if (toolName === 'summarize_useful_context') return Brain;
+  if (toolName === 'compose-draft' || toolName === 'compose_draft') return Sparkle;
+  if (toolName === 'summarize_useful_context') return Pen;
   if (toolName === 'search-knowledge-base') return FileSearch;
 
   // Database action type icons
@@ -41,7 +50,6 @@ function getIconForAction(actionType: string, toolName?: string) {
   }
 }
 
-
 export interface AgentPanelContainerProps {
   onUseAgent?: () => void;
   onDemoCustomerResponse?: () => void;
@@ -50,9 +58,7 @@ export interface AgentPanelContainerProps {
   onDraftClick?: (draft: { body: string }) => void;
 }
 
-export function AgentPanelContainer({
-  onDraftClick,
-}: AgentPanelContainerProps) {
+export function AgentPanelContainer({ onDraftClick }: AgentPanelContainerProps) {
   const selectedThreadId = useUIStore(state => state.selectedThreadId);
   const isAgentPanelOpen = useUIStore(state => state.isAgentPanelOpen);
   const queryClient = useQueryClient();
@@ -179,7 +185,7 @@ export function AgentPanelContainer({
 
       // Use the new enhanced backend API data structure
       return {
-        icon: getIconForAction(action.type, action.result?.tool_name),
+        icon: getIconForAction(action.type, action.result?.tool_name, action.description),
         title: action.title,
         description: action.description,
         timestamp: action.timestamp,
