@@ -37,6 +37,8 @@ services:
       DB_HOST: db
       DB_PORT: 5432
     restart: unless-stopped
+    volumes:
+      - ./demo-data:/demo-data:ro
     healthcheck:
       test: ["CMD", "node", "-e", "require('http').get('http://localhost:3000/', (r) => process.exit(r.statusCode === 200 ? 0 : 1))"]
       interval: 30s
