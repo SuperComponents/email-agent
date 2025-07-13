@@ -1,4 +1,4 @@
-# OpenSupport
+# ProResponse AI
 
 An open-source AI-powered customer support platform with intelligent email thread management, automated response generation, and comprehensive knowledge base management.
 

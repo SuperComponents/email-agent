@@ -8,28 +8,83 @@
   "scripts": {
     "dev": "bun --hot src/index.tsx",
     "start": "NODE_ENV=production bun src/index.tsx",
-    "build": "bun run build.ts"
+    "build": "bun run build.ts",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "prepare": "husky",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:headed": "playwright test --headed",
+    "test:visual": "playwright test --grep=\"visual regression\"",
+    "test:a11y": "playwright test --grep=\"Accessibility\"",
+    "test:performance": "playwright test e2e/performance.spec.ts",
+    "test:lighthouse": "lhci autorun",
+    "test:all": "npm run test && npm run test:e2e && npm run test:lighthouse",
+    "playwright:install": "playwright install",
+    "playwright:update-snapshots": "playwright test --update-snapshots"
   },
   "dependencies": {
     "@hookform/resolvers": "^4.1.0",
     "@radix-ui/react-label": "^2.1.2",
     "@radix-ui/react-select": "^2.1.6",
     "@radix-ui/react-slot": "^1.1.2",
+    "@tsparticles/react": "^3.0.0",
+    "@tsparticles/slim": "^3.8.1",
     "bun-plugin-tailwind": "^0.0.14",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "framer-motion": "^12.23.3",
+    "gsap": "^3.13.0",
     "lucide-react": "^0.475.0",
     "react": "^19",
     "react-dom": "^19",
     "react-hook-form": "^7.54.2",
+    "react-intersection-observer": "^9.16.0",
     "tailwind-merge": "^3.0.1",
     "tailwindcss": "^4.0.6",
     "tailwindcss-animate": "^1.0.7",
     "zod": "^3.24.2"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.10.2",
+    "@playwright/test": "^1.54.1",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/bun": "latest",
+    "@types/jest": "^30.0.0",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "@types/bun": "latest"
+    "@typescript-eslint/eslint-plugin": "^8.36.0",
+    "@typescript-eslint/parser": "^8.36.0",
+    "eslint": "^9.31.0",
+    "eslint-config-prettier": "^10.1.5",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "eslint-plugin-prettier": "^5.5.1",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "husky": "^9.1.7",
+    "jest": "^30.0.4",
+    "jest-axe": "^10.0.0",
+    "jest-environment-jsdom": "^30.0.4",
+    "lhci": "^4.1.1",
+    "lighthouse": "^12.8.0",
+    "lint-staged": "^16.1.2",
+    "prettier": "^3.6.2",
+    "ts-jest": "^29.4.0"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,css,md}": [
+      "prettier --write"
+    ]
   }
 }

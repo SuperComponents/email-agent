@@ -1,0 +1,38 @@
+#!/bin/bash
+
+echo "🚀 Starting Cloudflare AI Chat Widget Demo..."
+
+# Install dependencies
+echo "📦 Installing dependencies..."
+npm install
+
+# Build the widget
+echo "🔨 Building widget..."
+npm run build
+
+# Start backend API in background
+echo "🌐 Starting backend API on port 3001..."
+npx wrangler dev --port 3001 &
+BACKEND_PID=$!
+
+# Start widget server
+echo "🎯 Starting widget server on port 3002..."
+npm run serve &
+WIDGET_PID=$!
+
+# Wait a moment for servers to start
+sleep 2
+
+echo "
+✅ Cloudflare Widget Demo is running!
+
+🌐 Backend API: https://your-domain.com
+📦 Widget Server: http://localhost:3002
+🎯 Demo Page: http://localhost:3002/demo.html
+
+Press Ctrl+C to stop all servers.
+"
+
+# Wait for Ctrl+C
+trap "kill $BACKEND_PID $WIDGET_PID; exit" INT
+wait 
