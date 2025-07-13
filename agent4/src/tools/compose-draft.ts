@@ -74,7 +74,9 @@ Please provide:
 
 Don't include markdown formatting. Just use plain text and whitespace.
 
-Don't include any empty fields for the user to fill in. the draft must be ready to send without edit.`;
+Don't include any empty fields for the user to fill in. the draft must be ready to send without edit.
+
+Don't include a subject line or anything other than the email body.`;
 
     try {
       const response = await openai.chat.completions.create({
