@@ -4,6 +4,7 @@ import { AgentAction, type AgentActionProps } from '../molecules/AgentAction';
 import { Separator } from '../atoms/Separator';
 import { Button } from '../atoms/Button';
 import { Icon } from '../atoms/Icon';
+import { DotsLoader } from '../atoms/DotsLoader';
 import { Modal } from '../atoms/Modal';
 import { ExpandedAgentPanel } from './ExpandedAgentPanel';
 import { cn } from '../../lib/utils';
@@ -40,6 +41,15 @@ export const AgentPanel = React.forwardRef<HTMLDivElement, AgentPanelProps>(
     const [message, setMessage] = useState('');
     const [isExpanded, setIsExpanded] = useState(false);
     console.log('actions', actions);
+
+    // Check if agent is currently working:
+    // 1. There's at least one user message
+    // 2. The last action is NOT an assistant message (unless it's from explain_next_tool_call)
+    const hasUserMessage = actions.some(action => action.isMessage && action.messageRole === 'user');
+    const lastAction = actions[actions.length - 1];
+    const lastActionIsAssistantMessage = lastAction?.isMessage && lastAction?.messageRole === 'assistant';
+    const lastActionIsExplainToolCall = lastAction?.isFromExplainToolCall === true;
+    const isAgentWorking = hasUserMessage && (!lastActionIsAssistantMessage || lastActionIsExplainToolCall);
 
     const handleSend = () => {
       if (message.trim() && onSendMessage) {
@@ -117,6 +127,12 @@ export const AgentPanel = React.forwardRef<HTMLDivElement, AgentPanelProps>(
               {actions.map((action, index) => (
                 <AgentAction key={index} {...action} onDraftClick={onDraftClick} />
               ))}
+              {/* Show loader when agent is working */}
+              {isAgentWorking && (
+                <div className="flex justify-center py-3">
+                  <DotsLoader text="Working" />
+                </div>
+              )}
             </div>
           ) : null}
 

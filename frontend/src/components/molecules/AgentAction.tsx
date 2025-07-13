@@ -45,6 +45,7 @@ export interface AgentActionProps extends React.HTMLAttributes<HTMLDivElement> {
   status?: 'pending' | 'completed' | 'failed';
   isMessage?: boolean;
   messageRole?: 'user' | 'assistant';
+  isFromExplainToolCall?: boolean; // Track if this message came from explain_next_tool_call
   result?: {
     tool_name?: string;
     urgency_change?: string;
@@ -70,7 +71,6 @@ export const AgentAction = React.forwardRef<HTMLDivElement, AgentActionProps>(
     {
       className,
       icon,
-      title,
       description,
       timestamp,
       status = 'completed',
@@ -78,7 +78,6 @@ export const AgentAction = React.forwardRef<HTMLDivElement, AgentActionProps>(
       messageRole,
       result,
       type,
-      onDraftClick,
       ...props
     },
     ref,

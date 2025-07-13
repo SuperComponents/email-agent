@@ -236,6 +236,7 @@ export function AgentPanelContainer({
               : 'pending',
           isMessage: true,
           messageRole: 'assistant',
+          isFromExplainToolCall: isExplainToolCall,
         };
       }
 

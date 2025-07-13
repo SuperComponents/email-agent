@@ -10,8 +10,14 @@ export interface ExpandedAgentPanelProps extends React.HTMLAttributes<HTMLDivEle
 
 export const ExpandedAgentPanel = React.forwardRef<HTMLDivElement, ExpandedAgentPanelProps>(
   ({ className, actions, onDraftClick, ...props }, ref) => {
-    // Check if agent is currently working (has any pending actions)
-    const isAgentWorking = actions.some(action => action.status === 'pending');
+    // Check if agent is currently working:
+    // 1. There's at least one user message
+    // 2. The last action is NOT an assistant message (unless it's from explain_next_tool_call)
+    const hasUserMessage = actions.some(action => action.isMessage && action.messageRole === 'user');
+    const lastAction = actions[actions.length - 1];
+    const lastActionIsAssistantMessage = lastAction?.isMessage && lastAction?.messageRole === 'assistant';
+    const lastActionIsExplainToolCall = lastAction?.isFromExplainToolCall === true;
+    const isAgentWorking = hasUserMessage && (!lastActionIsAssistantMessage || lastActionIsExplainToolCall);
 
     return (
       <div ref={ref} className={cn('p-8', className)} {...props}>
