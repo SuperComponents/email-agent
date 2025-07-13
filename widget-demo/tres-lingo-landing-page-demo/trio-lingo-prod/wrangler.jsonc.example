@@ -14,7 +14,7 @@
 	},
 	"routes": [
 		{
-			"pattern": "trio.willduffy.work",
+			"pattern": "your.domain.com",
 			"custom_domain": true
 		}
 	],
