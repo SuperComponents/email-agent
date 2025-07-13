@@ -13,11 +13,22 @@ const main = async () => {
     await db.execute(sql`DROP TABLE IF EXISTS emails CASCADE`);
     await db.execute(sql`DROP TABLE IF EXISTS threads CASCADE`);
     await db.execute(sql`DROP TABLE IF EXISTS users CASCADE`);
-    
-    // Drop any remaining tables that might exist
-    await db.execute(sql`DROP TABLE IF EXISTS __drizzle_migrations CASCADE`);
+    await db.execute(sql`DROP TABLE IF EXISTS internal_notes CASCADE`);
     
     console.log('All tables dropped successfully');
+    
+    // Drop ENUM types that are used by the tables
+    console.log('Dropping ENUM types...');
+    await db.execute(sql`DROP TYPE IF EXISTS "public"."agent_action" CASCADE`);
+    await db.execute(sql`DROP TYPE IF EXISTS "public"."direction" CASCADE`);
+    await db.execute(sql`DROP TYPE IF EXISTS "public"."draft_status" CASCADE`);
+    await db.execute(sql`DROP TYPE IF EXISTS "public"."role" CASCADE`);
+    await db.execute(sql`DROP TYPE IF EXISTS "public"."status" CASCADE`);
+    
+    // Drop the migration tracking table to force a fresh migration
+    console.log('Dropping migration tracking table...');
+    await db.execute(sql`DROP TABLE IF EXISTS drizzle.__drizzle_migrations CASCADE`);
+    await db.execute(sql`DROP SCHEMA IF EXISTS drizzle CASCADE`);
     
     console.log('Running fresh migrations...');
     await migrate(db, { migrationsFolder: 'drizzle' });

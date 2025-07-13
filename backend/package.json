@@ -11,7 +11,7 @@
     "format": "prettier --write \"src/**/*.{ts,tsx}\"",
     "format:check": "prettier --check \"src/**/*.{ts,tsx}\"",
     "db:generate": "drizzle-kit generate --dialect=postgresql --schema=src/database/schema.ts --out=./drizzle",
-    "db:migrate": "tsx ./src/database/migrate.ts",
+    "db:migrate": "node ./dist/src/database/migrate.js",
     "db:reset": "node ./dist/src/database/reset.js",
     "db": "psql postgresql://localhost:5432/emailsmart_merge"
   },

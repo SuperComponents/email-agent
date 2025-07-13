@@ -1,10 +1,32 @@
 services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      target: development
+    container_name: email-agent-frontend
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+      - VITE_API_URL=http://localhost:3000
+    depends_on:
+      - backend
+    restart: unless-stopped
+    networks:
+      - email-agent-network
+
   landing-page:
     build:
       context: ./landing-page
       dockerfile: Dockerfile
       args:
         BUN_PUBLIC_APP_URL: ${BUN_PUBLIC_APP_URL:-http://localhost:5173}
+    depends_on:
+      - frontend
     container_name: email-agent-landing
     ports:
       - "3001:3001"
