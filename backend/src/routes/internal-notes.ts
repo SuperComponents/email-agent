@@ -4,6 +4,7 @@ import { db } from '../database/db.js';
 import { internal_notes, threads, users, agent_actions } from '../database/schema.js';
 import { successResponse, notFoundResponse, errorResponse } from '../utils/response.js';
 import { authMiddleware } from '../middleware/auth.js';
+import { workerManager } from '../services/worker-interface.js';
 import { z } from 'zod';
 
 const app = new Hono();
@@ -136,6 +137,16 @@ app.post('/:threadId/internal-notes', async (c) => {
       },
     });
 
+    // Automatically start agent worker for the internal note
+    try {
+      console.log(`🤖 Starting agent worker for internal note in thread ${threadId}`);
+      await workerManager.startWorkerForThreadIfNotActive(threadId);
+      console.log(`✅ Agent worker started for thread ${threadId}`);
+    } catch (error) {
+      console.error(`❌ Failed to start agent worker for thread ${threadId}:`, error);
+      // Don't throw error - internal note should still be processed even if worker fails
+    }
+
     // Get the note with author info
     const [noteWithAuthor] = await db
       .select({
@@ -242,6 +253,16 @@ app.put('/:threadId/internal-notes/:noteId', async (c) => {
         is_pinned: updatedNote.is_pinned,
       },
     });
+
+    // Automatically start agent worker for the updated internal note
+    try {
+      console.log(`🤖 Starting agent worker for updated internal note in thread ${threadId}`);
+      await workerManager.startWorkerForThreadIfNotActive(threadId);
+      console.log(`✅ Agent worker started for thread ${threadId}`);
+    } catch (error) {
+      console.error(`❌ Failed to start agent worker for thread ${threadId}:`, error);
+      // Don't throw error - internal note update should still be processed even if worker fails
+    }
 
     // Get the updated note with author info
     const [noteWithAuthor] = await db
