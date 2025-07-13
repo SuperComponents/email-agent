@@ -84,6 +84,15 @@ export const AgentAction = React.forwardRef<HTMLDivElement, AgentActionProps>(
     // Check if this is a finalized draft action (not just any draft action)
     const isFinalizedDraft = type === 'draft_created' && result?.tool_name === 'compose-draft';
 
+    if (description?.includes('Email analyzed with enhanced AI')) {
+      description = 'Received email from customer';
+    }
+    if (description?.includes('Response sent to customer')) {
+      description = 'Response sent to customer';
+    }
+    if (description?.includes('Agent action: finalize_draft')) {
+      return;
+    }
     const handleDraftClick = () => {
       if (isFinalizedDraft && onDraftClick && result) {
         const toolOutput = result.tool_output as { result?: { body?: string } };
@@ -95,6 +104,7 @@ export const AgentAction = React.forwardRef<HTMLDivElement, AgentActionProps>(
         });
       }
     };
+    console.log('result', result, description);
 
     // Message-style display for chat messages
     if (isMessage) {
@@ -265,7 +275,7 @@ export const AgentAction = React.forwardRef<HTMLDivElement, AgentActionProps>(
             !(result?.tool_name === 'search-knowledge-base') &&
             !isFinalizedDraft &&
             description && (
-              <p className="text-xs text-secondary-foreground leading-tight mt-1">{description}</p>
+              <p className="text-sm text-foreground leading-tight mt-1">{description}</p>
             )}
         </div>
       </div>
