@@ -132,17 +132,21 @@ export default function Chat() {
   };
 
   return (
-    <div className="h-[100vh] w-full p-4 flex justify-center items-center bg-fixed overflow-hidden">
-      <div className="h-[calc(100vh-2rem)] w-full mx-auto max-w-lg flex flex-col shadow-xl rounded-md overflow-hidden relative border border-neutral-300 dark:border-neutral-800">
-        <div className="px-4 py-3 border-b border-neutral-300 dark:border-neutral-800 flex items-center gap-3 sticky top-0 z-10">
-          <div className="flex items-center justify-center h-8 w-8">
+    <div className="h-[100vh] w-full p-2 sm:p-4 flex justify-center items-center gradient-bg overflow-hidden">
+      <div className="widget-container h-[calc(100vh-1rem)] sm:h-[calc(100vh-2rem)] w-full mx-auto max-w-lg flex flex-col rounded-2xl overflow-hidden relative backdrop-blur-xl" role="main" aria-label="ProResponse AI Chat Widget">
+        <div className="widget-header px-3 sm:px-4 py-3 sm:py-4 flex items-center gap-2 sm:gap-3" role="banner">
+          <motion.div 
+            className="flex items-center justify-center h-8 w-8 relative"
+            whileHover={{ rotate: [0, -10, 10, -10, 0] }}
+            transition={{ duration: 0.5 }}
+          >
             <svg
               width="28px"
               height="28px"
-              className="text-[#F48120]"
+              className="text-ai-purple"
               data-icon="agents"
             >
-              <title>Cloudflare Agents</title>
+              <title>ProResponse AI</title>
               {/** biome-ignore lint/nursery/useUniqueElementIds: it's fine */}
               <symbol id="ai:local:agents" viewBox="0 0 80 79">
                 <path
@@ -152,78 +156,107 @@ export default function Chat() {
               </symbol>
               <use href="#ai:local:agents" />
             </svg>
-          </div>
+            {/* Sparkle effects */}
+            <span className="sparkle" style={{ top: '-2px', left: '20px', animationDelay: '0s' }}></span>
+            <span className="sparkle" style={{ top: '10px', right: '-2px', animationDelay: '0.5s' }}></span>
+            <span className="sparkle" style={{ bottom: '-2px', left: '10px', animationDelay: '1s' }}></span>
+          </motion.div>
 
           <div className="flex-1">
-            <h2 className="font-semibold text-base">AI Chat Agent</h2>
+            <h2 className="font-semibold text-sm sm:text-base gradient-text">ProResponse AI</h2>
           </div>
 
-          <div className="flex items-center gap-2 mr-2">
-            <Bug size={16} />
+          <motion.div 
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.95 }}
+            className="flex items-center gap-2 mr-2"
+          >
+            <Bug size={16} className="text-ai-purple" />
             <Toggle
               toggled={showDebug}
               aria-label="Toggle debug mode"
               onClick={() => setShowDebug((prev) => !prev)}
             />
-          </div>
+          </motion.div>
 
           <Button
             variant="ghost"
             size="md"
             shape="square"
-            className="rounded-full h-9 w-9"
+            className="rounded-full h-8 w-8 sm:h-9 sm:w-9 hover:scale-110 transition-transform"
+            aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
             onClick={toggleTheme}
           >
-            {theme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
+            {theme === "dark" ? <Sun size={20} className="text-yellow-400" /> : <Moon size={20} className="text-purple-600" />}
           </Button>
 
           <Button
             variant="ghost"
             size="md"
             shape="square"
-            className="rounded-full h-9 w-9"
+            className="rounded-full h-8 w-8 sm:h-9 sm:w-9 hover:text-red-500 hover:scale-110 transition-all"
+            aria-label="Clear chat history"
             onClick={clearHistory}
           >
             <Trash size={20} />
           </Button>
         </div>
-        <Button
+          <Button
             variant="ghost"
             size="md"
             shape="square"
-            className="rounded-full h-9 w-9"
+            className="rounded-full h-8 w-8 sm:h-9 sm:w-9 hover:rotate-90 transition-all duration-300"
+            aria-label="Close chat widget"
             onClick={handleCloseWidget}
           >
             <X size={20} />
           </Button>
 
         {/* Messages */}
-        <div className="flex-1 overflow-y-auto p-4 space-y-4 pb-24 max-h-[calc(100vh-10rem)]">
+        <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4 sm:space-y-6 pb-24 max-h-[calc(100vh-10rem)] relative" role="log" aria-label="Chat messages">
           {agentMessages.length === 0 && (
-            <div className="h-full flex items-center justify-center">
-              <Card className="p-6 max-w-md mx-auto bg-neutral-100 dark:bg-neutral-900">
-                <div className="text-center space-y-4">
-                  <div className="bg-[#F48120]/10 text-[#F48120] rounded-full p-3 inline-flex">
-                    <Robot size={24} />
-                  </div>
-                  <h3 className="font-semibold text-lg">Welcome to AI Chat</h3>
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, type: "spring" }}
+              className="h-full flex items-center justify-center"
+            >
+              <Card className="premium-card glass p-8 max-w-md mx-auto">
+                <div className="text-center space-y-6">
+                  <motion.div 
+                    animate={{ rotate: [0, 10, -10, 0] }}
+                    transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
+                    className="bg-gradient-to-br from-primary/20 to-ai-purple/20 rounded-full p-4 inline-flex glow"
+                  >
+                    <Robot size={32} className="text-ai-purple" />
+                  </motion.div>
+                  <h3 className="font-bold text-xl gradient-text">Welcome to ProResponse AI</h3>
                   <p className="text-muted-foreground text-sm">
-                    Start a conversation with your AI assistant. Try asking
-                    about:
+                    Start a conversation with your AI-powered support assistant.
                   </p>
-                  <ul className="text-sm text-left space-y-2">
-                    <li className="flex items-center gap-2">
-                      <span className="text-[#F48120]">•</span>
-                      <span>Weather information for any city</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <span className="text-[#F48120]">•</span>
-                      <span>Local time in different locations</span>
-                    </li>
+                  <ul className="text-sm text-left space-y-3">
+                    <motion.li 
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.1 }}
+                      className="flex items-center gap-3 hover:translate-x-1 transition-transform"
+                    >
+                      <span className="w-2 h-2 rounded-full bg-gradient-to-r from-primary to-ai-purple"></span>
+                      <span>Get instant support assistance</span>
+                    </motion.li>
+                    <motion.li 
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.2 }}
+                      className="flex items-center gap-3 hover:translate-x-1 transition-transform"
+                    >
+                      <span className="w-2 h-2 rounded-full bg-gradient-to-r from-primary to-ai-purple"></span>
+                      <span>Ask questions about your account</span>
+                    </motion.li>
                   </ul>
                 </div>
               </Card>
-            </div>
+            </motion.div>
           )}
 
           <AnimatePresence initial={false}>
@@ -258,7 +291,13 @@ export default function Chat() {
                       }`}
                     >
                       {showAvatar && !isUser ? (
-                        <Avatar username={"AI"} />
+                        <motion.div
+                          initial={{ scale: 0 }}
+                          animate={{ scale: 1 }}
+                          transition={{ type: "spring", stiffness: 500 }}
+                        >
+                          <Avatar username={"AI"} className="ring-2 ring-ai-purple/20" />
+                        </motion.div>
                       ) : (
                         !isUser && <div className="w-8" />
                       )}
@@ -281,15 +320,15 @@ export default function Chat() {
                                   }}
                                 >
                                   <Card
-                                    className={`p-3 rounded-2xl ${
+                                    className={`p-4 rounded-2xl ${
                                       isUser
-                                        ? "bg-gradient-to-r from-primary to-ai-purple text-white rounded-tr-none"
-                                        : "bg-neutral-100 dark:bg-neutral-900 rounded-tl-none border-assistant-border"
+                                        ? "message-bubble user text-white rounded-tr-sm"
+                                        : "message-bubble assistant rounded-tl-sm"
                                     } ${
                                       part.text.startsWith("scheduled message")
                                         ? "border-accent/50"
                                         : ""
-                                    } relative transition-all duration-300 hover:shadow-lg`}
+                                    } relative transition-all duration-300 hover:shadow-xl hover:scale-[1.02]`}
                                   >
                                     {part.text.startsWith(
                                       "scheduled message"
@@ -363,9 +402,19 @@ export default function Chat() {
                 className="flex justify-start"
               >
                 <div className="flex gap-2 max-w-[85%]">
-                  <Avatar username={"AI"} />
-                  <div className="bg-neutral-100 dark:bg-neutral-900 rounded-2xl rounded-tl-none p-3 shadow-sm">
-                    <TypingIndicator />
+                  <motion.div
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ type: "spring", stiffness: 500 }}
+                  >
+                    <Avatar username={"AI"} className="ring-2 ring-ai-purple/20" />
+                  </motion.div>
+                  <div className="glass rounded-2xl rounded-tl-none p-4 shadow-sm">
+                    <div className="flex gap-1">
+                      <span className="loading-dot"></span>
+                      <span className="loading-dot"></span>
+                      <span className="loading-dot"></span>
+                    </div>
                   </div>
                 </div>
               </motion.div>
@@ -388,7 +437,7 @@ export default function Chat() {
             });
             setTextareaHeight("auto"); // Reset height after submission
           }}
-          className="p-3 bg-neutral-50 absolute bottom-0 left-0 right-0 z-10 border-t border-neutral-300 dark:border-neutral-800 dark:bg-neutral-900"
+          className="p-3 sm:p-4 glass absolute bottom-0 left-0 right-0 z-10 border-t border-white/10"
         >
           <div className="flex items-center gap-2">
             <div className="flex-1 relative">
@@ -399,8 +448,11 @@ export default function Chat() {
                     ? "Please respond to the tool confirmation above..."
                     : "Send a message..."
                 }
-                className="flex w-full border border-neutral-200 dark:border-neutral-700 px-3 py-2  ring-offset-background placeholder:text-neutral-500 dark:placeholder:text-neutral-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-300 dark:focus-visible:ring-neutral-700 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-900 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm min-h-[24px] max-h-[calc(75dvh)] overflow-hidden resize-none rounded-2xl !text-base pb-10 dark:bg-neutral-900"
+                className="premium-input flex w-full border border-neutral-200/50 dark:border-neutral-700/50 px-4 py-3 ring-offset-background placeholder:text-neutral-500 dark:placeholder:text-neutral-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ai-purple/50 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent disabled:cursor-not-allowed disabled:opacity-50 md:text-sm min-h-[24px] max-h-[calc(75dvh)] overflow-hidden resize-none rounded-2xl !text-base pb-12 backdrop-blur-sm"
                 value={agentInput}
+                aria-label="Message input"
+                aria-required="true"
+                aria-invalid={false}
                 onChange={(e) => {
                   handleAgentInputChange(e);
                   // Auto-resize the textarea
@@ -427,7 +479,7 @@ export default function Chat() {
                   <button
                     type="button"
                     onClick={stop}
-                    className="inline-flex items-center cursor-pointer justify-center gap-2 whitespace-nowrap text-sm font-medium ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-destructive focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-destructive text-white hover:bg-destructive/90 hover:scale-105 active:scale-95 rounded-full p-1.5 h-fit"
+                    className="inline-flex items-center cursor-pointer justify-center gap-2 whitespace-nowrap text-sm font-medium ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-destructive focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-gradient-to-r from-red-500 to-red-600 text-white hover:shadow-lg hover:scale-110 active:scale-95 rounded-full p-2 h-fit glow"
                     aria-label="Stop generation"
                   >
                     <Stop size={16} />
@@ -435,7 +487,7 @@ export default function Chat() {
                 ) : (
                   <button
                     type="submit"
-                    className="inline-flex items-center cursor-pointer justify-center gap-2 whitespace-nowrap text-sm font-medium ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-gradient-to-r from-primary to-ai-purple text-white hover:shadow-lg hover:scale-105 active:scale-95 rounded-full p-1.5 h-fit"
+                    className="inline-flex items-center cursor-pointer justify-center gap-2 whitespace-nowrap text-sm font-medium ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ai-purple focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-gradient-to-r from-primary to-ai-purple text-white hover:shadow-xl hover:scale-110 active:scale-95 rounded-full p-2 h-fit glow"
                     disabled={pendingToolCallConfirmation || !agentInput.trim()}
                     aria-label="Send message"
                   >
