@@ -1,8 +1,6 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/button/Button";
-import { Toggle } from "@/components/toggle/Toggle";
 import {
-  Bug,
   Moon,
   Sun,
   Trash,
@@ -12,8 +10,6 @@ import {
 interface WidgetHeaderProps {
   theme: "light" | "dark";
   onToggleTheme: () => void;
-  showDebug: boolean;
-  onToggleDebug: () => void;
   onClear: () => void;
   onClose: () => void;
 }
@@ -21,8 +17,6 @@ interface WidgetHeaderProps {
 export function WidgetHeader({
   theme,
   onToggleTheme,
-  showDebug,
-  onToggleDebug,
   onClear,
   onClose,
 }: WidgetHeaderProps) {
@@ -50,18 +44,7 @@ export function WidgetHeader({
         <h2 className="font-semibold text-sm sm:text-base gradient-text">ProResponse AI</h2>
       </div>
 
-      <motion.div 
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.95 }}
-        className="flex items-center gap-2 mr-2"
-      >
-        <Bug size={16} className="text-ai-purple" />
-        <Toggle
-          toggled={showDebug}
-          aria-label="Toggle debug mode"
-          onClick={onToggleDebug}
-        />
-      </motion.div>
+
 
       <Button
         variant="ghost"

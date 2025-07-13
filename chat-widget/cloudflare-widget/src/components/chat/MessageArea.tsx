@@ -9,11 +9,10 @@ import type { Message } from "../../types/Message";
 interface MessageAreaProps {
   messages: Message[];
   isLoading: boolean;
-  showDebug: boolean;
   addToolResult: (messageId: string, toolCallId: string, result: any) => void;
 }
 
-export function MessageArea({ messages, isLoading, showDebug, addToolResult }: MessageAreaProps) {
+export function MessageArea({ messages, isLoading, addToolResult }: MessageAreaProps) {
   const { messagesEndRef } = useAutoScroll([messages, isLoading]);
 
   return (
@@ -27,7 +26,6 @@ export function MessageArea({ messages, isLoading, showDebug, addToolResult }: M
             message={m}
             index={index}
             messages={messages}
-            showDebug={showDebug}
             addToolResult={addToolResult}
           />
         ))}

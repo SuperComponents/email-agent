@@ -10,7 +10,6 @@ interface ChatMessageProps {
   message: Message;
   index: number;
   messages: Message[];
-  showDebug: boolean;
   addToolResult: (toolCallId: string, result: any) => void;
 }
 
@@ -24,7 +23,7 @@ const formatTime = (date: Date) => {
   return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
 };
 
-export function ChatMessage({ message: m, index, messages, showDebug, addToolResult }: ChatMessageProps) {
+export function ChatMessage({ message: m, index, messages, addToolResult }: ChatMessageProps) {
   const isUser = m.role === "user";
   const showAvatar = index === 0 || messages[index - 1]?.role !== m.role;
 
@@ -40,11 +39,7 @@ export function ChatMessage({ message: m, index, messages, showDebug, addToolRes
         damping: 30,
       }}
     >
-      {showDebug && (
-        <pre className="text-xs text-muted-foreground overflow-scroll">
-          {JSON.stringify(m, null, 2)}
-        </pre>
-      )}
+
       <div
         className={`flex ${isUser ? "justify-end" : "justify-start"}`}
       >
@@ -129,8 +124,7 @@ export function ChatMessage({ message: m, index, messages, showDebug, addToolRes
                     toolInvocation.toolName as keyof typeof tools
                   );
 
-                // Skip rendering the card in debug mode
-                if (showDebug) return null;
+
 
                 return (
                   <ToolInvocationCard
