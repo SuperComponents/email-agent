@@ -19,7 +19,7 @@ export const EmptyStateWelcome = () => {
           >
             <Robot size={32} className="text-ai-purple" />
           </motion.div>
-          <h3 className="font-bold text-xl gradient-text">Welcome to ProResponse AI</h3>
+          <h3 className="font-bold text-xl gradient-text">Welcome to OpenSupport</h3>
           <p className="text-muted-foreground text-sm">
             Start a conversation with your AI-powered support assistant.
           </p>

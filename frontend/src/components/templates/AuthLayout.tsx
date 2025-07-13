@@ -18,7 +18,7 @@ export const AuthLayout = React.forwardRef<HTMLDivElement, AuthLayoutProps>(
       >
         <div className="w-full max-w-md">
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold">ProResponse AI</h1>
+            <h1 className="text-3xl font-bold">OpenSupport</h1>
             <p className="text-secondary-foreground mt-2">
               AI-powered support assistant
             </p>

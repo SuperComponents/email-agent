@@ -1,6 +1,6 @@
 # Agent Worker Thread
 
-This package provides a worker thread implementation for the ProResponse AI agent that can be controlled from your main backend server.
+This package provides a worker thread implementation for the OpenSupport agent that can be controlled from your main backend server.
 
 ## Architecture
 

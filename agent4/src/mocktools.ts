@@ -175,7 +175,7 @@ export class FinalizeDraftTool extends ToolDefinition {
   async execute(args: z.infer<typeof this.args>) {
     // Mock implementation
     const signature = args.include_signature
-      ? "\n\nBest regards,\nProResponse AI Support Team"
+      ? "\n\nBest regards,\nOpenSupport Support Team"
       : "";
     return {
       thread_id: args.thread_id,

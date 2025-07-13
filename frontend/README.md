@@ -1,6 +1,6 @@
-# ProResponse AI Frontend
+# OpenSupport Frontend
 
-The React-based frontend for ProResponse AI - an AI-powered customer support platform with intelligent email thread management and automated response generation.
+The React-based frontend for OpenSupport - an AI-powered customer support platform with intelligent email thread management and automated response generation.
 
 ## Features
 
@@ -197,7 +197,7 @@ The frontend is deployed as a static site:
 
 ## Integration with Backend
 
-The frontend is fully integrated with the ProResponse AI backend:
+The frontend is fully integrated with the OpenSupport backend:
 - **Email Threads**: Real-time thread management
 - **Agent Activity**: Live agent tool execution
 - **Draft Management**: AI-generated response review

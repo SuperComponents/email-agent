@@ -1,6 +1,6 @@
-# ProResponse AI Architecture Overview
+# OpenSupport Architecture Overview
 
-This document provides a clear overview of the ProResponse AI project architecture and component status.
+This document provides a clear overview of the OpenSupport project architecture and component status.
 
 ## 🚀 Active Components
 

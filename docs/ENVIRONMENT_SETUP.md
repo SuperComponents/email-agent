@@ -48,7 +48,7 @@ VITE_STACK_PUBLISHABLE_CLIENT_KEY=your_stack_publishable_key
 VITE_STACK_SECRET_KEY=your_stack_secret_key
 
 # Application Configuration
-VITE_APP_NAME=ProResponse AI
+VITE_APP_NAME=OpenSupport
 ```
 
 ### Landing Page (.env)
@@ -57,7 +57,7 @@ VITE_APP_NAME=ProResponse AI
 BUN_PUBLIC_APP_URL=http://localhost:5173
 
 # Application Configuration
-BUN_PUBLIC_APP_NAME=ProResponse AI
+BUN_PUBLIC_APP_NAME=OpenSupport
 ```
 
 ## Authentication Flow

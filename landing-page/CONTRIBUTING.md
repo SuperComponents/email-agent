@@ -1,6 +1,6 @@
-# Contributing to ProResponse AI Landing Page
+# Contributing to OpenSupport Landing Page
 
-Thank you for contributing to the ProResponse AI Landing Page! This document outlines the development workflow and code quality standards.
+Thank you for contributing to the OpenSupport Landing Page! This document outlines the development workflow and code quality standards.
 
 ## Development Workflow
 
@@ -104,4 +104,4 @@ If you encounter issues or have questions about the development workflow, please
 2. Review existing issues on GitHub
 3. Create a new issue with detailed information
 
-Thank you for helping make ProResponse AI more accessible and maintainable!
+Thank you for helping make OpenSupport more accessible and maintainable!

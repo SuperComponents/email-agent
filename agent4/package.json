@@ -1,7 +1,7 @@
 {
   "name": "@proresponse/agent",
   "version": "0.1.0",
-  "description": "Support agent worker thread for ProResponse AI",
+  "description": "Support agent worker thread for OpenSupport",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
