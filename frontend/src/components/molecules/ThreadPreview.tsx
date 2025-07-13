@@ -70,13 +70,6 @@ export const ThreadPreview = React.forwardRef<HTMLDivElement, ThreadPreviewProps
                 {title}
               </h3>
               <div className="flex items-center gap-2 h-full h-min-full">
-                {workerActive && (
-                  <div className="flex gap-1">
-                    <div className="w-1 h-1 bg-primary rounded-full animate-pulse [animation-delay:0ms]"></div>
-                    <div className="w-1 h-1 bg-primary rounded-full animate-pulse [animation-delay:200ms]"></div>
-                    <div className="w-1 h-1 bg-primary rounded-full animate-pulse [animation-delay:400ms]"></div>
-                  </div>
-                )}
                 <time
                   className={cn(
                     'text-xs my-auto text-nowrap',
@@ -106,6 +99,15 @@ export const ThreadPreview = React.forwardRef<HTMLDivElement, ThreadPreviewProps
             )}
           </div>
         </div>
+        {workerActive && (
+          <div className="flex justify-end w-full mb-[-6px]">
+            <div className="flex gap-1 items-center w-fit">
+              <div className="w-1.5 h-1.5 bg-primary rounded-full animate-pulse [animation-delay:0ms]"></div>
+              <div className="w-1.5 h-1.5 bg-primary rounded-full animate-pulse [animation-delay:150ms]"></div>
+              <div className="w-1.5 h-1.5 bg-primary rounded-full animate-pulse [animation-delay:300ms]"></div>
+            </div>
+          </div>
+        )}
       </div>
     );
   },
