@@ -1,9 +1,8 @@
-import React from "react";
-import { Avatar } from "../atoms/Avatar";
-import { Badge } from "../atoms/Badge";
-import { Lock } from "lucide-react";
-import { Icon } from "../atoms/Icon";
-import { cn } from "../../lib/utils";
+import React from 'react';
+import { Avatar } from '../atoms/Avatar';
+import { Lock } from 'lucide-react';
+import { Icon } from '../atoms/Icon';
+import { cn } from '../../lib/utils';
 
 export interface EmailMessage {
   id: string;
@@ -35,49 +34,29 @@ export interface InternalNoteMessage {
 
 export type ThreadMessage = EmailMessage | InternalNoteMessage;
 
-export interface ThreadDetailProps
-  extends React.HTMLAttributes<HTMLDivElement> {
+export interface ThreadDetailProps extends React.HTMLAttributes<HTMLDivElement> {
   subject: string;
   messages: ThreadMessage[];
-  status?: "open" | "closed" | "pending";
+  status?: 'open' | 'closed' | 'pending';
   tags?: string[];
 }
 
 export const ThreadDetail = React.forwardRef<HTMLDivElement, ThreadDetailProps>(
-  (
-    { className, subject, messages, status = "open", tags = [], ...props },
-    ref
-  ) => {
+  ({ className, subject, messages, status = 'open', tags = [], ...props }, ref) => {
     return (
-      <div
-        ref={ref}
-        className={cn("flex flex-col h-full", className)}
-        {...props}
-      >
-        <div className="flex-shrink-0 px-6 py-4 border-b border-border">
-          <div className="flex items-start justify-between gap-4">
-            <h2 className="text-xl font-semibold mb-2">{subject}</h2>
-            <div className="flex gap-2">
-              {status && (
-                <Badge variant={status === "closed" ? "secondary" : "default"}>
-                  {status}
-                </Badge>
-              )}
-              {tags.map((tag) => (
-                <Badge key={tag} variant="outline">
-                  {tag}
-                </Badge>
-              ))}
-            </div>
+      <div ref={ref} className={cn('flex flex-col h-full', className)} {...props}>
+        <div className="px-6 py-2 border-b border-border h-[60px] flex items-center">
+          <div className="flex items-center justify-between gap-4 w-full">
+            <h2 className="text-xl font-semibold text-nowrap">{subject}</h2>
           </div>
         </div>
 
         <div className="flex-1 overflow-y-auto px-6 py-4 space-y-6 min-h-0">
-          {messages.map((message) => {
+          {messages.map(message => {
             const isInternalNote = 'type' in message && message.type === 'internal_note';
             const emailMessage = message as EmailMessage;
             const noteMessage = message as InternalNoteMessage;
-            
+
             return (
               <article key={message.id} className="space-y-3">
                 <div className="flex items-start gap-3">
@@ -98,9 +77,7 @@ export const ThreadDetail = React.forwardRef<HTMLDivElement, ThreadDetailProps>(
                           <span className="text-xs text-accent-foreground bg-accent px-2 py-0.5 rounded">
                             Internal Note
                           </span>
-                          {noteMessage.isPinned && (
-                            <span className="text-xs">📌</span>
-                          )}
+                          {noteMessage.isPinned && <span className="text-xs">📌</span>}
                         </>
                       )}
                       <time className="text-sm text-secondary-foreground ml-auto">
@@ -109,16 +86,16 @@ export const ThreadDetail = React.forwardRef<HTMLDivElement, ThreadDetailProps>(
                     </div>
                     <div
                       className={cn(
-                        "rounded-lg p-4",
+                        'rounded-lg p-4',
                         isInternalNote
-                          ? "bg-accent/30 border border-accent/60"
+                          ? 'bg-accent/30 border border-accent/60'
                           : emailMessage.isSupport
-                            ? "bg-accent border border-accent-foreground/20"
-                            : "bg-card border border-border"
+                          ? 'bg-accent border border-accent-foreground/20'
+                          : 'bg-card border border-border',
                       )}
                     >
                       <div className="prose prose-sm max-w-none">
-                        {message.content.split("\n").map((paragraph, idx) => (
+                        {message.content.split('\n').map((paragraph, idx) => (
                           <p key={idx} className="mb-2 last:mb-0">
                             {paragraph}
                           </p>
@@ -133,7 +110,7 @@ export const ThreadDetail = React.forwardRef<HTMLDivElement, ThreadDetailProps>(
         </div>
       </div>
     );
-  }
+  },
 );
 
-ThreadDetail.displayName = "ThreadDetail";
+ThreadDetail.displayName = 'ThreadDetail';
