@@ -1,9 +1,8 @@
-import React from "react";
-import { Badge } from "../atoms/Badge";
-import { cn } from "../../lib/utils";
+import React from 'react';
+import { Badge } from '../atoms/Badge';
+import { cn } from '../../lib/utils';
 
-export interface ThreadPreviewProps
-  extends React.HTMLAttributes<HTMLDivElement> {
+export interface ThreadPreviewProps extends React.HTMLAttributes<HTMLDivElement> {
   id?: string;
   title: string;
   snippet: string;
@@ -16,16 +15,9 @@ export interface ThreadPreviewProps
   isActive?: boolean;
   isUnread?: boolean;
   workerActive?: boolean;
-  badges?: Array<{
-    label: string;
-    variant?: "default" | "secondary" | "destructive" | "outline";
-  }>;
 }
 
-export const ThreadPreview = React.forwardRef<
-  HTMLDivElement,
-  ThreadPreviewProps
->(
+export const ThreadPreview = React.forwardRef<HTMLDivElement, ThreadPreviewProps>(
   (
     {
       className,
@@ -35,19 +27,19 @@ export const ThreadPreview = React.forwardRef<
       isActive,
       isUnread,
       workerActive = false,
-      badges = [],
+
       ...props
     },
-    ref
+    ref,
   ) => {
     return (
       <div
         ref={ref}
         className={cn(
-          "px-4 py-4 border-b border-border cursor-pointer transition-colors",
-          "hover:bg-accent/50",
-          isActive && "bg-accent",
-          className
+          'px-4 py-4 border-b border-border cursor-pointer transition-colors',
+          'hover:bg-accent/50',
+          isActive && 'bg-accent',
+          className,
         )}
         {...props}
       >
@@ -56,8 +48,8 @@ export const ThreadPreview = React.forwardRef<
           <div className="flex items-start pt-2">
             <div
               className={cn(
-                "w-2 h-2 rounded-full shrink-0",
-                isUnread ? "bg-primary" : "bg-transparent"
+                'w-2 h-2 rounded-full shrink-0',
+                isUnread ? 'bg-primary' : 'bg-transparent',
               )}
             />
           </div>
@@ -65,9 +57,9 @@ export const ThreadPreview = React.forwardRef<
             <div className="flex justify-between gap-2 mb-1 align-center">
               <h3
                 className={cn(
-                  "text-sm truncate",
-                  isUnread && "text-foreground font-semibold",
-                  !isUnread && "text-secondary-foreground font-normal"
+                  'text-sm truncate',
+                  isUnread && 'text-foreground font-semibold',
+                  !isUnread && 'text-secondary-foreground font-normal',
                 )}
               >
                 {title}
@@ -80,34 +72,29 @@ export const ThreadPreview = React.forwardRef<
                     <div className="w-1 h-1 bg-primary rounded-full animate-pulse [animation-delay:400ms]"></div>
                   </div>
                 )}
-                <time className={cn(
-                  "text-xs my-auto text-nowrap",
-                  isUnread ? "text-foreground font-medium" : "text-secondary-foreground"
-                )}>
+                <time
+                  className={cn(
+                    'text-xs my-auto text-nowrap',
+                    isUnread ? 'text-foreground font-medium' : 'text-secondary-foreground',
+                  )}
+                >
                   {timestamp}
                 </time>
               </div>
             </div>
-            <p className={cn(
-              "text-sm truncate mb-2",
-              isUnread ? "text-foreground font-medium" : "text-secondary-foreground"
-            )}>
+            <p
+              className={cn(
+                'text-sm truncate mb-2',
+                isUnread ? 'text-foreground font-medium' : 'text-secondary-foreground',
+              )}
+            >
               {snippet}
             </p>
-            {badges.length > 0 && (
-              <div className="flex gap-1.5">
-                {badges.map((badge, index) => (
-                  <Badge key={index} variant={badge.variant}>
-                    {badge.label}
-                  </Badge>
-                ))}
-              </div>
-            )}
           </div>
         </div>
       </div>
     );
-  }
+  },
 );
 
-ThreadPreview.displayName = "ThreadPreview";
+ThreadPreview.displayName = 'ThreadPreview';
