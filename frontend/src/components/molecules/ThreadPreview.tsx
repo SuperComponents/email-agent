@@ -1,4 +1,5 @@
 import React from 'react';
+import { Badge } from '../atoms/Badge';
 import { cn } from '../../lib/utils';
 
 export interface ThreadPreviewProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -13,6 +14,11 @@ export interface ThreadPreviewProps extends React.HTMLAttributes<HTMLDivElement>
   timestamp: string;
   isActive?: boolean;
   isUnread?: boolean;
+  workerActive?: boolean;
+  badges?: Array<{
+    label: string;
+    variant: 'default' | 'secondary' | 'destructive' | 'outline';
+  }>;
 }
 
 export const ThreadPreview = React.forwardRef<HTMLDivElement, ThreadPreviewProps>(
@@ -24,6 +30,8 @@ export const ThreadPreview = React.forwardRef<HTMLDivElement, ThreadPreviewProps
       timestamp,
       isActive,
       isUnread,
+      workerActive = false,
+      badges = [],
 
       ...props
     },
@@ -80,6 +88,15 @@ export const ThreadPreview = React.forwardRef<HTMLDivElement, ThreadPreviewProps
             >
               {snippet}
             </p>
+            {badges.length > 0 && (
+              <div className="flex gap-1 flex-wrap">
+                {badges.map((badge, index) => (
+                  <Badge key={index} variant={badge.variant} className="text-xs">
+                    {badge.label}
+                  </Badge>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </div>

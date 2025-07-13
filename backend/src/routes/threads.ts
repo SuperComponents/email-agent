@@ -1,7 +1,7 @@
 import { Hono } from 'hono';
-import { eq, and, or, like, desc, sql } from 'drizzle-orm';
+import { eq, and, or, like, desc, sql, inArray } from 'drizzle-orm';
 import { db } from '../database/db.js';
-import { threads, emails, draft_responses, agent_actions, internal_notes, users } from '../database/schema.js';
+import { threads, emails, draft_responses, agent_actions, internal_notes, users, emailTags } from '../database/schema.js';
 import { successResponse, notFoundResponse, errorResponse } from '../utils/response.js';
 import { threadFilterSchema, updateThreadSchema, validateRequest } from '../utils/validation.js';
 import { authMiddleware } from '../middleware/auth.js';
@@ -18,8 +18,28 @@ app.get('/', async c => {
 
     // Build where conditions
     const conditions = [];
+    let threadIdsFromTags: number[] = [];
 
-    if (filter && filter !== 'all') {
+    // Handle tag-based filters first
+    if (filter === 'flagged' || filter === 'urgent') {
+      const taggedThreadsQuery = await db
+        .select({
+          thread_id: emails.thread_id,
+        })
+        .from(emails)
+        .innerJoin(emailTags, eq(emails.id, emailTags.email_id))
+        .where(eq(emailTags.tag, filter))
+        .groupBy(emails.thread_id);
+
+      threadIdsFromTags = taggedThreadsQuery.map(row => row.thread_id);
+      
+      if (threadIdsFromTags.length === 0) {
+        // No threads with this tag, return empty result
+        return successResponse(c, { threads: [] });
+      }
+      
+      conditions.push(inArray(threads.id, threadIdsFromTags));
+    } else if (filter && filter !== 'all') {
       switch (filter) {
         case 'closed':
           conditions.push(eq(threads.status, 'closed'));
@@ -27,8 +47,8 @@ app.get('/', async c => {
         case 'awaiting_customer':
           conditions.push(eq(threads.status, 'active'));
           break;
-        // Note: For MVP, we'll need to handle unread, flagged, urgent differently
-        // as they depend on additional fields or email states
+        // Note: For MVP, we'll need to handle unread differently
+        // as it depends on additional fields
       }
     }
 
@@ -64,6 +84,32 @@ app.get('/', async c => {
       .where(whereClause)
       .orderBy(desc(threads.last_activity_at));
 
+    // Get tags for all threads in the result
+    const threadIds = threadList.map(t => t.id);
+    let threadTags: Record<number, string[]> = {};
+    
+    if (threadIds.length > 0) {
+      const tagsQuery = await db
+        .select({
+          thread_id: emails.thread_id,
+          tag: emailTags.tag,
+        })
+        .from(emails)
+        .innerJoin(emailTags, eq(emails.id, emailTags.email_id))
+        .where(inArray(emails.thread_id, threadIds))
+        .groupBy(emails.thread_id, emailTags.tag);
+
+      threadTags = tagsQuery.reduce((acc, row) => {
+        if (!acc[row.thread_id]) {
+          acc[row.thread_id] = [];
+        }
+        if (!acc[row.thread_id].includes(row.tag)) {
+          acc[row.thread_id].push(row.tag);
+        }
+        return acc;
+      }, {} as Record<number, string[]>);
+    }
+
     // Transform to match API format
     const formattedThreads = threadList.map(thread => {
       const participants = thread.participant_emails as string[];
@@ -79,7 +125,7 @@ app.get('/', async c => {
         timestamp: thread.last_activity_at.toISOString(),
         is_unread: false, // TODO: Implement unread tracking
         status: thread.status,
-        tags: [], // TODO: Implement tags
+        tags: threadTags[thread.id] || [],
       };
     });
 
@@ -172,6 +218,18 @@ app.get('/:id', async c => {
       .where(eq(internal_notes.thread_id, threadId))
       .orderBy(desc(internal_notes.is_pinned), desc(internal_notes.created_at));
 
+    // Get tags for this thread
+    const threadTagsQuery = await db
+      .select({
+        tag: emailTags.tag,
+      })
+      .from(emails)
+      .innerJoin(emailTags, eq(emails.id, emailTags.email_id))
+      .where(eq(emails.thread_id, threadId))
+      .groupBy(emailTags.tag);
+
+    const threadTagsList = threadTagsQuery.map(row => row.tag);
+
     // Transform data
     const participants = thread.participant_emails as string[];
     const customerEmail =
@@ -213,7 +271,7 @@ app.get('/:id', async c => {
       id: thread.id.toString(),
       subject: thread.subject,
       status: thread.status,
-      tags: [], // TODO: Implement tags
+      tags: threadTagsList,
       customer: {
         name: customerEmail.split('@')[0],
         email: customerEmail,
