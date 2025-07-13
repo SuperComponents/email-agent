@@ -3,7 +3,7 @@ import { useAgentActivity, queryKeys } from '../repo/hooks';
 import { useQueryClient } from '@tanstack/react-query';
 import { useUIStore } from '../stores/ui-store';
 import { AgentPanel } from '../components/organisms';
-import { FileSearch, Brain, MessageSquare } from 'lucide-react';
+import { FileSearch, Brain, MessageSquare, Zap, FileText, AlertTriangle, Users } from 'lucide-react';
 import type { AgentActionProps } from '../components/molecules/AgentAction';
 import { apiClient } from '../lib/api';
 
@@ -49,11 +49,39 @@ interface FileSearchProviderData {
   [key: string]: unknown;
 }
 
+// Helper function to get appropriate icon for action types
+function getIconForAction(actionType: string, toolName?: string) {
+  // Tool-specific icons
+  if (toolName === 'update_thread_urgency') return Zap;
+  if (toolName === 'update_thread_category') return FileText;
+  if (toolName === 'user_action_needed') return AlertTriangle;
+  if (toolName === 'compose-draft' || toolName === 'compose_draft') return FileText;
+  if (toolName === 'summarize_useful_context') return Brain;
+  if (toolName === 'search-knowledge-base') return FileSearch;
+
+  // Database action type icons
+  switch (actionType) {
+    case 'thread_status_changed':
+      return Zap;
+    case 'draft_created':
+      return FileText;
+    case 'email_read':
+      return MessageSquare;
+    case 'thread_assigned':
+      return Users;
+    case 'internal_note_created':
+      return MessageSquare;
+    default:
+      return Brain;
+  }
+}
+
 export interface AgentPanelContainerProps {
   onUseAgent?: () => void;
   onDemoCustomerResponse?: () => void;
   isRegeneratingDraft?: boolean;
   isGeneratingDemoResponse?: boolean;
+  onDraftClick?: (draft: { body: string }) => void;
 }
 
 export function AgentPanelContainer({
@@ -61,6 +89,7 @@ export function AgentPanelContainer({
   onDemoCustomerResponse,
   isRegeneratingDraft,
   isGeneratingDemoResponse,
+  onDraftClick,
 }: AgentPanelContainerProps) {
   const selectedThreadId = useUIStore(state => state.selectedThreadId);
   const isAgentPanelOpen = useUIStore(state => state.isAgentPanelOpen);
@@ -168,12 +197,12 @@ export function AgentPanelContainer({
         try {
           const argumentsText = action.result?.arguments;
           if (argumentsText) {
-            const parsed = JSON.parse(argumentsText) as ExplainNextToolCallArgs;
+            const parsed = JSON.parse(argumentsText) as { explanation?: string };
             messageContent = parsed.explanation || '';
           }
         } catch (e) {
           console.error('Failed to parse explain_next_tool_call arguments:', e);
-          messageContent = action.result?.arguments || '';
+          messageContent = (action.result?.arguments as string) || '';
         }
 
         return {
@@ -259,8 +288,7 @@ export function AgentPanelContainer({
       }
 
       return {
-        icon:
-          action.type === 'analyze' ? Brain : action.type === 'search' ? FileSearch : MessageSquare,
+        icon: getIconForAction(action.type, action.result?.tool_name),
         title: displayTitle,
         description: displayDescription,
         timestamp: new Date(action.timestamp).toLocaleTimeString(),
@@ -270,6 +298,8 @@ export function AgentPanelContainer({
             : action.status === 'failed'
             ? 'failed'
             : 'pending',
+        result: action.result,
+        type: action.type,
       };
     }) || []
   ).filter((action): action is AgentActionProps => action !== null);
@@ -297,8 +327,7 @@ export function AgentPanelContainer({
       onUseAgent={onUseAgent}
       onDemoCustomerResponse={onDemoCustomerResponse}
       onSendMessage={handleSendMessage}
-      isRegeneratingDraft={isRegeneratingDraft}
-      isGeneratingDemoResponse={isGeneratingDemoResponse}
+      onDraftClick={onDraftClick}
     />
   );
 }
