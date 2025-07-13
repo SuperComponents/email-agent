@@ -173,7 +173,8 @@ export function generateMockThreadDetail(thread: Thread): ThreadDetail {
       analysis: randomElement(agentAnalyses),
       draft_response: `Dear ${thread.customer_name},\n\nThank you for reaching out. ${randomElement(agentAnalyses)}\n\nBest regards,\nSupport Team`,
       actions
-    }
+    },
+    internal_notes: []
   };
 }
 

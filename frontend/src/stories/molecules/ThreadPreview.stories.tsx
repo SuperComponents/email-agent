@@ -61,9 +61,5 @@ export const WithBadges: Story = {
     },
     timestamp: '10 min ago',
     isUnread: true,
-    badges: [
-      { label: 'Urgent', variant: 'destructive' },
-      { label: 'Payment', variant: 'outline' },
-    ],
   },
 };

@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
-import { Send, Maximize2 } from 'lucide-react';
+import { Send, Maximize2, Sparkles, UserPlus } from 'lucide-react';
 import { AgentAction, type AgentActionProps } from '../molecules/AgentAction';
 import { Separator } from '../atoms/Separator';
 import { Button } from '../atoms/Button';
 import { Icon } from '../atoms/Icon';
-import { DotsLoader } from '../atoms/DotsLoader';
 import { Modal } from '../atoms/Modal';
 import { ExpandedAgentPanel } from './ExpandedAgentPanel';
 import { cn } from '../../lib/utils';
@@ -17,14 +16,9 @@ export interface AgentPanelProps extends React.HTMLAttributes<HTMLDivElement> {
   onDemoCustomerResponse?: () => void;
   onSendMessage?: (message: string) => void;
   currentThreadId?: number;
-  workerStatus?: {
-    threadId: number;
-    status: string;
-    isActive: boolean;
-  };
-  onStartWorker?: () => void;
-  isStartingWorker?: boolean;
   onDraftClick?: (draft: { body: string }) => void;
+  isRegeneratingDraft?: boolean;
+  isGeneratingDemoResponse?: boolean;
 }
 
 export const AgentPanel = React.forwardRef<HTMLDivElement, AgentPanelProps>(
@@ -37,6 +31,8 @@ export const AgentPanel = React.forwardRef<HTMLDivElement, AgentPanelProps>(
       onDemoCustomerResponse,
       onSendMessage,
       onDraftClick,
+      isRegeneratingDraft,
+      isGeneratingDemoResponse,
       ...props
     },
     ref,
@@ -44,9 +40,6 @@ export const AgentPanel = React.forwardRef<HTMLDivElement, AgentPanelProps>(
     const [message, setMessage] = useState('');
     const [isExpanded, setIsExpanded] = useState(false);
     console.log('actions', actions);
-
-    // Check if agent is currently working using worker status
-    const isAgentWorking = props.workerStatus?.isActive || false;
 
     const handleSend = () => {
       if (message.trim() && onSendMessage) {
@@ -77,6 +70,46 @@ export const AgentPanel = React.forwardRef<HTMLDivElement, AgentPanelProps>(
           </Button>
         </div>
         <div className="flex-1 overflow-y-auto p-4 space-y-4">
+          {/* Agent Controls */}
+          {actions.length === 0 && (
+            <div className="space-y-3 mb-6">
+              <div className="text-xs text-secondary-foreground leading-relaxed">
+                Use the agent to analyze this conversation and generate a helpful response. The agent
+                will search your knowledge base and provide citations.
+              </div>
+              <div className="space-y-2">
+                <Button
+                  onClick={onUseAgent}
+                  size="sm"
+                  variant="secondary"
+                  className="w-full gap-2"
+                  disabled={isRegeneratingDraft}
+                >
+                  <Icon
+                    icon={Sparkles}
+                    size="sm"
+                    className={isRegeneratingDraft ? 'animate-pulse' : ''}
+                  />
+                  <span>{isRegeneratingDraft ? 'Generating...' : 'Use Agent'}</span>
+                </Button>
+                <Button
+                  onClick={onDemoCustomerResponse}
+                  size="sm"
+                  variant="ghost"
+                  className="w-full gap-2"
+                  disabled={isGeneratingDemoResponse}
+                >
+                  <Icon
+                    icon={UserPlus}
+                    size="sm"
+                    className={isGeneratingDemoResponse ? 'animate-pulse' : ''}
+                  />
+                  <span>{isGeneratingDemoResponse ? 'Generating...' : 'Demo Customer Response'}</span>
+                </Button>
+              </div>
+            </div>
+          )}
+
           {/* Agent Actions */}
           {actions.length > 0 ? (
             <div className="space-y-3 mb-6">
@@ -85,12 +118,7 @@ export const AgentPanel = React.forwardRef<HTMLDivElement, AgentPanelProps>(
                 <AgentAction key={index} {...action} onDraftClick={onDraftClick} />
               ))}
             </div>
-          ) : (
-            <div className="text-center py-6 text-xs text-secondary-foreground">
-              <p>No agent activity yet.</p>
-              <p className="mt-1">Click "Use Agent" to start analyzing this conversation.</p>
-            </div>
-          )}
+          ) : null}
 
           {analysis && (
             <>

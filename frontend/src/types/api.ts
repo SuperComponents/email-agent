@@ -8,7 +8,6 @@ export interface Thread {
   is_unread: boolean;
   status: string;
   tags: string[];
-  worker_active: boolean;
 }
 
 export interface Customer {

@@ -87,7 +87,6 @@ export function ThreadListContainer() {
     }),
     isActive: thread.id === selectedThreadId,
     isUnread: thread.is_unread,
-    workerActive: thread.worker_active,
     badges: [
       ...(thread.status !== 'open' ? [{ 
         label: thread.status, 

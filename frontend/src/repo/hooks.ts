@@ -1,6 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { APIClient } from './api-client';
-import { apiClient } from '../lib/api';
 import type { ThreadFilter } from '../types/api';
 
 // Query keys
@@ -18,7 +17,7 @@ export function useThreads(filter?: ThreadFilter, search?: string) {
     queryKey: queryKeys.threads(filter, search),
     queryFn: () => APIClient.getThreads(filter, search),
     placeholderData: (previousData) => previousData,
-    refetchInterval: 2000, // Poll every 2 seconds to keep worker status up to date
+    refetchInterval: 2000, // Poll every 2 seconds to keep status up to date
   });
 }
 
@@ -63,15 +62,6 @@ export function useAgentActivity(threadId: string) {
     queryFn: () => APIClient.getAgentActivity(threadId),
     enabled: !!threadId,
     refetchInterval: 200, // Poll 5 times per second
-  });
-}
-
-export function useWorkerStatus(threadId: number) {
-  return useQuery({
-    queryKey: ['workerStatus', threadId],
-    queryFn: () => apiClient.getWorkerStatus(threadId),
-    enabled: !!threadId,
-    refetchInterval: 2000, // Poll every 2 seconds
   });
 }
 
@@ -129,31 +119,6 @@ export function useSendMessage() {
       // Invalidate thread to refetch with new message
       void queryClient.invalidateQueries({ queryKey: queryKeys.thread(variables.threadId) });
       void queryClient.invalidateQueries({ queryKey: queryKeys.threads() });
-    },
-  });
-}
-
-export function useStartWorker() {
-  const queryClient = useQueryClient();
-  
-  return useMutation({
-    mutationFn: (threadId: number) => apiClient.startWorker(threadId),
-    onSuccess: (_, threadId) => {
-      // Invalidate worker status to get updated state
-      void queryClient.invalidateQueries({ queryKey: ['workerStatus', threadId] });
-    },
-  });
-}
-
-export function useStopWorker() {
-  const queryClient = useQueryClient();
-  
-  return useMutation({
-    mutationFn: ({ threadId, reason }: { threadId: number; reason?: string }) => 
-      apiClient.stopWorker(threadId, reason),
-    onSuccess: (_, { threadId }) => {
-      // Invalidate worker status to get updated state
-      void queryClient.invalidateQueries({ queryKey: ['workerStatus', threadId] });
     },
   });
 }

@@ -1,5 +1,4 @@
 import React from 'react';
-import { Badge } from '../atoms/Badge';
 import { cn } from '../../lib/utils';
 
 export interface ThreadPreviewProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -14,7 +13,6 @@ export interface ThreadPreviewProps extends React.HTMLAttributes<HTMLDivElement>
   timestamp: string;
   isActive?: boolean;
   isUnread?: boolean;
-  workerActive?: boolean;
 }
 
 export const ThreadPreview = React.forwardRef<HTMLDivElement, ThreadPreviewProps>(
@@ -26,7 +24,6 @@ export const ThreadPreview = React.forwardRef<HTMLDivElement, ThreadPreviewProps
       timestamp,
       isActive,
       isUnread,
-      workerActive = false,
 
       ...props
     },
@@ -65,13 +62,6 @@ export const ThreadPreview = React.forwardRef<HTMLDivElement, ThreadPreviewProps
                 {title}
               </h3>
               <div className="flex items-center gap-2 h-full h-min-full">
-                {workerActive && (
-                  <div className="flex gap-1">
-                    <div className="w-1 h-1 bg-primary rounded-full animate-pulse [animation-delay:0ms]"></div>
-                    <div className="w-1 h-1 bg-primary rounded-full animate-pulse [animation-delay:200ms]"></div>
-                    <div className="w-1 h-1 bg-primary rounded-full animate-pulse [animation-delay:400ms]"></div>
-                  </div>
-                )}
                 <time
                   className={cn(
                     'text-xs my-auto text-nowrap',

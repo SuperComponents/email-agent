@@ -197,7 +197,7 @@ export function AgentPanelContainer({
         try {
           const argumentsText = action.result?.arguments;
           if (argumentsText) {
-            const parsed = JSON.parse(argumentsText) as { explanation?: string };
+            const parsed = JSON.parse(argumentsText) as ExplainNextToolCallArgs;
             messageContent = parsed.explanation || '';
           }
         } catch (e) {
@@ -288,7 +288,7 @@ export function AgentPanelContainer({
       }
 
       return {
-        icon: getIconForAction(action.type, action.result?.tool_name),
+        icon: getIconForAction(action.type, action.result?.tool_name as string | undefined),
         title: displayTitle,
         description: displayDescription,
         timestamp: new Date(action.timestamp).toLocaleTimeString(),
@@ -298,7 +298,6 @@ export function AgentPanelContainer({
             : action.status === 'failed'
             ? 'failed'
             : 'pending',
-        result: action.result,
         type: action.type,
       };
     }) || []
@@ -328,6 +327,8 @@ export function AgentPanelContainer({
       onDemoCustomerResponse={onDemoCustomerResponse}
       onSendMessage={handleSendMessage}
       onDraftClick={onDraftClick}
+      isRegeneratingDraft={isRegeneratingDraft}
+      isGeneratingDemoResponse={isGeneratingDemoResponse}
     />
   );
 }
