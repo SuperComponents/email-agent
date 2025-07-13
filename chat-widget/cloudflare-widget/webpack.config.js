@@ -46,7 +46,7 @@ module.exports = (env, argv) => {
               },
             },
           ]
-        }
+        },
       ]
     },
     resolve: {
