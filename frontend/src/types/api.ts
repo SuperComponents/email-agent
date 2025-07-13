@@ -9,6 +9,7 @@ export interface Thread {
   status: string;
   tags: string[];
   worker_active: boolean;
+  userActionRequired: boolean;
 }
 
 export interface Customer {

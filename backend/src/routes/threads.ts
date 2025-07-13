@@ -82,8 +82,22 @@ app.get('/', async c => {
           ORDER BY ${emails.created_at} DESC 
           LIMIT 1
         )`,
+        // Check for user action needed flag using proper SQL
+        user_action_required: sql<boolean>`CASE 
+          WHEN ua.thread_id IS NOT NULL THEN true 
+          ELSE false 
+        END`,
       })
       .from(threads)
+      .leftJoin(
+        sql`(
+          SELECT DISTINCT thread_id 
+          FROM ${agent_actions} 
+          WHERE action = 'thread_assigned' 
+          AND created_at > NOW() - INTERVAL '48 HOURS'
+        ) ua`,
+        sql`ua.thread_id = ${threads.id}`
+      )
       .where(whereClause)
       .orderBy(desc(threads.last_activity_at));
 
@@ -133,6 +147,7 @@ app.get('/', async c => {
         status: thread.status,
         tags: threadTags[thread.id] || [],
         worker_active: workerStatus === 'running',
+        userActionRequired: thread.user_action_required,
       };
     });
 

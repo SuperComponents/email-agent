@@ -88,7 +88,9 @@ export function generateMockThread(index: number): Thread {
     timestamp: generateTimestamp(daysAgo),
     is_unread: isUnread,
     status: randomElement(statuses),
-    tags
+    tags,
+    worker_active: Math.random() > 0.8,
+    userActionRequired: Math.random() > 0.85
   };
 }
 
