@@ -57,7 +57,7 @@ VITE_APP_NAME=ProResponse AI
 BUN_PUBLIC_APP_URL=http://localhost:5173
 
 # Application Configuration
-BUN_PUBLIC_APP_NAME=OpenSupport
+BUN_PUBLIC_APP_NAME=ProResponse AI
 ```
 
 ## Authentication Flow

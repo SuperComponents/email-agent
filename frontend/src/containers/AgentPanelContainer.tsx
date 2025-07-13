@@ -24,8 +24,15 @@ interface TagEmailArgs {
   confidence?: number;
 }
 
-interface SearchEmailsArgs {
-  senderEmail?: string;
+interface GetCustomerHistoryArgs {
+  senderEmail: string;
+  limit?: number;
+}
+
+interface SearchCustomerEmailsArgs {
+  senderEmail: string;
+  searchQuery: string;
+  limit?: number;
 }
 
 interface SearchKnowledgeBaseArgs {
@@ -222,11 +229,18 @@ export function AgentPanelContainer({
       if (action.result?.type === 'function_call' && action.result?.name) {
         try {
           switch (action.result.name) {
-            case 'search_emails': {
+            case 'get_customer_history': {
               const args = action.result.arguments
-                ? (JSON.parse(action.result.arguments) as SearchEmailsArgs)
-                : {};
-              displayDescription = `Searched for emails from ${args.senderEmail || 'all senders'}`;
+                ? (JSON.parse(action.result.arguments) as GetCustomerHistoryArgs)
+                : { senderEmail: '' };
+              displayDescription = `Got customer history for ${args.senderEmail}`;
+              break;
+            }
+            case 'search_customer_emails': {
+              const args = action.result.arguments
+                ? (JSON.parse(action.result.arguments) as SearchCustomerEmailsArgs)
+                : { senderEmail: '', searchQuery: '' };
+              displayDescription = `Searched emails from ${args.senderEmail} for "${args.searchQuery}"`;
               break;
             }
             case 'tag_email': {

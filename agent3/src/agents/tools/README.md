@@ -27,22 +27,36 @@ This directory contains the tools that the email agent uses to process customer 
 
 ### 4. `search-customer-emails.ts` - Search Customer Emails
 **Purpose**: Searches for specific content within a customer's email history.
-**When to use**: When you need to find specific information rather than general context.
+**When to use**: HIGH PRIORITY - Use whenever ANY historical context indicators are present.
 **Use cases**:
-- Customer mentions a specific product → search for previous interactions with that product
-- Customer reports an error → search for similar error messages in their history
-- Customer asks about a refund → search for "refund" or "billing" in their emails
-- Customer references a previous conversation → search for keywords from that context
-- Customer mentions a specific feature → search for that feature name
+- Customer mentions "last time", "before", "previously", "again", "still", "another", "also"
+- Customer references any past interaction, issue, or conversation
+- Customer mentions any product, feature, or service name (search for previous interactions)
+- Customer expresses frustration or escalation language (check previous complaints)
+- Customer mentions billing, account, or subscription (check billing history)
+- Customer reports an error or technical issue (search for similar past problems)
+- Customer asks for an update or status (check previous follow-ups)
+- Customer mentions any specific dates, order numbers, or reference numbers
+- Customer implies they are a returning customer or have previous experience
+- Email is a follow-up or continuation of any conversation
+- **Default assumption**: If unsure, search customer emails - customer context is often relevant
 
 ### 5. `email-tagger.ts` - Tag Emails
 **Purpose**: Categorizes emails with appropriate tags.
-**When to use**: After understanding the email context, before knowledge base search.
+**When to use**: After understanding the email context.
 **Tags**: spam, legal, sales, support, billing, technical, general
 
 ### 6. `rag-search.ts` - Knowledge Base Search
 **Purpose**: Searches the company knowledge base for relevant information.
-**When to use**: When the customer is asking questions that require company knowledge.
+**When to use**: CONDITIONAL - Only when customer needs policy information, product specifications, or technical documentation.
+**Use cases**:
+- Company policies (refund policy, privacy policy, terms of service)
+- Product specifications, features, or technical documentation
+- How-to guides or troubleshooting steps
+- Warranty information or coverage details
+- Service offerings or product comparisons
+- Compliance or regulatory requirements
+**DO NOT use for**: General customer service responses, account-specific issues, simple acknowledgments, personal customer situations
 
 ### 7. `write-draft.ts` - Write Draft Response
 **Purpose**: Creates a draft email response.
@@ -55,9 +69,9 @@ This directory contains the tools that the email agent uses to process customer 
 1. read_thread (ALWAYS FIRST)
 2. explain_next_tool_call (before each subsequent tool)
 3. get_customer_history (for general context)
-4. search_customer_emails (for specific content, if needed)
+4. search_customer_emails (HIGH PRIORITY - use for ANY historical context)
 5. email_tagger (categorize the email)
-6. rag_search (search knowledge base, if needed)
+6. rag_search (CONDITIONAL - only for policies/products/documentation)
 7. write_draft (ALWAYS LAST)
 ```
 
