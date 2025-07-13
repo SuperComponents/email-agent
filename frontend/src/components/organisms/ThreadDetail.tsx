@@ -88,7 +88,7 @@ export const ThreadDetail = React.forwardRef<HTMLDivElement, ThreadDetailProps>(
                       className={cn(
                         'rounded-lg p-4',
                         isInternalNote
-                          ? 'bg-accent/30 border border-accent/60'
+                          ? 'bg-secondary/50 border-l-4 border-l-accent-foreground border border-border'
                           : emailMessage.isSupport
                           ? 'bg-accent border border-accent-foreground/20'
                           : 'bg-card border border-border',
