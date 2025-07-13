@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React from "react";
 import { useAgent } from "agents/react";
 import { useAgentChat } from "agents/ai-react";
 import type { tools } from "./tools";
@@ -18,7 +18,6 @@ const toolsRequiringConfirmation: (keyof typeof tools)[] = [
 
 export default function Chat() {
   const { theme, toggleTheme } = useTheme();
-  const [showDebug, setShowDebug] = useState(false);
 
   const handleCloseWidget = () => {
     if (window.parent !== window) {
@@ -61,8 +60,6 @@ export default function Chat() {
         <WidgetHeader
           theme={theme}
           onToggleTheme={toggleTheme}
-          showDebug={showDebug}
-          onToggleDebug={() => setShowDebug((prev) => !prev)}
           onClear={clearHistory}
           onClose={handleCloseWidget}
         />
@@ -71,7 +68,6 @@ export default function Chat() {
         <MessageArea
           messages={agentMessages}
           isLoading={isLoading}
-          showDebug={showDebug}
           addToolResult={addToolResult}
         />
 
