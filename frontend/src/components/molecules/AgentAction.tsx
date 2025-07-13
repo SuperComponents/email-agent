@@ -248,7 +248,9 @@ export const AgentAction = React.forwardRef<HTMLDivElement, AgentActionProps>(
           {/* Special handling for finalized draft actions */}
           {isFinalizedDraft && (
             <div className="mt-1 overflow-hidden">
-              <span className="text-sm font-medium text-foreground break-words">Draft response generated</span>
+              <span className="text-sm font-medium text-foreground break-words">
+                Draft response generated
+              </span>
               {(() => {
                 const toolOutput = result?.tool_output as { result?: { body?: string } };
                 const body = toolOutput?.result?.body || result?.draft_body_preview;
@@ -275,7 +277,9 @@ export const AgentAction = React.forwardRef<HTMLDivElement, AgentActionProps>(
             !(result?.tool_name === 'search-knowledge-base') &&
             !isFinalizedDraft &&
             description && (
-              <p className="text-sm text-foreground leading-tight mt-1 break-words">{description}</p>
+              <p className="text-sm text-foreground font-medium leading-tight mt-1 break-words">
+                {description}
+              </p>
             )}
         </div>
       </div>

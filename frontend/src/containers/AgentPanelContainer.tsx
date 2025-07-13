@@ -13,7 +13,6 @@ import {
   Users,
 } from 'lucide-react';
 import type { AgentActionProps } from '../components/molecules/AgentAction';
-import { apiClient } from '../lib/api';
 
 // Helper function to get appropriate icon for action types
 function getIconForAction(actionType: string, toolName?: string) {
@@ -191,21 +190,6 @@ export function AgentPanelContainer({
     }) || []
   ).filter((action): action is AgentActionProps => action !== null);
 
-  const handleSendMessage = (message: string) => {
-    if (!selectedThreadId) return;
-
-    void (async () => {
-      try {
-        await apiClient.post(`/api/threads/${selectedThreadId}/regenerate`, {
-          userMessage: message,
-        });
-        // The useAgentActivity hook should automatically refresh with new data
-      } catch (error) {
-        console.error('Failed to send message:', error);
-      }
-    })();
-  };
-
   const handleStartWorker = () => {
     if (!selectedThreadId) return;
     startWorkerMutation.mutate(parseInt(selectedThreadId));
@@ -217,7 +201,6 @@ export function AgentPanelContainer({
     <AgentPanel
       actions={actions}
       draftResponse={agentActivity?.suggested_response}
-      onSendMessage={handleSendMessage}
       currentThreadId={selectedThreadId ? parseInt(selectedThreadId) : undefined}
       workerStatus={workerStatus}
       onStartWorker={handleStartWorker}
