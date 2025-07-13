@@ -11,9 +11,13 @@
     "upload": "tsx src/upload.ts",
     "search": "tsx src/search.ts",
     "wipe": "tsx src/wipe.ts",
-    "test": "tsx src/test.ts"
+    "test": "tsx src/test.ts",
+    "scrape:agents-doc": "tsx src/site-scrape/ingest.ts --url https://openai.github.io/openai-agents-js/ --depth 1 --name npm-doc-scrape-test-214",
+    "scrape:web": "tsx src/web-scrape/scrape.ts"
   },
   "dependencies": {
+    "@mendable/firecrawl-js": "latest",
+    "@mozilla/readability": "^0.4.4",
     "dotenv": "^16.4.1",
     "fs-extra": "^11.2.0",
     "gray-matter": "^4.0.3",
