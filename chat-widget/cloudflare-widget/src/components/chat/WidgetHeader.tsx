@@ -7,6 +7,7 @@ import {
   X,
 } from "@phosphor-icons/react";
 
+
 interface WidgetHeaderProps {
   theme: "light" | "dark";
   onToggleTheme: () => void;
@@ -28,7 +29,7 @@ export function WidgetHeader({
         transition={{ duration: 0.5 }}
       >
         <img
-          src="/favicon-32x32.png"
+          src="IMAGE_URL"
           alt="ProResponse AI"
           width="28"
           height="28"
