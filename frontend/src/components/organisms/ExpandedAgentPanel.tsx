@@ -6,12 +6,17 @@ import { cn } from '../../lib/utils';
 export interface ExpandedAgentPanelProps extends React.HTMLAttributes<HTMLDivElement> {
   actions: AgentActionProps[];
   onDraftClick?: (draft: { body: string }) => void;
+  workerStatus?: {
+    threadId: number;
+    status: string;
+    isActive: boolean;
+  };
 }
 
 export const ExpandedAgentPanel = React.forwardRef<HTMLDivElement, ExpandedAgentPanelProps>(
-  ({ className, actions, onDraftClick, ...props }, ref) => {
-    // Check if agent is currently working (has any pending actions)
-    const isAgentWorking = actions.some(action => action.status === 'pending');
+  ({ className, actions, onDraftClick, workerStatus, ...props }, ref) => {
+    // Check if agent is currently working using worker status
+    const isAgentWorking = workerStatus?.isActive || false;
 
     return (
       <div ref={ref} className={cn('p-8', className)} {...props}>

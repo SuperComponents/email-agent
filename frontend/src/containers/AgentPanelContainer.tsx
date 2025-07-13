@@ -14,7 +14,6 @@ import {
   Send,
   Sparkle,
   Folder,
-  Notebook,
   Pen,
 } from 'lucide-react';
 import type { AgentActionProps } from '../components/molecules/AgentAction';

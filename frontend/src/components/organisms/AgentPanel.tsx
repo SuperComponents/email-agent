@@ -81,7 +81,7 @@ export const AgentPanel = React.forwardRef<HTMLDivElement, AgentPanelProps>(
           title="Agent Activity"
           size="xl"
         >
-          <ExpandedAgentPanel actions={actions} onDraftClick={onDraftClick} />
+          <ExpandedAgentPanel actions={actions} onDraftClick={onDraftClick} workerStatus={props.workerStatus} />
         </Modal>
       </div>
     );
